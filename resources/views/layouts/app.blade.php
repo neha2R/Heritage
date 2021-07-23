@@ -21,18 +21,21 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
 
   <link rel="stylesheet" href="{{ asset('/assets/css/main.css') }}" type="text/css">
- 
+
     @else
   <!-- Fonts -->
   <link rel="stylesheet" href="{{ asset('/assets/css/main.css') }}" type="text/css">
- 
+
   @endguest
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" type="text/css">
+  <link rel="stylesheet" href="{{ asset('/assets/css/developer.css') }}" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.6.9/sweetalert2.min.css">
+
   @yield('css')
 
 </head>
 <body class="bg-default">
-       @guest 
+       @guest
 
        @else
 
@@ -46,8 +49,9 @@
 
           </div>
        </div>
- 
 
+       </div>
+       </div>
  <footer class="py-5" id="footer-main">
     <div class="container">
       <!-- <div class="row align-items-center justify-content-xl-between">
@@ -75,14 +79,30 @@
       </div> -->
     </div>
   </footer>
-  
-      @guest 
+
+      @guest
 
        @else
-       <script type="text/javascript" src="{{ asset('/assets/scripts/main.js') }}"></script>
+
        @endguest
-       <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+       <script src="https://code.jquery.com/jquery-2.2.4.min.js"  crossorigin="anonymous"></script>
+
+       <script type="text/javascript" src="{{ asset('/assets/scripts/main.js') }}"></script>
+
        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+       <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+
+
        @yield('js')
+
+       @yield('model')
+
       </body>
 </html>
