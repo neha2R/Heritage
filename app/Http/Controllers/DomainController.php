@@ -98,7 +98,15 @@ class DomainController extends Controller
      */
     public function update(Request $request, Domain $domain)
     {
-        //
+
+        $domain->name = $request->name;
+        $domain->save();
+        if ($domain->id) {
+            return redirect()->back()->with(['success' => 'Domain Updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -109,7 +117,14 @@ class DomainController extends Controller
      */
     public function destroy(Domain $domain)
     {
-        dd($domain);
+
+        $domain->delete();
+        if ($domain->id) {
+            return redirect()->back()->with(['success' => 'Domain Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     public function addsubdomain(Request $request)
