@@ -30,7 +30,7 @@
                </span>
             </div>
             <div class="app-header__content">
-               <div class="app-header-left">
+               <!-- <div class="app-header-left">
                   <div class="search-wrapper">
                      <div class="input-holder">
                         <input type="text" class="search-input" placeholder="Type to search">
@@ -58,7 +58,7 @@
                         </a>
                      </li>
                   </ul>
-               </div>
+               </div> -->
                <div class="app-header-right">
                   <div class="header-btn-lg pr-0">
                      <div class="widget-content p-0">
@@ -71,9 +71,7 @@
                                  </a>
                                  <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                     <button type="button" tabindex="0" class="dropdown-item">User Account</button>
-                                    <button type="button" tabindex="0" class="dropdown-item">Settings</button>
-                                    <h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+
                                     <div tabindex="-1" class="dropdown-divider"></div>
                                     <form method="POST" action="{{ route('logout') }}">
                                     @csrf
@@ -90,11 +88,11 @@
                                  VP People Manager
                               </div>
                            </div>
-                           <div class="widget-content-right header-user-info ml-3">
+                           <!-- <div class="widget-content-right header-user-info ml-3">
                               <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
                               <i class="fa text-white fa-calendar pr-1 pl-1"></i>
                               </button>
-                           </div>
+                           </div> -->
                         </div>
                      </div>
                   </div>

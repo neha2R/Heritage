@@ -40,7 +40,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:domains',
         ]);
         $data = new Domain;
         $data->name = $request->name;
@@ -145,6 +145,50 @@ class DomainController extends Controller
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
+    }
+
+    public function changeSubDomainStatus($subdomain)
+    {
+        $subdomain = Subdomain::find($subdomain);
+        if ($subdomain->status == '1') {
+            $subdomain->status = '0';
+        } else {
+            $subdomain->status = '1';
+
+        }
+        $subdomain->save();
+
+        if ($subdomain->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
+    }
+
+    public function updatesubdomain(Request $request, $subdomain)
+    {
+        $subdomain = Subdomain::find($subdomain);
+        $subdomain->name = $request->name;
+        $subdomain->save();
+        if ($subdomain->id) {
+            return redirect()->back()->with(['success' => 'Sub Domain Updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
+    }
+
+    public function deletesubdomain($subdomain)
+    {
+        $subdomain = Subdomain::find($subdomain);
+        $subdomain->delete();
+        if ($subdomain->id) {
+            return redirect()->back()->with(['success' => 'Sub Domain Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
 }

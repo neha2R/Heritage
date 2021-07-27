@@ -44,7 +44,49 @@
             </div>
             @endforeach
                     <div class="card-body">
+                    <div class="table-responsive">
+                     <table id="table" class="mb-0 table table-striped">
+                        <thead>
+                           <tr>
+                              <th>#</th>
+                              <th>Name</th>
+                              <th>Age</th>
+                              <th>Status</th>
+                              <th>Edit</th>
+                              <th>Delete</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach($ages as $key=>$age)
+                           <tr>
+                              <th scope="row">{{$key+1}}</th>
+                              <td>{{$age->name}}</td>
+                              <td>{{$age->to}} - {{$age->from}}</td>
+                              <td><label class="switch">
+                                 @if($age->status=='1')
+                                 @php $status='checked'; @endphp
+                                 @else
+                                 @php $status=''; @endphp
+                                 @endif
+                                 <input {{$status}}  type="checkbox" class="status" ageid="{{$age->id}}">
+                                 <span class="slider round"></span>
+                                 </label>
 
+                              </td>
+                              <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
+                              </td>
+                              <td>
+                                 <form class="delete-age" action="{{route('age.destroy',$age->id)}}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
+                                 </form>
+                              </td>
+                           </tr>
+                           @endforeach
+                        </tbody>
+                     </table>
+                  </div>
                     </div>
             </div>
          </div>

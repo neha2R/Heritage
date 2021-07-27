@@ -37,6 +37,11 @@
                   </strong>
                </div>
                @endif
+               @foreach ($errors->all() as $message)
+               <div class="alert alert-dismissable alert-danger">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> <strong>
+                    {{ $message }}</strong></div>
+                @endforeach
                <div class="card-body">
                   <div class="table-responsive">
                      <table id="table" class="mb-0 table table-striped">
@@ -66,11 +71,12 @@
                                  <input {{$status}}  type="checkbox" class="status" domainid="{{$domain->id}}">
                                  <span class="slider round"></span>
                                  </label>
+
                               </td>
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
-                                 <form id="delete-domain" action="{{route('domain.destroy',$domain->id)}}" method="POST">
+                                 <form class="delete-domain" action="{{route('domain.destroy',$domain->id)}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
@@ -106,6 +112,8 @@
                      <th>#</th>
                      <th>Name</th>
                      <th>Status</th>
+                     <th>Edit</th>
+                     <th>Delete</th>
                   </tr>
                </thead>
                <tbody>
@@ -113,8 +121,27 @@
                   <tr>
                      <th scope="row">{{$key+1}}</th>
                      <td>{{$subdomain->name}}</td>
-                     <td>{{$subdomain->status}}</td>
+                     <td><label class="switch">
+                                 @if($subdomain->status=='1')
+                                 @php $substatus='checked'; @endphp
+                                 @else
+                                 @php $substatus=''; @endphp
+                                 @endif
+                                 <input {{$substatus}}  type="checkbox" class="substatus" subdomainid="{{$subdomain->id}}">
+                                 <span class="slider round"></span>
+                                 </label>
+                              </td>
+                              <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-subdomain-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
+                              </td>
+                              <td>
+                                 <form class="delete-subdomain" action="{{route('subdomain',$subdomain->id)}}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
+                                 </form>
+                              </td>
                   <tr>
+
                      @endforeach
                </tbody>
             </table>
@@ -129,6 +156,44 @@
 </div>
 <!-- Add Model Ends here -->
 
+ <!-- Edit Sub Domain Model Start Here -->
+ @foreach($domain->subdomain as $subdomain)
+
+ <div class="modal fade bd-example-modal-lg show" id="edit-subdomain-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title" id="exampleModalLongTitle">Edit Sub Domain </h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+      </div>
+      <div class="modal-body">
+
+	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('subdomain',$subdomain->id) }}" novalidate="novalidate">
+	  @method('PUT')
+
+               @csrf
+               <div class="form-group">
+                  <label for="name">Sub Domain name</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$subdomain->name}}"  name="name" placeholder="Domain name" required> @error('name')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                  @enderror
+               </div>
+               <!-- <div class="form-group">
+                  <button type="submit" class="btn btn-primary" name="signup" value="Sign up">Sign up</button>
+                  </div> -->
+         </div>
+         <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         <button type="submit" class="btn btn-primary">Update changes</button>
+         </form>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Edit Model Ends here -->
+@endforeach
+
+
 
 <!-- Edit Model Start Here -->
 <div class="modal fade bd-example-modal-lg show" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
@@ -140,13 +205,13 @@
       </div>
       <div class="modal-body">
 
-	  <form id="edit-domain" class="col-md-10 mx-auto" method="post" action="{{ route('domain.update',$domain->id) }}" novalidate="novalidate">
+	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('domain.update',$domain->id) }}" novalidate="novalidate">
 	  @method('PUT')
 
                @csrf
                <div class="form-group">
                   <label for="name">Domain name</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$domain->name}}" id="name" name="name" placeholder="Domain name required"> @error('name')
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$domain->name}}"  name="name" placeholder="Domain name" required> @error('name')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                </div>
@@ -179,7 +244,7 @@
                @csrf
                <div class="form-group">
                   <label for="name">Domain name</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" id="name" name="name" placeholder="Domain name required"> @error('name')
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" name="name" placeholder="Domain name required"> @error('name')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                </div>
@@ -205,7 +270,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
          </div>
          <div class="modal-body">
-            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('addsubdomain') }}" novalidate="novalidate">
+            <form  class="col-md-10 mx-auto" method="post" action="{{ route('addsubdomain') }}" novalidate="novalidate">
                @csrf
                <div class="form-group">
                   <label for="domain_id">Select Domain</label>
@@ -221,7 +286,7 @@
                </div>
                <div class="form-group">
                   <label for="name">Sub Domain name</label>
-                  <input type="text" class="@error('subdomain_name') is-invalid @enderror form-control" id="subdomain_name" name="subdomain_name" placeholder="Domain name"> @error('subdomain_name')
+                  <input type="text" class="@error('subdomain_name') is-invalid @enderror form-control " id="subdomain_name" name="subdomain_name" placeholder="Sub Domain name" required> @error('subdomain_name')
                   <div class="alert alert-danger">{{ $message }}</div>
                   @enderror
                </div>
@@ -239,6 +304,8 @@
 <!-- Ends Here -->@section('js')
 <script>
    $(document).ready(function() {
+      $(".form-control").attr('maxlength','30');
+
    	$('#table').DataTable();
 
    //             Swal.fire({
@@ -263,12 +330,47 @@
    $('.status').on('change', function() {
    	if(confirm("Are you sure want to change the status ?")) {
    		var domainid = $(this).attr('domainid');
+         $(".slider").addClass("sliderafter");
            window.location.href = "/admin/domain/"+domainid;
+          }
+          else{
+            if($(this).prop('checked') == true){
+               $(this).prop('checked', false); // Unchecks it
+            } else{
+               $(this).prop('checked', true);
+
+            }
           }
          });
 
 
-   $('#delete-domain').submit(function() {
+
+
+   $('.delete-domain').submit(function() {
+     var c = confirm("Are you sure want to delete ?");
+     return c; //you can just return c because it will be true or false
+   });
+
+
+
+
+         $(document).on('change','.substatus', function() {
+   	if(confirm("Are you sure want to change the status ?")) {
+   		var subdomainid = $(this).attr('subdomainid');
+           window.location.href = "/admin/sub-domain-status/"+subdomainid;
+          }
+          else{
+            if($(this).prop('checked') == true){
+               $(this).prop('checked', false); // Unchecks it
+            } else{
+               $(this).prop('checked', true);
+
+            }
+          }
+         });
+
+         $(document).on('submit','.delete-subdomain', function() {
+
      var c = confirm("Are you sure want to delete ?");
      return c; //you can just return c because it will be true or false
    });

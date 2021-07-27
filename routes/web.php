@@ -22,7 +22,12 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/domain', 'DomainController');
-    Route::post('/addsubdomain', 'DomainController@addsubdomain')->name('addsubdomain');
+    Route::post('/sub-domain-status', 'DomainController@addsubdomain')->name('addsubdomain');
+    Route::get('/sub-domain-status/{id}', 'DomainController@changeSubDomainStatus')->name('changesubdomain');
+    Route::put('/subdomain/{id}', 'DomainController@updatesubdomain')->name('subdomain');
+    Route::delete('/subdomain/{id}', 'DomainController@deletesubdomain')->name('subdomain');
+    Route::resource('/agegroup', 'AgeGroupController');
+
 });
 Auth::routes();
 

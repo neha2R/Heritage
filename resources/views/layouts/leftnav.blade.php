@@ -39,7 +39,7 @@
                            Add Domain
                            </a>
                         </li>
-                        <li class="app-sidebar__heading">UI Components</li>
+                        <li class="app-sidebar__heading">Age Group</li>
                         <li
                            >
                            <a href="#">
@@ -59,42 +59,6 @@
                                  <a href="elements-dropdowns.html">
                                  <i class="metismenu-icon">
                                  </i>Dropdowns
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-icons.html">
-                                 <i class="metismenu-icon">
-                                 </i>Icons
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-badges-labels.html">
-                                 <i class="metismenu-icon">
-                                 </i>Badges
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-cards.html">
-                                 <i class="metismenu-icon">
-                                 </i>Cards
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-list-group.html">
-                                 <i class="metismenu-icon">
-                                 </i>List Groups
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-navigation.html">
-                                 <i class="metismenu-icon">
-                                 </i>Navigation Menus
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="elements-utilities.html">
-                                 <i class="metismenu-icon">
-                                 </i>Utilities
                                  </a>
                               </li>
                            </ul>
@@ -180,47 +144,6 @@
                            <a href="tables-regular.html">
                            <i class="metismenu-icon pe-7s-display2"></i>
                            Tables
-                           </a>
-                        </li>
-                        <li class="app-sidebar__heading">Widgets</li>
-                        <li>
-                           <a href="dashboard-boxes.html">
-                           <i class="metismenu-icon pe-7s-display2"></i>
-                           Dashboard Boxes
-                           </a>
-                        </li>
-                        <li class="app-sidebar__heading">Forms</li>
-                        <li>
-                           <a href="forms-controls.html">
-                           <i class="metismenu-icon pe-7s-mouse">
-                           </i>Forms Controls
-                           </a>
-                        </li>
-                        <li>
-                           <a href="forms-layouts.html">
-                           <i class="metismenu-icon pe-7s-eyedropper">
-                           </i>Forms Layouts
-                           </a>
-                        </li>
-                        <li>
-                           <a href="forms-validation.html">
-                           <i class="metismenu-icon pe-7s-pendrive">
-                           </i>Forms Validation
-                           </a>
-                        </li>
-                        <li class="app-sidebar__heading">Charts</li>
-                        <li>
-                           <a href="charts-chartjs.html">
-                           <i class="metismenu-icon pe-7s-graph2">
-                           </i>ChartJS
-                           </a>
-                        </li>
-                        <li class="app-sidebar__heading">PRO Version</li>
-                        <li>
-                           <a href="https://dashboardpack.com/theme-details/architectui-dashboard-html-pro/" target="_blank">
-                           <i class="metismenu-icon pe-7s-graph2">
-                           </i>
-                           Upgrade to PRO
                            </a>
                         </li>
                      </ul>

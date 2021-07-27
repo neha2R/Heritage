@@ -14,7 +14,8 @@ class AgeGroupController extends Controller
      */
     public function index()
     {
-        //
+        $ages = AgeGroup::OrderBy('id', 'DESC')->get();
+        return view('age.list', compact('ages'));
     }
 
     /**
