@@ -14,7 +14,8 @@ class QuizSpeedController extends Controller
      */
     public function index()
     {
-        //
+        $quizSpeeds = QuizSpeed::OrderBy('id', 'DESC')->get();
+        return view('speed.list', compact('quizSpeeds'));
     }
 
     /**
@@ -35,7 +36,25 @@ class QuizSpeedController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|unique:quiz_speeds',
+            'duration' => 'required|numeric|min:1',
+            'no_of_question' => 'required|numeric|min:1',
+        ]);
+
+        $data = new QuizSpeed;
+        $data->name = $request->name;
+        $data->duration = $request->duration;
+        $data->no_of_question = $request->no_of_question;
+        $data->status = '1';
+        $data->save();
+
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Quiz Speed saved Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -44,9 +63,22 @@ class QuizSpeedController extends Controller
      * @param  \App\QuizSpeed  $quizSpeed
      * @return \Illuminate\Http\Response
      */
-    public function show(QuizSpeed $quizSpeed)
+    public function show($quizSpeed)
     {
-        //
+        $quizSpeed = QuizSpeed::find($quizSpeed);
+        if ($quizSpeed->status == '1') {
+            $quizSpeed->status = '0';
+        } else {
+            $quizSpeed->status = '1';
+
+        }
+        $quizSpeed->save();
+
+        if ($quizSpeed->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -67,9 +99,26 @@ class QuizSpeedController extends Controller
      * @param  \App\QuizSpeed  $quizSpeed
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, QuizSpeed $quizSpeed)
+    public function update(Request $request, $quizSpeed)
     {
-        //
+        $data = QuizSpeed::find($quizSpeed);
+
+        $validatedData = $request->validate([
+            'name' => 'required|unique:quiz_speeds,name,' . $data->id,
+            'duration' => 'required|numeric|min:1',
+            'no_of_question' => 'required|numeric|min:1',
+        ]);
+
+        $data->name = $request->name;
+        $data->duration = $request->duration;
+        $data->no_of_question = $request->no_of_question;
+        $data->save();
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Quiz Speed updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -78,8 +127,14 @@ class QuizSpeedController extends Controller
      * @param  \App\QuizSpeed  $quizSpeed
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuizSpeed $quizSpeed)
+    public function destroy($quizSpeed)
     {
-        //
+        $quizSpeed = QuizSpeed::find($quizSpeed);
+        $quizSpeed->delete();
+        if ($quizSpeed->id) {
+            return redirect()->back()->with(['success' => 'Quiz Speed Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 }

@@ -6,7 +6,7 @@
 <div class="app-page-title">
    <div class="page-title-wrapper">
       <div class="page-title-heading">
-         Age Group
+          Quiz Type
          <div class="page-title-subheading"> </div>
       </div>
    </div>
@@ -18,11 +18,11 @@
       <div class="col-md-12">
          <div class="card">
             <div class="card-header display-inline mt-3">
-               {{ __('Add Domain') }}
+               {{ __('Add Quiz Type') }}
                <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
                   </a> -->
 
-               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Age Group</button>
+               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Quiz Type</button>
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
@@ -50,25 +50,25 @@
                            <tr>
                               <th>#</th>
                               <th>Name</th>
-                              <th>Age</th>
+                              <th>No Of Players </th>
                               <th>Status</th>
                               <th>Edit</th>
                               <th>Delete</th>
                            </tr>
                         </thead>
                         <tbody>
-                           @foreach($ages as $key=>$age)
+                           @foreach($quizTypes as $key=>$quizType)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <td>{{$age->name}}</td>
-                              <td>{{$age->from}} - {{$age->to}}</td>
+                              <th scope="row">{{$quizType->name}}</th>
+                             <td>{{$quizType->no_of_player}}</td>
                               <td><label class="switch">
-                                 @if($age->status=='1')
+                                 @if($quizType->status=='1')
                                  @php $status='checked'; @endphp
                                  @else
                                  @php $status=''; @endphp
                                  @endif
-                                 <input {{$status}}  type="checkbox" class="agestatus" ageid="{{$age->id}}">
+                                 <input {{$status}}  type="checkbox" class="status" quizid="{{$quizType->id}}">
                                  <span class="slider round"></span>
                                  </label>
 
@@ -76,7 +76,7 @@
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
-                                 <form class="delete" action="{{route('agegroup.destroy',$age->id)}}" method="POST">
+                                 <form class="delete" action="{{route('quiztype.destroy',$quizType->id)}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
@@ -102,24 +102,20 @@
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Age Group</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Quiz Type</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
          </div>
          <div class="modal-body">
-            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('agegroup.store') }}" >
+            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('quiztype.store') }}" >
             <!-- novalidate="novalidate" -->
                @csrf
                <div class="form-group">
-                  <label for="name">Age Group</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Age Group name" required>
+                  <label for="name">Quiz Type</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Quiz type name" required>
                </div>
                <div class="form-group">
-                  <label for="name">From</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="from" placeholder="10" onKeyUp="if(this.value>99){this.value='99';}else if(this.value<0){this.value='0';}" required>
-               </div>
-               <div class="form-group">
-                  <label for="name">To</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1" max="99" name="to" placeholder="20" onKeyUp="if(this.value>99){this.value='99';}else if(this.value<0){this.value='0';}" required>
+                  <label for="name">No Of Players</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_player" placeholder="10"  required>
                </div>
          </div>
          <div class="modal-footer">
@@ -133,34 +129,31 @@
 <!-- Add Model Ends here -->
 
 
-@foreach($ages as $key=>$age)
+@foreach($quizTypes as $key=>$quizType)
 
 <!-- Edit Model Start Here -->
 <div class="modal fade bd-example-modal-lg show" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-lg">
      <div class="modal-content">
        <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLongTitle">Edit Age Group </h5>
+         <h5 class="modal-title" id="exampleModalLongTitle">Edit Quiz Type </h5>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
       </div>
       <div class="modal-body">
 
-	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('agegroup.update',$age->id) }}" >
+	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('quiztype.update',$quizType->id) }}" >
 	  @method('PUT')
 
                @csrf
                <div class="form-group">
-                  <label for="name">Age Group</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$age->name}}" maxlength="50" name="name" placeholder="Age Group name" required>
+                  <label for="name">Quiz Type</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$quizType->name}}" maxlength="50" name="name" placeholder="Quiz Type name" required>
                </div>
                <div class="form-group">
-                  <label for="name">From</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="from" placeholder="10" value="{{$age->from}}"  required>
+                  <label for="name">No Of Players</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_player" placeholder="10" value="{{$quizType->no_of_player}}"  required>
                </div>
-               <div class="form-group">
-                  <label for="name">To</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1" max="99" name="to" placeholder="20" value="{{$age->to}}"  required>
-               </div>
+
 
          </div>
          <div class="modal-footer">
@@ -181,10 +174,10 @@
 
    	$('#table').DataTable();
 
-$(document).on('change','.agestatus', function() {
+$(document).on('change','.status', function() {
     if(confirm("Are you sure want to change the status ?")) {
-        var ageid = $(this).attr('ageid');
-        window.location.href = "/admin/agegroup/"+ageid;
+        var quizid = $(this).attr('quizid');
+        window.location.href = "/admin/quiztype/"+quizid;
        }
        else{
          if($(this).prop('checked') == true){

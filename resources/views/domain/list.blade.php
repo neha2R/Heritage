@@ -96,7 +96,7 @@
 @endsection @section('model')
 @foreach($domains as $key=>$domain)
 
-<!-- Add Model Start Here -->
+<!-- Sub Domain List Model Start Here -->
 <div class="modal fade bd-example-modal-lg show" id="sub-model-list{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
 <div class="modal-dialog modal-lg">
    <div class="modal-content">
@@ -154,7 +154,7 @@
    </div>
 </div>
 </div>
-<!-- Add Model Ends here -->
+<!--  Ends here -->
 
  <!-- Edit Sub Domain Model Start Here -->
  @foreach($domain->subdomain as $subdomain)
@@ -301,7 +301,8 @@
 </div>
 <!-- Add Sub Domain Model Ends here -->
 @endsection
-<!-- Ends Here -->@section('js')
+<!-- Ends Here -->
+@section('js')
 <script>
    $(document).ready(function() {
       $(".form-control").attr('maxlength','30');

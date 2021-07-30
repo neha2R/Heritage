@@ -27,6 +27,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::put('/subdomain/{id}', 'DomainController@updatesubdomain')->name('subdomain');
     Route::delete('/subdomain/{id}', 'DomainController@deletesubdomain')->name('subdomain');
     Route::resource('/agegroup', 'AgeGroupController');
+    Route::resource('/difflevel', 'DifficultyLevelController');
+    Route::resource('/quizspeed', 'QuizSpeedController');
+    Route::resource('/quiztype', 'QuizTypeController');
 
 });
 Auth::routes();

@@ -36,7 +36,25 @@ class AgeGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|unique:age_groups',
+            'from' => 'required|numeric|min:1|max:99',
+            'to' => 'required|numeric|min:1|max:99',
+        ]);
+
+        $data = new AgeGroup;
+        $data->name = $request->name;
+        $data->from = $request->from;
+        $data->to = $request->to;
+        $data->status = '1';
+        $data->save();
+
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Age Group saved Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -45,9 +63,22 @@ class AgeGroupController extends Controller
      * @param  \App\AgeGroup  $ageGroup
      * @return \Illuminate\Http\Response
      */
-    public function show(AgeGroup $ageGroup)
+    public function show($ageGroup)
     {
-        //
+        $ageGroup = AgeGroup::find($ageGroup);
+        if ($ageGroup->status == '1') {
+            $ageGroup->status = '0';
+        } else {
+            $ageGroup->status = '1';
+
+        }
+        $ageGroup->save();
+
+        if ($ageGroup->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -68,9 +99,23 @@ class AgeGroupController extends Controller
      * @param  \App\AgeGroup  $ageGroup
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AgeGroup $ageGroup)
+    public function update(Request $request, $ageGroup)
     {
-        //
+        $ageGroup = AgeGroup::find($ageGroup);
+        $validatedData = $request->validate([
+            'name' => 'required|unique:age_groups,name,' . $ageGroup->id,
+            'from' => 'required|numeric|min:1|max:99',
+            'to' => 'required|numeric|min:1|max:99',
+        ]);
+        $ageGroup->name = $request->name;
+        $ageGroup->from = $request->from;
+        $ageGroup->to = $request->to;
+        $ageGroup->save();
+        if ($ageGroup->id) {
+            return redirect()->back()->with(['success' => 'Age Group Updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -79,8 +124,14 @@ class AgeGroupController extends Controller
      * @param  \App\AgeGroup  $ageGroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AgeGroup $ageGroup)
+    public function destroy($ageGroup)
     {
-        //
+        $ageGroup = AgeGroup::find($ageGroup);
+        $ageGroup->delete();
+        if ($ageGroup->id) {
+            return redirect()->back()->with(['success' => 'Age Group Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 }

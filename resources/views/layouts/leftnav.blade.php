@@ -32,21 +32,35 @@
                <div class="scrollbar-sidebar">
                   <div class="app-sidebar__inner">
                      <ul class="vertical-nav-menu">
+                     <li class="app-sidebar__heading">Quiz Speed</li>
+                        <li>
+                           <a href="{{ route('quiztype.index') }}" class="{{ request()->is('admin/quiztype*') ? 'mm-active' : '' }}">
+                           <i class="metismenu-icon pe-7s-rocket"></i>
+                          Quiz Type
+                           </a>
+                        </li>
+
                         <li class="app-sidebar__heading">Domain</li>
                         <li>
-                           <a href="{{ route('domain.index') }}" class="mm-active">
+                           <a href="{{ route('domain.index') }}" class="{{ request()->is('admin/domain*') ? 'mm-active' : '' }}">
                            <i class="metismenu-icon pe-7s-rocket"></i>
                            Add Domain
                            </a>
                         </li>
                         <li class="app-sidebar__heading">Age Group</li>
+                        <li>
+                           <a href="{{ route('agegroup.index') }}" class="{{ request()->is('admin/agegroup*') ? 'mm-active' : '' }}">
+                           <i class="metismenu-icon pe-7s-rocket"></i>
+                           Age Group
+                           </a>
+                        </li>
                         <li
                            >
-                           <a href="#">
+                           <!-- <a href="#">
                            <i class="metismenu-icon pe-7s-diamond"></i>
                            Elements
                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                           </a>
+                           </a> -->
                            <ul
                               >
                               <li>
@@ -63,87 +77,18 @@
                               </li>
                            </ul>
                         </li>
-                        <li
-                           >
-                           <a href="#">
-                           <i class="metismenu-icon pe-7s-car"></i>
-                           Components
-                           <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                        <li class="app-sidebar__heading">Difficulty Level</li>
+                        <li>
+                           <a href="{{ route('difflevel.index') }}" class="{{ request()->is('admin/difflevel*') ? 'mm-active' : '' }}">
+                           <i class="metismenu-icon pe-7s-rocket"></i>
+                          Difficulty Level
                            </a>
-                           <ul
-                              >
-                              <li>
-                                 <a href="components-tabs.html">
-                                 <i class="metismenu-icon">
-                                 </i>Tabs
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-accordions.html">
-                                 <i class="metismenu-icon">
-                                 </i>Accordions
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-notifications.html">
-                                 <i class="metismenu-icon">
-                                 </i>Notifications
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-modals.html">
-                                 <i class="metismenu-icon">
-                                 </i>Modals
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-progress-bar.html">
-                                 <i class="metismenu-icon">
-                                 </i>Progress Bar
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-tooltips-popovers.html">
-                                 <i class="metismenu-icon">
-                                 </i>Tooltips &amp; Popovers
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-carousel.html">
-                                 <i class="metismenu-icon">
-                                 </i>Carousel
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-calendar.html">
-                                 <i class="metismenu-icon">
-                                 </i>Calendar
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-pagination.html">
-                                 <i class="metismenu-icon">
-                                 </i>Pagination
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-scrollable-elements.html">
-                                 <i class="metismenu-icon">
-                                 </i>Scrollable
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="components-maps.html">
-                                 <i class="metismenu-icon">
-                                 </i>Maps
-                                 </a>
-                              </li>
-                           </ul>
                         </li>
-                        <li  >
-                           <a href="tables-regular.html">
-                           <i class="metismenu-icon pe-7s-display2"></i>
-                           Tables
+                        <li class="app-sidebar__heading">Quiz Speed</li>
+                        <li>
+                           <a href="{{ route('quizspeed.index') }}" class="{{ request()->is('admin/quizspeed*') ? 'mm-active' : '' }}">
+                           <i class="metismenu-icon pe-7s-rocket"></i>
+                          Quiz Speed
                            </a>
                         </li>
                      </ul>

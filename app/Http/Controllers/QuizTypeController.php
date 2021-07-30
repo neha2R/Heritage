@@ -14,7 +14,8 @@ class QuizTypeController extends Controller
      */
     public function index()
     {
-        //
+        $quizTypes = QuizType::OrderBy('id', 'DESC')->get();
+        return view('quiz_type.list', compact('quizTypes'));
     }
 
     /**
@@ -35,7 +36,23 @@ class QuizTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|unique:quiz_types',
+            'no_of_player' => 'required|numeric|min:1',
+        ]);
+
+        $data = new QuizType;
+        $data->name = $request->name;
+        $data->no_of_player = $request->no_of_player;
+        $data->status = '1';
+        $data->save();
+
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Quiz Type saved Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -44,9 +61,22 @@ class QuizTypeController extends Controller
      * @param  \App\QuizType  $quizType
      * @return \Illuminate\Http\Response
      */
-    public function show(QuizType $quizType)
+    public function show($quizType)
     {
-        //
+        $quizType = QuizType::find($quizType);
+        if ($quizType->status == '1') {
+            $quizType->status = '0';
+        } else {
+            $quizType->status = '1';
+
+        }
+        $quizType->save();
+
+        if ($quizType->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -67,9 +97,25 @@ class QuizTypeController extends Controller
      * @param  \App\QuizType  $quizType
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, QuizType $quizType)
+    public function update(Request $request, $quizType)
     {
-        //
+        $data = QuizType::find($quizType);
+
+        $validatedData = $request->validate([
+            'name' => 'required|unique:quiz_types,name,' . $data->id,
+            'no_of_player' => 'required|numeric|min:1',
+
+        ]);
+
+        $data->name = $request->name;
+        $data->no_of_player = $request->no_of_player;
+        $data->save();
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Quiz Type updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
+
     }
 
     /**
@@ -78,8 +124,14 @@ class QuizTypeController extends Controller
      * @param  \App\QuizType  $quizType
      * @return \Illuminate\Http\Response
      */
-    public function destroy(QuizType $quizType)
+    public function destroy($quizType)
     {
-        //
+        $quizType = QuizType::find($quizType);
+        $quizType->delete();
+        if ($quizType->id) {
+            return redirect()->back()->with(['success' => 'Quiz Type Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 }

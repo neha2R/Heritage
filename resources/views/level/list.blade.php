@@ -6,7 +6,7 @@
 <div class="app-page-title">
    <div class="page-title-wrapper">
       <div class="page-title-heading">
-         Age Group
+      Difficulty Level
          <div class="page-title-subheading"> </div>
       </div>
    </div>
@@ -18,11 +18,11 @@
       <div class="col-md-12">
          <div class="card">
             <div class="card-header display-inline mt-3">
-               {{ __('Add Domain') }}
+               {{ __('Add Difficulty Level') }}
                <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
                   </a> -->
 
-               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Age Group</button>
+               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Difficulty Level</button>
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
@@ -50,25 +50,27 @@
                            <tr>
                               <th>#</th>
                               <th>Name</th>
-                              <th>Age</th>
+                              <th>Weightage (Per question) </th>
+                              <th>Time (In Sec)</th>
                               <th>Status</th>
                               <th>Edit</th>
                               <th>Delete</th>
                            </tr>
                         </thead>
                         <tbody>
-                           @foreach($ages as $key=>$age)
+                           @foreach($difficultyLevels as $key=>$difficultyLevel)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <td>{{$age->name}}</td>
-                              <td>{{$age->from}} - {{$age->to}}</td>
+                              <th scope="row">{{$difficultyLevel->name}}</th>
+                             <td>{{$difficultyLevel->weitage_per_question}}</td>
+                              <td>{{$difficultyLevel->time_per_question}} </td>
                               <td><label class="switch">
-                                 @if($age->status=='1')
+                                 @if($difficultyLevel->status=='1')
                                  @php $status='checked'; @endphp
                                  @else
                                  @php $status=''; @endphp
                                  @endif
-                                 <input {{$status}}  type="checkbox" class="agestatus" ageid="{{$age->id}}">
+                                 <input {{$status}}  type="checkbox" class="status" levelid="{{$difficultyLevel->id}}">
                                  <span class="slider round"></span>
                                  </label>
 
@@ -76,7 +78,7 @@
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
-                                 <form class="delete" action="{{route('agegroup.destroy',$age->id)}}" method="POST">
+                                 <form class="delete" action="{{route('difflevel.destroy',$difficultyLevel->id)}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
@@ -102,24 +104,24 @@
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Age Group</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Difficulty  Level</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
          </div>
          <div class="modal-body">
-            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('agegroup.store') }}" >
+            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('difflevel.store') }}" >
             <!-- novalidate="novalidate" -->
                @csrf
                <div class="form-group">
-                  <label for="name">Age Group</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Age Group name" required>
+                  <label for="name">Difficulty  Level</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Difficulty  Level name" required>
                </div>
                <div class="form-group">
-                  <label for="name">From</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="from" placeholder="10" onKeyUp="if(this.value>99){this.value='99';}else if(this.value<0){this.value='0';}" required>
+                  <label for="name">Weightage Per Question</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10"  required>
                </div>
                <div class="form-group">
-                  <label for="name">To</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1" max="99" name="to" placeholder="20" onKeyUp="if(this.value>99){this.value='99';}else if(this.value<0){this.value='0';}" required>
+                  <label for="name">Time Per Question (In sec)</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="time_per_question" placeholder="Enter time in sec"  required>
                </div>
          </div>
          <div class="modal-footer">
@@ -133,33 +135,33 @@
 <!-- Add Model Ends here -->
 
 
-@foreach($ages as $key=>$age)
+@foreach($difficultyLevels as $key=>$difficultyLevel)
 
 <!-- Edit Model Start Here -->
 <div class="modal fade bd-example-modal-lg show" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-lg">
      <div class="modal-content">
        <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLongTitle">Edit Age Group </h5>
+         <h5 class="modal-title" id="exampleModalLongTitle">Edit Difficulty Level </h5>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
       </div>
       <div class="modal-body">
 
-	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('agegroup.update',$age->id) }}" >
+	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('difflevel.update',$difficultyLevel->id) }}" >
 	  @method('PUT')
 
                @csrf
                <div class="form-group">
-                  <label for="name">Age Group</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$age->name}}" maxlength="50" name="name" placeholder="Age Group name" required>
+                  <label for="name">Difficulty  Level</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$difficultyLevel->name}}" maxlength="50" name="name" placeholder="Difficulty  Level name" required>
                </div>
                <div class="form-group">
-                  <label for="name">From</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="from" placeholder="10" value="{{$age->from}}"  required>
+                  <label for="name">Weightage Per Question</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10" value="{{$difficultyLevel->weitage_per_question}}"  required>
                </div>
                <div class="form-group">
-                  <label for="name">To</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1" max="99" name="to" placeholder="20" value="{{$age->to}}"  required>
+                  <label for="name">Time Per Question (In Sec)</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1"  name="time_per_question" placeholder="Enter time in sec" value="{{$difficultyLevel->time_per_question}}"  required>
                </div>
 
          </div>
@@ -181,10 +183,10 @@
 
    	$('#table').DataTable();
 
-$(document).on('change','.agestatus', function() {
+$(document).on('change','.status', function() {
     if(confirm("Are you sure want to change the status ?")) {
-        var ageid = $(this).attr('ageid');
-        window.location.href = "/admin/agegroup/"+ageid;
+        var levelid = $(this).attr('levelid');
+        window.location.href = "/admin/difflevel/"+levelid;
        }
        else{
          if($(this).prop('checked') == true){
