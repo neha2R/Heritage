@@ -47,7 +47,7 @@
                      <table id="table" class="mb-0 table table-striped">
                         <thead>
                            <tr>
-                              <th>#</th>
+                              <th>Sr. No</th>
                               <th>Name</th>
                               <th>Sub Domain</th>
                               <th>Status</th>
