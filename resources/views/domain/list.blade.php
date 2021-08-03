@@ -73,7 +73,7 @@
                                  </label>
 
                               </td>
-                              <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
+                              <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
                                  <form class="delete-domain" action="{{route('domain.destroy',$domain->id)}}" method="POST">
@@ -131,7 +131,7 @@
             <table id="table" class="mb-0 table table-striped">
                <thead>
                   <tr>
-                     <th>#</th>
+                     <th>Sr. No</th>
                      <th>Name</th>
                      <th>Status</th>
                      <th>Edit</th>
@@ -153,7 +153,7 @@
                                  <span class="slider round"></span>
                                  </label>
                               </td>
-                              <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-subdomain-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
+                              <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-subdomain-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
                                  <form class="delete-subdomain" action="{{route('subdomain',$subdomain->id)}}" method="POST">
@@ -276,7 +276,7 @@
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         <button type="submit" class="btn btn-primary">Save changes</button>
+         <button type="submit" class="btn btn-primary">Continue</button>
          </form>
          </div>
       </div>
@@ -315,7 +315,7 @@
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         <button type="submit" class="btn btn-primary">Save changes</button>
+         <button type="submit" class="btn btn-primary">Continue</button>
          </form>
          </div>
       </div>

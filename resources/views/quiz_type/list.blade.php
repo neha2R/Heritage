@@ -48,7 +48,7 @@
                      <table id="table" class="mb-0 table table-striped">
                         <thead>
                            <tr>
-                              <th>#</th>
+                              <th>Sr. No</th>
                               <th>Name</th>
                               <th>No Of Players </th>
                               <th>Status</th>
@@ -73,7 +73,7 @@
                                  </label>
 
                               </td>
-                              <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
+                              <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
                                  <form class="delete" action="{{route('quiztype.destroy',$quizType->id)}}" method="POST">
@@ -142,7 +142,7 @@
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         <button type="submit" class="btn btn-primary">Save changes</button>
+         <button type="submit" class="btn btn-primary">Continue</button>
          </form>
          </div>
       </div>

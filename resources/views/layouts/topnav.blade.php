@@ -1,7 +1,7 @@
 <div class="app-header header-shadow">
             <div class="app-header__logo">
                <!-- <div class="logo-src">Heritage</div> -->
-              <a href="/home"> <div><h2>Heritage</h2></div></a>
+              <a href="/home"> <div style="font-size: 21px;">The Heritage Olympad</div></a>
                <div class="header__pane ml-auto">
                   <div>
                      <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">

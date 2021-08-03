@@ -127,3 +127,10 @@ input:checked + .slider:after {
   background-color: #2dace3;
   border-color: #2dace3;
 }
+.edit-btn-bg {
+  background-color: #fe9365;
+  border-color: #fe9365;
+}
+#table {
+  text-align: center;
+}
