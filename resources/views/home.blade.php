@@ -80,7 +80,7 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    {{ __('Welcome Back...!') }}
                 </div>
             </div>
         </div>
