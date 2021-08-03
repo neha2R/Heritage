@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\AgeGroup;
+use App\DifficultyLevel;
+use App\Domain;
 use App\Question;
+use App\Sundomain;
 use Illuminate\Http\Request;
 
 class QuestionController extends Controller
@@ -14,7 +18,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::OrderBy('id', 'DESC')->get();
+        return view('question.list', compact('questions'));
     }
 
     /**
@@ -24,7 +29,13 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        //
+        $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->get();
+        $sub_domains = Sundomain::OrderBy('id', 'DESC')->get();
+        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->get();
+
+        return view('question.add', compact('age_groups', 'domains'));
+
     }
 
     /**

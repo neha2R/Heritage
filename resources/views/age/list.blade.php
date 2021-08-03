@@ -97,6 +97,27 @@
 
  @section('model')
 
+ <!-- Add Model Start Here -->
+<div class="modal fade bd-example-modal-sm show nextstep" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+
+         <div class="modal-body text-center">
+<h3 class="text-success"><b>Congrulations ! </b></h3>
+<p>You have added a age group, now you can continue</p>
+<div>
+<a href="#"  data-toggle="modal" data-target=".add-model">Add more age groups</a></div>
+<div>Or</div>
+<a href="/admin/domain">Add new domain</a>
+
+         </div>
+
+      </div>
+   </div>
+</div>
+<!-- Add Model Ends here -->
+
+
 <!-- Add Model Start Here -->
 <div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">

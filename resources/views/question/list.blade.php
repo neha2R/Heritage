@@ -6,7 +6,7 @@
 <div class="app-page-title">
    <div class="page-title-wrapper">
       <div class="page-title-heading">
-          Quiz Type
+          Questions
          <div class="page-title-subheading"> </div>
       </div>
    </div>
@@ -18,11 +18,10 @@
       <div class="col-md-12">
          <div class="card">
             <div class="card-header display-inline mt-3">
-               {{ __('Add Quiz Type') }}
-               <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
-                  </a> -->
+               {{ __('Add Question') }}
+               <a href="{{ route('question.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Add
+                  </a>
 
-               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Quiz Type</button>
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
@@ -48,27 +47,29 @@
                      <table id="table" class="mb-0 table table-striped">
                         <thead>
                            <tr>
-                              <th>#</th>
-                              <th>Name</th>
-                              <th>No Of Players </th>
+                              <th>Sr. No.</th>
+                              <th>Type</th>
+                              <th>Speed </th>
+                              <th>View</th>
                               <th>Status</th>
                               <th>Edit</th>
                               <th>Delete</th>
                            </tr>
                         </thead>
                         <tbody>
-                           @foreach($quizTypes as $key=>$quizType)
+                           @foreach($questions as $key=>$question)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <th scope="row">{{$quizType->name}}</th>
-                             <td>{{$quizType->no_of_player}}</td>
+                              <th scope="row">{{$question->setting}}</th>
+                             <td>{{$quizSpeed->no_of_question}}</td>
+                              <td>{{$quizSpeed->duration}} </td>
                               <td><label class="switch">
-                                 @if($quizType->status=='1')
+                                 @if($quizSpeed->status=='1')
                                  @php $status='checked'; @endphp
                                  @else
                                  @php $status=''; @endphp
                                  @endif
-                                 <input {{$status}}  type="checkbox" class="status" quizid="{{$quizType->id}}">
+                                 <input {{$status}}  type="checkbox" class="status" quizid="{{$quizSpeed->id}}">
                                  <span class="slider round"></span>
                                  </label>
 
@@ -76,7 +77,7 @@
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
-                                 <form class="delete" action="{{route('quiztype.destroy',$quizType->id)}}" method="POST">
+                                 <form class="delete" action="{{route('quizspeed.destroy',$quizSpeed->id)}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
@@ -97,47 +98,29 @@
 
  @section('model')
 
-
- <!-- Add Model Start Here -->
-<div class="modal fade bd-example-modal-sm show nextstep" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
-   <div class="modal-dialog modal-md">
-      <div class="modal-content">
-
-         <div class="modal-body text-center">
-<h3 class="text-success"><b>Congrulations ! </b></h3>
-<p>You have added a quiz type, now you can continue</p>
-<div>
-<a href="#"  data-toggle="modal" data-target=".add-model">Add more quiz type</a></div>
-<div>Or</div>
-<a href="/admin/agegroup">Add age groups</a>
-
-         </div>
-
-      </div>
-   </div>
-</div>
-<!-- Add Model Ends here -->
-
-
 <!-- Add Model Start Here -->
 <div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Quiz Type</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Quiz Speed  Level</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
          </div>
          <div class="modal-body">
-            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('quiztype.store') }}" >
+            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('quizspeed.store') }}" >
             <!-- novalidate="novalidate" -->
                @csrf
                <div class="form-group">
-                  <label for="name">Quiz Type</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Quiz type name" required>
+                  <label for="name">Quiz Speed</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Quiz Speed name" required>
                </div>
                <div class="form-group">
-                  <label for="name">No Of Players</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_player" placeholder="10"  required>
+                  <label for="name">No Of Question</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_question" placeholder="10"  required>
+               </div>
+               <div class="form-group">
+                  <label for="name">Duration (In Min)</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="duration" placeholder="Enter time in min"  required>
                </div>
          </div>
          <div class="modal-footer">
@@ -151,31 +134,34 @@
 <!-- Add Model Ends here -->
 
 
-@foreach($quizTypes as $key=>$quizType)
+@foreach($quizSpeeds as $key=>$quizSpeed)
 
 <!-- Edit Model Start Here -->
 <div class="modal fade bd-example-modal-lg show" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-lg">
      <div class="modal-content">
        <div class="modal-header">
-         <h5 class="modal-title" id="exampleModalLongTitle">Edit Quiz Type </h5>
+         <h5 class="modal-title" id="exampleModalLongTitle">Edit Quiz Speed </h5>
          <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
       </div>
       <div class="modal-body">
 
-	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('quiztype.update',$quizType->id) }}" >
+	  <form  class="col-md-10 mx-auto" method="post" action="{{ route('quizspeed.update',$quizSpeed->id) }}" >
 	  @method('PUT')
 
                @csrf
                <div class="form-group">
-                  <label for="name">Quiz Type</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$quizType->name}}" maxlength="50" name="name" placeholder="Quiz Type name" required>
+                  <label for="name">Quiz Speed</label>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$quizSpeed->name}}" maxlength="50" name="name" placeholder="Quiz Speed name" required>
                </div>
                <div class="form-group">
-                  <label for="name">No Of Players</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_player" placeholder="10" value="{{$quizType->no_of_player}}"  required>
+                  <label for="name">No Of Question</label>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_question" placeholder="10" value="{{$quizSpeed->no_of_question}}"  required>
                </div>
-
+               <div class="form-group">
+                  <label for="name">Duration (In Min)</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1"  name="duration" placeholder="Enter time in min" value="{{$quizSpeed->duration}}"  required>
+               </div>
 
          </div>
          <div class="modal-footer">
@@ -191,11 +177,7 @@
 
 @endsection
 @section('js')
-
-
-
 <script>
-
    $(document).ready(function() {
 
    	$('#table').DataTable();
@@ -203,7 +185,7 @@
 $(document).on('change','.status', function() {
     if(confirm("Are you sure want to change the status ?")) {
         var quizid = $(this).attr('quizid');
-        window.location.href = "/admin/quiztype/"+quizid;
+        window.location.href = "/admin/quizspeed/"+quizid;
        }
        else{
          if($(this).prop('checked') == true){

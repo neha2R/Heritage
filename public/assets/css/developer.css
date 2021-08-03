@@ -84,3 +84,46 @@ input:checked + .slider:after {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.app-sidebar .scrollbar-sidebar {
+  background-color: #343d4c;
+  color: #fff;
+}
+.app-sidebar__heading {
+  color: #fff;
+}
+.vertical-nav-menu li a {
+  color: #fff;
+}
+.vertical-nav-menu ul:before {
+  width: 0px;
+}
+.vertical-nav-menu li a:hover {
+  background: #151313;
+  text-decoration: none;
+}
+
+.vertical-nav-menu ul > li > a.mm-active {
+  color: #3f6ad8;
+  background: #eeeeee26;
+  font-weight: bold;
+}
+.vertical-nav-menu ul > li > a {
+  color: #fff;
+}
+.vertical-nav-menu li a.mm-active {
+  background: #151313;
+}
+.nextstep {
+  top: 125px !important;
+  left: 119px !important;
+}
+.app-theme-white .app-footer .app-footer__inner,
+.app-theme-white .app-header {
+  background: #fff;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #2dace3;
+  border-color: #2dace3;
+}

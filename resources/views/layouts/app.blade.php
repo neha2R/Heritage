@@ -94,7 +94,7 @@
 
        <script type="text/javascript" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 
-
+       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -105,6 +105,26 @@
        @yield('js')
 
        @yield('model')
+       <script>
+  $('li.dropdown.mega-dropdown a').on('click', function (event) {
+    $(this).toggleClass('mm-active');
+    $('.inside').toggleClass('mm-show');
+    // mm-collapse mm-show
+});
+$(document).ready(function() {
+  // $('li.dropdown.mega-dropdown a').addClass('mm-active');
+  $('.inside').addClass('mm-show');
 
+});
+</script>
+
+@if(session()->has('model'))
+<script>
+         $('.nextstep').modal('show');
+         setTimeout(function(){
+  $('.nextstep').modal('hide')
+}, 4000);
+</script>
+@endif
       </body>
 </html>

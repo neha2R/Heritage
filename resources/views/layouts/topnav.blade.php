@@ -1,6 +1,7 @@
 <div class="app-header header-shadow">
             <div class="app-header__logo">
-               <div class="logo-src"></div>
+               <!-- <div class="logo-src">Heritage</div> -->
+              <a href="/home"> <div><h2>Heritage</h2></div></a>
                <div class="header__pane ml-auto">
                   <div>
                      <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -66,7 +67,7 @@
                            <div class="widget-content-left">
                               <div class="btn-group">
                                  <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                 <img width="42" class="rounded-circle" src="assets/images/avatars/1.jpg" alt="">
+                                 <img width="42" class="rounded-circle" src="{{ asset('assets/images/avatars/employee.png') }}" alt="">
                                  <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                  </a>
                                  <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
@@ -82,10 +83,10 @@
                            </div>
                            <div class="widget-content-left  ml-3 header-user-info">
                               <div class="widget-heading">
-                                 Alina Mclourd
+                                 Virendra Singh
                               </div>
                               <div class="widget-subheading">
-                                 VP People Manager
+                                 Sr Software Engg
                               </div>
                            </div>
                            <!-- <div class="widget-content-right header-user-info ml-3">

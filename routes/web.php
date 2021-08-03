@@ -30,6 +30,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/difflevel', 'DifficultyLevelController');
     Route::resource('/quizspeed', 'QuizSpeedController');
     Route::resource('/quiztype', 'QuizTypeController');
+    Route::resource('/question', 'QuestionController');
 
 });
 Auth::routes();

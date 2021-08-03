@@ -30,39 +30,42 @@
                   </span>
                </div>
                <div class="scrollbar-sidebar">
+                  <h5 class="m-3">Navigation</h5>
                   <div class="app-sidebar__inner">
                      <ul class="vertical-nav-menu">
-                     <li class="app-sidebar__heading">Quiz Speed</li>
+                     <!-- <li class="app-sidebar__heading">Quiz Management</li> -->
+                      <li class="dropdown mega-dropdown">
+                          <a href="#">
+                          <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+
+                           Quiz Management
+                           <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                           </a>
+                        <ul class="inside">
                         <li>
                            <a href="{{ route('quiztype.index') }}" class="{{ request()->is('admin/quiztype*') ? 'mm-active' : '' }}">
-                           <i class="metismenu-icon pe-7s-rocket"></i>
+                           <i class="fa fa-bars" aria-hidden="true"></i>
                           Quiz Type
                            </a>
                         </li>
-
-                        <li class="app-sidebar__heading">Domain</li>
-                        <li>
-                           <a href="{{ route('domain.index') }}" class="{{ request()->is('admin/domain*') ? 'mm-active' : '' }}">
-                           <i class="metismenu-icon pe-7s-rocket"></i>
-                           Add Domain
-                           </a>
-                        </li>
-                        <li class="app-sidebar__heading">Age Group</li>
                         <li>
                            <a href="{{ route('agegroup.index') }}" class="{{ request()->is('admin/agegroup*') ? 'mm-active' : '' }}">
-                           <i class="metismenu-icon pe-7s-rocket"></i>
-                           Age Group
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Age Group
                            </a>
                         </li>
-                        <li
-                           >
-                           <!-- <a href="#">
+                        <li>
+                           <a href="{{ route('domain.index') }}" class="{{ request()->is('admin/domain*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add Domain
+                           </a>
+                        </li>
+
+                        <!-- <li>
+                           <a href="#">
                            <i class="metismenu-icon pe-7s-diamond"></i>
                            Elements
                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                           </a> -->
-                           <ul
-                              >
+                           </a>
+                           <ul>
                               <li>
                                  <a href="elements-buttons-standard.html">
                                  <i class="metismenu-icon"></i>
@@ -76,20 +79,25 @@
                                  </a>
                               </li>
                            </ul>
-                        </li>
-                        <li class="app-sidebar__heading">Difficulty Level</li>
+                        </li> -->
+
                         <li>
                            <a href="{{ route('difflevel.index') }}" class="{{ request()->is('admin/difflevel*') ? 'mm-active' : '' }}">
-                           <i class="metismenu-icon pe-7s-rocket"></i>
-                          Difficulty Level
+                           <i class="fa fa-bars" aria-hidden="true"></i>                          Difficulty Level
                            </a>
                         </li>
-                        <li class="app-sidebar__heading">Quiz Speed</li>
+
                         <li>
                            <a href="{{ route('quizspeed.index') }}" class="{{ request()->is('admin/quizspeed*') ? 'mm-active' : '' }}">
-                           <i class="metismenu-icon pe-7s-rocket"></i>
-                          Quiz Speed
+                           <i class="fa fa-bars" aria-hidden="true"></i>                          Quiz Speed
                            </a>
+                        </li>
+                        <li>
+                           <a href="{{ route('question.index') }}" class="{{ request()->is('admin/question*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Question List
+                           </a>
+                        </li>
+                        </ul>
                         </li>
                      </ul>
                   </div>

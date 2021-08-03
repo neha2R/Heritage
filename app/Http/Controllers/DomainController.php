@@ -48,7 +48,7 @@ class DomainController extends Controller
         $data->save();
 
         if ($data->id) {
-            return redirect()->back()->with(['success' => 'Domain saved Successfully']);
+            return redirect()->back()->with(['success' => 'Domain saved Successfully', 'model' => 'model show']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
