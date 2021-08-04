@@ -48,7 +48,7 @@
                         <thead>
                            <tr>
                               <th>Sr. No</th>
-                              <th>Name</th>
+                              <th>Domain Name</th>
                               <th>Sub Domain</th>
                               <th>Status</th>
                               <th>Edit</th>
@@ -116,6 +116,28 @@
 <!-- Add Model Ends here -->
 
 
+<!-- Add Model Start Here -->
+<div class="modal fade bd-example-modal-sm show nextstep2" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+   <div class="modal-dialog modal-md">
+      <div class="modal-content">
+
+         <div class="modal-body text-center">
+<h3 class="text-success"><b>Congrulations ! </b></h3>
+<p>You have added a new sub domain, now you can</p>
+<div>
+<a href="#"  data-toggle="modal" data-target=".add-model">Add more sub domain</a></div>
+<div>Or</div>
+<a href="/admin/difflevel">Add new diffulcity level</a>
+</div>
+
+         </div>
+
+      </div>
+   </div>
+</div>
+<!-- Add Model Ends here -->
+
+
 @foreach($domains as $key=>$domain)
 
 <!-- Sub Domain List Model Start Here -->
@@ -128,11 +150,11 @@
       </div>
       <div class="modal-body">
          <div class="table-responsive">
-            <table id="table" class="mb-0 table table-striped">
+            <table class="mb-0 table table2 table-striped">
                <thead>
                   <tr>
                      <th>Sr. No</th>
-                     <th>Name</th>
+                     <th>Sub Domain Name</th>
                      <th>Status</th>
                      <th>Edit</th>
                      <th>Delete</th>
@@ -330,6 +352,8 @@
       $(".form-control").attr('maxlength','30');
 
    	$('#table').DataTable();
+      $('.table2').DataTable();
+
 
    //             Swal.fire({
    //   title: 'Are you sure?',

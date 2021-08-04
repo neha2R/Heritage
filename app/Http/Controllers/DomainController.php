@@ -141,7 +141,7 @@ class DomainController extends Controller
         $data->save();
 
         if ($data->id) {
-            return redirect()->back()->with(['success' => 'Sub Domain saved Successfully', 'model' => 'model show']);
+            return redirect()->back()->with(['success' => 'Sub Domain saved Successfully', 'submodel' => 'model show']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }

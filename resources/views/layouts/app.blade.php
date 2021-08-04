@@ -126,5 +126,14 @@ $(document).ready(function() {
 }, 4000);
 </script>
 @endif
+
+@if(session()->has('submodel'))
+<script>
+         $('.nextstep2').modal('show');
+         setTimeout(function(){
+  $('.nextstep2').modal('hide')
+}, 4000);
+</script>
+@endif
       </body>
 </html>
