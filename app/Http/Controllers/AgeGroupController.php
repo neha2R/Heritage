@@ -42,6 +42,11 @@ class AgeGroupController extends Controller
             'to' => 'required|numeric|min:1|max:99',
         ]);
 
+        $agegroup = AgeGroup::where('from', $request->from)->where('to', $request->to)->first();
+        if ($agegroup) {
+            return redirect()->back()->with(['error' => 'Age group already exists']);
+        }
+
         $data = new AgeGroup;
         $data->name = $request->name;
         $data->from = $request->from;
