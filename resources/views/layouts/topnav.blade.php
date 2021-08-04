@@ -1,7 +1,7 @@
 <div class="app-header header-shadow">
             <div class="app-header__logo">
-               <!-- <div class="logo-src">Heritage</div> -->
-              <a href="/home"> <div style="font-size: 21px;">The Heritage</div></a>
+               <!-- <div class="logo-src"></div> -->
+               <img style="width:100px" class="img img-responsive" src="{{asset('assets/images/mylogo-inverse.png') }}" alt="">
                <div class="header__pane ml-auto">
                   <div>
                      <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
@@ -83,10 +83,10 @@
                            </div>
                            <div class="widget-content-left  ml-3 header-user-info">
                               <div class="widget-heading">
-                                 Virendra Singh
+                                 Heritage
                               </div>
                               <div class="widget-subheading">
-                                 Sr Software Engg
+                                 Admin
                               </div>
                            </div>
                            <!-- <div class="widget-content-right header-user-info ml-3">

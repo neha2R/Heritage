@@ -30,7 +30,7 @@
                   </span>
                </div>
                <div class="scrollbar-sidebar">
-                  <h6 class="m-3">Navigation</h6>
+                  <h6 class="">Navigation</h6>
                   <div class="app-sidebar__inner">
                      <ul class="vertical-nav-menu">
                      <!-- <li class="app-sidebar__heading">Quiz Management</li> -->
