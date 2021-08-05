@@ -110,7 +110,7 @@
 <div>
 <a href="#"  data-toggle="modal" data-target=".add-model">Add more diffulcity level</a></div>
 <div>Or</div>
-<a href="/admin/quizspeed">Add new quiz speed</a>
+<a href="/admin/quizspeed?success=1">Add new quiz speed</a>
 
          </div>
 
@@ -201,7 +201,11 @@
 @section('js')
 <script>
    $(document).ready(function() {
-
+      var success="{{Request::get('success')}}";
+      if(success=='1')
+     { 
+          $('.add-model').modal('show');
+     }
    	$('#table').DataTable();
 
 $(document).on('change','.status', function() {
