@@ -58,16 +58,8 @@
                            <i class="fa fa-bars" aria-hidden="true"></i>                           Add Domain
                            </a>
                         </li>
-                        <li>
-                           <a href="{{ route('faq.index') }}" class="{{ request()->is('admin/faq*') ? 'mm-active' : '' }}">
-                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add FAQs
-                           </a>
-                        </li>
-                        <li>
-                           <a href="{{ route('quizrules.index') }}" class="{{ request()->is('admin/quizrules*') ? 'mm-active' : '' }}">
-                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add Quiz Rules
-                           </a>
-                        </li>
+
+
 
                         <!-- <li>
                            <a href="#">
@@ -104,11 +96,33 @@
                         </li>
                         <li>
                            <a href="{{ route('question.index') }}" class="{{ request()->is('admin/question*') ? 'mm-active' : '' }}">
-                           <i class="fa fa-bars" aria-hidden="true"></i>                           Question List
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Question
+                           </a>
+                        </li>
+                        <li>
+                           <a href="{{ route('quizrules.index') }}" class="{{ request()->is('admin/quizrules*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add Quiz Rules
                            </a>
                         </li>
                         </ul>
                         </li>
+
+                        <li class="dropdown">
+                          <a href="#">
+                          <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+
+                           Settings
+                           <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                           </a>
+                        <ul class="inside2">
+                        <li>
+                           <a href="{{ route('faq.index') }}" class="{{ request()->is('admin/faq*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add FAQs
+                           </a>
+                        </li>
+                        </li>
+                        </ul>
+
                      </ul>
                   </div>
                </div>

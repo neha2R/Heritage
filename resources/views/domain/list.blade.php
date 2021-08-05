@@ -161,6 +161,7 @@
                   </tr>
                </thead>
                <tbody>
+
                   @foreach($domain->subdomain as $subdomain)
                   <tr>
                      <th scope="row">{{$key+1}}</th>
@@ -184,7 +185,7 @@
                                     <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
                                  </form>
                               </td>
-                  <tr>
+                          </tr>
 
                      @endforeach
                </tbody>

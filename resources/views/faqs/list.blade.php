@@ -63,11 +63,11 @@
                               <th scope="row">{{$Faq->title}}</th>
                               <td >
                               <div class="row">
-                                       <div class="col-2 text-truncate">
+                                       <div class="col-12 text-truncate">
                                        {{$Faq->content}}
                                        </div>
                               </div>
-                                
+
                               </td>
                               <td><label class="switch">
                                  @if($Faq->status=='1')
@@ -145,7 +145,7 @@
                   <label for="name">Description</label>
                   <textarea maxlength="300" class="@error('content') is-invalid @enderror form-control"  name="content" placeholder="description"  required> </textarea>
                </div>
-              
+
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
