@@ -18,7 +18,7 @@
       <div class="col-md-12">
          <div class="card">
             <div class="card-header display-inline mt-3">
-               {{ __('Add Domain') }}
+               {{ __('Add Group') }}
                <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
                   </a> -->
 
@@ -108,7 +108,7 @@
 <div>
 <a href="#"  data-toggle="modal" data-target=".add-model">Add more age groups</a></div>
 <div>Or</div>
-<a href="/admin/domain">Add new domain</a>
+<a href="/admin/domain?success=1">Add new domain</a>
 
          </div>
 
@@ -119,7 +119,7 @@
 
 
 <!-- Add Model Start Here -->
-<div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg show add-model" tabindex="-1"  role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
@@ -199,7 +199,11 @@
 @section('js')
 <script>
    $(document).ready(function() {
-
+     var success="{{Request::get('success')}}";
+     if(success=='1')
+     { 
+          $('.add-model').modal('show');
+     }
    	$('#table').DataTable();
 
 $(document).on('change','.agestatus', function() {

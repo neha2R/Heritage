@@ -109,7 +109,7 @@
 <div>
 <a href="#"  data-toggle="modal" data-target=".add-model">Add more quiz type</a></div>
 <div>Or</div>
-<a href="/admin/agegroup">Add age groups</a>
+<a href="/admin/agegroup?success=1">Add age groups</a>
 
          </div>
 

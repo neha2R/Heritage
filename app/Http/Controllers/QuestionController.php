@@ -113,7 +113,7 @@ class QuestionController extends Controller
         $quessetting->subdomain_id = $request->subdomain_id;
         $quessetting->save();
         if ($data->id) {
-            return redirect()->back()->with(['success' => 'Question saved successfully', 'model' => 'model show']);
+            return redirect('admin/question')->with(['success' => 'Question saved successfully', 'model' => 'model show']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }

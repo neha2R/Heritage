@@ -48,7 +48,7 @@ class QuizTypeController extends Controller
         $data->save();
 
         if ($data->id) {
-            return redirect()->back()->with(['success' => 'Quiz Type saved Successfully', 'model' => 'model show']);
+            return redirect('admin/quiztype')->with(['success' => 'Quiz Type saved Successfully', 'model' => 'model show']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }

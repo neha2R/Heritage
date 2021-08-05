@@ -127,7 +127,7 @@
 <div>
 <a href="#"  data-toggle="modal" data-target=".add-model">Add more sub domain</a></div>
 <div>Or</div>
-<a href="/admin/difflevel">Add new diffulcity level</a>
+<a href="/admin/difflevel?success=1">Add new diffulcity level</a>
 </div>
 
          </div>
@@ -354,7 +354,11 @@
    	$('#table').DataTable();
       $('.table2').DataTable();
 
-
+   var success="{{Request::get('success')}}";
+     if(success=='1')
+     { 
+          $('.add-model').modal('show');
+     }
    //             Swal.fire({
    //   title: 'Are you sure?',
    //   text: "You won't be able to revert this!",
