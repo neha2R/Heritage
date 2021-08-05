@@ -134,3 +134,73 @@ input:checked + .slider:after {
 #table {
   text-align: center;
 }
+
+.image-upload > .file-input {
+  display: none;
+}
+
+.image-upload i {
+  width: 80px;
+  cursor: pointer;
+}
+.inner-addon {
+  position: relative;
+}
+
+/* style icon */
+.inner-addon .fa {
+  position: absolute;
+  padding: 10px;
+}
+
+/* align icon */
+.left-addon .fa {
+  left: 0px;
+}
+.right-addon .fa {
+  right: 10px;
+  padding-top: 25px;
+  padding-left: 45px;
+  width: 10px;
+}
+
+/* add padding  */
+.left-addon input {
+  padding-left: 30px;
+}
+.right-addon input {
+  padding-right: 30px;
+}
+
+.it {
+  height: 50px;
+  margin-left: 10px;
+  width: 80px;
+}
+
+.btn-rmv1,
+.btn-rmv2,
+.btn-rmv3,
+.btn-rmv4,
+.btn-rmv5 {
+  display: none;
+}
+
+.rmv {
+  cursor: pointer;
+  color: #fff;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  display: inline-block;
+  background: rgba(255, 0, 0, 1);
+  margin: -7px -10px;
+}
+
+.rmv:hover {
+  background: rgba(255, 0, 0, 0.5);
+}
+.yes {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 0px !important;
+}
