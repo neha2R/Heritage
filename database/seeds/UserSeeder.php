@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
             'name' => 'Heritage',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin123'),
+            'dob' => date('Y-m-d'),
         ]);
     }
 }
