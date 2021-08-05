@@ -103,9 +103,9 @@
                            </a>
                         </li>
                         <li>
-                           <!-- <a href="{{ route('question.index') }}" class="{{ request()->is('admin/question*') ? 'mm-active' : '' }}">
+                           <a href="{{ route('question.index') }}" class="{{ request()->is('admin/question*') ? 'mm-active' : '' }}">
                            <i class="fa fa-bars" aria-hidden="true"></i>                           Question List
-                           </a> -->
+                           </a>
                         </li>
                         </ul>
                         </li>
