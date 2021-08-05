@@ -123,7 +123,7 @@ $(document).ready(function() {
          $('.nextstep').modal('show');
          setTimeout(function(){
   $('.nextstep').modal('hide')
-}, 4000);
+}, 20000);
 </script>
 @endif
 
