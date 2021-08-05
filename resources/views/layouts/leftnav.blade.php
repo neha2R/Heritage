@@ -58,6 +58,16 @@
                            <i class="fa fa-bars" aria-hidden="true"></i>                           Add Domain
                            </a>
                         </li>
+                        <li>
+                           <a href="{{ route('faq.index') }}" class="{{ request()->is('admin/faq*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add FAQs
+                           </a>
+                        </li>
+                        <li>
+                           <a href="{{ route('quizrules.index') }}" class="{{ request()->is('admin/quizrules*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>                           Add Quiz Rules
+                           </a>
+                        </li>
 
                         <!-- <li>
                            <a href="#">
