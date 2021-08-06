@@ -17,6 +17,9 @@ class AddFieldsToUsersTable extends Migration
             $table->string('state_id')->nullable();
             $table->string('city_id')->nullable();
             $table->string('address')->nullable();
+            $table->string('username')->nullable();
+            $table->enum('gender', ['male', 'female', 'other'])->nullable();
+            $table->enum('subscribe_newslater', ['0', '1'])->default(0);
 
         });
     }

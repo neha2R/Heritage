@@ -15,6 +15,7 @@ class AddFieldsToQuestionsTable extends Migration
     {
         Schema::table('questions', function (Blueprint $table) {
             $table->string('question_media_type')->nullable();
+            $table->softDeletes();
 
         });
     }
