@@ -102,7 +102,7 @@
 
  @section('model')
 
- 
+
 
 
 <!-- Add Model Start Here -->
@@ -163,7 +163,7 @@
                </div>
                <div class="form-group more" >
                </div>
-               
+
                <div class="form-group row">
                   <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
                </div>
@@ -181,7 +181,7 @@
 
 @foreach($quizRules as $key=>$rule)
 <!-- edit Model Start Here -->
-<div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" id="edit-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg show " tabindex="-1" id="edit-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
@@ -197,7 +197,7 @@
                   <select class="@error('quiz_type_id') is-invalid @enderror form-control" name="quiz_type_id" id="type" required onchange="addType(this.value)">
                   <option>Select Any</option>
                   @foreach($quizType as $type)
-                  @php 
+                  @php
                      $selected=$rule->quiz_type_id==$type->id?'selected':'';
                   @endphp
                   <option value="{{$type->id}}"  {{$selected}}>{{ucwords(strtolower($type->name))}}</option>
@@ -208,7 +208,7 @@
                   <select class="@error('quiz_speed_id') is-invalid @enderror form-control" name="quiz_speed_id"  id="speed" required onchange="addSpeed(this.value)">
                   <option>Select Any</option>
                   @foreach($quizSpeed as $speed)
-                  @php 
+                  @php
                      $selected=$rule->quiz_speed_id==$speed->id?'selected':'';
                   @endphp
                   <option value="{{$speed->id}}" {{$selected}}>{{ucwords(strtolower($speed->name))}}</option>
@@ -223,7 +223,7 @@
                </div>
                <div class="form-group row">
                   <div class="col-md-8">
-                      <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}"> 
+                      <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
                   </div>
                   <div class="col-md-4">
                       <input type="text" maxlength="50" class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
@@ -255,7 +255,7 @@
 
                   @endforeach
                </div>
-               
+
                <div class="form-group row">
                   <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
                </div>
@@ -275,7 +275,7 @@
 
 @foreach($quizRules as $key=>$rule)
 <!-- view Model Start Here -->
-<div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" id="view-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg show " tabindex="-1" id="view-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
@@ -283,7 +283,7 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
          </div>
          <div class="modal-body">
-            
+
                <div class="form-group">
                   <input type="text"   disabled class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
                </div>
@@ -292,7 +292,7 @@
                </div>
                <div class="form-group row">
                   <div class="col-md-8">
-                      <input type="text" disabled class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}"> 
+                      <input type="text" disabled class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
                   </div>
                   <div class="col-md-4">
                       <input type="text" disabled class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
@@ -323,13 +323,13 @@
 
                   @endforeach
                </div>
-               
-               
+
+
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         
-         
+
+
          </div>
       </div>
    </div>
@@ -362,7 +362,7 @@
          }
        }
       });
-    
+
 
 
 
@@ -372,7 +372,7 @@ return c; //you can just return c because it will be true or false
 });
 
 function addType(val){
-   
+
    $.ajax({
       type:"get",
       url:'/admin/get_rule_type/'+val,
