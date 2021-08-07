@@ -243,7 +243,7 @@
                <div class="form-group">
                   <input type="text" maxlength="50" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
-               <div class="form-group more">
+               <div class="form-group moreone">
                   @foreach(json_decode($rule->more) as $Rule)
                   <div class="row box">
                      <div class="form-group col-md-10">
@@ -257,7 +257,7 @@
                </div>
 
                <div class="form-group row">
-                  <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
+                  <a href="#" class="form-group btn btn-success ml-auto" onclick="addMoreOne()">Add more..</a>
                </div>
          </div>
          <div class="modal-footer">
@@ -394,9 +394,14 @@ function addSpeed(val){
    });
 }
 
+function addMoreOne(){
+   $('.moreone').append('<div class="row box"><div class="form-group col-md-10"><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
+}
+
 function addMore(){
    $('.more').append('<div class="row box"><div class="form-group col-md-10"><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
 }
+
 
 $(document).on("click", ".button-remove", function() {
     $(this).closest(".box").remove();
