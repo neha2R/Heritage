@@ -125,7 +125,7 @@
 <h3 class="text-success"><b>Congrulations ! </b></h3>
 <p>You have added a new sub domain, now you can</p>
 <div>
-<a href="#"  data-toggle="modal" data-target=".add-model">Add more sub domain</a></div>
+<a href="#"  data-toggle="modal" data-target=".add-sub-model">Add more sub domain</a></div>
 <div>Or</div>
 <a href="/admin/difflevel?success=1">Add new diffulcity level</a>
 </div>
@@ -357,7 +357,7 @@
 
    var success="{{Request::get('success')}}";
      if(success=='1')
-     { 
+     {
           $('.add-model').modal('show');
      }
    //             Swal.fire({

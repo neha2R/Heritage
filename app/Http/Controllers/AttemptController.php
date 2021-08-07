@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Attempt;
+use App\QuizDomain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class AttemptController extends Controller
 {
@@ -35,7 +37,34 @@ class AttemptController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'quiz_type_id' => 'required',
+            'difficulty_level_id' => 'required',
+            'quiz_speed_id' => 'required',
+            'domains' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $data = new Attempt;
+        $data->user_id = $request->user_id;
+        $data->quiz_type_id = $request->quiz_type_id;
+        $data->difficulty_level_id = $request->difficulty_level_id;
+        $data->quiz_speed_id = $request->quiz_speed_id;
+        $data->save();
+        $domain = new QuizDomain;
+        $domain->attempts_id = $data->id;
+        $domain->domain_id = $request->domains;
+        $domain->save();
+
+        $data = $data->toArray();
+
+        return response()->json(['status' => 200, 'message' => 'User created successfully', 'data' => $data]);
+
     }
 
     /**

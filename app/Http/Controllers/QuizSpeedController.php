@@ -137,4 +137,14 @@ class QuizSpeedController extends Controller
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
     }
+
+    public function speed()
+    {
+
+        $speed = QuizSpeed::OrderBy('id', 'DESC')->get();
+        $speed = $speed->toArray();
+        return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $speed]);
+
+    }
+
 }

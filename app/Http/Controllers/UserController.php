@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Unverified;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -48,7 +49,8 @@ class UserController extends Controller
                     'profile' => $user,
                     'avatar' => $user_avatar], 200);
             } else {
-                return response()->json(['status' => 400, 'message' => "Email is invalid."], 400);
+
+                return response()->json(['status' => 200, 'message' => "User not found.", 'data' => ''], 400);
             }
         } else {
             if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
@@ -75,7 +77,8 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
-            'name' => 'required',
+            'username' => 'required|unique:users',
+            'first_name' => 'required',
             'dob' => 'required',
         ]);
 
@@ -85,23 +88,51 @@ class UserController extends Controller
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'dob' => date('Y-m-d', strtotime($request->dob)),
-            'password' => bcrypt($request->password),
-            'mobile' => $request->mobile,
-            'type' => '2',
-            'age' => $age,
-        ]);
-
+        $user = new User;
+        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->dob = date('Y-m-d', strtotime($request->dob));
+        $user->password = bcrypt($request->password);
+        $user->mobile = $request->mobile;
+        $user->type = '2';
+        $user->state_id = $request->state_id;
+        $user->city_id = $request->city_id;
+        $user->save();
         if ($request->is_social == 1) {
             User::where('id', $user->id)->update(['is_social' => '1', 'email_verified_at' => date('Y-m-d H:i:s')]);
+            // $user->otp = '';
         }
+        // else {
+        //     $user->otp = '9876';
+        // }
 
         $user = $user->toArray();
 
-        return response()->json(['status' => 200, 'message' => 'Status succesfully saved', 'data' => $user]);
+        return response()->json(['status' => 200, 'message' => 'User created successfully', 'data' => $user]);
+
+    }
+
+    public function stepone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users',
+            'username' => 'unique:users',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $user = new Unverified;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $user->password = bcrypt($request->password);
+        $user->save();
+        $otp = '7898';
+        $user = $user->toArray();
+
+        return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $otp]);
 
     }
 

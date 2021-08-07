@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuizQuestionsTable extends Migration
+class CreateQuizDomainsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateQuizQuestionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('quiz_questions', function (Blueprint $table) {
+        Schema::create('quiz_domains', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('quiz_id')->constrained();
-            $table->string('questions')->comment('question for quiz in comma seprated form')->nullable();
-            $table->integer('total')->comment('sum of all questions')->nullable();
+            $table->foreignId('attempts_id')->constrained();
+            $table->string('domain_id')->comment('domain id of quiz selected by user')->nullable();
             $table->timestamps();
+
         });
     }
 
@@ -29,6 +29,6 @@ class CreateQuizQuestionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quiz_questions');
+        Schema::dropIfExists('quiz_domains');
     }
 }

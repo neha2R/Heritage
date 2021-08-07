@@ -17,9 +17,10 @@ class CreateAttemptsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('difficulty_level_id')->constrained();
+            $table->foreignId('quiz_type_id')->constrained();
             $table->foreignId('quiz_speed_id')->constrained();
             $table->integer('attempt')->comment('1=> for singal 2=>second')->nullable();
-            $table->foreignId('challange_id')->comment('Challange table id')->constrained();
+            $table->integer('challange_id')->comment('Challange table id')->nullable();
             $table->string('status')->comment('status of exam , completed,notcompleted')->nullable();
             $table->string('result')->comment('Pass, fail etc')->nullable();
             $table->string('marks')->comment('Obtain Marks')->nullable();

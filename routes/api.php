@@ -22,3 +22,8 @@ Route::post('register', 'UserController@register');
 Route::get('country', 'StatesController@index');
 Route::get('state/{id}', 'StatesController@fetchState');
 Route::get('city/{id}', 'StatesController@fetchCity');
+Route::post('stepone', 'UserController@stepone');
+Route::post('createquiz', 'AttemptController@store');
+Route::get('domains', 'DomainController@domains');
+Route::get('difficulty', 'DifficultyLevelController@difficulty');
+Route::get('speed', 'QuizSpeedCOntroller@speed');

@@ -137,4 +137,14 @@ class DifficultyLevelController extends Controller
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
     }
+
+    public function difficulty()
+    {
+
+        $difflevel = DifficultyLevel::OrderBy('id', 'DESC')->get();
+        $difflevel = $difflevel->toArray();
+        return response()->json(['status' => 200, 'message' => 'Difficulty level data', 'data' => $difflevel]);
+
+    }
+
 }

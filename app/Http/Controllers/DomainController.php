@@ -191,4 +191,13 @@ class DomainController extends Controller
 
     }
 
+    public function domains()
+    {
+
+        $domains = Domain::OrderBy('id', 'DESC')->get();
+        $domains = $domains->toArray();
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
+
+    }
+
 }
