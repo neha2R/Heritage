@@ -1,12 +1,11 @@
 <?php
 
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 
 class QuestionsSetting extends Model
 {
-    //
+    
     protected $table = 'questions_setting';
     public function age_group()
     {
