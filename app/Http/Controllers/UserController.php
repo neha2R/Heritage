@@ -136,4 +136,10 @@ class UserController extends Controller
 
     }
 
+    public function index()
+    {
+        $users=User::where('type','2')->get();
+        return view('users.list', compact('users'));
+    }
+
 }

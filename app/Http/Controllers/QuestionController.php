@@ -8,7 +8,10 @@ use App\Domain;
 use App\Question;
 use App\QuestionsSetting;
 use App\Subdomain;
+use App\Imports\QuestionImport;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class QuestionController extends Controller
 {
@@ -340,5 +343,16 @@ class QuestionController extends Controller
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
+    }
+
+    public function import(Request $request) 
+
+    {
+        Excel::import(new QuestionImport,$request->file('bulk'));
+
+           
+
+        return back();
+
     }
 }
