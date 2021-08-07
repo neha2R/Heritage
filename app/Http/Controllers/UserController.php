@@ -118,21 +118,64 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'username' => 'unique:users',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-
+        $otp = rand(100000, 999999);
         $user = new Unverified;
         $user->email = $request->email;
         $user->username = $request->username;
         $user->password = bcrypt($request->password);
+        $user->otp = $otp;
         $user->save();
-        $otp = '7898';
+
         $user = $user->toArray();
 
         return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $otp]);
+
+    }
+
+    public function email_verify(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'otp' => 'required',
+            'is_social' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        if ($request->is_social == 0) {
+            $user = Unverified::where('email', $request->email)->where('otp', $request->otp)->first();
+            if (empty($user)) {
+                return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 400);
+            } else {
+                if ($user->otp != $request->otp) {
+                    return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 400);
+                } else {
+                    $userdata = new User;
+                    $userdata->email = $user->email;
+                    $userdata->password = $user->password;
+                    $userdata->username = $user->username;
+                    $userdata->dob = date('d-m-Y');
+                    $userdata->save();
+
+                    $userdata = $userdata->toArray();
+                }
+            }
+        } else {
+            $userdata = new User;
+            $userdata->email = $request->email;
+            $userdata->username = $user->username;
+            $userdata->dob = date('d-m-Y');
+            $userdata->save();
+            $userdata = $userdata->toArray();
+        }
+        return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $userdata]);
 
     }
 

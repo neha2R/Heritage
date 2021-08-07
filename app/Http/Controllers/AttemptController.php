@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Attempt;
 use App\QuizDomain;
+use App\QuizRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,10 +61,12 @@ class AttemptController extends Controller
         $domain->attempts_id = $data->id;
         $domain->domain_id = $request->domains;
         $domain->save();
-
+        $rule = QuizRule::where('quiz_type_id', $request->quiz_type_id)->orWhere('quiz_speed_id', $request->quiz_speed_id)->first();
         $data = $data->toArray();
-
-        return response()->json(['status' => 200, 'message' => 'User created successfully', 'data' => $data]);
+        if (!empty($rule)) {
+            $data['rule'] = $rule->toArray();
+        }
+        return response()->json(['status' => 200, 'message' => 'Quiz created successfully', 'data' => $data]);
 
     }
 
