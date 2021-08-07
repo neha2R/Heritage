@@ -6,11 +6,13 @@ use App\AgeGroup;
 use App\Attempt;
 use App\DifficultyLevel;
 use App\Domain;
+use App\Imports\QuestionImport;
 use App\Question;
 use App\QuestionsSetting;
 use App\QuizSpeed;
 use App\Subdomain;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QuestionController extends Controller
 {
@@ -328,4 +330,11 @@ class QuestionController extends Controller
 
     }
 
+    public function import(Request $request)
+    {
+        Excel::import(new QuestionImport, $request->file('bulk'));
+
+        return back();
+
+    }
 }

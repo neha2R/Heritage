@@ -176,7 +176,12 @@ class UserController extends Controller
             $userdata = $userdata->toArray();
         }
         return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $userdata]);
+    }
 
+    public function index()
+    {
+        $users = User::where('type', '2')->get();
+        return view('users.list', compact('users'));
     }
 
 }

@@ -7,6 +7,7 @@ class QuestionsSetting extends Model
 {
     
     protected $table = 'questions_setting';
+    protected $guarded=[];
     public function age_group()
     {
         return $this->belongsTo('App\AgeGroup', 'age_group_id', 'id');
