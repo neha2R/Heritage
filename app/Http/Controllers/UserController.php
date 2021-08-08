@@ -50,7 +50,8 @@ class UserController extends Controller
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
-                    'profile' => $user,
+                    'data' => $user,
+                    'profile_complete' => $user->profile_complete,
                     'avatar' => $user_avatar], 200);
             } else {
 
@@ -69,7 +70,8 @@ class UserController extends Controller
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
-                    'profile' => $user], 200);
+                    'profile_complete' => $user->profile_complete,
+                    'data' => $user], 200);
             } else {
                 return response()->json(['status' => 400, 'message' => "Email or password is invalid."], 400);
             }
