@@ -150,7 +150,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'otp' => 'required',
+            // 'otp' => 'required',
             'is_social' => 'required',
         ]);
 
@@ -181,7 +181,8 @@ class UserController extends Controller
             $userdata = new User;
             $userdata->name = '';
             $userdata->email = $request->email;
-            $userdata->username = $user->username;
+            $userdata->username = $request->email;
+            $userdata->password = '';
             $userdata->dob = date('Y-m-d');
             $userdata->email_verified_at = date('Y-m-d H:i:s');
             $userdata->is_social = '1';
