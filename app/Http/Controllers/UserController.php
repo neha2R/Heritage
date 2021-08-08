@@ -73,7 +73,7 @@ class UserController extends Controller
                     'profile_complete' => $user->profile_complete,
                     'data' => $user], 200);
             } else {
-                return response()->json(['status' => 204, 'message' => "Email or password is invalid."], 204);
+                return response()->json(['status' => 200, 'message' => "Email or password is invalid."], 204);
             }
         }
 
