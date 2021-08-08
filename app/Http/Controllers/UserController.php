@@ -60,12 +60,12 @@ class UserController extends Controller
         } else {
             if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
                 $user = Auth::user();
+                $token = $user->createToken($user->email)->plainTextToken;
 
                 if ($user->profile_complete == 0) {
-                    return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'profile_complete' => 0, 'data' => ''], 400);
+                    return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
+                        'data' => $user], 400);
                 }
-
-                $token = $user->createToken($user->email)->plainTextToken;
 
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
