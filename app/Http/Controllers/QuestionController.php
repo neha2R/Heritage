@@ -330,8 +330,8 @@ class QuestionController extends Controller
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
         $domains = QuizDomain::where('attempts_id', $quiz->id)->first();
         $diff = DifficultyLevel::find($quiz->difficulty_level_id);
-        $age_group = AgeGroup::where('from', '>=', $user->age)->where('to', '=<', $user->age)->first();
-        dd($age_group);
+        $age_group = AgeGroup::where('from', '>', $user->age)->orWhere('to', '<', $user->age)->latest()->first();
+
         if (empty($age_group)) {
             $age_group = AgeGroup::where('from', '>=', $user->age)->latest();
         }

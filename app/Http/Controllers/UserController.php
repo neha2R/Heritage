@@ -117,9 +117,10 @@ class UserController extends Controller
         //     $user->otp = '9876';
         // }
 
-        $user = $user->toArray();
+        // $user = $user->toArray();
 
-        return response()->json(['status' => 200, 'message' => 'User updated successfully', 'data' => $user]);
+        return response()->json(['status' => 200, 'profile_complete' => $user->profile_complete,
+            'message' => 'User updated successfully', 'data' => $user]);
 
     }
 
