@@ -9,6 +9,7 @@ use App\Domain;
 use App\Imports\QuestionImport;
 use App\Question;
 use App\QuestionsSetting;
+use App\QuizDomain;
 use App\QuizSpeed;
 use App\Subdomain;
 use App\User;
@@ -327,9 +328,15 @@ class QuestionController extends Controller
         }
         $user = User::find($quiz->user_id);
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
+        $domains = QuizDomain::where('attempts_id', $quiz->id)->first();
         $diff = DifficultyLevel::find($quiz->difficulty_level_id);
-        $question = Question::inRandomOrder()->where()->limit($speed->no_of_question)->get();
-        $question = QuestionsSetting::inRandomOrder()->where('age_group_id', )->limit($speed->no_of_question)->get();
+        $age_group = AgeGroup::where('from', '>=', $user->age)->where('to', '=<', $user->age)->first();
+        dd($age_group);
+        if (empty($age_group)) {
+            $age_group = AgeGroup::where('from', '>=', $user->age)->latest();
+        }
+        $domains = (explode(",", $domains));
+        $question = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)->whereIn('domain_id', $domains)->limit($speed->no_of_question)->get('question_id');
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $speed]);
 
     }
