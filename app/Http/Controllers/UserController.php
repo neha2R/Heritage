@@ -76,10 +76,11 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users',
-            'username' => 'required|unique:users',
+            // 'email' => 'required|email|unique:users',
+            // 'username' => 'required|unique:users',
             'first_name' => 'required',
             'dob' => 'required',
+            'user_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -88,21 +89,21 @@ class UserController extends Controller
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
 
-        $user = new User;
+        $user = User::find($user_id);
         $user->name = $request->first_name . ' ' . $request->last_name;
-        $user->email = $request->email;
-        $user->username = $request->username;
+        // $user->email = $request->email;
+        // $user->username = $request->username;
         $user->dob = date('Y-m-d', strtotime($request->dob));
-        $user->password = bcrypt($request->password);
+        // $user->password = bcrypt($request->password);
         $user->mobile = $request->mobile;
         $user->type = '2';
         $user->state_id = $request->state_id;
         $user->city_id = $request->city_id;
         $user->save();
-        if ($request->is_social == 1) {
-            User::where('id', $user->id)->update(['is_social' => '1', 'email_verified_at' => date('Y-m-d H:i:s')]);
-            // $user->otp = '';
-        }
+        // if ($request->is_social == 1) {
+        //     User::where('id', $user->id)->update(['is_social' => '1', 'email_verified_at' => date('Y-m-d H:i:s')]);
+        //     // $user->otp = '';
+        // }
         // else {
         //     $user->otp = '9876';
         // }
@@ -162,6 +163,7 @@ class UserController extends Controller
                     $userdata->password = $user->password;
                     $userdata->username = $user->username;
                     $userdata->dob = date('d-m-Y');
+                    $userdata->email_verified_at = date('Y-m-d H:i:s');
                     $userdata->save();
 
                     $userdata = $userdata->toArray();
@@ -172,6 +174,8 @@ class UserController extends Controller
             $userdata->email = $request->email;
             $userdata->username = $user->username;
             $userdata->dob = date('d-m-Y');
+            $userdata->email_verified_at = date('Y-m-d H:i:s');
+            $userdata->is_social = '1';
             $userdata->save();
             $userdata = $userdata->toArray();
         }
