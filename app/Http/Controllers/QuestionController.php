@@ -11,6 +11,7 @@ use App\Question;
 use App\QuestionsSetting;
 use App\QuizSpeed;
 use App\Subdomain;
+use App\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -321,6 +322,9 @@ class QuestionController extends Controller
     {
 
         $quiz = Attempt::find($request->quiz_id);
+        if (empty($quiz)) {
+            return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
+        }
         $user = User::find($quiz->user_id);
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
         $diff = DifficultyLevel::find($quiz->difficulty_level_id);
