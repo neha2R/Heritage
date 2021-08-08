@@ -99,6 +99,7 @@ class UserController extends Controller
         $user->type = '2';
         $user->state_id = $request->state_id;
         $user->city_id = $request->city_id;
+        $user->profile_complete = '1';
         $user->save();
         // if ($request->is_social == 1) {
         //     User::where('id', $user->id)->update(['is_social' => '1', 'email_verified_at' => date('Y-m-d H:i:s')]);
