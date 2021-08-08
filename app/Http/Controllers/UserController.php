@@ -33,7 +33,7 @@ class UserController extends Controller
                 $user = Auth::user();
 
                 if ($user->profile_complete == 0) {
-                    return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'data' => ''], 204);
+                    return response()->json(['status' => 200, 'message' => "Your profile is not completed", 'data' => ''], 202);
                 }
 
                 $token = $user->createToken($user->email)->plainTextToken;
@@ -55,7 +55,7 @@ class UserController extends Controller
                     'avatar' => $user_avatar], 200);
             } else {
 
-                return response()->json(['status' => 200, 'message' => "User not found.", 'data' => ''], 204);
+                return response()->json(['status' => 200, 'message' => "User not found.", 'data' => ''], 202);
             }
         } else {
             if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
@@ -63,8 +63,8 @@ class UserController extends Controller
                 $token = $user->createToken($user->email)->plainTextToken;
 
                 if ($user->profile_complete == 0) {
-                    return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
-                        'data' => $user], 204);
+                    return response()->json(['status' => 200, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
+                        'data' => $user], 202);
                 }
 
                 return response()->json(['status' => 200,
@@ -73,7 +73,7 @@ class UserController extends Controller
                     'profile_complete' => $user->profile_complete,
                     'data' => $user], 200);
             } else {
-                return response()->json(['status' => 200, 'message' => "Email or password is invalid."], 204);
+                return response()->json(['status' => 200, 'message' => "Email or password is invalid."], 202);
             }
         }
 
@@ -162,10 +162,10 @@ class UserController extends Controller
         if ($request->is_social == 0) {
             $user = Unverified::where('email', $request->email)->where('otp', $request->otp)->first();
             if (empty($user)) {
-                return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 204);
+                return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 202);
             } else {
                 if ($user->otp != $request->otp) {
-                    return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 204);
+                    return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 202);
                 } else {
                     $userdata = new User;
                     $userdata->name = '';
