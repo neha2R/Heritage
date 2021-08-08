@@ -36,8 +36,8 @@ class UserController extends Controller
                     return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'data' => ''], 400);
                 }
 
-                // $token = $user->createToken('Android')->accessToken;
-                $token = $this->generateRandomString();
+                $token = $user->createToken($user->email)->plainTextToken;
+                // $token = $this->generateRandomString();
                 // $user->app_id = $request->app_id;
                 // $user->save();
 
@@ -64,7 +64,7 @@ class UserController extends Controller
                     return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'data' => ''], 400);
                 }
 
-                $token = $user->createToken('Android')->accessToken;
+                $token = $user->createToken($user->email)->plainTextToken;
 
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
@@ -93,10 +93,10 @@ class UserController extends Controller
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
 
-        $user = User::find($user_id);
+        $user = User::find($request->user_id);
         $user->name = $request->first_name . ' ' . $request->last_name;
         // $user->email = $request->email;
-        // $user->username = $request->username;
+        $user->age = $age;
         $user->dob = date('Y-m-d', strtotime($request->dob));
         // $user->password = bcrypt($request->password);
         $user->mobile = $request->mobile;
@@ -104,6 +104,8 @@ class UserController extends Controller
         $user->state_id = $request->state_id;
         $user->city_id = $request->city_id;
         $user->profile_complete = '1';
+        $user->subscribe_newslater = $request->newsletter;
+
         $user->save();
         // if ($request->is_social == 1) {
         //     User::where('id', $user->id)->update(['is_social' => '1', 'email_verified_at' => date('Y-m-d H:i:s')]);
@@ -115,7 +117,7 @@ class UserController extends Controller
 
         $user = $user->toArray();
 
-        return response()->json(['status' => 200, 'message' => 'User created successfully', 'data' => $user]);
+        return response()->json(['status' => 200, 'message' => 'User updated successfully', 'data' => $user]);
 
     }
 
@@ -164,10 +166,11 @@ class UserController extends Controller
                     return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 400);
                 } else {
                     $userdata = new User;
+                    $userdata->name = '';
                     $userdata->email = $user->email;
                     $userdata->password = $user->password;
                     $userdata->username = $user->username;
-                    $userdata->dob = date('d-m-Y');
+                    $userdata->dob = date('Y-m-d');
                     $userdata->email_verified_at = date('Y-m-d H:i:s');
                     $userdata->save();
 
@@ -176,15 +179,16 @@ class UserController extends Controller
             }
         } else {
             $userdata = new User;
+            $userdata->name = '';
             $userdata->email = $request->email;
             $userdata->username = $user->username;
-            $userdata->dob = date('d-m-Y');
+            $userdata->dob = date('Y-m-d');
             $userdata->email_verified_at = date('Y-m-d H:i:s');
             $userdata->is_social = '1';
             $userdata->save();
             $userdata = $userdata->toArray();
         }
-        return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $userdata]);
+        return response()->json(['status' => 200, 'message' => 'Email verified succesfully', 'data' => $userdata]);
     }
 
     public function index()
