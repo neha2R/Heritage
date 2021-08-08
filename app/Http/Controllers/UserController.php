@@ -19,6 +19,10 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+    public function generateRandomString($length = 10)
+    {
+        return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
+    }
     public function login(Request $request)
     {
 
@@ -32,8 +36,8 @@ class UserController extends Controller
                     return response()->json(['status' => 203, 'message' => "Your profile is not completed", 'data' => ''], 400);
                 }
 
-                $token = $user->createToken('Android')->accessToken;
-
+                // $token = $user->createToken('Android')->accessToken;
+                $token = $this->generateRandomString();
                 // $user->app_id = $request->app_id;
                 // $user->save();
 
