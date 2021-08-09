@@ -26,4 +26,6 @@ Route::post('stepone', 'UserController@stepone');
 Route::post('createquiz', 'AttemptController@store');
 Route::get('domains', 'DomainController@domains');
 Route::get('difficulty', 'DifficultyLevelController@difficulty');
-Route::get('speed', 'QuizSpeedCOntroller@speed');
+Route::get('speed', 'QuizSpeedController@speed');
+Route::post('email_verify', 'UserController@email_verify');
+Route::post('questions', 'QuestionController@question');
