@@ -72,41 +72,38 @@ class QuestionController extends Controller
             'subdomain_id' => 'required',
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
-           // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
+            // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
         ]);
         $option1_media = '';
         $option2_media = '';
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
-        $type='';
+        $type = '';
         if ($request->has('question_media')) {
             $foldername = 'question';
-             $file = $request->file('question_media');
-          
-            $imagemimes = ['image/png','image/jpg','image/jpeg','image_gif']; //Add more mimes that you want to support
+            $file = $request->file('question_media');
+
+            $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $audiomimes = ['audio/mpeg']; //Add more mimes that you want to support
-            
-            
-            $question_media=$file->store('question', 'public');
-            
-            if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='0';
+
+            $question_media = $file->store('question', 'public');
+
+            if (in_array($file->getMimeType(), $imagemimes)) {
+                $type = '0';
             }
 
             //validate audio
-            if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='1';
-            }	
+            if (in_array($file->getMimeType(), $audiomimes)) {
+                $type = '1';
+            }
 
             //Validate video
-            if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='2';
+            if (in_array($file->getMimeType(), $videomimes)) {
+                $type = '2';
             }
-            
-      
-            
+
         }
         if ($request->has('option1_media')) {
             $foldername = 'option1';
@@ -138,7 +135,7 @@ class QuestionController extends Controller
         $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type;
-        $data->type=$type;
+        $data->type = $type;
         $data->save();
 
         $quessetting = new QuestionsSetting;
@@ -225,7 +222,7 @@ class QuestionController extends Controller
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
-        $type='';
+        $type = '';
         if ($request->has('question_media')) {
             $foldername = 'question';
 
@@ -233,27 +230,27 @@ class QuestionController extends Controller
                 unlink(storage_path('app/public/' . $request->question_media_old));
             }
             $file = $request->file('question_media');
-          
-            $imagemimes = ['image/png','image/jpg','image/jpeg','image_gif']; //Add more mimes that you want to support
+
+            $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             $videomimes = ['video/mp4']; //Add more mimes that you want to support
-            $audiomimes = ['audio/mpeg','audio/mp3']; //Add more mimes that you want to support
-             
-            $question_media=$file->store('question', 'public');
-               
-            if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='0';
+            $audiomimes = ['audio/mpeg', 'audio/mp3']; //Add more mimes that you want to support
+
+            $question_media = $file->store('question', 'public');
+
+            if (in_array($file->getMimeType(), $imagemimes)) {
+                $type = '0';
             }
 
             //validate audio
-            if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='1';
-            }	
+            if (in_array($file->getMimeType(), $audiomimes)) {
+                $type = '1';
+            }
 
             //Validate video
-            if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='2';
+            if (in_array($file->getMimeType(), $videomimes)) {
+                $type = '2';
             }
-            
+
             $question_media = $request->file('question_media')->store($foldername, 'public');
         } else {
             $question_media = $request->question_media_old;
@@ -308,7 +305,7 @@ class QuestionController extends Controller
         $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type_old;
-        $data->type=$type;
+        $data->type = $type;
         $data->save();
 
         if (QuestionsSetting::where('question_id', $data->id)->first()) {
@@ -427,11 +424,20 @@ class QuestionController extends Controller
         $data = [];
         $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
         $data['quiz_type'] = $quiz_type->name;
-        foreach ($questions as $question) {
-            $id = $question->questionsettingapi->difficulty_level_id;
-            $time = $diff->where('id', $id)->first('time_per_question');
-            $question['time'] = $time->time_per_question;
-            unset($question['questionsettingapi']);
+        if ($speed->quiz_speed_type == 'single') {
+            $data['time'] = $speed->duration;
+            $data['whole_quiz_time'] = '0';
+
+            // foreach ($questions as $question) {
+            //     // $id = $question->questionsettingapi->difficulty_level_id;
+            //     // $time = $diff->where('id', $id)->first('time_per_question');
+            //     $question['time'] = $speed->duration;
+            //     // unset($question['questionsettingapi']);
+            // }
+        }
+        if ($speed->quiz_speed_type == 'all') {
+            $data['whole_quiz_time'] = '1';
+            $data['time'] = $speed->duration;
         }
 
         $quizques = new QuizQuestion;
