@@ -29,4 +29,4 @@ Route::get('difficulty', 'DifficultyLevelController@difficulty');
 Route::get('speed', 'QuizSpeedController@speed');
 Route::post('email_verify', 'UserController@email_verify');
 Route::post('questions', 'QuestionController@question');
-Route::post('quiz_rules', 'QuizRuleController@quiz_rules');
+Route::post('quiz_rule', 'QuizRuleController@quiz_rules');
