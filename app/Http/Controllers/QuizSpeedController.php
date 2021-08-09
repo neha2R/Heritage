@@ -40,7 +40,7 @@ class QuizSpeedController extends Controller
             'name' => 'required|unique:quiz_speeds',
             'duration' => 'required|numeric|min:1',
             'no_of_question' => 'required|numeric|min:1',
-            'quiz_speed_type' => 'required|numeric|min:1',
+            'quiz_speed_type' => 'required',
         ]);
 
         $data = new QuizSpeed;
@@ -109,7 +109,7 @@ class QuizSpeedController extends Controller
             'name' => 'required|unique:quiz_speeds,name,' . $data->id,
             'duration' => 'required|numeric|min:1',
             'no_of_question' => 'required|numeric|min:1',
-            'quiz_speed_type' => 'required|numeric|min:1',
+            'quiz_speed_type' => 'required',
         ]);
 
         $data->name = $request->name;

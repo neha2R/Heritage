@@ -52,7 +52,7 @@
                               <th>Name</th>
                               <th>No Of Question </th>
                               <th>Quiz Speed Type </th>
-                              <th>Duration (In Min)</th>
+                              <th>Duration</th>
                               <th>Status</th>
                               <th>Edit</th>
                               <th>Delete</th>
@@ -72,7 +72,7 @@
                                     {{"Whole Quiz"}}
                                   @endif
                               </th>
-                              <td>{{$quizSpeed->duration}} </td>
+                              <td>{{$quizSpeed->duration}} @if($quizSpeed->quiz_speed_type=="single") seconds @else minutes @endif </td>
                               <td><label class="switch">
                                  @if($quizSpeed->status=='1')
                                  @php $status='checked'; @endphp
@@ -151,15 +151,15 @@
                </div>
                <div class="form-group">
                   <label for="name">Quiz Speed Type</label>
-                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required> 
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDuration(this.value)"> 
                      <option>Select Any</option>
                      <option value="single">Per Question</option>
                      <option value="all" >Whole Quiz</option>
                   </select>
                </div>
                <div class="form-group">
-                  <label for="name">Duration (In Min)</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="duration" placeholder="Enter time in min"  required>
+                  <label for="name" id="duration">Duration</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="duration" placeholder="Enter time"  id="duration_type" required>
                </div>
          </div>
          <div class="modal-footer">
@@ -199,15 +199,15 @@
                </div>
                <div class="form-group">
                   <label for="name">Quiz Speed Type</label>
-                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required> 
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDurationOne(this.value)"> 
                      <option>Select Any</option>
                      <option value="single" {{$quizSpeed->quiz_speed_type=="single"?'selected':''}}>Per Question</option>
                      <option value="all" {{$quizSpeed->quiz_speed_type=="all"?'selected':''}}>Whole Quiz</option>
                   </select>
                </div>
                <div class="form-group">
-                  <label for="name">Duration (In Min)</label>
-                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1"  name="duration" placeholder="Enter time in min" value="{{$quizSpeed->duration}}"  required>
+                  <label for="name" id="duration1">@if($quizSpeed->quiz_speed_type=="single") Duration in seconds @else Duration in minutes @endif</label>
+                  <input type="number" class="@error('name') is-invalid @enderror form-control" min="1"  name="duration"  @if($quizSpeed->quiz_speed_type=="single") placeholder="Enter time in seconds" @else placeholder="Enter time in seconds" @endif value="{{$quizSpeed->duration}}" id="duration_type1"  required>
                </div>
 
          </div>
@@ -253,5 +253,37 @@ $(document).on('change','.status', function() {
 var c = confirm("Are you sure want to delete ?");
 return c; //you can just return c because it will be true or false
 });
+
+ changeDuration=(val)=>{
+    if(val=="single")
+    {
+         $('#duration').html('');
+         $('#duration').html('Duration in Seconds');
+         $('#duration_type').attr("placeholder", "Enter time in seconds");
+    }  
+    else
+    {
+      $('#duration').html('');
+         $('#duration').html('Duration in Minutes');
+         $('#duration_type').attr("placeholder", "Enter time in minutes");
+    } 
+      }
+
+   changeDurationOne=(val)=>{
+    if(val=="single")
+    {
+         $('#duration1').html('');
+         $('#duration1').html('Duration in Seconds');
+         $('#duration_type1').attr("placeholder", "Enter time in seconds");
+    }  
+    else
+    {
+      $('#duration1').html('');
+         $('#duration1').html('Duration in Minutes');
+         $('#duration_type1').attr("placeholder", "Duration in minutes");
+    } 
+      }
     </script>
+
+    
       @endsection
