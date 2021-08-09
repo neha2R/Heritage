@@ -348,12 +348,21 @@ use App\QuestionsSetting;
                   </div>
                </div>
                <div class="col-md-2 yes" id="img1">
+                  @if($question->type=='1')
+                  <audio controls>
+                 
+                     <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
+                     Your browser does not support the audio tag.
+                     </audio> 
+                  @else
+
                   <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
                   <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
                   <video width="141" class="video" id="video1" style="display:none" controls>
                      <source src="" id="video_here6">
                      Your browser does not support HTML5 video.
                   </video>
+                  @endif
                </div>
             </div>
          <div class="row">
