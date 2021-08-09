@@ -67,15 +67,34 @@ class QuestionController extends Controller
             'subdomain_id' => 'required',
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
+           // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
         ]);
         $option1_media = '';
         $option2_media = '';
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
+       
         if ($request->has('question_media')) {
             $foldername = 'question';
-            $question_media = $request->file('question_media')->store($foldername, 'public');
+            $file=$request->file('question_media');
+
+          
+        
+        //    $mime = $file->getClientOriginalExtension();
+        //    if ($mime == "x-flv" || $mime == "mp4" || $mime == "x-mpegURL" || $mime == "MP2T" || $mime == "3gpp" || $mime == "quicktime" || $mime == "x-msvideo" || $mime == "x-ms-wmv") 
+        //     {
+                $file = $request->file('question_media');
+                $file->move(storage_path('app/public/question/'), $file->getClientOriginalName());
+               
+    
+        //    }
+        //    else
+        //    {
+
+        //     $question_media = $request->file('question_media')->store($foldername, 'public');
+        //    }
+            
         }
         if ($request->has('option1_media')) {
             $foldername = 'option1';
