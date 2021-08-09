@@ -16,7 +16,7 @@ class CreateDifficultyLevelsTable extends Migration
         Schema::create('difficulty_levels', function (Blueprint $table) {
             $table->id();
             $table->string('name',50);
-            $table->integer('weitage_per_question')->nullable();	
+            $table->string('weitage_per_question',10)->nullable();	
             $table->integer('time_per_question')->comment('in seconds')->nullable();	
             $table->timestamps();
         });

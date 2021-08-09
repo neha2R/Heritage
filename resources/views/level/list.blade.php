@@ -138,7 +138,7 @@
                </div>
                <div class="form-group">
                   <label for="name">Weightage Per Question</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10"  required>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="0.1" max="99" step="0.01"  name="weitage_per_question" placeholder="10"  required>
                </div>
                <!-- <div class="form-group">
                   <label for="name">Time Per Question (In sec)</label>
@@ -178,7 +178,7 @@
                </div>
                <div class="form-group">
                   <label for="name">Weightage Per Question</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10" value="{{$difficultyLevel->weitage_per_question}}"  required>
+                  <input type="number" step="0.01" class="@error('from') is-invalid @enderror form-control" min="0.1" max="99" name="weitage_per_question" placeholder="10" value="{{$difficultyLevel->weitage_per_question}}"  required>
                </div>
                <!-- <div class="form-group">
                   <label for="name">Time Per Question (In Sec)</label>
