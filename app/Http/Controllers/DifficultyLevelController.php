@@ -38,14 +38,14 @@ class DifficultyLevelController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|unique:difficulty_levels',
-            'weitage_per_question' => 'required|numeric|min:1|max:99',
-            'time_per_question' => 'required|numeric|',
+            'weitage_per_question' => 'required|numeric|max:99',
+            // 'time_per_question' => 'required|numeric|',
         ]);
 
         $data = new DifficultyLevel;
         $data->name = $request->name;
         $data->weitage_per_question = $request->weitage_per_question;
-        $data->time_per_question = $request->time_per_question;
+        $data->time_per_question = isset($request->time_per_question)?$request->time_per_question:'0';
         $data->status = '1';
         $data->save();
 
@@ -105,12 +105,12 @@ class DifficultyLevelController extends Controller
 
         $validatedData = $request->validate([
             'name' => 'required|unique:difficulty_levels,name,' . $data->id,
-            'weitage_per_question' => 'required|numeric|min:1|max:99',
-            'time_per_question' => 'required|numeric|',
+            'weitage_per_question' => 'required|numeric|max:99',
+            // 'time_per_question' => 'required|numeric|',
         ]);
         $data->name = $request->name;
         $data->weitage_per_question = $request->weitage_per_question;
-        $data->time_per_question = $request->time_per_question;
+        $data->time_per_question = isset($request->time_per_question)?$request->time_per_question:'0';
         $data->save();
 
         if ($data->id) {

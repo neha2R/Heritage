@@ -20,9 +20,11 @@ use App\QuestionsSetting;
             <div class="row justify-content-center">
                <div class="col-md-12">
                   <div class="card">
+
                      <div class="card-header display-inline mt-3">
-                        {{ __('Add Question') }}
-                        <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Add Question</button>
+                     <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Add Question</button>
+                        <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-bulk"> <i class="fas fa-plus-circle"></i> Bulk Upload</button>
+                     
                      </div>
                      @if(session()->has('success'))
                      <div class="alert alert-dismissable alert-success">
@@ -112,9 +114,8 @@ use App\QuestionsSetting;
    </div>
 </div>
 <!-- Confirmation Model -->
-
-      <!-- Add Model Start Here -->
-      <div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+   <!-- Add Model Start Here -->
+   <div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
          <div class="modal-dialog modal-lg">
             <div class="modal-content">
                <div class="modal-header">
@@ -776,7 +777,64 @@ use App\QuestionsSetting;
    </div>
 </div>
 <!-- view Model Ends here -->
+
+   
 @endforeach
+ <!-- Bulk Model Start Here -->
+ <div class="modal fade bd-example-modal-lg show add-bulk" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+         <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Bulk Upload</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+               </div>
+               <div class="modal-body">
+                  <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{Route('upload_bulk')}}" enctype='multipart/form-data' >
+                     <!-- novalidate="novalidate" -->
+                     @csrf
+                     <div class="row">
+                        <div class="col-md-10 d-flex">
+                           <div class="form-group inner-addon right-addon">
+                             
+                              <a href="{{public_path('assets/Untitled spreadsheet - Sheet1.csv')}}" target="_blank" class="btn btn-success" download>Sample Document</a>
+                              
+                         
+                           </div>
+                        </div>
+                      
+                     </div>
+                     <div class="row">
+                        <div class="col-md-10 d-flex">
+                           <div class="form-group inner-addon right-addon">
+                             
+                            <h6>Or</h6>
+                         
+                           </div>
+                        </div>
+                      
+                     </div>
+
+                     <div class="row">
+                        <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                             
+                              <input id="file-input2" name="bulk" class="" type="file" accept="*"/>
+                              
+                              </div>
+                        </div>
+                          
+                     </div>
+               </div>
+           
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+            </div>
+      </div>
+</div>
+
+<!-- Bulk Model Ends here -->
 @endsection
 @section('js')
 <script>

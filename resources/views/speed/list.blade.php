@@ -51,6 +51,7 @@
                               <th>Sr. No</th>
                               <th>Name</th>
                               <th>No Of Question </th>
+                              <th>Quiz Speed Type </th>
                               <th>Duration (In Min)</th>
                               <th>Status</th>
                               <th>Edit</th>
@@ -62,7 +63,15 @@
                            <tr>
                               <th scope="row">{{$key+1}}</th>
                               <th scope="row">{{$quizSpeed->name}}</th>
+                            
                              <td>{{$quizSpeed->no_of_question}}</td>
+                             <th>
+                                  @if($quizSpeed->quiz_speed_type=="single")
+                                    {{"Per Question Speed"}}
+                                  @else
+                                    {{"Whole Quiz"}}
+                                  @endif
+                              </th>
                               <td>{{$quizSpeed->duration}} </td>
                               <td><label class="switch">
                                  @if($quizSpeed->status=='1')
@@ -141,6 +150,14 @@
                   <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_question" placeholder="10"  required>
                </div>
                <div class="form-group">
+                  <label for="name">Quiz Speed Type</label>
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required> 
+                     <option>Select Any</option>
+                     <option value="single">Per Question</option>
+                     <option value="all" >Whole Quiz</option>
+                  </select>
+               </div>
+               <div class="form-group">
                   <label for="name">Duration (In Min)</label>
                   <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="duration" placeholder="Enter time in min"  required>
                </div>
@@ -179,6 +196,14 @@
                <div class="form-group">
                   <label for="name">No Of Question</label>
                   <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_question" placeholder="10" value="{{$quizSpeed->no_of_question}}"  required>
+               </div>
+               <div class="form-group">
+                  <label for="name">Quiz Speed Type</label>
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required> 
+                     <option>Select Any</option>
+                     <option value="single" {{$quizSpeed->quiz_speed_type=="single"?'selected':''}}>Per Question</option>
+                     <option value="all" {{$quizSpeed->quiz_speed_type=="all"?'selected':''}}>Whole Quiz</option>
+                  </select>
                </div>
                <div class="form-group">
                   <label for="name">Duration (In Min)</label>
