@@ -124,7 +124,7 @@ class AttemptController extends Controller
      */
     public function saveresult(Request $request)
     {
-        SaveResult::dispatchNow($request);
+        SaveResult::dispatchNow($request->all());
 
     }
 }
