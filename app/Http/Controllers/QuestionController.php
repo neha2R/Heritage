@@ -10,7 +10,9 @@ use App\Imports\QuestionImport;
 use App\Question;
 use App\QuestionsSetting;
 use App\QuizDomain;
+use App\QuizQuestion;
 use App\QuizSpeed;
+use App\QuizType;
 use App\Subdomain;
 use App\User;
 use Illuminate\Http\Request;
@@ -328,6 +330,7 @@ class QuestionController extends Controller
         }
         $user = User::find($quiz->user_id);
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
+        $quiz_type = QuizType::find($quiz->quiz_speed_id);
         $domains = QuizDomain::where('attempts_id', $quiz->id)->first();
         $diff = DifficultyLevel::find($quiz->difficulty_level_id);
         $age_group = AgeGroup::where('from', '>', $user->age)->orWhere('to', '<', $user->age)->latest()->first();
@@ -336,15 +339,65 @@ class QuestionController extends Controller
             $age_group = AgeGroup::where('from', '>=', $user->age)->latest();
         }
         $domains = (explode(",", $domains));
-        $question = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)->whereIn('domain_id', $domains)->limit($speed->no_of_question)->get('question_id');
-        return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $speed]);
+
+        $quesdis = strtolower($diff->name);
+        switch ($quesdis) {
+            case "easy":
+                $dis1 = round(($speed->no_of_question / 100) * 75);
+                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
+                $dis2 = $dis1 - $speed->no_of_question;
+                $question_ids = $question_ids->orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                // $question_ids = $question_ids->get()->toArray();
+                break;
+            case "intermediate":
+                $dis1 = round(($speed->no_of_question / 100) * 75);
+                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
+                $dis2 = $dis1 - $speed->no_of_question;
+                $question_ids = $question_ids->orWhere('difficulty_level_id', 1)->limit($dis2)->pluck('question_id')->toArray();
+                // $question_ids->get()->toArray();
+                break;
+            case "advance":
+                $dis1 = round(($speed->no_of_question / 100) * 75);
+                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
+                $dis2 = $dis1 - $speed->no_of_question;
+                $question_ids = $question_ids->orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                // $question_ids->get()->toArray();
+                break;
+            default:
+                $dis1 = $speed->no_of_question;
+                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                // $question_ids->get()->toArray();
+        }
+
+        // print_r($question_ids);exit;
+        $data = [];
+        $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
+        $data['quiz_type'] = $quiz_type->name;
+        foreach ($questions as $question) {
+            $id = $question->questionsettingapi->difficulty_level_id;
+            $time = $diff->where('id', $id)->first('time_per_question');
+            $question['time'] = $time->time_per_question;
+            unset($question['questionsettingapi']);
+        }
+
+        $quizques = new QuizQuestion;
+        $quizques->attempts_id = $request->quiz_id;
+        $quizques->questions = implode(",", $question_ids);
+        $quizques->total = count($question_ids);
+        $quizques->save();
+        $data['question'] = $questions;
+
+        return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
 
     }
 
     public function import(Request $request)
     {
         Excel::import(new QuestionImport, $request->file('bulk'));
-
         return back();
 
     }

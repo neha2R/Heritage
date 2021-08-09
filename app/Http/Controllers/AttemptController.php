@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Attempt;
+use App\Jobs\SaveResult;
 use App\QuizDomain;
 use App\QuizRule;
 use Illuminate\Http\Request;
@@ -112,6 +113,18 @@ class AttemptController extends Controller
      */
     public function destroy(Attempt $attempt)
     {
-        //
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Attempt  $attempt
+     * @return \Illuminate\Http\Response
+     */
+    public function saveresult(Request $request)
+    {
+        SaveResult::dispatchNow($request);
+
     }
 }

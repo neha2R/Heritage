@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\QuizRule;
-use App\QuizType;
 use App\QuizSpeed;
+use App\QuizType;
 use Illuminate\Http\Request;
 
 class QuizRuleController extends Controller
@@ -18,8 +18,8 @@ class QuizRuleController extends Controller
     {
         $quizType = QuizType::OrderBy('id', 'DESC')->get();
         $quizSpeed = QuizSpeed::OrderBy('id', 'DESC')->get();
-        $quizRules= QuizRule::all();
-        return view('quiz_rules.list', compact('quizType','quizSpeed','quizRules'));
+        $quizRules = QuizRule::all();
+        return view('quiz_rules.list', compact('quizType', 'quizSpeed', 'quizRules'));
     }
 
     /**
@@ -127,7 +127,6 @@ class QuizRuleController extends Controller
             'more' => 'required',
         ]);
 
-       
         $data->quiz_type_id = $request->quiz_type_id;
         $data->quiz_speed_id = $request->quiz_speed_id;
         $data->scoring = $request->scoring;
@@ -152,9 +151,9 @@ class QuizRuleController extends Controller
      * @param  \App\Quiz_rule  $quiz_rule
      * @return \Illuminate\Http\Response
      */
-    public function destroy( $quizrule)
+    public function destroy($quizrule)
     {
-        
+
         $quizrule = QuizRule::find($quizrule);
         $quizrule->delete();
         if ($quizrule->id) {
@@ -165,12 +164,23 @@ class QuizRuleController extends Controller
     }
 
     public function get_rule_type(Request $req)
-    { 
-          return json_encode(QuizType::where('id',$req->id)->first());  
+    {
+        return json_encode(QuizType::where('id', $req->id)->first());
     }
 
     public function get_rule_speed(Request $req)
     {
-        return json_encode(QuizSpeed::where('id',$req->id)->first());
+        return json_encode(QuizSpeed::where('id', $req->id)->first());
     }
+
+    public function quiz_rules(Request $request)
+    {
+        $quiz_rules = QuizRule::where('quiz_type_id', $request->quiz_type_id)->where('quiz_speed_id', $request->quiz_speed_id)->first();
+        if (empty($quiz_rules)) {
+            return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
+        } else {
+            return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $quiz_rules]);
+        }
+    }
+
 }
