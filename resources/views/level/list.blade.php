@@ -51,7 +51,7 @@
                               <th>Sr. No</th>
                               <th>Name</th>
                               <th>Weightage (Per question) </th>
-                              <th>Time (In Sec)</th>
+                              <!-- <th>Time (In Sec)</th> -->
                               <th>Status</th>
                               <th>Edit</th>
                               <th>Delete</th>
@@ -63,7 +63,7 @@
                               <th scope="row">{{$key+1}}</th>
                               <th scope="row">{{$difficultyLevel->name}}</th>
                              <td>{{$difficultyLevel->weitage_per_question}}</td>
-                              <td>{{$difficultyLevel->time_per_question}} </td>
+                              <!-- <td>{{$difficultyLevel->time_per_question}} </td> -->
                               <td><label class="switch">
                                  @if($difficultyLevel->status=='1')
                                  @php $status='checked'; @endphp
@@ -140,10 +140,10 @@
                   <label for="name">Weightage Per Question</label>
                   <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10"  required>
                </div>
-               <div class="form-group">
+               <!-- <div class="form-group">
                   <label for="name">Time Per Question (In sec)</label>
                   <input type="number" class="@error('name') is-invalid @enderror form-control" min="10"  name="time_per_question" placeholder="Enter time in sec"  required>
-               </div>
+               </div> -->
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -180,10 +180,10 @@
                   <label for="name">Weightage Per Question</label>
                   <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="weitage_per_question" placeholder="10" value="{{$difficultyLevel->weitage_per_question}}"  required>
                </div>
-               <div class="form-group">
+               <!-- <div class="form-group">
                   <label for="name">Time Per Question (In Sec)</label>
                   <input type="number" class="@error('name') is-invalid @enderror form-control" min="1"  name="time_per_question" placeholder="Enter time in sec" value="{{$difficultyLevel->time_per_question}}"  required>
-               </div>
+               </div> -->
 
          </div>
          <div class="modal-footer">

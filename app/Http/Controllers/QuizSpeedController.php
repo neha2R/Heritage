@@ -40,12 +40,14 @@ class QuizSpeedController extends Controller
             'name' => 'required|unique:quiz_speeds',
             'duration' => 'required|numeric|min:1',
             'no_of_question' => 'required|numeric|min:1',
+            'quiz_speed_type' => 'required|numeric|min:1',
         ]);
 
         $data = new QuizSpeed;
         $data->name = $request->name;
         $data->duration = $request->duration;
         $data->no_of_question = $request->no_of_question;
+        $data->quiz_speed_type=$request->quiz_speed_type;
         $data->status = '1';
         $data->save();
 
@@ -107,11 +109,13 @@ class QuizSpeedController extends Controller
             'name' => 'required|unique:quiz_speeds,name,' . $data->id,
             'duration' => 'required|numeric|min:1',
             'no_of_question' => 'required|numeric|min:1',
+            'quiz_speed_type' => 'required|numeric|min:1',
         ]);
 
         $data->name = $request->name;
         $data->duration = $request->duration;
         $data->no_of_question = $request->no_of_question;
+        $data->quiz_speed_type=$request->quiz_speed_type;
         $data->save();
         if ($data->id) {
             return redirect()->back()->with(['success' => 'Quiz Speed updated Successfully']);
