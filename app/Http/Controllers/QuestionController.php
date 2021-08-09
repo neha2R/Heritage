@@ -72,15 +72,41 @@ class QuestionController extends Controller
             'subdomain_id' => 'required',
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
+           // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
         ]);
         $option1_media = '';
         $option2_media = '';
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
+        $type='';
         if ($request->has('question_media')) {
             $foldername = 'question';
-            $question_media = $request->file('question_media')->store($foldername, 'public');
+             $file = $request->file('question_media');
+          
+            $imagemimes = ['image/png','image/jpg','image/jpeg','image_gif']; //Add more mimes that you want to support
+            $videomimes = ['video/mp4']; //Add more mimes that you want to support
+            $audiomimes = ['audio/mpeg']; //Add more mimes that you want to support
+            
+            
+            $question_media=$file->store('question', 'public');
+            
+            if(in_array($file->getMimeType() ,$imagemimes)) {
+                $type='0';
+            }
+
+            //validate audio
+            if (in_array($file->getMimeType() ,$audiomimes)) {
+                $type='1';
+            }	
+
+            //Validate video
+            if (in_array($file->getMimeType() ,$videomimes)) {
+                $type='2';
+            }
+            
+      
+            
         }
         if ($request->has('option1_media')) {
             $foldername = 'option1';
@@ -112,6 +138,7 @@ class QuestionController extends Controller
         $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type;
+        $data->type=$type;
         $data->save();
 
         $quessetting = new QuestionsSetting;
@@ -198,13 +225,35 @@ class QuestionController extends Controller
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
+        $type='';
         if ($request->has('question_media')) {
             $foldername = 'question';
 
             if (file_exists(storage_path('app/public/' . $request->question_media_old))) {
                 unlink(storage_path('app/public/' . $request->question_media_old));
             }
+            $file = $request->file('question_media');
+          
+            $imagemimes = ['image/png','image/jpg','image/jpeg','image_gif']; //Add more mimes that you want to support
+            $videomimes = ['video/mp4']; //Add more mimes that you want to support
+            $audiomimes = ['audio/mpeg','audio/mp3']; //Add more mimes that you want to support
+             
+            $question_media=$file->store('question', 'public');
+               
+            if(in_array($file->getMimeType() ,$imagemimes)) {
+                $type='0';
+            }
 
+            //validate audio
+            if (in_array($file->getMimeType() ,$audiomimes)) {
+                $type='1';
+            }	
+
+            //Validate video
+            if (in_array($file->getMimeType() ,$videomimes)) {
+                $type='2';
+            }
+            
             $question_media = $request->file('question_media')->store($foldername, 'public');
         } else {
             $question_media = $request->question_media_old;
@@ -259,6 +308,7 @@ class QuestionController extends Controller
         $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type_old;
+        $data->type=$type;
         $data->save();
 
         if (QuestionsSetting::where('question_id', $data->id)->first()) {

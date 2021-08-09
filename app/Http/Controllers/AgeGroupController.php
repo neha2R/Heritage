@@ -47,7 +47,7 @@ class AgeGroupController extends Controller
             return redirect()->back()->with(['error' => 'Age group already exists']);
         }
          
-        $allAgeGroups=AgeGroup::get();
+       
         $data = new AgeGroup;
         $data->name = $request->name;
         $data->from = $request->from;
