@@ -5,7 +5,7 @@
 
 {{-- Intro Lines --}}
 
-You had a request for email verification from Heritage.
+You have a request for email verification from Heritage.
 Your email verification code is # <b><span style="font-size: 24px;">{{$otp}}</span></b>
 
 
