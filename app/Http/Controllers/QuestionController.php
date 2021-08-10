@@ -420,10 +420,10 @@ class QuestionController extends Controller
                 // $question_ids->get()->toArray();
         }
 
-        if ($speed->no_of_question < count($question_ids)) {
-            $dis3 = $speed->no_of_question - count($question_ids);
-            $question_ids = $question_ids->inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
-        }
+        // if ($speed->no_of_question < count($question_ids)) {
+        //     $dis3 = $speed->no_of_question - count($question_ids);
+        //     $question_ids = $question_ids->inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
+        // }
 
         // print_r($question_ids);exit;
         $data = [];
