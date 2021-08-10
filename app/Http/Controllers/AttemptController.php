@@ -126,9 +126,12 @@ class AttemptController extends Controller
     {
         $quiz = Attempt::find($request->quiz_id);
         if (!empty($quiz)) {
-            SaveResult::dispatchNow($request->all());
+            $data = SaveResult::dispatchNow($request->all());
+            if ($data == 'error') {
+                return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+            }
         } else {
-            return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
+            return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
         }
 
     }
