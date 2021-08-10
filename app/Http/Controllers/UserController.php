@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Setotp;
 use App\Unverified;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -144,6 +146,7 @@ class UserController extends Controller
         $user->save();
 
         $user = $user->toArray();
+        Mail::to($request->email)->send(new Setotp($otp));
 
         return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $otp]);
 

@@ -148,7 +148,7 @@ class AttemptController extends Controller
         if (!empty($quiz)) {
             $questions_id = Performance::where('attempt_id', $request->quiz_id)->where('result', 1)->get('question_id');
             if (empty($questions_id)) {
-                return response()->json(['status' => 202, 'message' => 'Your quiz is not submitted', 'data' => '']);
+                return response()->json(['status' => 202, 'message' => 'Your quiz is not submitted yet', 'data' => '']);
             }
             $questions = Question::whereIn('id', $questions_id)->get();
 
