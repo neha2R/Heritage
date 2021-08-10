@@ -43,7 +43,7 @@ class DifficultyLevelController extends Controller
         ]);
 
         $data = new DifficultyLevel;
-        $data->name = $request->name;
+        $data->name = strtolower($request->name);
         $data->weitage_per_question = $request->weitage_per_question;
         $data->time_per_question = isset($request->time_per_question)?$request->time_per_question:'0';
         $data->status = '1';
@@ -108,7 +108,7 @@ class DifficultyLevelController extends Controller
             'weitage_per_question' => 'required|numeric|max:99',
             // 'time_per_question' => 'required|numeric|',
         ]);
-        $data->name = $request->name;
+        $data->name = strtolower($request->name);
         $data->weitage_per_question = $request->weitage_per_question;
         $data->time_per_question = isset($request->time_per_question)?$request->time_per_question:'0';
         $data->save();

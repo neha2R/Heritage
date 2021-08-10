@@ -65,9 +65,9 @@ use App\QuestionsSetting;
                                  <tr>
                                     <th scope="row">{{$key+1}}</th>
                                     <th scope="row">{{$question->question}}</th>
-                                    <td>{{$question->questionsetting->domain->name}}</td>
-                                    <td>{{$question->questionsetting->age_group->name}}</td>
-                                    <td>{{$question->questionsetting->difflevel->name}}</td>
+                                    <td>{{ucwords($question->questionsetting->domain->name)}}</td>
+                                    <td>{{ucwords($question->questionsetting->age_group->name)}}</td>
+                                    <td>{{ucwords($question->questionsetting->difflevel->name)}}</td>
                                     <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button>
                                     </td>
                                     <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>

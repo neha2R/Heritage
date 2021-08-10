@@ -59,7 +59,7 @@
                            @foreach($domains as $key=>$domain)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <td>{{$domain->name}}</td>
+                              <td>{{ucwords($domain->name)}}</td>
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#sub-model-list{{$key}}">Sub Domain</button>
                               </td>
                               <td><label class="switch">

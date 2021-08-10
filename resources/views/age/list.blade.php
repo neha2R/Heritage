@@ -60,7 +60,7 @@
                            @foreach($ages as $key=>$age)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <td>{{$age->name}}</td>
+                              <td>{{ucwords($age->name)}}</td>
                               <td>{{$age->from}} - {{$age->to}}</td>
                               <td><label class="switch">
                                  @if($age->status=='1')

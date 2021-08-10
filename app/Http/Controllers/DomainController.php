@@ -43,7 +43,7 @@ class DomainController extends Controller
             'name' => 'required|unique:domains',
         ]);
         $data = new Domain;
-        $data->name = $request->name;
+        $data->name = strtolower($request->name);
         $data->status = '1';
         $data->save();
 
@@ -99,7 +99,7 @@ class DomainController extends Controller
     public function update(Request $request, Domain $domain)
     {
 
-        $domain->name = $request->name;
+        $domain->name = strtolower($request->name);
         $domain->save();
         if ($domain->id) {
             return redirect()->back()->with(['success' => 'Domain Updated Successfully']);

@@ -92,17 +92,17 @@ class QuestionController extends Controller
             $question_media=$file->store('question', 'public');
             
             if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='0';
+                $type='1';
             }
 
             //validate audio
             if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='1';
+                $type='2';
             }	
 
             //Validate video
             if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='2';
+                $type='3';
             }
             
       
@@ -241,17 +241,17 @@ class QuestionController extends Controller
             $question_media=$file->store('question', 'public');
                
             if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='0';
+                $type='1';
             }
 
             //validate audio
             if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='1';
+                $type='2';
             }	
 
             //Validate video
             if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='2';
+                $type='3';
             }
             
             $question_media = $request->file('question_media')->store($foldername, 'public');

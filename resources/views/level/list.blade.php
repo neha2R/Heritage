@@ -61,7 +61,7 @@
                            @foreach($difficultyLevels as $key=>$difficultyLevel)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <th scope="row">{{$difficultyLevel->name}}</th>
+                              <th scope="row">{{ucwords($difficultyLevel->name)}}</th>
                              <td>{{$difficultyLevel->weitage_per_question}}</td>
                               <!-- <td>{{$difficultyLevel->time_per_question}} </td> -->
                               <td><label class="switch">

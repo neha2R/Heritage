@@ -49,7 +49,7 @@ class AgeGroupController extends Controller
          
        
         $data = new AgeGroup;
-        $data->name = $request->name;
+        $data->name = strtolower($request->name);
         $data->from = $request->from;
         $data->to = $request->to;
         $data->status = '1';
@@ -113,7 +113,7 @@ class AgeGroupController extends Controller
             'from' => 'required|numeric|min:1|max:99',
             'to' => 'required|numeric|min:1|max:99',
         ]);
-        $ageGroup->name = $request->name;
+        $ageGroup->name = strtolower($request->name);
         $ageGroup->from = $request->from;
         $ageGroup->to = $request->to;
         $ageGroup->save();
