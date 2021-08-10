@@ -171,9 +171,39 @@ class AttemptController extends Controller
             $data = [];
             foreach ($questions as $question) {
                 $res = [];
-                $que = Question::whereIn('id', $question->question_id)->first();
+                $que = Question::where('id', $question->question_id)->first();
+                $res['question'] = $que->question;
+                if ($que->right_option == 1) {
+                    $res['right_option'] = $que->option1;
+                } elseif ($que->right_option == 2) {
+                    $res['right_option'] = $que->option2;
+                } elseif ($que->right_option == 3) {
+                    $res['right_option'] = $que->option3;
+                } elseif ($que->right_option == 4) {
+                    $res['right_option'] = $que->option4;
+                } else {
+                    $res['right_option'] = '';
+
+                }
+                if ($question->selected_option == 1) {
+                    $res['your_option'] = $que->option1;
+                } elseif ($question->selected_option == 2) {
+                    $res['your_option'] = $que->option2;
+                } elseif ($question->selected_option == 3) {
+                    $res['your_option'] = $que->option3;
+                } elseif ($question->selected_option == 4) {
+                    $res['your_option'] = $que->option4;
+                } elseif ($question->selected_option == 0) {
+                    $res['your_option'] = 'not attempt';
+                } else {
+                    $res['your_option'] = '';
+
+                }
+                $res['question_id'] = $que->id;
+                $data[] = $res;
 
             }
+            return response()->json(['status' => 200, 'message' => 'Result show', 'data' => $data]);
 
         } else {
             return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
