@@ -124,7 +124,12 @@ class AttemptController extends Controller
      */
     public function saveresult(Request $request)
     {
-        SaveResult::dispatchNow($request->all());
+        $quiz = Attempt::find($request->quiz_id);
+        if ($quiz) {
+            SaveResult::dispatchNow($request->all());
+        } else {
+            return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
+        }
 
     }
 }
