@@ -422,7 +422,6 @@ class QuestionController extends Controller
 
         if ($speed->no_of_question < count($question_ids)) {
             $dis3 = $speed->no_of_question - count($question_ids);
-
             $question_ids = $question_ids->inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
         }
 
@@ -434,6 +433,7 @@ class QuestionController extends Controller
             $data['time'] = $speed->duration;
             $data['whole_quiz_time'] = '0';
             $data['total_question'] = count($question_ids);
+            $data['total_question_in_quiz'] = $speed->no_of_question;
             // foreach ($questions as $question) {
             //     // $id = $question->questionsettingapi->difficulty_level_id;
             //     // $time = $diff->where('id', $id)->first('time_per_question');
