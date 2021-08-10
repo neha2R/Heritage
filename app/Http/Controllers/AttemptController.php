@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Attempt;
+use App\DifficultyLevel;
 use App\Jobs\SaveResult;
 use App\Performance;
 use App\Question;
+use App\QuestionsSetting;
 use App\QuizDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -146,13 +148,28 @@ class AttemptController extends Controller
     {
         $quiz = Attempt::find($request->quiz_id);
         if (!empty($quiz)) {
-            $questions_id = Performance::where('attempt_id', $request->quiz_id)->where('result', 1)->get('question_id');
+            $questions_id = Performance::where('attempt_id', $request->quiz_id)->get('question_id');
             if (empty($questions_id)) {
                 return response()->json(['status' => 202, 'message' => 'Your quiz is not submitted yet', 'data' => '']);
             }
-            $questions = Question::whereIn('id', $questions_id)->get();
+            $questions = QuestionsSetting::whereIn('id', $questions_id->toArray())->get();
+            $total = 0;
+            $obtain = 0;
+            foreach ($questions as $question) {
+                $diff = DifficultyLevel::find($question->difficulty_level_id)->first();
+                $total = $total + $diff->weitage_per_question;
 
-            return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => '75']);
+            }
+            $questions_id = Performance::where('attempt_id', $request->quiz_id)->where('result', 1)->get('question_id');
+            $questions = QuestionsSetting::whereIn('id', $questions_id->toArray())->get();
+            foreach ($questions as $question) {
+                $diff = DifficultyLevel::find($question->difficulty_level_id)->first();
+                $obtain = $obtain + $diff->weitage_per_question;
+
+            }
+            $per = round(($obtain / $total) * 100);
+
+            return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => $per]);
             // foreach ($questions as $question) {
 
             // }
