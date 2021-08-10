@@ -422,7 +422,7 @@ class QuestionController extends Controller
 
         if (count($question_ids) < $speed->no_of_question) {
             $dis3 = $speed->no_of_question - count($question_ids);
-            $question_ids = $question_ids->inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
+            $question_ids = $question_ids->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
         }
 
         // print_r($question_ids);exit;
