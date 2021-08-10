@@ -54,6 +54,7 @@ class SaveResult implements ShouldQueue
             $saveperformance->save();
 
         }
+        return 'success';
 
     }
 }

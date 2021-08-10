@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Attempt;
 use App\Jobs\SaveResult;
 use App\QuizDomain;
-use App\QuizRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -62,11 +61,11 @@ class AttemptController extends Controller
         $domain->attempts_id = $data->id;
         $domain->domain_id = $request->domains;
         $domain->save();
-        $rule = QuizRule::where('quiz_type_id', $request->quiz_type_id)->orWhere('quiz_speed_id', $request->quiz_speed_id)->first();
-        $data = $data->toArray();
-        if (!empty($rule)) {
-            $data['rule'] = $rule->toArray();
-        }
+        // $rule = QuizRule::where('quiz_type_id', $request->quiz_type_id)->orWhere('quiz_speed_id', $request->quiz_speed_id)->first();
+        // $data = $data->toArray();
+        // if (!empty($rule)) {
+        //     $data['rule'] = $rule->toArray();
+        // }
         return response()->json(['status' => 200, 'message' => 'Quiz created successfully', 'data' => $data]);
 
     }
@@ -129,6 +128,11 @@ class AttemptController extends Controller
             $data = SaveResult::dispatchNow($request->all());
             if ($data == 'error') {
                 return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+            }
+            if ($data == 'success') {
+                $data = [];
+                $data['quiz_id'] = $request->quiz_id;
+                return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $data]);
             }
         } else {
             return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
