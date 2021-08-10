@@ -35,8 +35,13 @@ class SaveResult implements ShouldQueue
     {
         $respreformance = $this->performance;
 
-        $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions')->toArray();
+        $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions');
+        if (empty($questions)) {
 
+            return response()->json(['status' => 202, 'message' => 'Question not found for the quiz', 'data' => '']);
+        } else {
+            $questions = $questions->toArray();
+        }
         $ans = explode(",", $respreformance['quiz_answer']);
         $question = explode(",", $questions['questions']);
         // dd($ans);
