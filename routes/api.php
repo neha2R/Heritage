@@ -34,3 +34,6 @@ Route::post('save_result', 'AttemptController@saveresult');
 Route::post('get_result', 'AttemptController@get_result');
 Route::post('get_answerkey', 'AttemptController@get_answerkey');
 Route::post('helpandsupport', 'HelpAndSupportController@store');
+// Route::fallback(function () {
+//     return response()->json(['message' => 'Not Found.'], 404);
+// });
