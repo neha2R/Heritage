@@ -420,6 +420,12 @@ class QuestionController extends Controller
                 // $question_ids->get()->toArray();
         }
 
+        if ($speed->no_of_question < count($question_ids)) {
+            $dis3 = $speed->no_of_question - count($question_ids);
+
+            $question_ids = $question_ids->inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
+        }
+
         // print_r($question_ids);exit;
         $data = [];
         $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
@@ -427,7 +433,7 @@ class QuestionController extends Controller
         if ($speed->quiz_speed_type == 'single') {
             $data['time'] = $speed->duration;
             $data['whole_quiz_time'] = '0';
-
+            $data['total_question'] = count($question_ids);
             // foreach ($questions as $question) {
             //     // $id = $question->questionsettingapi->difficulty_level_id;
             //     // $time = $diff->where('id', $id)->first('time_per_question');
