@@ -146,10 +146,32 @@ class AttemptController extends Controller
     {
         $quiz = Attempt::find($request->quiz_id);
         if (!empty($quiz)) {
-            $questions_id = Performance::where('attempts_id', $request->quiz_id)->where('result', 1)->get('question_id');
-            dd($questions_id);
+            $questions_id = Performance::where('attempt_id', $request->quiz_id)->where('result', 1)->get('question_id');
+            if (empty($questions_id)) {
+                return response()->json(['status' => 202, 'message' => 'Your quiz is not submitted', 'data' => '']);
+            }
             $questions = Question::whereIn('id', $questions_id)->get();
+
+            return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => '75']);
+            // foreach ($questions as $question) {
+
+            // }
+
+        } else {
+            return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+        }
+
+    }
+
+    public function get_answerkey(Request $request)
+    {
+        $quiz = Attempt::find($request->quiz_id);
+        if (!empty($quiz)) {
+            $questions = Performance::where('attempt_id', $request->quiz_id)->get();
+            $data = [];
             foreach ($questions as $question) {
+                $res = [];
+                $que = Question::whereIn('id', $question->question_id)->first();
 
             }
 
