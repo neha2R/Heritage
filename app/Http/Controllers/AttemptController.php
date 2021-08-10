@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Attempt;
 use App\Jobs\SaveResult;
+use App\Performance;
+use App\Question;
 use App\QuizDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -139,4 +141,22 @@ class AttemptController extends Controller
         }
 
     }
+
+    public function get_result(Request $request)
+    {
+        $quiz = Attempt::find($request->quiz_id);
+        if (!empty($quiz)) {
+            $questions_id = Performance::where('attempts_id', $request->quiz_id)->where('result', 1)->get('question_id');
+            dd($questions_id);
+            $questions = Question::whereIn('id', $questions_id)->get();
+            foreach ($questions as $question) {
+
+            }
+
+        } else {
+            return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+        }
+
+    }
+
 }

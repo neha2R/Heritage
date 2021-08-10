@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Performance;
+use App\Question;
 use App\QuizQuestion;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -50,7 +51,14 @@ class SaveResult implements ShouldQueue
             $saveperformance->attempt_id = $respreformance['quiz_id'];
             $saveperformance->selected_option = $myperformance;
             $saveperformance->question_id = $question[$key];
-            // $saveperformance->result = 2;
+            $ques = Question::find($question[$key]);
+            if ($myperformance != 0) {
+                if ($ques->right_option == $myperformance) {
+                    $saveperformance->result = 1;
+                } else {
+                    $saveperformance->result = 0;
+                }
+            }
             $saveperformance->save();
 
         }
