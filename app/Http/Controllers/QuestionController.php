@@ -398,7 +398,7 @@ class QuestionController extends Controller
                 $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
                 $question_ids = array_merge($question_id1, $question_id2);
 
-                dd($question_ids);
+                dd($question_id1, $question_id2);
                 // $question_ids = $question_ids->get()->toArray();
                 break;
             case "intermediate":
