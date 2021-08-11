@@ -314,12 +314,12 @@
                </div>
                <div class="form-group more">
                   @foreach(json_decode($rule->more) as $Rule)
-                  <div class="row box">
-                     <div class="form-group col-md-12">
+                  <div class="form-group">
+
                         <input type="text" disabled class=" form-control box" name="more[]" value="{{$Rule}}" placeholder="More Value" required>
-                     </div>
+
                   </div>
-               </div>
+
 
                   @endforeach
                </div>

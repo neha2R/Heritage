@@ -418,7 +418,7 @@ class QuestionController extends Controller
         $quiz_type = QuizType::find($quiz->quiz_speed_id);
         $domains = QuizDomain::where('attempts_id', $quiz->id)->first();
         $diff = DifficultyLevel::find($quiz->difficulty_level_id);
-        $age_group = AgeGroup::where('from', '>', $user->age)->orWhere('to', '<', $user->age)->latest()->first();
+        $age_group = AgeGroup::where('from', '>', $user->age)->orWhere('to', '<', $user->age)->first();
 
         if (empty($age_group)) {
             $age_group = AgeGroup::where('from', '>=', $user->age)->latest();
@@ -429,26 +429,35 @@ class QuestionController extends Controller
         switch ($quesdis) {
             case "easy":
                 $dis1 = round(($speed->no_of_question / 100) * 75);
-                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
-                $dis2 = $dis1 - $speed->no_of_question;
-                $question_ids = $question_ids->orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+
+                $dis2 = $speed->no_of_question - count($question_id1);
+                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                $question_ids = array_merge($question_id1, $question_id2);
+
+                // dd($question_id1, $dis1, $dis2, $speed->no_of_question);
                 // $question_ids = $question_ids->get()->toArray();
                 break;
             case "intermediate":
                 $dis1 = round(($speed->no_of_question / 100) * 75);
-                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
-                $dis2 = $dis1 - $speed->no_of_question;
-                $question_ids = $question_ids->orWhere('difficulty_level_id', 1)->limit($dis2)->pluck('question_id')->toArray();
+                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                $dis2 = $speed->no_of_question - count($question_id1);
+                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 1)->limit($dis2)->pluck('question_id')->toArray();
+                $question_ids = array_merge($question_id1, $question_id2);
+
                 // $question_ids->get()->toArray();
                 break;
-            case "advance":
+            case "hard":
                 $dis1 = round(($speed->no_of_question / 100) * 75);
-                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1);
-                $dis2 = $dis1 - $speed->no_of_question;
-                $question_ids = $question_ids->orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                $dis2 = $speed->no_of_question - count($question_id1);
+                // $dis2 = $dis1 - $speed->no_of_question;
+                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
+                $question_ids = array_merge($question_id1, $question_id2);
+
                 // $question_ids->get()->toArray();
                 break;
             default:
@@ -458,6 +467,14 @@ class QuestionController extends Controller
                 // $question_ids->get()->toArray();
         }
 
+        // if (count($question_ids) < $speed->no_of_question) {
+        //     $dis3 = $speed->no_of_question - count($question_ids);
+
+        //     $question_id2 = QuestionsSetting::inRandomOrder()->whereIn('question_id', '!=', $question_ids)->limit($dis3)->pluck('question_id')->toArray();
+
+        //     $question_ids = array_merge($question_id2, $question_ids);
+        // }
+
         // print_r($question_ids);exit;
         $data = [];
         $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
@@ -465,7 +482,8 @@ class QuestionController extends Controller
         if ($speed->quiz_speed_type == 'single') {
             $data['time'] = $speed->duration;
             $data['whole_quiz_time'] = '0';
-
+            $data['total_question'] = count($question_ids);
+            $data['total_question_in_quiz'] = $speed->no_of_question;
             // foreach ($questions as $question) {
             //     // $id = $question->questionsettingapi->difficulty_level_id;
             //     // $time = $diff->where('id', $id)->first('time_per_question');

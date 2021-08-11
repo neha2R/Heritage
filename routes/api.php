@@ -31,3 +31,9 @@ Route::post('email_verify', 'UserController@email_verify');
 Route::post('questions', 'QuestionController@question');
 Route::post('quiz_rules', 'QuizRuleController@quiz_rules');
 Route::post('save_result', 'AttemptController@saveresult');
+Route::post('get_result', 'AttemptController@get_result');
+Route::post('get_answerkey', 'AttemptController@get_answerkey');
+Route::post('helpandsupport', 'HelpAndSupportController@store');
+// Route::fallback(function () {
+//     return response()->json(['message' => 'Not Found.'], 404);
+// });

@@ -61,14 +61,12 @@
                            <tr>
                               <th scope="row">{{$key+1}}</th>
                               <th scope="row">{{$Faq->title}}</th>
-                              <td >
-                              <div class="row">
-                                       <div class="col-12 text-truncate">
-                                       {{$Faq->content}}
-                                       </div>
-                              </div>
+                              <th scope="row">
 
-                              </td>
+                                       {{$Faq->content}}
+
+
+                                </th>
                               <td><label class="switch">
                                  @if($Faq->status=='1')
                                  @php $status='checked'; @endphp
