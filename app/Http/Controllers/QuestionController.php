@@ -87,40 +87,21 @@ class QuestionController extends Controller
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $audiomimes = ['audio/mpeg']; //Add more mimes that you want to support
-<<<<<<< HEAD
-            
-            
-            $question_media=$file->store('question', 'public');
-            
-            if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='1';
-            }
-
-            //validate audio
-            if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='2';
-            }	
-
-            //Validate video
-            if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='3';
-=======
 
             $question_media = $file->store('question', 'public');
 
             if (in_array($file->getMimeType(), $imagemimes)) {
-                $type = '0';
+                $type = '1';
             }
 
             //validate audio
             if (in_array($file->getMimeType(), $audiomimes)) {
-                $type = '1';
+                $type = '2';
             }
 
             //Validate video
             if (in_array($file->getMimeType(), $videomimes)) {
-                $type = '2';
->>>>>>> 94950c583fe41b0679114be1189e53b9090bfcb1
+                $type = '3';
             }
 
         }
@@ -252,41 +233,22 @@ class QuestionController extends Controller
 
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             $videomimes = ['video/mp4']; //Add more mimes that you want to support
-<<<<<<< HEAD
-            $audiomimes = ['audio/mpeg','audio/mp3']; //Add more mimes that you want to support
-             
-            $question_media=$file->store('question', 'public');
-               
-            if(in_array($file->getMimeType() ,$imagemimes)) {
-                $type='1';
-            }
-
-            //validate audio
-            if (in_array($file->getMimeType() ,$audiomimes)) {
-                $type='2';
-            }	
-
-            //Validate video
-            if (in_array($file->getMimeType() ,$videomimes)) {
-                $type='3';
-=======
             $audiomimes = ['audio/mpeg', 'audio/mp3']; //Add more mimes that you want to support
 
             $question_media = $file->store('question', 'public');
 
             if (in_array($file->getMimeType(), $imagemimes)) {
-                $type = '0';
+                $type = '1';
             }
 
             //validate audio
             if (in_array($file->getMimeType(), $audiomimes)) {
-                $type = '1';
+                $type = '2';
             }
 
             //Validate video
             if (in_array($file->getMimeType(), $videomimes)) {
-                $type = '2';
->>>>>>> 94950c583fe41b0679114be1189e53b9090bfcb1
+                $type = '3';
             }
 
             $question_media = $request->file('question_media')->store($foldername, 'public');
