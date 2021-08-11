@@ -63,7 +63,7 @@
                            <tr>
                               <th scope="row">{{$key+1}}</th>
                               <th scope="row">{{$quizSpeed->name}}</th>
-                            
+
                              <td>{{$quizSpeed->no_of_question}}</td>
                              <th>
                                   @if($quizSpeed->quiz_speed_type=="single")
@@ -108,7 +108,7 @@
 
  @section('model')
 
- 
+
 
 <!-- Add Model Start Here -->
 <div class="modal fade bd-example-modal-sm show nextstep" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
@@ -147,11 +147,11 @@
                </div>
                <div class="form-group">
                   <label for="name">No Of Question</label>
-                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="99" name="no_of_question" placeholder="10"  required>
+                  <input type="number" class="@error('from') is-invalid @enderror form-control" min="1" max="200" name="no_of_question" placeholder="10"  required>
                </div>
                <div class="form-group">
                   <label for="name">Quiz Speed Type</label>
-                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDuration(this.value)"> 
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDuration(this.value)">
                      <option>Select Any</option>
                      <option value="single">Per Question</option>
                      <option value="all" >Whole Quiz</option>
@@ -199,7 +199,7 @@
                </div>
                <div class="form-group">
                   <label for="name">Quiz Speed Type</label>
-                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDurationOne(this.value)"> 
+                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDurationOne(this.value)">
                      <option>Select Any</option>
                      <option value="single" {{$quizSpeed->quiz_speed_type=="single"?'selected':''}}>Per Question</option>
                      <option value="all" {{$quizSpeed->quiz_speed_type=="all"?'selected':''}}>Whole Quiz</option>
@@ -228,7 +228,7 @@
    $(document).ready(function() {
       var success="{{Request::get('success')}}";
       if(success=='1')
-     { 
+     {
           $('.add-model').modal('show');
      }
    	$('#table').DataTable();
@@ -260,13 +260,13 @@ return c; //you can just return c because it will be true or false
          $('#duration').html('');
          $('#duration').html('Duration in Seconds');
          $('#duration_type').attr("placeholder", "Enter time in seconds");
-    }  
+    }
     else
     {
       $('#duration').html('');
          $('#duration').html('Duration in Minutes');
          $('#duration_type').attr("placeholder", "Enter time in minutes");
-    } 
+    }
       }
 
    changeDurationOne=(val)=>{
@@ -275,15 +275,15 @@ return c; //you can just return c because it will be true or false
          $('#duration1').html('');
          $('#duration1').html('Duration in Seconds');
          $('#duration_type1').attr("placeholder", "Enter time in seconds");
-    }  
+    }
     else
     {
       $('#duration1').html('');
          $('#duration1').html('Duration in Minutes');
          $('#duration_type1').attr("placeholder", "Duration in minutes");
-    } 
+    }
       }
     </script>
 
-    
+
       @endsection

@@ -23,7 +23,7 @@ class SaveResult implements ShouldQueue
      */
     public function __construct($performance)
     {
-        $this->performance[] = $performance;
+        $this->performance = $performance;
     }
 
     /**
@@ -34,10 +34,20 @@ class SaveResult implements ShouldQueue
     public function handle()
     {
         $respreformance = $this->performance;
+
         $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions')->toArray();
-        foreach ($respreformance as $myperformance) {
+
+        $ans = explode(",", $respreformance['quiz_answer']);
+        $question = explode(",", $questions['questions']);
+        // dd($ans);
+        foreach ($ans as $key => $myperformance) {
             $saveperformance = new Performance;
             $saveperformance->attempt_id = $respreformance['quiz_id'];
+            $saveperformance->selected_option = $myperformance;
+            $saveperformance->question_id = $question[$key];
+            // $saveperformance->result = 2;
+            $saveperformance->save();
+
         }
 
     }

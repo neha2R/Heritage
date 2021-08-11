@@ -203,7 +203,7 @@
    $(document).ready(function() {
       var success="{{Request::get('success')}}";
       if(success=='1')
-     { 
+     {
           $('.add-model').modal('show');
      }
    	$('#table').DataTable();
