@@ -79,7 +79,7 @@ class QuestionController extends Controller
         $option3_media = '';
         $option4_media = '';
         $question_media = '';
-        $type = '';
+        $type = '0';
         if ($request->has('question_media')) {
             $foldername = 'question';
             $file = $request->file('question_media');
