@@ -22,9 +22,10 @@ use App\QuestionsSetting;
                   <div class="card">
 
                      <div class="card-header display-inline mt-3">
+                     {{ __('Add Question') }}
                      <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Add Question</button>
                         <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-bulk"> <i class="fas fa-plus-circle"></i> Bulk Upload</button>
-                     
+
                      </div>
                      @if(session()->has('success'))
                      <div class="alert alert-dismissable alert-success">
@@ -164,7 +165,7 @@ use App\QuestionsSetting;
                               <label for="file-input2">
                               <i class="fa fa-paperclip form-control-feedback"></i>
                               </label>
-                              <input id="file-input2" name="option1_media" class="file-input" type="file" accept="*"/>
+                              <input id="file-input2" name="option1_media" class="file-input" type="file" accept="image/*"/>
                               </span>
                               <input type="text" class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
                               </div>
@@ -187,7 +188,7 @@ use App\QuestionsSetting;
                               <label for="file-input3">
                               <i class="fa fa-paperclip form-control-feedback"></i>
                               </label>
-                              <input id="file-input3" name="option2_media" class="file-input" type="file" accept="*"/>
+                              <input id="file-input3" name="option2_media" class="file-input" type="file" accept="image/*"/>
                               </span>
                               <input type="text" class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
                               </div>
@@ -210,7 +211,7 @@ use App\QuestionsSetting;
                         <label for="file-input4">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
-                        <input id="file-input4"  name="option3_media" class="file-input" type="file" accept="*"/>
+                        <input id="file-input4"  name="option3_media" class="file-input" type="file" accept="image/*"/>
                         <input type="hidden" name="option3_media_old" />
                         </span>
                         <input type="text" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
@@ -234,7 +235,7 @@ use App\QuestionsSetting;
          <label for="file-input5">
          <i class="fa fa-paperclip form-control-feedback"></i>
          </label>
-         <input id="file-input5"  name="option4_media" class="file-input" type="file" accept="*"/>
+         <input id="file-input5"  name="option4_media" class="file-input" type="file" accept="image/*"/>
          </span>
          <input type="text" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
          </div>
@@ -351,10 +352,10 @@ use App\QuestionsSetting;
                <div class="col-md-2 yes" id="img1">
                   @if($question->type=='1')
                   <audio controls>
-                 
+
                      <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
                      Your browser does not support the audio tag.
-                     </audio> 
+                     </audio>
                   @else
 
                   <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
@@ -778,7 +779,7 @@ use App\QuestionsSetting;
 </div>
 <!-- view Model Ends here -->
 
-   
+
 @endforeach
  <!-- Bulk Model Start Here -->
  <div class="modal fade bd-example-modal-lg show add-bulk" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
@@ -795,37 +796,37 @@ use App\QuestionsSetting;
                      <div class="row">
                         <div class="col-md-10 d-flex">
                            <div class="form-group inner-addon right-addon">
-                             
-                              <a href="{{public_path('assets/Untitled spreadsheet - Sheet1.csv')}}" target="_blank" class="btn btn-success" download>Sample Document</a>
-                              
-                         
+
+                              <a href="{{asset('assets/Untitled spreadsheet - Sheet1.csv')}}" target="_blank" class="btn btn-success" download>Sample Document</a>
+
+
                            </div>
                         </div>
-                      
+
                      </div>
                      <div class="row">
                         <div class="col-md-10 d-flex">
                            <div class="form-group inner-addon right-addon">
-                             
+
                             <h6>Or</h6>
-                         
+
                            </div>
                         </div>
-                      
+
                      </div>
 
                      <div class="row">
                         <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
-                             
+
                               <input id="file-input2" name="bulk" class="" type="file" accept="*"/>
-                              
+
                               </div>
                         </div>
-                          
+
                      </div>
                </div>
-           
+
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <button type="submit" class="btn btn-primary">Continue</button>
