@@ -465,7 +465,7 @@ class QuestionController extends Controller
         // }
 
         // print_r($question_ids);exit;
-        $question_ids = shuffle($question_ids);
+        shuffle($question_ids);
         $data = [];
         $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
         $data['quiz_type'] = $quiz_type->name;
