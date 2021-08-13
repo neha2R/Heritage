@@ -491,6 +491,7 @@ class QuestionController extends Controller
         $quizques->questions = implode(",", $question_ids);
         $quizques->total = count($question_ids);
         $quizques->save();
+        shuffle($questions);
         $data['question'] = $questions;
 
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
