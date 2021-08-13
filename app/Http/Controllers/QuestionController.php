@@ -391,24 +391,44 @@ class QuestionController extends Controller
         $quesdis = strtolower($diff->name);
         switch ($quesdis) {
             case "easy":
+                //Easy level question distribution
+                // Easy    (75% E, 25% H/I)
                 $dis1 = round(($speed->no_of_question / 100) * 75);
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
-                $dis2 = $speed->no_of_question - count($question_id1);
-                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
-                $question_ids = array_merge($question_id1, $question_id2);
+                $dis2 = round(($speed->no_of_question - $dis1) / 2);
+                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+
+                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+
+                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+
+                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
                 // dd($question_id1, $dis1, $dis2, $speed->no_of_question);
                 // $question_ids = $question_ids->get()->toArray();
                 break;
             case "intermediate":
+                //Intermediate level question distribution
+                // Easy    (75% I, 25% H/E)
                 $dis1 = round(($speed->no_of_question / 100) * 75);
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
-                $dis2 = $speed->no_of_question - count($question_id1);
-                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 1)->limit($dis2)->pluck('question_id')->toArray();
-                $question_ids = array_merge($question_id1, $question_id2);
+
+                $dis2 = round(($speed->no_of_question - $dis1) / 2);
+
+                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+
+                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+
+                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+
+                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
                 // $question_ids->get()->toArray();
                 break;
@@ -416,11 +436,17 @@ class QuestionController extends Controller
                 $dis1 = round(($speed->no_of_question / 100) * 75);
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
-                $dis2 = $speed->no_of_question - count($question_id1);
-                // $dis2 = $dis1 - $speed->no_of_question;
-                $question_id2 = QuestionsSetting::orWhere('difficulty_level_id', 2)->limit($dis2)->pluck('question_id')->toArray();
-                $question_ids = array_merge($question_id1, $question_id2);
 
+                $dis2 = round(($speed->no_of_question - $dis1) / 2);
+                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+
+                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+
+                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                    ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+
+                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
                 // $question_ids->get()->toArray();
                 break;
             default:
