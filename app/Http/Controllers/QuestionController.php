@@ -401,7 +401,7 @@ class QuestionController extends Controller
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
                 $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
@@ -423,7 +423,7 @@ class QuestionController extends Controller
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
                 $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
@@ -441,7 +441,7 @@ class QuestionController extends Controller
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - $dis1 + $dis2);
+                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
                 $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
@@ -465,6 +465,7 @@ class QuestionController extends Controller
         // }
 
         // print_r($question_ids);exit;
+        shuffle($question_ids);
         $data = [];
         $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
         $data['quiz_type'] = $quiz_type->name;
