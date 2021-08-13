@@ -98,23 +98,22 @@ use App\QuestionsSetting;
       <!-- Confirmation Model -->
 <div class="modal fade bd-example-modal-sm show step1" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-md">
-      <div class="modal-content">
-      <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">Add Question</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+          <div class="modal-content">
+               <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLongTitle">Add Question</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                </div>
-         <div class="modal-body text-center">
-
-         <div>
-         <a href="#"  data-toggle="modal" data-target=".add-sub-model">Add more sub domain</a></div>
-      <div>Or</div>
-      <a href="/admin/difflevel?success=1">Add new diffulcity level</a>
-      </div>
-
+               <div class="modal-body text-center">
+                     <div>
+                        <a href="#"  data-toggle="modal" data-target=".add-sub-model">Add more sub domain</a>
+                     </div>
+                  <div>Or</div>
+                     <a href="/admin/difflevel?success=1">Add new diffulcity level</a>
+               </div>
          </div>
       </div>
    </div>
-</div>
+
 <!-- Confirmation Model -->
    <!-- Add Model Start Here -->
    <div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
