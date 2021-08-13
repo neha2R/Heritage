@@ -292,29 +292,30 @@ use App\QuestionsSetting;
          </select>
          </div>
          </div>
-         <div class="col-md-6">
-         <div class="form-group inner-addon right-addon">
-         <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_name" >
-         <option value="">Difficulty Level</option>
-         @foreach($diffulcitylevels as $diffulcitylevel)
-         <option value="{{$diffulcitylevel->id}}" >{{$diffulcitylevel->name}}</option>
-         @endforeach
-         </select>
+            <div class="col-md-6">
+                  <div class="form-group inner-addon right-addon">
+                        <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_name" >
+                        <option value="">Difficulty Level</option>
+                        @foreach($diffulcitylevels as $diffulcitylevel)
+                        <option value="{{$diffulcitylevel->id}}" >{{$diffulcitylevel->name}}</option>
+                        @endforeach
+                        </select>
+                  </div>
+            </div>
          </div>
-         </div>
-         </div>
-         <div class="form-group more">
-         </div>
-         <div class="form-group row">
-         <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
-         </div>
+            <div class="form-group more">
+            </div>
+            <div class="form-group row">
+               <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
+            </div>
       </div>
-      <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="submit" class="btn btn-primary">Continue</button>
-      </form>
-      </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
+         </div>
    </div>
+</div>
 </div>
 </div>
 <!-- Add Model Ends here -->
@@ -329,457 +330,457 @@ use App\QuestionsSetting;
          </div>
          <div class="modal-body">
             <!-- novalidate="novalidate" -->
-            <div class="row">
-               <div class="col-md-10">
-                  <div class="form-group inner-addon right-addon">
-                     <!-- <label for="name">Quiz Speed</label> -->
-                     <span class="image-upload">
-                     <label for="file-input6">
-                     <i class="fa fa-paperclip form-control-feedback"></i>
-                     </label>
-                     <input id="file-input6" name="question_media" class="file-input" type="file" accept="*"/>
-                     <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
-                     <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
-                     </span>
-                     <input type="text" value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
-                     <!-- <span class="image-upload form-control-feedback">
-                        <label for="file-input">
-                        <i class="fa fa-paperclip" aria-hidden="true"></i>
-                        </label>
-                        <input id="file-input" type="file"/>
-                        </span> -->
-                  </div>
-               </div>
-               <div class="col-md-2 yes" id="img1">
-                  @if($question->type=='1')
-                  <audio controls>
+                  <div class="row">
+                     <div class="col-md-10">
+                        <div class="form-group inner-addon right-addon">
+                           <!-- <label for="name">Quiz Speed</label> -->
+                           <span class="image-upload">
+                           <label for="file-input6">
+                           <i class="fa fa-paperclip form-control-feedback"></i>
+                           </label>
+                           <input id="file-input6" name="question_media" class="file-input" type="file" accept="*"/>
+                           <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
+                           <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
+                           </span>
+                           <input type="text" value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
+                           <!-- <span class="image-upload form-control-feedback">
+                              <label for="file-input">
+                              <i class="fa fa-paperclip" aria-hidden="true"></i>
+                              </label>
+                              <input id="file-input" type="file"/>
+                              </span> -->
+                        </div>
+                     </div>
+                     <div class="col-md-2 yes" id="img1">
+                        @if($question->type=='1')
+                        <audio controls>
 
-                     <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
-                     Your browser does not support the audio tag.
-                     </audio>
-                  @else
+                           <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
+                           Your browser does not support the audio tag.
+                           </audio>
+                        @else
 
-                  <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
-                  <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
-                  <video width="141" class="video" id="video1" style="display:none" controls>
-                     <source src="" id="video_here6">
-                     Your browser does not support HTML5 video.
-                  </video>
-                  @endif
-               </div>
-            </div>
-         <div class="row">
-            <div class="col-md-10">
-               <div class="form-group inner-addon right-addon">
-                  <!-- <label for="name">Quiz Speed</label> -->
-                  <span class="image-upload">
-                  <label for="file-input7">
-                  <i class="fa fa-paperclip form-control-feedback"></i>
-                  </label>
-                  <input id="file-input7" name="option1_media" class="file-input" type="file" accept="*"/>
-                  <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
-                  </span>
-                  <input type="text" value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
-               </div>
-            </div>
-            <div class="col-md-2 yes" id="img2">
-               <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
-               <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
-               <video width="141" class="video" id="video2" style="display:none" controls>
-                  <source src="" id="video_here7">
-                  Your browser does not support HTML5 video.
-               </video>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-10">
-               <div class="form-group inner-addon right-addon">
-                  <!-- <label for="name">Quiz Speed</label> -->
-                  <span class="image-upload">
-                  <label for="file-input8">
-                  <i class="fa fa-paperclip form-control-feedback"></i>
-                  </label>
-                  <input id="file-input8" name="option2_media" class="file-input" type="file" accept="*"/>
-                  <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
-                  </span>
-                  <input type="text" value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
-               </div>
-            </div>
-            <div class="col-md-2 yes" id="img3">
-               <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
-               <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
-               <video width="141" class="video" id="video3" style="display:none" controls>
-                  <source src="" id="video_here8">
-                  Your browser does not support HTML5 video.
-               </video>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-10">
-               <div class="form-group inner-addon right-addon">
-                  <!-- <label for="name">Quiz Speed</label> -->
-                  <span class="image-upload">
-                  <label for="file-input9">
-                  <i class="fa fa-paperclip form-control-feedback"></i>
-                  </label>
-                  <input id="file-input9"  name="option3_media" class="file-input" type="file" accept="*"/>
-                  <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
-                  </span>
-                  <input type="text" value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
-               </div>
-            </div>
-            <div class="col-md-2 yes" id="img4">
-               <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
-               <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
-               <video width="141" class="video" id="video4" style="display:none" controls>
-                  <source src="" id="video_here9">
-                  Your browser does not support HTML5 video.
-               </video>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-10">
-               <div class="form-group inner-addon right-addon">
-                  <!-- <label for="name">Quiz Speed</label> -->
-                  <span class="image-upload">
-                  <label for="file-input10">
-                  <i class="fa fa-paperclip form-control-feedback"></i>
-                  </label>
-                  <input id="file-input10"  name="option4_media" class="file-input" type="file" accept="*"/>
-                  <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
-                  </span>
-                  <input type="text" value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
-               </div>
-            </div>
-            <div class="col-md-2 yes" id="img5">
-               <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
-               <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
-               <video width="141" class="video" id="video5" style="display:none" controls>
-                  <source src="" id="video_here10">
-                  Your browser does not support HTML5 video.
-               </video>
-            </div>
-         </div>
-         <div class="form-group inner-addon right-addon">
-            <select class="@error('option3') is-invalid @enderror form-control" required  name="right_option" >
-               <option value="">Correct Option</option>
-               <option value="1" @if ($question->right_option=='1')  selected="selected" @endif>Option 1</option>
-               <option value="2" @if ($question->right_option=='2')  selected="selected" @endif>Option 2</option>
-               <option value="3" @if ($question->right_option=='3')  selected="selected" @endif>Option 3</option>
-               <option value="4" @if ($question->right_option=='4')  selected="selected" @endif>Option 4</option>
-            </select>
-         </div>
-               @php
-               $setting=QuestionsSetting::where('question_id',$question->id)->where('name','parent')->first();
-               @endphp
-         <div class="row append">
-            <div class="col-md-6">
-               <div class="form-group inner-addon right-addon">
-                  <select class="@error('option3') is-invalid @enderror form-control" required  name="domain_id" >
-                     <option value="">Domain</option>
-                     @foreach($domains as $domain)
-                     <option value="{{$domain->id}}" {{$setting->domain_id==$domain->id?'selected':''}}>{{$domain->name}}</option>
-                     @endforeach
-                  </select>
-               </div>
-            </div>
-            <div class="col-md-6">
-               <div class="form-group inner-addon right-addon">
-                  <select class="@error('option3') is-invalid @enderror form-control" required  name="subdomain_id" >
-                     <option value="">Sub Domain</option>
-                     @foreach($subdomains as $subdomain)
-                     <option value="{{$subdomain->id}}" {{$setting->subdomain_id==$subdomain->id?'selected':''}} >{{$subdomain->name}}</option>
-                     @endforeach
-                  </select>
-               </div>
-            </div>
-         </div>
-         <div class="row append">
-            <div class="col-md-6">
-               <div class="form-group inner-addon right-addon">
-                  <select class="@error('option3') is-invalid @enderror form-control" required  name="age_group_name" >
-                     <option value="">Age Group</option>
-                     @foreach($age_groups as $age_group)
-                     <option value="{{$age_group->id}}"  {{$setting->age_group_id==$age_group->id?'selected':''}} >{{$age_group->name}}</option>
-                     @endforeach
-                  </select>
-               </div>
-            </div>
-            <div class="col-md-6">
-               <div class="form-group inner-addon right-addon">
-                  <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_name" >
-                     <option value="">Difficulty Level</option>
-                     @foreach($diffulcitylevels as $diffulcitylevel)
-                     <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}} >{{$diffulcitylevel->name}}</option>
-                     @endforeach
-                  </select>
-               </div>
-            </div>
-         </div>
-         <div class="form-group moreone">
-               @php
-               $settings=QuestionsSetting::where('question_id',$question->id)->where('name','sub')->get();
-               @endphp
-               @if(!empty($settings))
-               @foreach($settings as $setting)
-               <div class="row box-one">
-                  <div class="form-group col-md-5">
-                     <select class="@error('option3') is-invalid @enderror form-control" required  name="age_group_id[]" >
-                        <option value="">Age Group</option>
-                        @foreach($age_groups as $age_group)
-                        <option value="{{$age_group->id}}" {{$setting->age_group_id==$age_group->id?'selected':''}}   >{{$age_group->name}}</option>
-                        @endforeach
-                     </select>
+                        <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
+                        <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                        <video width="141" class="video" id="video1" style="display:none" controls>
+                           <source src="" id="video_here6">
+                           Your browser does not support HTML5 video.
+                        </video>
+                        @endif
+                     </div>
                   </div>
-                  <div class="form-group col-md-5">
-                     <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_id[]" >
-                        <option value="">Difficulty Level</option>
-                        @foreach($diffulcitylevels as $diffulcitylevel)
-                        <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}}  >{{$diffulcitylevel->name}}</option>
-                        @endforeach
-                     </select>
-                  </div>
-                     <div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove-one" >Remove</a>
-                     </div>
-                  @endforeach
-                  @endif
-               </div>
-         </div>
-         <div class="form-group row">
-            <a href="#" class="form-group btn btn-success ml-auto" onclick="addMoreOne()">Add more..</a>
-         </div>
-         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Continue</button>
-         </div>
-      </div>
-   </div>
-</div>
-</div>
-<!-- edit Model Ends here -->
-<!-- view Model Start Here -->
-<div class="modal fade bd-example-modal-lg show "  tabindex="-1" id="view-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">View Question</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-               </div>
-               <div class="modal-body">
-                  <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('question.update',$question->id) }}" enctype='multipart/form-data' >
-                     <!-- novalidate="novalidate" -->
-                     @method('PUT')
-                     @csrf
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group inner-addon right-addon">
-                              <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                              <label for="file-input6">
-                              <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
-                              <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
-                              </span>
-                              <input type="text" disabled value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
-                              <!-- <span class="image-upload form-control-feedback">
-                                 <label for="file-input">
-                                 <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                 </label>
-                                 <input id="file-input" type="file"/>
-                                 </span> -->
-                           </div>
-                        </div>
-                        <div class="col-md-2 yes" id="img1">
-                           <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
-                           <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
-                           <video width="141" class="video" id="video1" style="display:none" controls>
-                              <source src="" id="video_here6">
-                              Your browser does not support HTML5 video.
-                           </video>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group inner-addon right-addon">
-                              <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                              <label for="file-input7">
-                              <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
-                              </span>
-                              <input type="text" disabled value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
-                           </div>
-                        </div>
-                        <div class="col-md-2 yes" id="img2">
-                           <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
-                           <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
-                           <video width="141" class="video" id="video2" style="display:none" controls>
-                              <source src="" id="video_here7">
-                              Your browser does not support HTML5 video.
-                           </video>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group inner-addon right-addon">
-                              <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                              <label for="file-input8">
-                              <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
-                              </span>
-                              <input type="text" disabled value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
-                           </div>
-                        </div>
-                        <div class="col-md-2 yes" id="img3">
-                           <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
-                           <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
-                           <video width="141" class="video" id="video3" style="display:none" controls>
-                              <source src="" id="video_here8">
-                              Your browser does not support HTML5 video.
-                           </video>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group inner-addon right-addon">
-                              <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                              <label for="file-input9">
-                              <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
-                              </span>
-                              <input type="text" disabled value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
-                           </div>
-                        </div>
-                        <div class="col-md-2 yes" id="img4">
-                           <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
-                           <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
-                           <video width="141" class="video" id="video4" style="display:none" controls>
-                              <source src="" id="video_here9">
-                              Your browser does not support HTML5 video.
-                           </video>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="col-md-10">
-                           <div class="form-group inner-addon right-addon">
-                              <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                              <label for="file-input10">
-                              <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
-                              </span>
-                              <input type="text" disabled  value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
-                           </div>
-                        </div>
-                        <div class="col-md-2 yes" id="img5">
-                           <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
-                           <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
-                           <video width="141" class="video" id="video5" style="display:none" controls>
-                              <source src="" id="video_here10">
-                              Your browser does not support HTML5 video.
-                           </video>
-                        </div>
-                     </div>
+               <div class="row">
+                  <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
-                        <select class="@error('option3') is-invalid @enderror form-control" disabled  name="right_option" >
-                           <option value="">Correct Option</option>
-                           <option value="1" @if ($question->right_option=='1')  selected="selected" @endif>Option 1</option>
-                           <option value="2" @if ($question->right_option=='2')  selected="selected" @endif>Option 2</option>
-                           <option value="3" @if ($question->right_option=='3')  selected="selected" @endif>Option 3</option>
-                           <option value="4" @if ($question->right_option=='4')  selected="selected" @endif>Option 4</option>
-                        </select>
+                        <!-- <label for="name">Quiz Speed</label> -->
+                        <span class="image-upload">
+                        <label for="file-input7">
+                        <i class="fa fa-paperclip form-control-feedback"></i>
+                        </label>
+                        <input id="file-input7" name="option1_media" class="file-input" type="file" accept="*"/>
+                        <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
+                        </span>
+                        <input type="text" value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
                      </div>
+                  </div>
+                  <div class="col-md-2 yes" id="img2">
+                     <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
+                     <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
+                     <video width="141" class="video" id="video2" style="display:none" controls>
+                        <source src="" id="video_here7">
+                        Your browser does not support HTML5 video.
+                     </video>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-10">
+                     <div class="form-group inner-addon right-addon">
+                        <!-- <label for="name">Quiz Speed</label> -->
+                        <span class="image-upload">
+                        <label for="file-input8">
+                        <i class="fa fa-paperclip form-control-feedback"></i>
+                        </label>
+                        <input id="file-input8" name="option2_media" class="file-input" type="file" accept="*"/>
+                        <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
+                        </span>
+                        <input type="text" value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
+                     </div>
+                  </div>
+                  <div class="col-md-2 yes" id="img3">
+                     <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
+                     <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
+                     <video width="141" class="video" id="video3" style="display:none" controls>
+                        <source src="" id="video_here8">
+                        Your browser does not support HTML5 video.
+                     </video>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-10">
+                     <div class="form-group inner-addon right-addon">
+                        <!-- <label for="name">Quiz Speed</label> -->
+                        <span class="image-upload">
+                        <label for="file-input9">
+                        <i class="fa fa-paperclip form-control-feedback"></i>
+                        </label>
+                        <input id="file-input9"  name="option3_media" class="file-input" type="file" accept="*"/>
+                        <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
+                        </span>
+                        <input type="text" value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
+                     </div>
+                  </div>
+                  <div class="col-md-2 yes" id="img4">
+                     <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
+                     <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
+                     <video width="141" class="video" id="video4" style="display:none" controls>
+                        <source src="" id="video_here9">
+                        Your browser does not support HTML5 video.
+                     </video>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-10">
+                     <div class="form-group inner-addon right-addon">
+                        <!-- <label for="name">Quiz Speed</label> -->
+                        <span class="image-upload">
+                        <label for="file-input10">
+                        <i class="fa fa-paperclip form-control-feedback"></i>
+                        </label>
+                        <input id="file-input10"  name="option4_media" class="file-input" type="file" accept="*"/>
+                        <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
+                        </span>
+                        <input type="text" value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
+                     </div>
+                  </div>
+                  <div class="col-md-2 yes" id="img5">
+                     <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
+                     <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
+                     <video width="141" class="video" id="video5" style="display:none" controls>
+                        <source src="" id="video_here10">
+                        Your browser does not support HTML5 video.
+                     </video>
+                  </div>
+               </div>
+               <div class="form-group inner-addon right-addon">
+                  <select class="@error('option3') is-invalid @enderror form-control" required  name="right_option" >
+                     <option value="">Correct Option</option>
+                     <option value="1" @if ($question->right_option=='1')  selected="selected" @endif>Option 1</option>
+                     <option value="2" @if ($question->right_option=='2')  selected="selected" @endif>Option 2</option>
+                     <option value="3" @if ($question->right_option=='3')  selected="selected" @endif>Option 3</option>
+                     <option value="4" @if ($question->right_option=='4')  selected="selected" @endif>Option 4</option>
+                  </select>
+               </div>
                      @php
                      $setting=QuestionsSetting::where('question_id',$question->id)->where('name','parent')->first();
                      @endphp
-                     <div class="row append">
-                        <div class="col-md-6">
-                           <div class="form-group inner-addon right-addon">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="domain_id" >
-                                 <option value="">Domain</option>
-                                 @foreach($domains as $domain)
-                                 <option value="{{$domain->id}}" {{$setting->domain_id==$domain->id?'selected':''}}>{{$domain->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="form-group inner-addon right-addon">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="subdomain_id" >
-                                 <option value="">Sub Domain</option>
-                                 @foreach($subdomains as $subdomain)
-                                 <option value="{{$subdomain->id}}" {{$setting->subdomain_id==$subdomain->id?'selected':''}} >{{$subdomain->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="row append">
-                        <div class="col-md-6">
-                           <div class="form-group inner-addon right-addon">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="age_group_name" >
-                                 <option value="">Age Group</option>
-                                 @foreach($age_groups as $age_group)
-                                 <option value="{{$age_group->id}}"  {{$setting->age_group_id==$age_group->id?'selected':''}} >{{$age_group->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                        </div>
-                        <div class="col-md-6">
-                           <div class="form-group inner-addon right-addon">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="difficulty_level_name" >
-                                 <option value="">Difficulty Level</option>
-                                 @foreach($diffulcitylevels as $diffulcitylevel)
-                                 <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}} >{{$diffulcitylevel->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="form-group moreone">
-                        @php
-                        $settings=QuestionsSetting::where('question_id',$question->id)->where('name','sub')->get();
-                        @endphp
-                        @if(!empty($settings))
-                        @foreach($settings as $setting)
-                        <div class="row box-one">
-                           <div class="form-group col-md-5">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="age_group_id[]" >
-                                 <option value="">Age Group</option>
-                                 @foreach($age_groups as $age_group)
-                                 <option value="{{$age_group->id}}" {{$setting->age_group_id==$age_group->id?'selected':''}}   >{{$age_group->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                           <div class="form-group col-md-5">
-                              <select class="@error('option3') is-invalid @enderror form-control" disabled  name="difficulty_level_id[]" >
-                                 <option value="">Difficulty Level</option>
-                                 @foreach($diffulcitylevels as $diffulcitylevel)
-                                 <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}}  >{{$diffulcitylevel->name}}</option>
-                                 @endforeach
-                              </select>
-                           </div>
-                           <div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove-one" >Remove</a>
-                           </div>
+               <div class="row append">
+                  <div class="col-md-6">
+                     <div class="form-group inner-addon right-addon">
+                        <select class="@error('option3') is-invalid @enderror form-control" required  name="domain_id" >
+                           <option value="">Domain</option>
+                           @foreach($domains as $domain)
+                           <option value="{{$domain->id}}" {{$setting->domain_id==$domain->id?'selected':''}}>{{$domain->name}}</option>
                            @endforeach
-                           @endif
-                        </div>
+                        </select>
                      </div>
-                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  </form>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="form-group inner-addon right-addon">
+                        <select class="@error('option3') is-invalid @enderror form-control" required  name="subdomain_id" >
+                           <option value="">Sub Domain</option>
+                           @foreach($subdomains as $subdomain)
+                           <option value="{{$subdomain->id}}" {{$setting->subdomain_id==$subdomain->id?'selected':''}} >{{$subdomain->name}}</option>
+                           @endforeach
+                        </select>
+                     </div>
                   </div>
                </div>
-            </div>
-      </div>
+               <div class="row append">
+                  <div class="col-md-6">
+                     <div class="form-group inner-addon right-addon">
+                        <select class="@error('option3') is-invalid @enderror form-control" required  name="age_group_name" >
+                           <option value="">Age Group</option>
+                           @foreach($age_groups as $age_group)
+                           <option value="{{$age_group->id}}"  {{$setting->age_group_id==$age_group->id?'selected':''}} >{{$age_group->name}}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="form-group inner-addon right-addon">
+                        <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_name" >
+                           <option value="">Difficulty Level</option>
+                           @foreach($diffulcitylevels as $diffulcitylevel)
+                           <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}} >{{$diffulcitylevel->name}}</option>
+                           @endforeach
+                        </select>
+                     </div>
+                  </div>
+               </div>
+               <div class="form-group moreone">
+                     @php
+                     $settings=QuestionsSetting::where('question_id',$question->id)->where('name','sub')->get();
+                     @endphp
+                     @if(!empty($settings))
+                     @foreach($settings as $setting)
+                     <div class="row box-one">
+                        <div class="form-group col-md-5">
+                           <select class="@error('option3') is-invalid @enderror form-control" required  name="age_group_id[]" >
+                              <option value="">Age Group</option>
+                              @foreach($age_groups as $age_group)
+                              <option value="{{$age_group->id}}" {{$setting->age_group_id==$age_group->id?'selected':''}}   >{{$age_group->name}}</option>
+                              @endforeach
+                           </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                           <select class="@error('option3') is-invalid @enderror form-control" required  name="difficulty_level_id[]" >
+                              <option value="">Difficulty Level</option>
+                              @foreach($diffulcitylevels as $diffulcitylevel)
+                              <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}}  >{{$diffulcitylevel->name}}</option>
+                              @endforeach
+                           </select>
+                        </div>
+                           <div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove-one" >Remove</a>
+                           </div>
+                        @endforeach
+                        @endif
+                     </div>
+               </div>
+               <div class="form-group row">
+                  <a href="#" class="form-group btn btn-success ml-auto" onclick="addMoreOne()">Add more..</a>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Continue</button>
+               </div>
+         </div>
+     </div>
+   </div>
 </div>
+<!-- edit Model Ends here -->
+<!-- view Model Start Here -->
+   <div class="modal fade bd-example-modal-lg show "  tabindex="-1" id="view-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+         <div class="modal-dialog modal-lg">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title" id="exampleModalLongTitle">View Question</h5>
+                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                  </div>
+                  <div class="modal-body">
+                     <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('question.update',$question->id) }}" enctype='multipart/form-data' >
+                        <!-- novalidate="novalidate" -->
+                        @method('PUT')
+                        @csrf
+                        <div class="row">
+                           <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                                 <!-- <label for="name">Quiz Speed</label> -->
+                                 <span class="image-upload">
+                                 <label for="file-input6">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                                 </label>
+                                 <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
+                                 <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
+                                 </span>
+                                 <input type="text" disabled value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
+                                 <!-- <span class="image-upload form-control-feedback">
+                                    <label for="file-input">
+                                    <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                    </label>
+                                    <input id="file-input" type="file"/>
+                                    </span> -->
+                              </div>
+                           </div>
+                           <div class="col-md-2 yes" id="img1">
+                              <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
+                              <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                              <video width="141" class="video" id="video1" style="display:none" controls>
+                                 <source src="" id="video_here6">
+                                 Your browser does not support HTML5 video.
+                              </video>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                                 <!-- <label for="name">Quiz Speed</label> -->
+                                 <span class="image-upload">
+                                 <label for="file-input7">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                                 </label>
+                                 <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
+                                 </span>
+                                 <input type="text" disabled value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
+                              </div>
+                           </div>
+                           <div class="col-md-2 yes" id="img2">
+                              <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
+                              <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
+                              <video width="141" class="video" id="video2" style="display:none" controls>
+                                 <source src="" id="video_here7">
+                                 Your browser does not support HTML5 video.
+                              </video>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                                 <!-- <label for="name">Quiz Speed</label> -->
+                                 <span class="image-upload">
+                                 <label for="file-input8">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                                 </label>
+                                 <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
+                                 </span>
+                                 <input type="text" disabled value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
+                              </div>
+                           </div>
+                           <div class="col-md-2 yes" id="img3">
+                              <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
+                              <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
+                              <video width="141" class="video" id="video3" style="display:none" controls>
+                                 <source src="" id="video_here8">
+                                 Your browser does not support HTML5 video.
+                              </video>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                                 <!-- <label for="name">Quiz Speed</label> -->
+                                 <span class="image-upload">
+                                 <label for="file-input9">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                                 </label>
+                                 <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
+                                 </span>
+                                 <input type="text" disabled value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
+                              </div>
+                           </div>
+                           <div class="col-md-2 yes" id="img4">
+                              <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
+                              <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
+                              <video width="141" class="video" id="video4" style="display:none" controls>
+                                 <source src="" id="video_here9">
+                                 Your browser does not support HTML5 video.
+                              </video>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="col-md-10">
+                              <div class="form-group inner-addon right-addon">
+                                 <!-- <label for="name">Quiz Speed</label> -->
+                                 <span class="image-upload">
+                                 <label for="file-input10">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                                 </label>
+                                 <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
+                                 </span>
+                                 <input type="text" disabled  value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
+                              </div>
+                           </div>
+                           <div class="col-md-2 yes" id="img5">
+                              <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
+                              <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
+                              <video width="141" class="video" id="video5" style="display:none" controls>
+                                 <source src="" id="video_here10">
+                                 Your browser does not support HTML5 video.
+                              </video>
+                           </div>
+                        </div>
+                        <div class="form-group inner-addon right-addon">
+                           <select class="@error('option3') is-invalid @enderror form-control" disabled  name="right_option" >
+                              <option value="">Correct Option</option>
+                              <option value="1" @if ($question->right_option=='1')  selected="selected" @endif>Option 1</option>
+                              <option value="2" @if ($question->right_option=='2')  selected="selected" @endif>Option 2</option>
+                              <option value="3" @if ($question->right_option=='3')  selected="selected" @endif>Option 3</option>
+                              <option value="4" @if ($question->right_option=='4')  selected="selected" @endif>Option 4</option>
+                           </select>
+                        </div>
+                        @php
+                        $setting=QuestionsSetting::where('question_id',$question->id)->where('name','parent')->first();
+                        @endphp
+                        <div class="row append">
+                           <div class="col-md-6">
+                              <div class="form-group inner-addon right-addon">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="domain_id" >
+                                    <option value="">Domain</option>
+                                    @foreach($domains as $domain)
+                                    <option value="{{$domain->id}}" {{$setting->domain_id==$domain->id?'selected':''}}>{{$domain->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group inner-addon right-addon">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="subdomain_id" >
+                                    <option value="">Sub Domain</option>
+                                    @foreach($subdomains as $subdomain)
+                                    <option value="{{$subdomain->id}}" {{$setting->subdomain_id==$subdomain->id?'selected':''}} >{{$subdomain->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row append">
+                           <div class="col-md-6">
+                              <div class="form-group inner-addon right-addon">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="age_group_name" >
+                                    <option value="">Age Group</option>
+                                    @foreach($age_groups as $age_group)
+                                    <option value="{{$age_group->id}}"  {{$setting->age_group_id==$age_group->id?'selected':''}} >{{$age_group->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="form-group inner-addon right-addon">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="difficulty_level_name" >
+                                    <option value="">Difficulty Level</option>
+                                    @foreach($diffulcitylevels as $diffulcitylevel)
+                                    <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}} >{{$diffulcitylevel->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group moreone">
+                           @php
+                           $settings=QuestionsSetting::where('question_id',$question->id)->where('name','sub')->get();
+                           @endphp
+                           @if(!empty($settings))
+                           @foreach($settings as $setting)
+                           <div class="row box-one">
+                              <div class="form-group col-md-5">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="age_group_id[]" >
+                                    <option value="">Age Group</option>
+                                    @foreach($age_groups as $age_group)
+                                    <option value="{{$age_group->id}}" {{$setting->age_group_id==$age_group->id?'selected':''}}   >{{$age_group->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                              <div class="form-group col-md-5">
+                                 <select class="@error('option3') is-invalid @enderror form-control" disabled  name="difficulty_level_id[]" >
+                                    <option value="">Difficulty Level</option>
+                                    @foreach($diffulcitylevels as $diffulcitylevel)
+                                    <option value="{{$diffulcitylevel->id}}" {{$setting->difficulty_level_id==$diffulcitylevel->id?'selected':''}}  >{{$diffulcitylevel->name}}</option>
+                                    @endforeach
+                                 </select>
+                              </div>
+                              <div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove-one" >Remove</a>
+                              </div>
+                              @endforeach
+                              @endif
+                           </div>
+                        </div>
+                        <div class="modal-footer">
+                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     </form>
+                     </div>
+                  </div>
+               </div>
+         </div>
+   </div>
 <!-- view Model Ends here -->
 
 
