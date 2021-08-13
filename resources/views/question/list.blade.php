@@ -21,7 +21,7 @@ use App\QuestionsSetting;
                <div class="col-md-12">
                   <div class="card">
 
-                     <div class="card-header display-inline mt-3">
+                  <div class="card-header display-inline mt-3">
                      {{ __('Add Question') }}
                      <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Add Question</button>
                         <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-bulk"> <i class="fas fa-plus-circle"></i> Bulk Upload</button>
@@ -86,6 +86,7 @@ use App\QuestionsSetting;
                            </table>
                         </div>
                      </div>
+
                   </div>
                </div>
             </div>
@@ -834,7 +835,7 @@ use App\QuestionsSetting;
             </div>
       </div>
 </div>
-
+</div>
 <!-- Bulk Model Ends here -->
 @endsection
 @section('js')
