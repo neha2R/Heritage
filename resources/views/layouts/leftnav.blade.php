@@ -122,7 +122,12 @@
                         </li>
                         </li>
                         </ul>
-
+                        <li class="menu">
+                        <a href="{{ route('feed-content.index') }}" class="{{ request()->is('admin/feed-content*') ? 'mm-active' : '' }}">
+                          <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+                           Feed Setting
+                           </a>
+                        </li>
                      </ul>
                   </div>
                </div>

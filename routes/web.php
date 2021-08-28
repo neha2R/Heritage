@@ -39,7 +39,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/quizrules', 'QuizRuleController');
     Route::get('/get_rule_type/{id}', 'QuizRuleController@get_rule_type');
     Route::get('/get_rule_speed/{id}', 'QuizRuleController@get_rule_speed');
- 
+    Route::resource('/feed-content', 'FeedContentController');
+
 
 });
 Auth::routes();
