@@ -203,9 +203,9 @@
                              <span>Video Link</span>
                         <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link" placeholder="https://www.youtube.com/" >
                         </div>
-                  </div>
-                 
+                  </div>                 
                </div>
+               <button type="button" class="btn btn-sm btn-success float-right" >Add more post</button>
          </div>
          <div class="modal-footer">
          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

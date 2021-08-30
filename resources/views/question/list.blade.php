@@ -885,12 +885,10 @@ use App\QuestionsSetting;
       // }
       if(imgControlName=='#ImgPreview1')
       {
-
          $('#question_media_type').val(extension);
       }
       if(imgControlName=='#ImgPreview6')
       {
-
          $('#question_media_type_edit').val(extension);
       }
 
