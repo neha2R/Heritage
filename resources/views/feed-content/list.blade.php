@@ -148,7 +148,7 @@
                </div>
                <div class="form-group">
                   <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
-                     <option>Domain</option>
+                     <option value="">Domain</option>
                      @foreach($domains as $domain)
                      <option value="{{$domain->id}}">{{$domain->name}}</option>
                      @endforeach
@@ -157,38 +157,43 @@
                <div class="form-group">
                   <select name="feed_id" id="feed_id" class="@error('feed_id') is-invalid @enderror form-control" required >
                      <!-- <option>Type</option> -->
+                     <option onchnage value=""> Select Feed Type </option>
                      @foreach($feeds as $feed)
-                     <option value="{{$feed->id}}">{{$feed->title}}</option>
+                     <option value="{{$feed->id}}" onchnage>{{$feed->title}}</option>
                      @endforeach
                   </select>
                </div>
+
+               <div id="module_title_description" style="display:none">
+               </div>
+               
                <div class="form-group">
-                  <!-- <label for="tags"># Tags</label> -->
+                  <label for="tags"># Tags</label> 
                   <input type="text" class="@error('from') is-invalid @enderror form-control"  name="tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100" >
                </div>
 
                <div class="form-group">
                   <label for="title">External Link</label>
-                  <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link" placeholder="https://www.google.com/" >
+                  <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >
                </div>
                
                <div class="form-group">
-                  <!-- <label for="title">Title</label> -->
-                  <input type="text" class="@error('title') is-invalid @enderror form-control" maxlength="50" name="title" placeholder="Title" required>
+                   <label for="title">Title</label> 
+                  <input type="text" class="@error('title') is-invalid @enderror form-control" maxlength="50" name="title[]" placeholder="Title" >
                </div>
 
            
           
                <div class="form-group">
-                  <!-- <label for="name" id="duration">Duration</label> -->
-                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" maxlength="200" id="description" >
+                   <label for="name" id="duration">Description</label> 
+                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >
                    </textarea>
                </div>
-               <div id="single_post">
+               <div id="single_post" style="display:none">
                      <div class="form-group">
                         <div class="field" align="left">
-                           <!-- <h3>Upload your images</h3> -->
-                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple  required/>
+                            <h3>Upload your images</h3> 
+                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
                         </div>
                   </div>
                </div>
@@ -196,22 +201,38 @@
                <div id="modules" style="display:none">
                   <div class="form-group row">
                         <div class="field col" >
-                           <!-- <h3>Upload your Videos</h3> -->
-                           <input type="file" id="videos" name="media_name[]" accept="video/*" multiple  required/>
+                            <h3>Upload your Videos</h3> 
+                           <input type="file" id="videos" name="media_name_[0][]" accept="video/*" multiple  />
                         </div>
                         <div class="col" >
                              <span>Video Link</span>
-                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link" placeholder="https://www.youtube.com/" >
+                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >
                         </div>
-                  </div>                 
+                  </div> 
+                   <!-- ===== Placholder Image for Video ================ -->
+                  <div id="placeholder_image">
+                     <div class="form-group row">
+                        <div class="field col" >
+                            <h3>Placeholder Image your Videos</h3> 
+                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
+                        </div>
+                     </div>                 
+                  </div>
+                  <div id="append"></div>
+                  <button type="button" id="add_more_post" class="btn btn-sm btn-success float-right" >Add more post</button>                
                </div>
-               <button type="button" class="btn btn-sm btn-success float-right" >Add more post</button>
+
+              
+
+
+              
          </div>
          <div class="modal-footer">
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-         <button type="submit" class="btn btn-primary">Continue</button>
-         </form>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Continue</button>
+            </form>
          </div>
+         
       </div>
    </div>
 </div>
@@ -261,10 +282,16 @@
 @section('js')
 <script>
    $(document).ready(function() {
- 
+      var cart=1;
    	$('#table').DataTable();
+     // $('#add_more_post').hide();
+      $("#videos").removeAttr("required");
+      var x=1;
+      
 
 $(document).on('change','.status', function() {
+
+
     if(confirm("Are you sure want to change the status ?")) {
         var quizid = $(this).attr('quizid');
         window.location.href = "/admin/quizspeed/"+quizid;
@@ -278,17 +305,136 @@ $(document).on('change','.status', function() {
          }
        }
       });
+
+
+      // var single_post_display = $("#single_post").css( "display" );
+      // var module_display = $("#module").css( "display" );
+      // if(single_post_display == 'none')
+      // {
+      //    $("#files").removeAttr("required");
+      // }
+      // else if(module_display == 'none')
+      // {
+      //    $("#videos").removeAttr("required");
+      //    $("#palceholder_image").removeAttr("required");
+         
+      // }
+
       $(document).on('change','#feed_id', function() {
     
+
+
          if($(this).val() == 1){
             $("#single_post").show(); // Unchecks it
             $("#modules").hide(); 
-            } else{
+           // $("#video").removeAttr("required");
+            // select value 1 than hide button add more post and empty append div
+            //$('#add_more_post').hide();
+            $('#append').empty();
+           // $('#placeholder_image').hide();
+            $("#placeholder_image").removeAttr("required");
+            $("#videos").removeAttr("required");
+            $("#files").attr("required","required");
+            $("#module_title_description").hide();
+               $('#module_title_description').empty();
+
+            //$("#files").attr("required");
+
+            } if($(this).val()==2)
+            {
+               // 
+               $('#add_more_post').show();
+               $('#placeholder_image').show();
                $("#single_post").hide(); // Unchecks it
-            $("#modules").show(); 
+               $("#modules").show(); 
+
+               $("#videos").attr("required");
+               $("#placeholder_image").attr("required");
+               $("#files").removeAttr("required");
+              
+
+
+               $("#module_title_description").show();
+               var title_description = '<div class="form-group">\
+                   <label for="title">Title</label>\
+                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title_fix" placeholder="Title" >\
+               </div>\
+               <div class="form-group">\
+                   <label for="name" id="duration">Description</label>\
+                   <textarea class="@error("name") is-invalid @enderror form-control"   name="description_fix" placeholder="Description" maxlength="200" id="description" >\
+                   </textarea>\
+               </div>';
+
+               $("#module_title_description").append(title_description);
+            }
+            else{
+              // $("#single_post").hide(); // Unchecks it
+               $("#modules").hide(); 
+               // $('#add_more_post').hide();
+               // $('#placeholder_image').hide();
+               //$('#append').empty();
          }
        
       });
+
+
+
+      $(document).on('click','#add_more_post', function() {
+         
+         var x = document.getElementById("signupForm");
+        
+
+       
+
+
+         var post = '<div class="form-group">\
+                  <label for="title">External Link</label>\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
+               </div>\
+               <div class="form-group">\
+                  <label for="title">Titel</label>\
+                  <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title[]" placeholder="Title" required>\
+               </div>\
+               <div class="form-group">\
+                   <label for="name" id="duration">description</label>\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >\
+                   </textarea>\
+               </div>\
+               <div id="modules">\
+                  <div class="form-group row">\
+                        <div class="field col" >\
+                            <h3>Upload your Videos</h3>\
+                           <input type="file" id="videos" name="media_name_['+cart+'][]" accept="video/*" multiple  required/>\
+                        </div>\
+                        <div class="col" >\
+                             <span>Video Link</span>\
+                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >\
+                        </div>\
+                  </div>\
+                  </div>\
+               <div id="placeholder_image">\
+                  <div class="form-group row">\
+                        <div class="field col" >\
+                           <h3>Placeholder Image your Videos</h3>\
+                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"   required/>\
+                        </div>\
+                        <div class="col" >\
+                             <span>Placeholder Image Link</span>\
+                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="placeholder_image" placeholder="Palceholder Image" >\
+                        </div>\
+                  </div>\
+                  </div>\
+                  '
+               ;
+
+        cart++;
+         $( "#append" ).append( post );
+         // x.insertBefore(new_field, x.childNodes[pos]);
+
+         
+  
+      });
+
 
     $(document).on('submit','.delete', function() {
 var c = confirm("Are you sure want to delete ?");

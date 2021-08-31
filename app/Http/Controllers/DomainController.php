@@ -45,6 +45,7 @@ class DomainController extends Controller
         $data = new Domain;
         $data->name = strtolower($request->name);
         $data->status = '1';
+        $data->themes_id = '1';
         $data->save();
 
         if ($data->id) {
