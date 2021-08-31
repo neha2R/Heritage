@@ -19,6 +19,6 @@ class FeedContent extends Model
 
     public function feed_media()
     {
-        return $this->hasOne('App\FeedMedia', 'feed_content_id','id');
+        return $this->hasMany('App\FeedMedia', 'feed_content_id','id')->with('feed_attachments');
     }
 }

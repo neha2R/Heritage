@@ -82,4 +82,18 @@ class ThemeController extends Controller
     {
         //
     }
+
+       /**
+     * Get All theme.
+     *
+     * @param  \App\Theme  $theme
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllThemes()
+    {
+        $themes = Theme::select('id','title')->OrderBy('id', 'DESC')->get();
+        $themes = $themes->toArray();
+        return response()->json(['status' => 200, 'message' => 'Themes data', 'data' => $themes]);
+
+    }
 }

@@ -61,7 +61,7 @@
                         @foreach($quizRules as $key=>$rule)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <th scope="row">{{ucwords(strtolower($rule->types->name))}}</th>
+                              <th scope="row">@if(isset($rule->types)){{ucwords(strtolower($rule->types->name))}} @else {{'n/a'}}@endif</th>
                               <th>
                               {{ucwords(strtolower($rule->speeds->name))}}
                               </th>
@@ -234,7 +234,7 @@
                     <input type="text" maxlength="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
                     </div>
                   <div class="col-md-4">
-                      <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required value="{{$rule->types->no_of_player}}">
+                      <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
                   </div>
                </div>
                <div class="form-group">
@@ -303,7 +303,7 @@
                     <input type="number" disabled min="0" max="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
                     </div>
                   <div class="col-md-4">
-                      <input type="text" disabled class=" form-control no_of_player" placeholder="0"  disabled required value="{{$rule->types->no_of_player}}">
+                      <input type="text" disabled class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
                   </div>
                </div>
                <div class="form-group">

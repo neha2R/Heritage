@@ -9,6 +9,7 @@ use App\Domain;
 use App\Feed;
 use App\FeedMedia;
 use App\FeedAttachment;
+use Illuminate\Support\Facades\Validator;
 
 class FeedContentController extends Controller
 {
@@ -62,6 +63,8 @@ class FeedContentController extends Controller
 
         $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
         $videomimes = ['video/mp4']; //Add more mimes that you want to support
+
+
         $media = new FeedMedia;
         $media->feed_content_id = $data->id;
         $media->title = $request->title;
@@ -145,5 +148,33 @@ class FeedContentController extends Controller
     public function destroy(FeedContent $feedContent)
     {
         //
+    }
+
+
+    public function feed(Request $request)
+    {  
+        $validator = Validator::make($request->all(), [
+            'theme_id' => 'required',
+            'domain_id' => 'required',
+            'feed_type_id' => 'required',
+            'feed_page_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        
+
+        $id = explode(',', $request->theme_id);
+        $domain_id = explode(',', $request->domain_id);
+        $feed_id = explode(',', $request->feed_type_id);
+        $feedContents = FeedContent::select('id','type','tags','title')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
+        $feedContents = $feedContents->toArray();
+        if(empty($feedContents)){
+            return response()->json(['status' => 200, 'message' => 'Domain not found', 'data' => '']);
+        }
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $feedContents]);
+
     }
 }
