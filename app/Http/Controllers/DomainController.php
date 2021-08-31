@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain;
 use App\Subdomain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DomainController extends Controller
 {
@@ -192,11 +193,32 @@ class DomainController extends Controller
 
     }
 
+    // Get all domains
     public function domains()
     {
 
         $domains = Domain::OrderBy('id', 'DESC')->get();
         $domains = $domains->toArray();
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
+
+    }
+
+    public function getDomainAccordingTheme(Request $request)
+    {  
+        $validator = Validator::make($request->all(), [
+            'theme_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $id = explode(',', $request->theme_id);
+        $domains = Domain::select('id','name')->whereIn('themes_id',$id)->get();
+        $domains = $domains->toArray();
+        if(empty($domains)){
+            return response()->json(['status' => 200, 'message' => 'Domain not found', 'data' => '']);
+        }
         return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
 
     }

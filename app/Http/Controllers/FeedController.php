@@ -82,4 +82,20 @@ class FeedController extends Controller
     {
         //
     }
+
+        /**
+     * Get all feed data from database
+     *
+     * @param  \null\
+     * @return \json response\
+     */
+    public function feed_type()
+    {
+        $feed = Feed::select('id','title')->OrderBy('id', 'DESC')->get();
+        $feed = $feed->toArray();
+        return response()->json(['status' => 200, 'message' => 'Feed data', 'data' => $feed]);
+
+    }
+
+   
 }

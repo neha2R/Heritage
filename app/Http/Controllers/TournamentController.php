@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Theme;
+use App\Tournament;
 use Illuminate\Http\Request;
 
-class ThemeController extends Controller
+class TournamentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ThemeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Theme  $theme
+     * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Theme $theme)
+    public function show(Tournament $tournament)
     {
         //
     }
@@ -52,10 +52,10 @@ class ThemeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Theme  $theme
+     * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function edit(Theme $theme)
+    public function edit(Tournament $tournament)
     {
         //
     }
@@ -64,10 +64,10 @@ class ThemeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Theme  $theme
+     * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Theme $theme)
+    public function update(Request $request, Tournament $tournament)
     {
         //
     }
@@ -75,25 +75,11 @@ class ThemeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Theme  $theme
+     * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Theme $theme)
+    public function destroy(Tournament $tournament)
     {
         //
-    }
-
-       /**
-     * Get All theme.
-     *
-     * @param  \App\Theme  $theme
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllThemes()
-    {
-        $themes = Theme::select('id','title')->OrderBy('id', 'DESC')->get();
-        $themes = $themes->toArray();
-        return response()->json(['status' => 200, 'message' => 'Themes data', 'data' => $themes]);
-
     }
 }
