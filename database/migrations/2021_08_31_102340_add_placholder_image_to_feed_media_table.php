@@ -15,7 +15,7 @@ class AddPlacholderImageToFeedMediaTable extends Migration
     {
         Schema::table('feed_media', function (Blueprint $table) {
             //
-            $table->string('placholder_image',200);
+            $table->string('placholder_image',200)->nullable();;
         });
     }
 
