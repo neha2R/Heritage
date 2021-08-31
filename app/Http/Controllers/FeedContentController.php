@@ -58,6 +58,18 @@ class FeedContentController extends Controller
         $data->domain_id = $request->domain_id;
         $data->feed_id = $request->feed_id;
         $data->tags=$request->tags;
+
+        if($request->feed_id == 1)
+        {
+            $data->title = $request->title['0'];
+            $data->description = $request->description['0'];
+        }
+        else
+        {
+            $data->title = $request->title_fix;
+            $data->description = $request->description_fix;
+        }
+        
         // $data->type = '1';
      
         $data->save();
@@ -70,7 +82,7 @@ class FeedContentController extends Controller
             $media = new FeedMedia;
             $media->feed_content_id = $data->id;
             $media->title = $request->title['0'];
-            $data->description=$request->description['0'];
+            $media->description=$request->description['0'];
             $media->external_link=$request->external_link['0'];
             $media->video_link=$request->video_link['0'];
             $media->save();
