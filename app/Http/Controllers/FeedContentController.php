@@ -322,9 +322,10 @@ class FeedContentController extends Controller
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->get(5);
+        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->get(2);
         $data=[];
         $last_page='';
+        $i=1;
         foreach($feedContents as $cont){
           $mydata['id'] = $cont->id; 
           $mydata['type'] = $cont->feedtype->title; 
@@ -335,6 +336,7 @@ class FeedContentController extends Controller
           $mydata['video_link'] = $cont->feed_media_single->video_link; 
           $mydata['placeholder_image'] = $cont->feed_media_single->placholder_image; 
           $mydata['savepost'] = 20; 
+          $mydata['is_saved'] = fmod($i,2); 
           $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
           foreach($cont->feed_media_single->feed_attachments_name as $image){
              
@@ -345,6 +347,7 @@ class FeedContentController extends Controller
           $mydata['media'] = $imagename; 
           $data[]=$mydata;
           $last_page = $cont->id;
+          $i++;
         }
        
         if(empty($feedContents)){
