@@ -303,12 +303,28 @@ class FeedContentController extends Controller
         $id = explode(',', $request->theme_id);
         $domain_id = explode(',', $request->domain_id);
         $feed_id = explode(',', $request->feed_type_id);
-        $feedContents = FeedContent::select('id','type','tags','title')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
-        $feedContents = $feedContents->toArray();
+        $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->get(15);
+        $data=[];
+        foreach($feedContents as $cont){
+          $mydata['id'] = $cont->id; 
+          $mydata['type'] = $cont->feedtype->title; 
+          $mydata['tags'] =explode(",",$cont->tags); 
+          $mydata['title'] = $cont->feed_media_single->title;  
+          $mydata['description'] = $cont->feed_media_single->description; 
+          $mydata['external_link'] = $cont->feed_media_single->external_link; 
+          $mydata['video_link'] = $cont->feed_media_single->video_link; 
+          $mydata['placeholder_image'] = $cont->feed_media_single->placholder_image; 
+          $mydata['savepost'] = 20; 
+          $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
+          $mydata['media'] = $cont->feed_media_single->feed_attachments_single->media_name; 
+          $data[]=$mydata;
+        }
+        
         if(empty($feedContents)){
             return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
         }
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $feedContents]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $data]);
 
     }
 }
