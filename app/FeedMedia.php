@@ -14,4 +14,8 @@ class FeedMedia extends Model
     {
         return $this->hasOne('App\FeedAttachment', 'feed_media_id','id');
     }
+    public function feed_attachments_name()
+    {
+        return $this->hasMany('App\FeedAttachment', 'feed_media_id','id')->select('media_name');
+    }
 }

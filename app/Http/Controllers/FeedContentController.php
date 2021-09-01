@@ -288,9 +288,9 @@ class FeedContentController extends Controller
     public function feed(Request $request)
     {  
         $validator = Validator::make($request->all(), [
-            'theme_id' => 'required',
-            'domain_id' => 'required',
-            'feed_type_id' => 'required',
+            // 'theme_id' => 'required',
+            // 'domain_id' => 'required',
+            // 'feed_type_id' => 'required',
             'feed_page_id' => 'required',
         ]);
 
@@ -303,8 +303,8 @@ class FeedContentController extends Controller
         $id = explode(',', $request->theme_id);
         $domain_id = explode(',', $request->domain_id);
         $feed_id = explode(',', $request->feed_type_id);
-        $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
-        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->get(15);
+        // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->where('id','>=',$request->feed_page_id)->get(15);
         $data=[];
         foreach($feedContents as $cont){
           $mydata['id'] = $cont->id; 
@@ -317,14 +317,15 @@ class FeedContentController extends Controller
           $mydata['placeholder_image'] = $cont->feed_media_single->placholder_image; 
           $mydata['savepost'] = 20; 
           $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
-          $mydata['media'] = $cont->feed_media_single->feed_attachments_single->media_name; 
+          $mydata['media'] = $cont->feed_media_single->feed_attachments_name; 
           $data[]=$mydata;
+          $last_page = $cont->id;
         }
         
         if(empty($feedContents)){
             return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
         }
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $data]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'last_id'=>$last_page,'data' => $data]);
 
     }
 }
