@@ -56,6 +56,10 @@ Route::get('feed_domains', 'DomainController@getDomainAccordingTheme');
 Route::get('feed_type', 'FeedController@feed_type');
 // Feed data according to passing filters
 Route::post('feed', 'FeedContentController@feed');
+
+Route::post('savefeed', 'FeedContentController@savepost');
+Route::get('tagfilter', 'FeedContentController@tagfilter');
+
 /*
 These are the auth routes
 End Here

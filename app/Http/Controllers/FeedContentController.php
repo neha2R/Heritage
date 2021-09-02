@@ -10,6 +10,7 @@ use App\Feed;
 use App\FeedMedia;
 use App\FeedAttachment;
 use Illuminate\Support\Facades\Validator;
+use App\SaveFeed;
 
 class FeedContentController extends Controller
 {
@@ -383,4 +384,87 @@ class FeedContentController extends Controller
      }
  
       }
+
+      function savepost(Request $request)
+      {
+     
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'feed_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+        //feed_contents_id
+        $data = SaveFeed::where('user_id',$request->user_id)->where('feed_contents_id',$request->feed_id)->first();
+        if($data){
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed already saved']); 
+        }
+        $data = new SaveFeed;
+        $data->feed_contents_id = $request->feed_id;
+        $data->user_id = $request->user_id;
+        $data->save();
+
+        return response()->json(['status' => 200, 'data' => $data, 'message' => 'Feed saved']);
+       }
+
+
+
+       function tagfilter(Request $request)
+       {
+
+      $feedContents = FeedContent::select('id','feed_id','type','tags','title','description');
+        
+           
+      if ($request->type=='0') {
+          $feedContents = $feedContents->where('tags', 'like', '%' . $request->searchkey . '%');
+      }
+      else {
+ 
+          $feedContents = $feedContents->where('title','like','%' . $request->searchkey . '%');
+      }
+
+
+      $feedContents = $feedContents->get();
+      $data=[];
+      $last_page='';
+      $i=1;
+      foreach($feedContents as $cont){
+        $mydata['id'] = $cont->id; 
+        $mydata['type'] = $cont->feedtype->title; 
+        $mydata['tags'] =explode(",",$cont->tags); 
+        $mydata['title'] = $cont->feed_media_single->title;  
+        $mydata['description'] = $cont->feed_media_single->description; 
+        $mydata['external_link'] = $cont->feed_media_single->external_link; 
+        $mydata['video_link'] = $cont->feed_media_single->video_link; 
+        if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+            }
+        else{
+          $place =null;
+            }
+        $mydata['placeholder_image'] =$place;  
+        $mydata['savepost'] = 20; 
+        $mydata['is_saved'] = fmod($i,2); 
+        $mydata['share'] = $this->sharepath($cont->id); 
+        $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
+        $imagename=[];
+        foreach($cont->feed_media_single->feed_attachments_name as $image){
+           
+         $imagename[] = $this->imageurl($image->media_name);
+         $imgdata = $imagename;
+        }
+        
+        $mydata['media'] = $imgdata; 
+        $data[]=$mydata;
+        $last_page = $cont->id;
+        $i++;
+      }
+     
+      if(empty($feedContents)){
+          return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+      }
+      return response()->json(['status' => 200, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
+    }
+      
 }
