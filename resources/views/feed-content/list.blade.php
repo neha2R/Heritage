@@ -96,7 +96,7 @@
                            @foreach($feedContents as $key=>$feedContent)
                            <tr>
                               <th scope="row">{{$key+1}}</th>
-                              <th scope="row">{{$feedContent->feed_medium->title}}</th>  
+                              <th scope="row">{{$feedContent->title}}</th>  
                               <th scope="row">{{$feedContent->feedtype->title}}</th>
                              <td>{{$feedContent->theme->title}}</td>
                             <td></td>

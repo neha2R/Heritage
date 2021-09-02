@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddPlacholderImageToFeedMediaTable extends Migration
+class CreateSaveFeedsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddPlacholderImageToFeedMediaTable extends Migration
      */
     public function up()
     {
-        Schema::table('feed_media', function (Blueprint $table) {
-            //
-            $table->string('placholder_image',200)->nullable();;
+        Schema::create('save_feeds', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->nullable(); $table->foreignId('feed_contents_id')->nullable(); $table->timestamps();
         });
     }
 
@@ -26,9 +26,6 @@ class AddPlacholderImageToFeedMediaTable extends Migration
      */
     public function down()
     {
-        Schema::table('feed_media', function (Blueprint $table) {
-            //
-            $table->dropColumn('placholder_image');
-        });
+        Schema::dropIfExists('save_feeds');
     }
 }
