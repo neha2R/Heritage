@@ -40,6 +40,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/get_rule_type/{id}', 'QuizRuleController@get_rule_type');
     Route::get('/get_rule_speed/{id}', 'QuizRuleController@get_rule_speed');
     Route::resource('/feed-content', 'FeedContentController');
+    Route::resource('/tournament', 'TournamentController');
 
 
 });
