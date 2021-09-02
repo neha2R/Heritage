@@ -397,16 +397,23 @@ class FeedContentController extends Controller
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
         //feed_contents_id
-        $data = SaveFeed::where('user_id',$request->user_id)->where('feed_contents_id',$request->feed_id)->first();
-        if($data){
-            return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed already saved']); 
-        }
+       
+        if($request->type=='1'){
+            $data = SaveFeed::where('user_id',$request->user_id)->where('feed_contents_id',$request->feed_id)->first();
+            if($data){
+                return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed already saved']); 
+            }
         $data = new SaveFeed;
         $data->feed_contents_id = $request->feed_id;
         $data->user_id = $request->user_id;
         $data->save();
-
-        return response()->json(['status' => 200, 'data' => $data, 'message' => 'Feed saved']);
+        }
+        if($request->type=='0'){
+            SaveFeed::where('user_id',$request->user_id)->where('feed_contents_id',$request->feed_id)->delete();
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed unsaved']);
+            }
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed saved']);
+       
        }
 
 
