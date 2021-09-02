@@ -334,9 +334,15 @@ class FeedContentController extends Controller
           $mydata['description'] = $cont->feed_media_single->description; 
           $mydata['external_link'] = $cont->feed_media_single->external_link; 
           $mydata['video_link'] = $cont->feed_media_single->video_link; 
-          $mydata['placeholder_image'] = $cont->feed_media_single->placholder_image; 
+          if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+              }
+          else{
+            $place =null;
+              }
+          $mydata['placeholder_image'] =$place;  
           $mydata['savepost'] = 20; 
           $mydata['is_saved'] = fmod($i,2); 
+          $mydata['share'] = $this->sharepath($cont->id); 
           $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
           $imagename=[];
           foreach($cont->feed_media_single->feed_attachments_name as $image){
@@ -359,12 +365,22 @@ class FeedContentController extends Controller
     }
 
     function imageurl($image)
-{
+    {
     try {
         return url('/storage').'/'.$image;
     } catch (\Throwable $th) {
         return '';
     }
 
-}
+     }
+
+     function sharepath($id)
+     {
+     try {
+         return url('/feed').'/'.$id;
+     } catch (\Throwable $th) {
+         return '';
+     }
+ 
+      }
 }
