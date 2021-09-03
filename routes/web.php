@@ -43,6 +43,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/feed-collection', 'FeedContentController@feed_collection_view');
     Route::resource('/tournament', 'TournamentController');
     Route::get('/tournament_add', 'TournamentController@tournament_add')->name('tournament_add');
+    Route::Post('/feed-collection-store','FeedContentController@feed_collection_store')->name('feed-collection-store');
 
 
 });

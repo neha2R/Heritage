@@ -6,9 +6,11 @@ use App\FeedContent;
 use Illuminate\Http\Request;
 use App\Theme;
 use App\Domain;
+use App\Subdomain;
 use App\Feed;
 use App\FeedMedia;
 use App\FeedAttachment;
+use App\FeedCollection;
 use Illuminate\Support\Facades\Validator;
 use App\SaveFeed;
 use App\Jobs\FeedMediaUploadJob;
@@ -480,7 +482,42 @@ class FeedContentController extends Controller
 
     public function feed_collection_view()
     {
-        return "hello";
+        $single_posts = FeedContent::where('feed_id','=','1')->get();
+        //dd($single_posts);
+        $themes = Theme::OrderBy('id', 'DESC')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->get();
+        $sub_domains = Subdomain::OrderBy('id', 'DESC')->get();
+        $types = Feed::OrderBy('id', 'DESC')->get();
+        //dd($themes);
+        //dd($domains);
+        //dd($sub_domains);
+        //dd($types);
+        return view('feed-content.feed-collection',compact('domains','sub_domains','themes','types','single_posts'));
+    }
+
+    public function feed_collection_store(Request $request)
+    {
+        $newFeedContent = new FeedContent;
+        $newFeedContent->theme_id = $request->theme_id;
+        $newFeedContent->domain_id = $request->domain_id;
+       // $newFeedContent->sub_domain_id = $request->sub_domain_id;
+        $newFeedContent->type = $request->type;
+        $newFeedContent->feed_id = $request->feed_id;
+        $newFeedContent->title = $request->title;
+        $newFeedContent->description = $request->description;
+        
+        $newFeedContent->save();
+
+
+        foreach($request->single_post as $single_post)
+        {
+            $newCollection = new FeedCollection;
+            $newCollection->feed_content_id = $newFeedContent->id;
+            $newCollection->single_post_id = $single_post;
+            $newCollection->save();
+        }
+        //dd($request);
+        
     }
       
 }
