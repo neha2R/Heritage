@@ -28,4 +28,9 @@ class QuestionsSetting extends Model
         return $this->hasMany('App\Subdomain', 'id', 'Subdomain_id');
     }
 
+    public function question()
+    {
+        return $this->hasOne('App\Question', 'id', 'question_id');
+    }
+
 }

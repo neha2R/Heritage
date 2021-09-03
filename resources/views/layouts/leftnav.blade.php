@@ -127,6 +127,11 @@
                           <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
                            Feed Setting
                            </a>
+                        </li> <li class="menu">
+                        <a href="{{ route('tournament.index') }}" class="{{ request()->is('admin/tournament*') ? 'mm-active' : '' }}">
+                          <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+                          Tournament Setting
+                           </a>
                         </li>
                      </ul>
                   </div>

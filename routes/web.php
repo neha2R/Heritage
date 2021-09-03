@@ -42,10 +42,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/feed-content', 'FeedContentController');
     Route::get('/feed-collection', 'FeedContentController@feed_collection_view');
     Route::resource('/tournament', 'TournamentController');
+    Route::get('/tournament_add', 'TournamentController@tournament_add')->name('tournament_add');
 
 
 });
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/faqs', function(){
