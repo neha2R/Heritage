@@ -57,7 +57,7 @@
                <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
                   </a> -->
 
-               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Feed</button>
+               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".card-type-model"> <i class="fas fa-plus-circle"></i> Create Feed</button>
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
@@ -124,10 +124,30 @@
 
  @section('model')
 
+ <!-- Show Card Type Start Here  -->
 
+ <!-- Show Card Type End  Here  -->
+ <div class="modal fade bd-example-modal-lg card-type-model" id="card-type-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class= row>
+                        <div class = "col-6" style="text-align:center">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add_new_card_button" data-target="#add-model" >Add New Card</button>
+                        </div>
+                        <div class = "col-6" style="text-align:center">
+                            
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add_existing_card_button" data-target="#add_existing_card_model" >Add Existing Card</button>
+                        </div>
+                        
+                    </div>          
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- Add Model Start Here -->
-<div class="modal fade bd-example-modal-lg show add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg show add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
@@ -288,8 +308,17 @@
       $("#videos").removeAttr("required");
       var x=1;
       
+      // add new card button 
+      $("#add_new_card_button").on('click',function(){
 
-$(document).on('change','.status', function() {
+         $("#add-model").modal('show');
+      });
+
+      // add existing card button
+      $("#add_existing_card_button").on('click',function(){
+         window.location.href = "/admin/feed-collection";
+      });
+   $(document).on('change','.status', function() {
 
 
     if(confirm("Are you sure want to change the status ?")) {

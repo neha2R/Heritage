@@ -428,7 +428,7 @@
                         <div class="form-group">
                             <div class="field" align="left">
                                 <h3>Excel File </h3> 
-                                <input type="file" class="form-control" id="files" name="logo_media_name" accept="image/*" multiple   />
+                                <input type="file" class="form-control" id="files" name="tournament_question_bluck"     />
                             </div>
                         </div>
                     </div>

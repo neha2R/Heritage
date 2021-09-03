@@ -11,6 +11,7 @@ use App\FeedMedia;
 use App\FeedAttachment;
 use Illuminate\Support\Facades\Validator;
 use App\SaveFeed;
+use App\Jobs\FeedMediaUploadJob;
 
 class FeedContentController extends Controller
 {
@@ -103,13 +104,15 @@ class FeedContentController extends Controller
                     // }
 
                     $type = '0';
-                    $name = $file->store('feed','public');
+                   
 
-                    $attachment = new FeedAttachment;
-                    $attachment->feed_media_id = $media->id;
-                    $attachment->media_name = $name;
-                    $attachment->media_type = $type;
-                    $attachment->save();
+                    FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
+                    // $name = $file->store('feed','public');
+                    // $attachment = new FeedAttachment;
+                    // $attachment->feed_media_id = $media->id;
+                    // $attachment->media_name = $name;
+                    // $attachment->media_type = $type;
+                    // $attachment->save();
                 }
             }
 
@@ -159,13 +162,14 @@ class FeedContentController extends Controller
                          //     $type = '1';
                          // }
                          $type = '1';
-                         $name = $files->store('feed','public');
- 
-                         $attachment = new FeedAttachment;
-                         $attachment->feed_media_id = $media->id;
-                         $attachment->media_name = $name;
-                         $attachment->media_type = $type;
-                         $attachment->save();
+                        
+                        // $name = $files->store('feed','public');
+                         FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
+                        //  $attachment = new FeedAttachment;
+                        //  $attachment->feed_media_id = $media->id;
+                        //  $attachment->media_name = $name;
+                        //  $attachment->media_type = $type;
+                        //  $attachment->save();
                    //  }
               }
               
@@ -472,6 +476,11 @@ class FeedContentController extends Controller
           return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
       }
       return response()->json(['status' => 200, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
+    }
+
+    public function feed_collection_view()
+    {
+        return "hello";
     }
       
 }

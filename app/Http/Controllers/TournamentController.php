@@ -10,6 +10,9 @@ use App\Theme;
 use App\Domain;
 use App\SubDomain;
 use Storage;
+use App\Imports\TournamentQuestionImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 //use App\Frequency;
 
 class TournamentController extends Controller
@@ -104,7 +107,20 @@ class TournamentController extends Controller
                 $media_name = $request->file('media_name')->store('tournament','public');
                 $newTournament->media_name = $media_name;
             }
-            $newTournament->save();
+
+
+
+
+
+
+           $newTournament->save();
+
+
+            
+            // store excel file question 
+            Excel::import(new TournamentQuestionImport($newTournament->id), $request->file('tournament_question_bluck'));
+            return back();
+            
             //dd($newTournament);
             
 
