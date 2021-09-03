@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\FeedAttachment;
 
 class FeedMediaUploadJob implements ShouldQueue
 {
@@ -38,7 +39,7 @@ class FeedMediaUploadJob implements ShouldQueue
         $attachment = new FeedAttachment;
         $attachment->feed_media_id = $this->media_id;
         $attachment->media_name = $name;
-        $attachment->media_type = $type;
+        $attachment->media_type = $this->type;
         $attachment->save();
     }
 }

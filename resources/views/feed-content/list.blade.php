@@ -302,6 +302,9 @@
 @section('js')
 <script>
    $(document).ready(function() {
+      var add_more_btn_click=1;
+
+      
       var cart=1;
    	$('#table').DataTable();
      // $('#add_more_post').hide();
@@ -410,12 +413,9 @@
 
       $(document).on('click','#add_more_post', function() {
          
-         var x = document.getElementById("signupForm");
-        
-
-       
-
-
+         if(add_more_btn_click<3)
+         {
+            var x = document.getElementById("signupForm");
          var post = '<div class="form-group">\
                   <label for="title">External Link</label>\
                   <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
@@ -458,7 +458,15 @@
 
         cart++;
          $( "#append" ).append( post );
+         add_more_btn_click++;
          // x.insertBefore(new_field, x.childNodes[pos]);
+         }
+         else
+         {
+            $('#add_more_post').hide();
+         }
+         
+         
 
          
   
