@@ -41,10 +41,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/get_rule_speed/{id}', 'QuizRuleController@get_rule_speed');
     Route::resource('/feed-content', 'FeedContentController');
     Route::resource('/tournament', 'TournamentController');
+    Route::get('/tournament_add', 'TournamentController@tournament_add')->name('tournament_add');
 
 
 });
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/faqs', function(){

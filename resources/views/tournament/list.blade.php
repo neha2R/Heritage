@@ -110,7 +110,7 @@
 
 
 <!-- strat model quize type button  -->
-    <div class="modal fade bd-example-modal-lg add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+    <div class="modal fade bd-example-modal-lg add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;     top: 200px;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">

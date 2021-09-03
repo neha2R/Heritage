@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tournament;
+use App\QuestionsSetting;
 use Illuminate\Http\Request;
 use App\AgeGroup;
 use App\DifficultyLevel;
@@ -106,10 +107,10 @@ class TournamentController extends Controller
             }
             $newTournament->save();
             //dd($newTournament);
-            
+           
 
         }
-
+        return redirect()->route('tournament_add',['id'=>$newTournament->id]);
     }
 
     /**
@@ -155,5 +156,12 @@ class TournamentController extends Controller
     public function destroy(Tournament $tournament)
     {
         //
+    }
+
+    public function tournament_add(Request $req)
+    {
+          
+          $tournament=Tournament::where('id',$req->id)->first();$questions=QuestionsSetting::with('domain')->with('question')->where('domain_id',$tournament->domain_id)->get();
+          return view('tournament.create_tournament',compact('questions','tournament'));
     }
 }
