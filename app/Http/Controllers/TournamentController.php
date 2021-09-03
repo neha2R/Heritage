@@ -58,7 +58,20 @@ class TournamentController extends Controller
     public function store(Request $request)
     {
           
-        
+        $validatedData = $request->validate([
+            'title' => 'required|regex:/^[a-zA-Z]+$/u|max:255',
+            'subdomain_name' => 'required|integer',
+            'quize_type' => 'required|integer',
+            'age_group_id' => 'required|integer',
+            'difficulty_level_id' => 'required|integer',
+            'theme_id' => 'required|integer',
+            'domain_id' => 'required|integer',
+            'session_per_day' => 'required|integer',
+            'no_of_players' => 'required|integer',
+            'duration' => 'required|integer',
+            'duration' => 'required|integer',
+            'media_name' => 'required'
+        ]);
        
         
 
@@ -190,6 +203,8 @@ class TournamentController extends Controller
         $newQuizeQuestions->tournament_id  = $req->tournament_id;
         $newQuizeQuestions->total_no_question = count($req->questions_id);
         $newQuizeQuestions->save();
-        dd(json_encode($req->questions_id));
+
+        return redirect()->route('tournament.index');
+       // dd(json_encode($req->questions_id));
     }
 }

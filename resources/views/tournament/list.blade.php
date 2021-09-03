@@ -234,10 +234,10 @@
                             </div>                  
                             <div class = "row"> 
                                 <div class="col">
-                                    <input id="datetimepicker" class="form-control"  type="text" name="start_time" placeholder="start time" >
+                                    <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" name="start_time" placeholder="start time" >
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" name="interval_session" placeholder="Interval b/w session">
+                                    <input type="text" class="form-control" autocomplete="off" name="interval_session" placeholder="Interval b/w session">
                                 </div>
                             </div>
                             <div class="row">
@@ -338,12 +338,12 @@
                             </div>
                             <div class = "row"> 
                             <div class="col">
-                                    <input id="datetimepicker"  type="text" name="start_time" class="form-control" placeholder="start time" />
+                                    <input id="datetimepicker"  type="text" name="start_time" autocomplete="off" class="form-control" placeholder="start time" />
                                 </div>
 
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="interval_bw_session" placeholder="Interval b/w session">
+                                        <input type="text" class="form-control" autocomplete="off" name="interval_bw_session" placeholder="Interval b/w session">
                                     </div>
                                 </div>
                             </div>
