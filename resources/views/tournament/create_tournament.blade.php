@@ -79,7 +79,9 @@
                {{ $message }}</strong>
             </div>
             @endforeach
-            
+            <form action="{{route('tournament-questions-store')}}" method="Post">
+            @csrf
+            <input type="hidden" name="tournament_id" value="{{$tournament->id}}"/>
             <div class="card-body">
                 <div class="table-responsive">
                     <table id="table" class="mb-0 table table-striped">
@@ -94,14 +96,17 @@
                            </tr>
                         </thead>
                         <tbody>
-                          
+                        
+                            
+                            
                            @foreach($questions as $question)
                            <tr>
-                           <td><input type="checkbox" class="form-control" value="{{$question->question->id}}"/></td>
+                           <td><input type="checkbox" class="form-control" name="questions_id[]" value="{{$question->question->id}}"/></td>
                            <td>{{$question->question->question}}</td>
                            <th>{{$question->domain->name}}</th>
                            </tr>
                            @endforeach
+                           
                         </tbody>
                     </table>
                 </div>
@@ -111,10 +116,11 @@
 
 <p>Press <b>Submit</b>  form data that would be submitted.</p>
 
-<p><button id="btn-submit">Submit</button></p>
+<p><button type="submit" name="submit">Submit</button></p>
 
 <!-- <p><b>Selected rows data:</b></p> -->
 </div>
+</form>
             </div>
          </div>
       </div>

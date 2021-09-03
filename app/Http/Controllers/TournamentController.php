@@ -10,6 +10,7 @@ use App\DifficultyLevel;
 use App\Theme;
 use App\Domain;
 use App\SubDomain;
+use App\TournamentQuizeQuestion;
 use Storage;
 use App\Imports\TournamentQuestionImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -177,7 +178,18 @@ class TournamentController extends Controller
     public function tournament_add(Request $req)
     {
           
-          $tournament=Tournament::where('id',$req->id)->first();$questions=QuestionsSetting::with('domain')->with('question')->where('domain_id',$tournament->domain_id)->get();
+          $tournament=Tournament::where('id',$req->id)->first();
+          $questions=QuestionsSetting::with('domain')->with('question')->where('domain_id',$tournament->domain_id)->get();
           return view('tournament.create_tournament',compact('questions','tournament'));
+    }
+
+    public function tournament_question_store(Request $req)
+    {
+        $newQuizeQuestions = new TournamentQuizeQuestion;
+        $newQuizeQuestions->questions_id = json_encode($req->questions_id);
+        $newQuizeQuestions->tournament_id  = $req->tournament_id;
+        $newQuizeQuestions->total_no_question = count($req->questions_id);
+        $newQuizeQuestions->save();
+        dd(json_encode($req->questions_id));
     }
 }
