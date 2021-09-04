@@ -92,7 +92,18 @@
                               <th>Delete</th>
                            </tr>
                         </thead>
-                        <tbody>                        
+                        <tbody>    
+                        @foreach($tournaments as $key=>$tournament) 
+                            <tr>
+                            <th scope="row">{{$key+1}}</th>
+                              <th scope="row">{{$tournament->title}}</th>
+                             <td>{{$tournament->frequency->title}}</td>
+                             <td></td>
+                             <td></td>
+                             <td></td>
+
+                            </tr>   
+                            @endforeach            
                       </tbody>
                   </table>
                 </div>
@@ -202,7 +213,10 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control" required >
-                                            <option>Frequency</option>
+                                            <option value="">Select Frequency</option>
+                                            @foreach($frequencies as $freq)
+                                                <option value="{{$freq->id}}">{{$freq->title}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -276,7 +290,7 @@
 <!-- Add normal quize  Ends here -->
 
 <!-- special  quize Start Here  -->
-    <div class="modal fade bd-example-modal-lg special_quize_model" tabindex="-1" role="dialog" aria-labelledby="special_quize_model" style="display: none;"   aria-hidden="true">
+<div class="modal fade bd-example-modal-lg special_quize_model" tabindex="-1" role="dialog" aria-labelledby="special_quize_model" style="display: none;"   aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

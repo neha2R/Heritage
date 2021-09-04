@@ -14,6 +14,7 @@ use App\TournamentQuizeQuestion;
 use Storage;
 use App\Imports\TournamentQuestionImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Frequency;
 
 //use App\Frequency;
 
@@ -34,9 +35,9 @@ class TournamentController extends Controller
         $themes = Theme::OrderBy('id','DESC')->get();
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = SubDomain::OrderBy('id','DESC')->get();
-       // $frequencies = Frequency::OrderBy('id','DESC');
+        $frequencies = Frequency::OrderBy('id','DESC');
         
-        return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains'));
+        return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
 
     /**

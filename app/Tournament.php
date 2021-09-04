@@ -34,10 +34,10 @@ class Tournament extends Model
         return $this->hasOne('App\Subdomain', 'id','sub_domain_id');
     }
 
-    // public function frequency_id()
-    // {
-    //     return $this->hasOne('App\Subdomain', 'id','sub_domain_id');
-    // }
+    public function frequency()
+    {
+        return $this->hasOne('App\Frequency', 'id','frequency_id');
+    }
 
     
     
