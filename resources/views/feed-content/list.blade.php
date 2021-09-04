@@ -126,14 +126,14 @@
 
  <!-- Show Card Type Start Here  -->
 
- <!-- Show Card Type End  Here  -->
+
  <div class="modal fade bd-example-modal-lg card-type-model" id="card-type-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class= row>
                         <div class = "col-6" style="text-align:center">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add_new_card_button" data-target="#add-model" >Add New Card</button>
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" id="add_new_card_button" data-target=".add-model" >Add New Card</button>
                         </div>
                         <div class = "col-6" style="text-align:center">
                             
@@ -145,9 +145,9 @@
             </div>
         </div>
     </div>
-
+ <!-- Show Card Type End  Here  -->
 <!-- Add Model Start Here -->
-<div class="modal fade bd-example-modal-lg show add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg  add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="add-model" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
          <div class="modal-header">
@@ -312,10 +312,10 @@
       var x=1;
       
       // add new card button 
-      $("#add_new_card_button").on('click',function(){
+      // $("#add_new_card_button").on('click',function(){
 
-         $("#add-model").modal('show');
-      });
+      //    $("#add-model").modal('show');
+      // });
 
       // add existing card button
       $("#add_existing_card_button").on('click',function(){
@@ -413,7 +413,7 @@
 
       $(document).on('click','#add_more_post', function() {
          
-         if(add_more_btn_click<3)
+         if(add_more_btn_click<4)
          {
             var x = document.getElementById("signupForm");
          var post = '<div class="form-group">\
