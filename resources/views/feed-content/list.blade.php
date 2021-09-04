@@ -413,7 +413,7 @@
 
       $(document).on('click','#add_more_post', function() {
          
-         if(add_more_btn_click<3)
+         if(add_more_btn_click<4)
          {
             var x = document.getElementById("signupForm");
          var post = '<div class="form-group">\

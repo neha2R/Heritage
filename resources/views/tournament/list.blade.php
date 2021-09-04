@@ -144,7 +144,7 @@
                                   <div class="col">
                                         <div class="form-group">
                                             <select name="age_group_id" class="@error('age_group_id') is-invalid @enderror form-control" required >
-                                                <option>Age Group</option>
+                                                <option disabled selected value> -- Select Age Group --</option>
                                                 @foreach($age_groups as $age_group)
                                                     <option value="{{$age_group->id}}">{{$age_group->name}}</option>
                                                 @endforeach
@@ -157,7 +157,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="difficulty_level_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required >
-                                            <option>Difficulty Level</option>
+                                            <option  disabled selected value > -- Select Difficulty Level --</option>
                                             @foreach($difficulty_levels as $difficulty_level)
                                                 <option value="{{$difficulty_level->id}}">{{$difficulty_level->name}}</option>
                                             @endforeach
@@ -168,7 +168,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
-                                            <option>Theme</option>
+                                            <option disabled selected value > --Select Theme--</option>
                                             @foreach($themes as $theme)
                                                 <option value="{{$theme->id}}">{{$theme->title}}</option>
                                             @endforeach
@@ -180,7 +180,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
-                                            <option>Domain</option>
+                                            <option  disabled selected value>--Select Domain--</option>
                                             @foreach($domains as $domain)
                                                 <option value="{{$domain->id}}">{{$domain->name}}</option>
                                             @endforeach
@@ -190,7 +190,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
-                                            <option>Sub Domain</option>
+                                            <option  disabled selected value>-- Select Sub Domain--</option>
                                             @foreach($subDomains as $subDomain)
                                                 <option value="{{$subDomain->id}}">{{$subDomain->name}}</option>
                                             @endforeach
@@ -214,7 +214,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="no_of_players" class="@error('domain_id') is-invalid @enderror form-control" required >
-                                            <option>No. of Players</option>
+                                            <option  disabled selected value >--Select No. of Players--</option>
                                             <option value="10">10 Players</option>
                                             <option value="20">20 Players</option>
                                             <option value="30">30 Players</option>
@@ -259,10 +259,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <br>
-                                    <button type="button" class="btn btn-success" >Add Question Manually</button>
-                                </div>
+                               
                             </div>                        
                     </div>
                         <div class="modal-footer">
@@ -294,7 +291,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="age_group_id" class="@error('age_group_id') is-invalid @enderror form-control" required >
-                                            <option>Age Group</option>
+                                            <option  disabled selected value >--Select Age Group--</option>
                                             @foreach($age_groups as $age_group)
                                             <option value="{{$age_group->id}}">{{$age_group->name}}</option>
                                             @endforeach
@@ -318,7 +315,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="no_of_players" class="@error('domain_id') is-invalid @enderror form-control" required >
-                                            <option>No. of Players</option>
+                                            <option  disabled selected value> --Select No. of Players--</option>
                                             <option value="10">10 Players</option>
                                             <option value="20">20 Players</option>
                                             <option value="30">30 Players</option>

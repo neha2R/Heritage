@@ -53,8 +53,11 @@ class FeedContentController extends Controller
             'theme_id' => 'required',
             'domain_id' => 'required|',
             'feed_id' => 'required',
-            'title' => 'required|regex:/^[a-zA-Z]+$/u|max:200',
-            'tags'=>'required'
+            'title' => 'required|max:200',
+            'tags'=>'required',
+            'external_link.*' => 'required|url',
+            'title.*'=>'required',
+            'description.*' =>'required' 
         ]);
         
         $data = new FeedContent;
@@ -70,6 +73,13 @@ class FeedContentController extends Controller
         }
         else
         {
+            $validatedData = $request->validate([
+                
+                'title_fix.*'=>'required',
+                'description_fix.*' =>'required', 
+                'media_name_'=>'required',
+                'placeholder_image'=>'required'
+            ]);
             $data->title = $request->title_fix;
             $data->description = $request->description_fix;
         }
@@ -79,6 +89,8 @@ class FeedContentController extends Controller
         // check feed is single than only single value store 
         if($request->feed_id == 1)
         { 
+
+
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             // $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $media = new FeedMedia;

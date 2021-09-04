@@ -70,7 +70,8 @@ class TournamentController extends Controller
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
             'duration' => 'required|integer',
-            'media_name' => 'required'
+            'media_name' => 'required',
+            'logo_media_name'=>'required'
         ]);
        
         
