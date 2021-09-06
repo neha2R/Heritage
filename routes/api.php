@@ -59,25 +59,38 @@ Route::get('feed_domains', 'DomainController@getDomainAccordingTheme');
 Route::get('feed_type', 'FeedController@feed_type');
 // Feed data according to passing filters
 Route::post('feed', 'FeedContentController@feed');
+// Save feed to database
 Route::post('savefeed', 'FeedContentController@savepost');
 Route::get('tagfilter', 'FeedContentController@tagfilter');
+// Get feed according to module and collections
 Route::post('/module', 'FeedContentController@module');
+//Get all saved feeds of user
 Route::get('save_feed','FeedContentController@save_feed');
+// Filter saved feeds
 Route::post('filter_feed','FeedContentController@filter_feed');
 
  /**  End from Here        */
+
+
+
+// Route::fallback(function () {
+//     return response()->json(['message' => 'Not Found.'], 404);
+// });
+
+
+
+/**  Tournament APi Routes  Start from Here      */
+Route::get('tournament','TournamentController@tournament');
+Route::post('start_tournament','TournamentController@start_tournament');
+/**  End from Here        */
+
+
+
 
 /*
 These are the auth routes
 End Here
 */
 
-// Route::fallback(function () {
-//     return response()->json(['message' => 'Not Found.'], 404);
-// });
-
-Route::get('tournament','TournamentController@tournament');
-
-// 
+// For server date and time
 Route::get('currentDateTime','UserController@currentDateTime');
-
