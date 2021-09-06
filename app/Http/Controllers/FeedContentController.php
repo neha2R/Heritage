@@ -272,7 +272,7 @@ class FeedContentController extends Controller
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(2)->get();
+        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(5)->OrderBy('id', 'DESC')->get();
         $data=[];
         $last_page='';
         $i=1;
@@ -280,7 +280,12 @@ class FeedContentController extends Controller
           $mydata['id'] = $cont->id; 
           $mydata['type'] = $cont->feedtype->title; 
           $mydata['tags'] =explode(",",$cont->tags); 
-          $mydata['title'] = $cont->feed_media_single->title;  
+          if(isset($cont->feed_media_single->title)){
+            $title = $cont->feed_media_single->title;
+        }else{
+            $title='';
+        }
+          $mydata['title'] = $title;  
           $mydata['description'] = $cont->feed_media_single->description; 
           $mydata['external_link'] = $cont->feed_media_single->external_link; 
           $mydata['video_link'] = $cont->feed_media_single->video_link; 
@@ -484,6 +489,7 @@ class FeedContentController extends Controller
             $newCollection->save();
         }
         //dd($request);
+        return redirect('admin/feed-content')->with(['success' => 'Feed saved Successfully']);
         
     }
 
