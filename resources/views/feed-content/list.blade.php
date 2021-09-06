@@ -222,7 +222,7 @@
                   <div class="form-group row">
                         <div class="field col" >
                             <h3>Upload your Videos</h3> 
-                           <input type="file" id="videos" name="media_name_[0][]" accept="video/*" multiple  />
+                           <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
                         </div>
                         <div class="col" >
                              <span>Video Link</span>
@@ -320,6 +320,14 @@
       // add existing card button
       $("#add_existing_card_button").on('click',function(){
          window.location.href = "/admin/feed-collection";
+      });
+
+      $("#videos").on('change',function(){
+         var $fileUpload = $("#videos");
+               if (parseInt($fileUpload.get(0).files.length) > 1){
+                  alert("You are only allowed to upload a maximum of 3 files");
+                  $("videos").val("");
+               }
       });
    $(document).on('change','.status', function() {
 

@@ -70,7 +70,7 @@
                                 <div class="col-10">
                                     <div class="form-group">
                                         <select name="theme_id" class="@error('domain_id') is-invalid @enderror form-control form-select-lg mb-3" aria-label="Default select example" required >
-                                           
+                                           <option disabled selected value> -- Select Theme -- </option>
                                             @foreach($themes as $theme)
                                                 <option value="{{$theme->id}}">{{$theme->title}}</option>
                                             @endforeach
@@ -89,7 +89,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
-                                           
+                                        <option disabled selected value> -- Select Domain -- </option>
                                             @foreach($domains as $domain)
                                                 <option value="{{$domain->id}}">{{$domain->name}}</option>
                                             @endforeach
@@ -106,6 +106,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="sub_domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
+                                        <option disabled selected value> -- Select Sub Domain -- </option>
                                         @foreach($sub_domains as $sub_domain)
                                                 <option value="{{$sub_domain->id}}">{{$sub_domain->name}}</option>
                                         @endforeach
@@ -125,6 +126,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
+                                        
                                         <select name="feed_id" class="@error('domain_id') is-invalid @enderror form-control" required >
                                      
                                                 <option value="3">Collection</option>

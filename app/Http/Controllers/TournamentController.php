@@ -15,6 +15,7 @@ use Storage;
 use App\Imports\TournamentQuestionImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Frequency;
+use Response;
 
 //use App\Frequency;
 
@@ -72,7 +73,7 @@ class TournamentController extends Controller
             'duration' => 'required|integer',
             'duration' => 'required|integer',
             'media_name' => 'required',
-            'logo_media_name'=>'required'
+            'sponsor_media_name'=>'required'
         ]);
        
         
@@ -87,8 +88,8 @@ class TournamentController extends Controller
             $newTournament->difficulty_level_id = $request->difficulty_level_id;
             $newTournament->theme_id = $request->theme_id;
             $newTournament->domain_id = $request->domain_id;
-            $newTournament->sub_domain_id = '1';//$request->sub_domain_id;
-            $newTournament->frequency_id = '1';//$request->frequency_id;
+            $newTournament->sub_domain_id = $request->sub_domain_id;
+            $newTournament->frequency_id = $request->frequency_id;
             $newTournament->session_per_day = $request->session_per_day;
             $newTournament->no_players = $request->no_of_players;
             $newTournament->duration = $request->duration;
@@ -100,6 +101,11 @@ class TournamentController extends Controller
                 $media_name = $request->file('media_name')->store('tournament','public');
                 $newTournament->media_name = $media_name;
             }
+            if($request->hasFile('sponsor_media_name'))
+            {
+                $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
+                $newTournament->sponsor_media_name = $sponsor_media_name;
+            }
             $newTournament->save();
             
         }
@@ -109,7 +115,7 @@ class TournamentController extends Controller
             $newTournament->title = $request->title;
             $newTournament->type = $request->quize_type;
             $newTournament->age_group_id = $request->age_group_id;
-            $newTournament->frequency_id = '1';//$request->frequency_id;
+            $newTournament->frequency_id = $request->frequency_id;
             $newTournament->session_per_day =$request->session_per_day;
             $newTournament->no_players = $request->no_of_players;
             $newTournament->duration = $request->duration;
@@ -123,6 +129,11 @@ class TournamentController extends Controller
             {
                 $media_name = $request->file('media_name')->store('tournament','public');
                 $newTournament->media_name = $media_name;
+            }
+            if($request->hasFile('sponsor_media_name'))
+            {
+                $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
+                $newTournament->sponsor_media_name = $sponsor_media_name;
             }
 
 
@@ -209,4 +220,49 @@ class TournamentController extends Controller
         return redirect()->route('tournament.index');
        // dd(json_encode($req->questions_id));
     }
+
+    public function getDownloadExccelSheet()
+    {
+        //PDF file is stored under project/public/download/info.pdf
+   
+        $file=  storage_path()."\app\public\sponsor-sample.csv";
+        //dd($file);
+        $headers = array(
+              'Content-Type: application/csv',
+            );
+
+        return Response::download($file, 'sponsor-sample.csv', $headers);   
+    }
+
+    public  function imageurl($image)
+    {
+    try {
+        return url('/storage').'/'.$image;
+    } catch (\Throwable $th) {
+        return '';
+    }
+
+     }
+
+    // get all tournament api 
+    public function tournament()
+    {
+
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session')->OrderBy('id', 'DESC')->get();
+        //Post::with('user:id,username')->get();
+
+        foreach($tournaments as $tournament)
+        {
+            $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
+            $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
+            $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
+            $tournament->image_url = $url_image;
+        }
+        return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data']);
+        
+
+    }
+
+ 
+
 }

@@ -68,3 +68,6 @@ End Here
 // Route::fallback(function () {
 //     return response()->json(['message' => 'Not Found.'], 404);
 // });
+
+Route::get('tournament','TournamentController@tournament');
+Route::get('save_feed','FeedContentController@save_feed');

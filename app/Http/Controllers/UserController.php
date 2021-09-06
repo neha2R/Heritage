@@ -204,4 +204,7 @@ class UserController extends Controller
         return view('users.list', compact('users'));
     }
 
+
+
+
 }

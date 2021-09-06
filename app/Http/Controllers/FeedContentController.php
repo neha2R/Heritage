@@ -48,6 +48,7 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
     
         $validatedData = $request->validate([
             'theme_id' => 'required',
@@ -440,6 +441,14 @@ class FeedContentController extends Controller
 
     public function feed_collection_store(Request $request)
     {
+
+          
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required|max:255'
+        ]);
+
+
         $newFeedContent = new FeedContent;
         $newFeedContent->theme_id = $request->theme_id;
         $newFeedContent->domain_id = $request->domain_id;
@@ -462,5 +471,87 @@ class FeedContentController extends Controller
         //dd($request);
         
     }
+
+    // get user save all feed for api
+    
+    public function save_feed(Request $request)
+    {
+        
+        $feeds = SaveFeed::where('user_id',$request->id)->pluck('feed_contents_id');
+        
+       return $feeds;
+            $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds);
+            return $feedContents;
+        /*
+           
+            if ($request->theme_id) {
+               
+                $id = explode(',', $request->theme_id);
+                $feedContents = $feedContents->orWhereIn('theme_id', $id);
+            }
+    
+            if ($request->feed_type_id) {
+               
+                $feed_id = explode(',', $request->feed_type_id);
+                $feedContents = $feedContents->orWhereIn('feed_id',$feed_id);
+            }
+            if ($request->domain_id) {
+              
+                $domain_id = explode(',', $request->domain_id);
+                $feedContents = $feedContents->orWhereIn('domain_id',$domain_id);
+            }
+           
+           
+            // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
+            
+            $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(2)->get();
+            $data=[];
+            $last_page='';
+            $i=1;
+            */
+            $data = [];
+            foreach($feedContents as $cont){
+              $mydata['id'] = $cont->id; 
+              $mydata['type'] = $cont->feedtype->title; 
+              $mydata['tags'] =explode(",",$cont->tags); 
+              $mydata['title'] = $cont->feed_media_single->title;  
+              $mydata['description'] = $cont->feed_media_single->description; 
+              $mydata['external_link'] = $cont->feed_media_single->external_link; 
+              $mydata['video_link'] = $cont->feed_media_single->video_link; 
+              if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+                  }
+              else{
+                $place =null;
+                  }
+              $mydata['placeholder_image'] =$place;  
+              $mydata['savepost'] = 20; 
+              $mydata['is_saved'] = fmod($i,2); 
+              $mydata['share'] = $this->sharepath($cont->id); 
+              $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
+              $imagename=[];
+              foreach($cont->feed_media_single->feed_attachments_name as $image){
+                 
+               $imagename[] = $this->imageurl($image->media_name);
+               $imgdata = $imagename;
+              }
+              
+              $mydata['media'] = $imgdata; 
+              $data[]=$mydata;
+              $last_page = $cont->id;
+              $i++;
+            }
+           
+            if(empty($feedContents)){
+                return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+            }
+            return response()->json(['status' => 200, 'message' => 'Domain data','data' => $data]);
+    
+        
+
+       
+    }
+
+
+ 
       
 }

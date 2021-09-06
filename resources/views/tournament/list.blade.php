@@ -268,8 +268,8 @@
                                     <br>
                                     <div class="form-group">
                                         <div class="field" align="left">
-                                            <h3>Logo images</h3> 
-                                            <input type="file" id="files" name="logo_media_name" accept="image/*" multiple   />
+                                            <h3>Sponsor Images</h3> 
+                                            <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple   />
                                         </div>
                                     </div>
                                 </div>
@@ -395,13 +395,15 @@
                                 <div class="form-group">
                                     <div class="field" align="left">
                                         <h3>Excel File </h3> 
-                                        <input type="file" class="form-control" id="files" name="logo_media_name" accept="image/*" multiple   />
+                                        <input type="file" class="form-control" id="files" name="sponsor_media_name" accept="image/*" multiple   />
                                     </div>
                                 </div>
+                                <a type="button" class="btn btn-warning" href={{ route("tournament-excel-download") }}>Excel Sample </a>
                             </div>
                         </div>            
                 </div>
                <div class="modal-footer">
+               
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Continue</button>
                     </form>
@@ -441,6 +443,9 @@
     //     $("#special_quize_model").modal('show');
     // });
 
+
+
+ 
     $('#datetimepicker').datetimepicker();    
     if (window.File && window.FileList && window.FileReader) {
         
