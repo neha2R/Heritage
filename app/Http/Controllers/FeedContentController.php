@@ -479,7 +479,9 @@ class FeedContentController extends Controller
         }        
         $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->with('feed_media');        
         $feedContents = $feedContents->where('id',$request->module_id)->first();
-        
+        if(empty($feedContents)){
+            return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+        }
         $data=[];
         $last_page='';
         $i=1;
@@ -491,7 +493,8 @@ class FeedContentController extends Controller
           $mydata['description'] = $cont->description; 
           $mydata['external_link'] = $cont->external_link; 
           $mydata['video_link'] = $cont->video_link; 
-          if(isset($feedContents->placholder_image)) { $place = $this->imageurl($feedContents->feed_media_single->placholder_image);
+          if(isset($feedContents->placholder_image)) { 
+              $place = $this->imageurl($feedContents->feed_media_single->placholder_image);
               }
           else{
             $place =null;
@@ -514,9 +517,7 @@ class FeedContentController extends Controller
           $i++;
         }
        
-        if(empty($feedContents)){
-            return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
-        }
+     
         return response()->json(['status' => 200, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
 
     }
