@@ -17,6 +17,10 @@ class FeedContent extends Model
         return $this->hasOne('App\Theme', 'id','theme_id');
     }
 
+    public function domain()
+    {
+        return $this->hasOne('App\Domain','id','domain_id');
+    }
     public function feed_media()
     {
         return $this->hasMany('App\FeedMedia', 'feed_content_id','id')->with('feed_attachments');

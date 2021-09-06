@@ -16,6 +16,7 @@ use App\Imports\TournamentQuestionImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Frequency;
 use Response;
+use Carbon\Carbon;
 
 //use App\Frequency;
 
@@ -258,7 +259,11 @@ class TournamentController extends Controller
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
         }
-        return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data']);
+        $currentDateTime = Carbon::now();
+        
+       $date=  $currentDateTime->toDateString();
+        $time=  $currentDateTime->toTimeString(); 
+        return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data','date'=>$date,'time'=>$time]);
         
 
     }

@@ -160,7 +160,7 @@
                @csrf
                <div class="form-group">
                   <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
-                     <option>Theme</option>
+                     <option disabled selected value>-- Select Theme --</option>
                      @foreach($themes as $theme)
                      <option value="{{$theme->id}}">{{$theme->title}}</option>
                      @endforeach
@@ -168,7 +168,7 @@
                </div>
                <div class="form-group">
                   <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
-                     <option value="">Domain</option>
+                     <option disabled selected value> -- Select Domain --</option>
                      @foreach($domains as $domain)
                      <option value="{{$domain->id}}">{{$domain->name}}</option>
                      @endforeach
@@ -177,7 +177,7 @@
                <div class="form-group">
                   <select name="feed_id" id="feed_id" class="@error('feed_id') is-invalid @enderror form-control" required >
                      <!-- <option>Type</option> -->
-                     <option onchnage value=""> Select Feed Type </option>
+                     <option onchnage  disabled selected value> -- Select Feed Type -- </option>
                      @foreach($feeds as $feed)
                      <option value="{{$feed->id}}" onchnage>{{$feed->title}}</option>
                      @endforeach
@@ -275,16 +275,101 @@
 	  @method('PUT')
 
                @csrf
-               <!-- 
+              
                <div class="form-group">
-                  <label for="name">Quiz Speed Type</label>
-                  <select name="quiz_speed_type" class="@error('quiz_speed_type') is-invalid @enderror form-control" required onchange="changeDurationOne(this.value)">
-                     <option>Select Any</option>
-                     <option value="single" >Per Question</option>
-                     <option value="all">Whole Quiz</option>
+                  <select name="update_theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
+                  <option value="{{$feedContent->theme->theme_id}}">{{$feedContent->theme->title}}</option>
+                     @foreach($themes as $theme)
+                     <option value="{{$theme->id}}">{{$theme->title}}</option>
+                     @endforeach
                   </select>
                </div>
-               -->
+               <div class="form-group">
+                  <select name="update_domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
+                     <option value="{{$feedContent->domain->domain_id}}">{{$feedContent->domain->name}}</option>
+                     @foreach($domains as $domain)
+                     <option value="{{$domain->id}}">{{$domain->name}}</option>
+                     @endforeach
+                  </select>
+               </div>
+               <div class="form-group">
+                  <select name="update_feed_id" id="update_feed_id" class="@error('feed_id') is-invalid @enderror form-control" required >
+                     <!-- <option>Type</option> -->
+                     <option onchnage value="{{$feedContent->feedtype->id}}"> {{$feedContent->feedtype->title}} </option>
+                     @foreach($feeds as $feed)
+                        <option value="{{$feed->id}}" onchnage>{{$feed->title}}</option>
+                     @endforeach
+                  </select>
+               </div>
+
+               <div id="module_title_description" style="display:none">
+               </div>
+               
+               <div class="form-group">
+                  <label for="tags"># Tags</label> 
+                  <input type="text" class="@error('from') is-invalid @enderror form-control" value="{{$feedContent->tags}}"  name="update_tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100" >
+               </div>
+
+               <div class="form-group">
+                  <label for="title">External Link</label>
+                  <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" value="@if(isset($feedContent->feed_media->external_link)){{$feedContent->feed_media->external_link}}@endif"   name="update_external_link[]" placeholder="https://www.google.com/" >
+               </div>
+               
+               <div class="form-group">
+                   <label for="title">Title</label> 
+                  <input type="text" class="@error('title') is-invalid @enderror form-control" value="{{$feedContent->title}}" maxlength="50" name="update_title[]" placeholder="Title" >
+               </div>
+
+           
+          
+               <div class="form-group">
+                   <label for="name" id="duration">Description</label> 
+                  <textarea class="@error('name') is-invalid @enderror form-control"  value="@if(isset($feedContent->feed_media->description)){{$feedContent->feed_media->description}}@endif"    name="update_description[]" placeholder="Description" maxlength="200" id="description" >
+                   </textarea>
+               </div>
+               <!--
+               <div id="single_post" style="display:none">
+                     <div class="form-group">
+                        <div class="field" align="left">
+                            <h3>Upload your images</h3> 
+                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
+                        </div>
+                  </div>
+               </div>
+
+               <div id="modules" style="display:none">
+                  <div class="form-group row">
+                        <div class="field col" >
+                            <h3>Upload your Videos</h3> 
+                           <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
+                        </div>
+                        <div class="col" >
+                             <span>Video Link</span>
+                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >
+                        </div>
+                  </div> 
+
+                        -->
+                   <!-- ===== Placholder Image for Video ================ -->
+
+                   <!--
+                  <div id="placeholder_image">
+                     <div class="form-group row">
+                        <div class="field col" >
+                            <h3>Placeholder Image your Videos</h3> 
+                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
+                        </div>
+                     </div>                 
+                  </div>
+                   -->
+                   <div id="update_post_append"></div>
+                   @if($feedContent->feedtype->id == '2')
+                   <button type="button" id="update_more_post" class="btn btn-sm btn-success float-right" >Add more post</button> 
+                  @endif
+                                
+               </div>
+           
+
 
          </div>
          <div class="modal-footer">
@@ -346,6 +431,52 @@
        }
       });
 
+
+      $("#update_more_post").on('click',function(){
+         $(this).hide();
+         var post = '<div class="form-group">\
+                  <label for="title">External Link</label>\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="update_external_link[]" placeholder="https://www.google.com/" >\
+               </div>\
+               <div class="form-group">\
+                  <label for="title">Titel</label>\
+                  <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="update_title[]" placeholder="Title" required>\
+               </div>\
+               <div class="form-group">\
+                   <label for="name" id="duration">description</label>\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="update_description[]" placeholder="Description" maxlength="200" id="description" >\
+                   </textarea>\
+               </div>\
+               <div id="modules">\
+                  <div class="form-group row">\
+                        <div class="field col" >\
+                            <h3>Upload your Videos</h3>\
+                           <input type="file" id="videos" name="update_media_name_['+cart+'][]" accept="video/*" multiple  required/>\
+                        </div>\
+                        <div class="col" >\
+                             <span>Video Link</span>\
+                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="update_video_link[]" placeholder="https://www.youtube.com/" >\
+                        </div>\
+                  </div>\
+                  </div>\
+               <div id="placeholder_image">\
+                  <div class="form-group row">\
+                        <div class="field col" >\
+                           <h3>Placeholder Image your Videos</h3>\
+                           <input type="file" id="palceholder_image" name="update_placeholder_image[]" accept="image/*"   required/>\
+                        </div>\
+                        <div class="col" >\
+                             <span>Placeholder Image Link</span>\
+                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="update_placeholder_image" placeholder="Palceholder Image" >\
+                        </div>\
+                  </div>\
+                  </div>\
+                  '
+               ;
+
+        cart++;
+         $( "#update_post_append" ).append( post );
+      });
 
       // var single_post_display = $("#single_post").css( "display" );
       // var module_display = $("#module").css( "display" );

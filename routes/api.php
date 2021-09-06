@@ -71,3 +71,7 @@ End Here
 
 Route::get('tournament','TournamentController@tournament');
 Route::get('save_feed','FeedContentController@save_feed');
+
+// 
+Route::get('currentDateTime','UserController@currentDateTime');
+
