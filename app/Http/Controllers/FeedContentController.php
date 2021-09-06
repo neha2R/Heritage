@@ -48,8 +48,7 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-    
+       
         $validatedData = $request->validate([
             'theme_id' => 'required',
             'domain_id' => 'required|',
