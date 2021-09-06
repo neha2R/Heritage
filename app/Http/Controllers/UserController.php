@@ -9,6 +9,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -203,6 +204,17 @@ class UserController extends Controller
         $users = User::where('type', '2')->get();
         return view('users.list', compact('users'));
     }
+
+    public function currentDateTime()
+    {
+        $currentDateTime = Carbon::now();
+        $currentTime = $currentDateTime->toTimeString();
+        $currentDate = $currentDateTime->toDateString();
+
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'currentTime' => $currentTime,'currentDate'=>$currentDate]);
+    }
+
+   
 
 
 
