@@ -374,7 +374,7 @@
            // $('#placeholder_image').hide();
             $("#placeholder_image").removeAttr("required");
             $("#videos").removeAttr("required");
-            $("#files").attr("required","required");
+            // $("#files").attr("required","required");
             $("#module_title_description").hide();
                $('#module_title_description').empty();
 
