@@ -59,7 +59,7 @@ Route::post('feed', 'FeedContentController@feed');
 
 Route::post('savefeed', 'FeedContentController@savepost');
 Route::get('tagfilter', 'FeedContentController@tagfilter');
-
+Route::post('/module', 'FeedContentController@module');
 /*
 These are the auth routes
 End Here

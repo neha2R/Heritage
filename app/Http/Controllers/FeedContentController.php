@@ -472,6 +472,7 @@ class FeedContentController extends Controller
         
     }
 
+<<<<<<< HEAD
     // get user save all feed for api
     
     public function save_feed(Request $request)
@@ -553,5 +554,68 @@ class FeedContentController extends Controller
 
 
  
+=======
+
+
+    public function module(Request $request)
+    {  
+        $validator = Validator::make($request->all(), [
+            // 'theme_id' => 'required',
+            // 'domain_id' => 'required',
+             'type' => 'required',
+            'module_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }        
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->with('feed_media');        
+        $feedContents = $feedContents->where('id',$request->module_id)->first();
+        if(empty($feedContents)){
+            return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+        }
+        $data=[];
+        $last_page='';
+        $i=1;
+        foreach($feedContents->feed_media as $cont){
+          $mydata['id'] = $feedContents->id; 
+          $mydata['type'] = $feedContents->feedtype->title; 
+          $mydata['tags'] =explode(",",$feedContents->tags); 
+          $mydata['title'] = $cont->title;  
+          $mydata['description'] = $cont->description; 
+          $mydata['external_link'] = $cont->external_link; 
+          $mydata['video_link'] = $cont->video_link; 
+          if(isset($feedContents->placholder_image)) { 
+              $place = $this->imageurl($feedContents->feed_media_single->placholder_image);
+              }
+          else{
+            $place =null;
+              }
+          $mydata['placeholder_image'] =$place;  
+          $mydata['savepost'] = 20; 
+          $mydata['is_saved'] = fmod($i,2); 
+          $mydata['share'] = $this->sharepath($cont->id); 
+          $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type; 
+          $imagename=[];
+          foreach($cont->feed_attachments as $image){
+             
+           $imagename[] = $this->imageurl($image->media_name);
+           $imgdata = $imagename;
+          }
+          
+          $mydata['media'] = $imgdata; 
+          $data[]=$mydata;
+          $last_page = $feedContents->id;
+          $i++;
+        }
+       
+     
+        return response()->json(['status' => 200,'title'=>$feedContents->title, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
+
+    }
+
+
+
+>>>>>>> 07651fa3184b8903e5278d1597a334bf88e16b74
       
 }
