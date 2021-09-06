@@ -518,7 +518,7 @@ class FeedContentController extends Controller
         }
        
      
-        return response()->json(['status' => 200, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
+        return response()->json(['status' => 200,'title'=>$feedContents->title, 'message' => 'Feed data', 'last_id'=>$last_page,'data' => $data]);
 
     }
 
