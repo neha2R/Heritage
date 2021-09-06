@@ -106,13 +106,13 @@ class FeedContentController extends Controller
                 foreach($request->file('media_name') as $key=>$file)
                 {
                     $type = '0';
-                    FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
-                    // $name = $file->store('feed','public');
-                    // $attachment = new FeedAttachment;
-                    // $attachment->feed_media_id = $media->id;
-                    // $attachment->media_name = $name;
-                    // $attachment->media_type = $type;
-                    // $attachment->save();
+                    // FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
+                    $name = $file->store('feed','public');
+                    $attachment = new FeedAttachment;
+                    $attachment->feed_media_id = $media->id;
+                    $attachment->media_name = $name;
+                    $attachment->media_type = $type;
+                    $attachment->save();
                 }
             }
 
@@ -148,12 +148,12 @@ class FeedContentController extends Controller
               {
                     $type = '1';
                     // $name = $files->store('feed','public');
-                    FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
-                    //  $attachment = new FeedAttachment;
-                    //  $attachment->feed_media_id = $media->id;
-                    //  $attachment->media_name = $name;
-                    //  $attachment->media_type = $type;
-                    //  $attachment->save();
+                    // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
+                     $attachment = new FeedAttachment;
+                     $attachment->feed_media_id = $media->id;
+                     $attachment->media_name = $name;
+                     $attachment->media_type = $type;
+                     $attachment->save();
                    
               }
               
