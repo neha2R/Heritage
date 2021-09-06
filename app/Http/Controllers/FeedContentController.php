@@ -293,7 +293,7 @@ class FeedContentController extends Controller
           $mydata['savepost'] = 20; 
           $mydata['is_saved'] = fmod($i,2); 
           $mydata['share'] = $this->sharepath($cont->id); 
-        if(isset($cont->feed_media_single))
+        if(isset($cont->feed_media_single->feed_attachments_single))
           { 
               $media_type = $cont->feed_media_single->feed_attachments_single->media_type ; 
         } else {
