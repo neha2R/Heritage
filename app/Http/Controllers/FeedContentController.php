@@ -152,7 +152,7 @@ class FeedContentController extends Controller
                      $attachment = new FeedAttachment;
                      $attachment->feed_media_id = $media->id;
                      $attachment->media_name = $name;
-                     $attachment->media_type = $type;
+                     $attachment->media_type = $request->type[$key];
                      $attachment->save();
                    
               }

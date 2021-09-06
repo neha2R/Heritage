@@ -212,7 +212,7 @@
                <div id="single_post" style="display:none">
                      <div class="form-group">
                         <div class="field" align="left">
-                            <h3>Upload your images</h3> 
+                            <h5>Upload images</h5> 
                            <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
                         </div>
                   </div>
@@ -221,7 +221,7 @@
                <div id="modules" style="display:none">
                   <div class="form-group row">
                         <div class="field col" >
-                            <h3>Upload your Videos</h3> 
+                            <h5>Upload  Videos</h5> 
                            <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
                         </div>
                         <div class="col" >
@@ -233,19 +233,14 @@
                   <div id="placeholder_image">
                      <div class="form-group row">
                         <div class="field col" >
-                            <h3>Placeholder Image your Videos</h3> 
+                            <h5>Placeholder Image for Video</h5> 
                            <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
                         </div>
                      </div>                 
                   </div>
                   <div id="append"></div>
                   <button type="button" id="add_more_post" class="btn btn-sm btn-success float-right" >Add more post</button>                
-               </div>
-
-              
-
-
-              
+               </div>              
          </div>
          <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -492,9 +487,6 @@
       // }
 
       $(document).on('change','#feed_id', function() {
-    
-
-
          if($(this).val() == 1){
             $("#single_post").show(); // Unchecks it
             $("#modules").hide(); 
