@@ -472,7 +472,6 @@ class FeedContentController extends Controller
         
     }
 
-<<<<<<< HEAD
     // get user save all feed for api
     
     public function save_feed(Request $request)
@@ -554,7 +553,6 @@ class FeedContentController extends Controller
 
 
  
-=======
 
 
     public function module(Request $request)
@@ -616,6 +614,5 @@ class FeedContentController extends Controller
 
 
 
->>>>>>> 07651fa3184b8903e5278d1597a334bf88e16b74
       
 }
