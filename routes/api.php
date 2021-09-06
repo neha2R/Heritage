@@ -50,16 +50,23 @@ Route::post('get_answerkey', 'AttemptController@get_answerkey');
 Route::post('helpandsupport', 'HelpAndSupportController@store');
 // Get all themes
 Route::get('theme', 'ThemeController@getAllThemes');
+
+      
+/**  Feed APi Routes  Start from Here      */
 // Get domains according to theme id
 Route::get('feed_domains', 'DomainController@getDomainAccordingTheme');
 // Feed types all
 Route::get('feed_type', 'FeedController@feed_type');
 // Feed data according to passing filters
 Route::post('feed', 'FeedContentController@feed');
-
 Route::post('savefeed', 'FeedContentController@savepost');
 Route::get('tagfilter', 'FeedContentController@tagfilter');
 Route::post('/module', 'FeedContentController@module');
+Route::get('save_feed','FeedContentController@save_feed');
+Route::post('filter_feed','FeedContentController@filter_feed');
+
+ /**  End from Here        */
+
 /*
 These are the auth routes
 End Here
@@ -70,7 +77,6 @@ End Here
 // });
 
 Route::get('tournament','TournamentController@tournament');
-Route::get('save_feed','FeedContentController@save_feed');
 
 // 
 Route::get('currentDateTime','UserController@currentDateTime');

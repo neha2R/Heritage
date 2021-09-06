@@ -510,7 +510,7 @@ class FeedContentController extends Controller
                   }
               $mydata['placeholder_image'] =$place;  
               $mydata['savepost'] = 20; 
-              $mydata['is_saved'] = fmod($i,2); 
+              $mydata['is_saved'] = 1; 
               $mydata['share'] = $this->sharepath($cont->id); 
               $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
               $imagename=[];
