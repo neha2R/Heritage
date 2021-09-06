@@ -435,7 +435,7 @@
 
 
       $(".update_more_post_btn").on('click',function(){
-         feed_id = $("#select_feed"+).val();
+        // feed_id = $("#select_feed"+).val();
       console.log(feed_id+"id");
          // get date 
          var response = '';
