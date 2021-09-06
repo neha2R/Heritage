@@ -605,5 +605,66 @@ class FeedContentController extends Controller
         return "Hello Feed";
     }
 
+
+    
+    public function filter_feed(Request $request)
+    {  
+        $validator = Validator::make($request->all(), [
+             'user_id' => 'required',
+            'serach' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        } 
+
+        $feeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
+        
+     
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds);
+
+        $feedContents = $feedContents->where('title','like','%' . $request->serach . '%')->get();
+      
+        $last_page='';
+        $i=1;
+        $data = [];
+        foreach($feedContents as $cont){
+          $mydata['id'] = $cont->id; 
+          $mydata['type'] = $cont->feedtype->title; 
+          $mydata['tags'] =explode(",",$cont->tags); 
+          $mydata['title'] = $cont->feed_media_single->title;  
+          $mydata['description'] = $cont->feed_media_single->description; 
+          $mydata['external_link'] = $cont->feed_media_single->external_link; 
+          $mydata['video_link'] = $cont->feed_media_single->video_link; 
+          if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+              }
+          else{
+            $place =null;
+              }
+          $mydata['placeholder_image'] =$place;  
+          $mydata['savepost'] = 20; 
+          $mydata['is_saved'] = 1; 
+          $mydata['share'] = $this->sharepath($cont->id); 
+          $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
+          $imagename=[];
+          foreach($cont->feed_media_single->feed_attachments_name as $image){
+             
+           $imagename[] = $this->imageurl($image->media_name);
+           $imgdata = $imagename;
+          }
+          
+          $mydata['media'] = $imgdata; 
+          $data[]=$mydata;
+          $last_page = $cont->id;
+          $i++;
+        }
+       
+        if(empty($feedContents)){
+            return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+        }
+        return response()->json(['status' => 200, 'message' => 'Domain data','data' => $data]);
+
+
+    }
       
 }
