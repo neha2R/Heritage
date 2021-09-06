@@ -214,7 +214,8 @@ class DomainController extends Controller
         }
 
         $id = explode(',', $request->theme_id);
-        $domains = Domain::select('id','name')->whereIn('themes_id',$id)->get();
+        // $domains = Domain::select('id','name')->whereIn('themes_id',$id)->get();
+        $domains = Domain::select('id','name')->get();
         $domains = $domains->toArray();
         if(empty($domains)){
             return response()->json(['status' => 200, 'message' => 'Domain not found', 'data' => '']);
