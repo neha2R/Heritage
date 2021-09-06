@@ -286,7 +286,12 @@ class FeedContentController extends Controller
             $title='';
         }
           $mydata['title'] = $title;  
-          $mydata['description'] = $cont->feed_media_single->description; 
+          if(isset($cont->feed_media_single->description)){
+            $description = $cont->feed_media_single->description;
+        }else{
+            $description='';
+        }
+          $mydata['description'] =$description ; 
           $mydata['external_link'] = $cont->feed_media_single->external_link; 
           $mydata['video_link'] = $cont->feed_media_single->video_link; 
           if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
