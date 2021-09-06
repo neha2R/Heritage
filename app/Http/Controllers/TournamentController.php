@@ -9,7 +9,7 @@ use App\AgeGroup;
 use App\DifficultyLevel;
 use App\Theme;
 use App\Domain;
-use App\SubDomain;
+use App\Subdomain;
 use App\TournamentQuizeQuestion;
 use Storage;
 use App\Imports\TournamentQuestionImport;
@@ -36,7 +36,7 @@ class TournamentController extends Controller
         
         $themes = Theme::OrderBy('id','DESC')->get();
         $domains = Domain::OrderBy('id','DESC')->get();
-        $subDomains = SubDomain::OrderBy('id','DESC')->get();
+        $subDomains = Subdomain::OrderBy('id','DESC')->get();
         $frequencies = Frequency::OrderBy('id','DESC');
         
         return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));

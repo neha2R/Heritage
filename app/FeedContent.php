@@ -35,4 +35,9 @@ class FeedContent extends Model
         return $this->hasOne('App\FeedMedia', 'feed_content_id','id')->with('feed_attachments_single');
     }
 
+    public function savefeed()
+    {
+        return $this->hasOne('App\SaveFeed', 'id','feed_contents_id');
+    }
+
 }
