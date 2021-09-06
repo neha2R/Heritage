@@ -597,7 +597,44 @@ class FeedContentController extends Controller
     // get feed content data according feed_content id
     public function get_feed_content_by_id($id)
     {
-        return "Hello Feed";
+        $data = [];
+        $feedContent =  FeedContent::find($id);
+       // dd($feedContent);
+        if($feedContent->feed_id == '1')
+        {
+            $data['theme_id'] = $feedContent->theme_id;
+            dd('data');
+            $data->theme_name = $feedContent->theme->title;
+            $data->feed_id = $feedContent->feed_id;
+            $data->feed_name = $feedContent->feed->title;
+            $data->tags = $feedContent->tags;
+            $data->title = $feedContent->tile;
+            $data->description = $feedContent->description;
+
+            $feed_media = FeedMedia::where('feed_content_id',$feedContent->id)->get();
+            $data->external_link = $feed_media->external_link;
+            $data->description = $feed_medai->description;
+
+            $feed_attachment = FeedAttachment::where('feed_media_id','=',$feed_media->id)->get();
+            $data->media_name = $feed_attachment->media_name;
+            dd($data);
+        }
+        else if($feedContent->feed_if == '2')
+        {
+
+        }
+        else
+        {
+
+        }
+        //return $feedContent->id;
+        $feedMedia = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
+      
+        $feedMediaIds = FeedMedia::where('feed_content_id','=',$feedContent->id)->pluck('id');
+        
+        $feedAtachment = FeedAttachment::whereIn('feed_media_id',$feedMediaIds)->get();
+       
+       return $feedMedia;
     }
 
       

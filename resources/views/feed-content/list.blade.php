@@ -219,6 +219,8 @@
                </div>
 
                <div id="modules" style="display:none">
+
+                                          
                   <div class="form-group row">
                         <div class="field col" >
                             <h3>Upload your Videos</h3> 
@@ -275,7 +277,7 @@
 	  @method('PUT')
 
                @csrf
-              
+              <input type="hidden" name="id" id="select_feed_{{$feedContent->id}}"value="{{$feedContent->id}}">
                <div class="form-group">
                   <select name="update_theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
                   <option value="{{$feedContent->theme->theme_id}}">{{$feedContent->theme->title}}</option>
@@ -362,9 +364,9 @@
                      </div>                 
                   </div>
                    -->
-                   <div id="update_post_append"></div>
+                   <div id="update_more_post_append{{$feedContent->id}}}"></div>
                    @if($feedContent->feedtype->id == '2')
-                   <button type="button" id="update_more_post" class="btn btn-sm btn-success float-right" >Add more post</button> 
+                   <button type="button"  class="btn btn-sm btn-success float-right update_more_post_btn" >Update more post</button> 
                   @endif
                                 
                </div>
@@ -432,7 +434,25 @@
       });
 
 
-      $("#update_more_post").on('click',function(){
+      $(".update_more_post_btn").on('click',function(){
+         feed_id = $("#select_feed"+).val();
+      console.log(feed_id+"id");
+         // get date 
+         var response = '';
+         $.ajax({ type: "GET",   
+         url: "http://127.0.0.1:8000/admin/get-feed-content-by-id/"+feed_id,   
+         async: false,
+         success : function(text)
+         {
+             response = text;
+         }
+      });
+      console.log(response);
+
+      
+
+
+
          $(this).hide();
          var post = '<div class="form-group">\
                   <label for="title">External Link</label>\
@@ -475,7 +495,7 @@
                ;
 
         cart++;
-         $( "#update_post_append" ).append( post );
+         $( "#update_more_post_append"+feed_id).append( post );
       });
 
       // var single_post_display = $("#single_post").css( "display" );
@@ -492,8 +512,6 @@
       // }
 
       $(document).on('change','#feed_id', function() {
-    
-
 
          if($(this).val() == 1){
             $("#single_post").show(); // Unchecks it
@@ -505,7 +523,7 @@
            // $('#placeholder_image').hide();
             $("#placeholder_image").removeAttr("required");
             $("#videos").removeAttr("required");
-            // $("#files").attr("required","required");
+            $("#files").attr("required","required");
             $("#module_title_description").hide();
                $('#module_title_description').empty();
 
@@ -555,7 +573,7 @@
          if(add_more_btn_click<4)
          {
             var x = document.getElementById("signupForm");
-         var post = '<div class="form-group">\
+            var post = '<div class="form-group">\
                   <label for="title">External Link</label>\
                   <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
                </div>\
