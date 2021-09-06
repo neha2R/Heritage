@@ -106,13 +106,13 @@ class FeedContentController extends Controller
                 foreach($request->file('media_name') as $key=>$file)
                 {
                     $type = '0';
-                    FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
-                    // $name = $file->store('feed','public');
-                    // $attachment = new FeedAttachment;
-                    // $attachment->feed_media_id = $media->id;
-                    // $attachment->media_name = $name;
-                    // $attachment->media_type = $type;
-                    // $attachment->save();
+                    // FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
+                    $name = $file->store('feed','public');
+                    $attachment = new FeedAttachment;
+                    $attachment->feed_media_id = $media->id;
+                    $attachment->media_name = $name;
+                    $attachment->media_type = $type;
+                    $attachment->save();
                 }
             }
 
@@ -147,13 +147,13 @@ class FeedContentController extends Controller
               foreach($request->file('media_name_')[$key] as $files)
               {
                     $type = '1';
-                    // $name = $files->store('feed','public');
-                    FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
-                    //  $attachment = new FeedAttachment;
-                    //  $attachment->feed_media_id = $media->id;
-                    //  $attachment->media_name = $name;
-                    //  $attachment->media_type = $type;
-                    //  $attachment->save();
+                     $name = $files->store('feed','public');
+                    // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
+                     $attachment = new FeedAttachment;
+                     $attachment->feed_media_id = $media->id;
+                     $attachment->media_name = $name;
+                     $attachment->media_type = $type;
+                     $attachment->save();
                    
               }
               
@@ -272,7 +272,7 @@ class FeedContentController extends Controller
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(2)->get();
+        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(5)->OrderBy('id', 'DESC')->get();
         $data=[];
         $last_page='';
         $i=1;
@@ -280,8 +280,18 @@ class FeedContentController extends Controller
           $mydata['id'] = $cont->id; 
           $mydata['type'] = $cont->feedtype->title; 
           $mydata['tags'] =explode(",",$cont->tags); 
-          $mydata['title'] = $cont->feed_media_single->title;  
-          $mydata['description'] = $cont->feed_media_single->description; 
+          if(isset($cont->feed_media_single->title)){
+            $title = $cont->feed_media_single->title;
+        }else{
+            $title='';
+        }
+          $mydata['title'] = $title;  
+          if(isset($cont->feed_media_single->description)){
+            $description = $cont->feed_media_single->description;
+        }else{
+            $description='';
+        }
+          $mydata['description'] =$description ; 
           $mydata['external_link'] = $cont->feed_media_single->external_link; 
           $mydata['video_link'] = $cont->feed_media_single->video_link; 
           if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
@@ -291,7 +301,12 @@ class FeedContentController extends Controller
               }
           $mydata['placeholder_image'] =$place;  
           $mydata['savepost'] = 20; 
-          $mydata['is_saved'] = fmod($i,2); 
+                if(isset($cont->savefeed)){
+                    $save = 1;
+                }else{
+                    $save=0;
+                }
+        $mydata['is_saved'] = $save; 
           $mydata['share'] = $this->sharepath($cont->id); 
         if(isset($cont->feed_media_single->feed_attachments_single))
           { 
@@ -407,7 +422,12 @@ class FeedContentController extends Controller
             }
         $mydata['placeholder_image'] =$place;  
         $mydata['savepost'] = 20; 
-        $mydata['is_saved'] = fmod($i,2); 
+                if(isset($cont->savefeed)){
+                    $save = 1;
+                }else{
+                    $save=0;
+                }
+        $mydata['is_saved'] = $save; 
         $mydata['share'] = $this->sharepath($cont->id); 
         $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
         $imagename=[];
@@ -474,6 +494,7 @@ class FeedContentController extends Controller
             $newCollection->save();
         }
         //dd($request);
+        return redirect('admin/feed-content')->with(['success' => 'Feed saved Successfully']);
         
     }
 
@@ -505,7 +526,7 @@ class FeedContentController extends Controller
                   }
               $mydata['placeholder_image'] =$place;  
               $mydata['savepost'] = 20; 
-              $mydata['is_saved'] = fmod($i,2); 
+              $mydata['is_saved'] = 1; 
               $mydata['share'] = $this->sharepath($cont->id); 
               $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
               $imagename=[];
@@ -637,5 +658,66 @@ class FeedContentController extends Controller
        return $feedMedia;
     }
 
+
+    
+    public function filter_feed(Request $request)
+    {  
+        $validator = Validator::make($request->all(), [
+             'user_id' => 'required',
+            'serach' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        } 
+
+        $feeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
+        
+     
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds);
+
+        $feedContents = $feedContents->where('title','like','%' . $request->serach . '%')->get();
+      
+        $last_page='';
+        $i=1;
+        $data = [];
+        foreach($feedContents as $cont){
+          $mydata['id'] = $cont->id; 
+          $mydata['type'] = $cont->feedtype->title; 
+          $mydata['tags'] =explode(",",$cont->tags); 
+          $mydata['title'] = $cont->feed_media_single->title;  
+          $mydata['description'] = $cont->feed_media_single->description; 
+          $mydata['external_link'] = $cont->feed_media_single->external_link; 
+          $mydata['video_link'] = $cont->feed_media_single->video_link; 
+          if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+              }
+          else{
+            $place =null;
+              }
+          $mydata['placeholder_image'] =$place;  
+          $mydata['savepost'] = 20; 
+          $mydata['is_saved'] = 1; 
+          $mydata['share'] = $this->sharepath($cont->id); 
+          $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
+          $imagename=[];
+          foreach($cont->feed_media_single->feed_attachments_name as $image){
+             
+           $imagename[] = $this->imageurl($image->media_name);
+           $imgdata = $imagename;
+          }
+          
+          $mydata['media'] = $imgdata; 
+          $data[]=$mydata;
+          $last_page = $cont->id;
+          $i++;
+        }
+       
+        if(empty($feedContents)){
+            return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
+        }
+        return response()->json(['status' => 200, 'message' => 'Domain data','data' => $data]);
+
+
+    }
       
 }

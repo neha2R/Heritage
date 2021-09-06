@@ -38,7 +38,7 @@ class TournamentController extends Controller
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = Subdomain::OrderBy('id','DESC')->get();
         $frequencies = Frequency::OrderBy('id','DESC');
-        
+        // dd($frequencies);
         return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
 
@@ -267,6 +267,31 @@ class TournamentController extends Controller
         
 
     }
+
+    // Saved tournamnet or Start a Tournament
+    public function start_tournament()
+    {
+
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session')->OrderBy('id', 'DESC')->get();
+        //Post::with('user:id,username')->get();
+
+        foreach($tournaments as $tournament)
+        {
+            $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
+            $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
+            $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
+            $tournament->image_url = $url_image;
+        }
+        $currentDateTime = Carbon::now();
+        
+       $date=  $currentDateTime->toDateString();
+        $time=  $currentDateTime->toTimeString(); 
+        return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data','date'=>$date,'time'=>$time]);
+        
+
+    }
+
+    
 
  
 
