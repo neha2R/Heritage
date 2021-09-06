@@ -291,7 +291,12 @@ class FeedContentController extends Controller
               }
           $mydata['placeholder_image'] =$place;  
           $mydata['savepost'] = 20; 
-          $mydata['is_saved'] = fmod($i,2); 
+                if(isset($cont->savefeed)){
+                    $save = 1;
+                }else{
+                    $save=0;
+                }
+        $mydata['is_saved'] = $save; 
           $mydata['share'] = $this->sharepath($cont->id); 
         if(isset($cont->feed_media_single->feed_attachments_single))
           { 
