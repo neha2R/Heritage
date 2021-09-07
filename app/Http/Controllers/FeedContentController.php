@@ -618,30 +618,71 @@ class FeedContentController extends Controller
     // get feed content data according feed_content id
     public function get_feed_content_by_id($id)
     {
+       
         $data = [];
+        $themes = Theme::OrderBy('id', 'DESC')->get();
+        $domains= Domain::OrderBy('id','DESC')->get();
+        $feeds = Feed::OrderBy('id','DESC')->get();
         $feedContent =  FeedContent::find($id);
-       // dd($feedContent);
+        $feed_type = $feedContent->feed_id;
         if($feedContent->feed_id == '1')
         {
             $data['theme_id'] = $feedContent->theme_id;
-            dd('data');
-            $data->theme_name = $feedContent->theme->title;
-            $data->feed_id = $feedContent->feed_id;
-            $data->feed_name = $feedContent->feed->title;
-            $data->tags = $feedContent->tags;
-            $data->title = $feedContent->tile;
-            $data->description = $feedContent->description;
+            $data['theme_name'] = $feedContent->theme->title;
+            $data['domain_id'] = $feedContent->domain_id;
+            $data['domain_name'] = $feedContent->domain->name;
+            $data['feed_id'] = $feedContent->feed_id;
+            $data['feed_name'] = $feedContent->feedtype->title;
+            $data['tags'] = $feedContent->tags;
+            $data['fix_title'] = $feedContent->title;
+            $data['fix_description'] = $feedContent->description;
+           
+        
+            $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get()->first();
+            $data['external_link'][] = $feed_mediaes->external_link;
+           // $data['video_link'][] = $feed_media->video_link;
 
-            $feed_media = FeedMedia::where('feed_content_id',$feedContent->id)->get();
-            $data->external_link = $feed_media->external_link;
-            $data->description = $feed_medai->description;
-
-            $feed_attachment = FeedAttachment::where('feed_media_id','=',$feed_media->id)->get();
-            $data->media_name = $feed_attachment->media_name;
-            dd($data);
+            $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_mediaes->id)->get();
+            foreach($feed_attachmentes as $feed_attachment)
+            {
+                
+                $data['media_names'][] = $feed_attachment->media_name;
+                $data['media_ids'][] = $feed_attachment->id;
+                $data['images_url'][] = storage_path().'/app'.'/public'.'/'.$feed_attachment->media_name;
+                
+            }
+      //  dd($data);
+            return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
         }
-        else if($feedContent->feed_if == '2')
+        else if($feedContent->feed_id == '2')
         {
+          
+                $data['theme_id'] = $feedContent->theme_id;
+                $data['theme_name'] = $feedContent->theme->title;
+                $data['feed_id'] = $feedContent->feed_id;
+                $data['feed_name'] = $feedContent->feedtype->title;
+                $data['tags'] = $feedContent->tags;
+                $data['fix_title'] = $feedContent->title;
+                $data['fix_description'] = $feedContent->description;
+               
+               
+                $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
+                $x=0;
+                foreach($feed_mediaes as $feed_media)
+                {
+                    $data['title'][$x] = $feed_media->title;
+                    $data['description'][$x] = $feed_media->description;
+                    $data['external_link'][$x] = $feed_media->external_link;
+                    $data['video_link'][$x] = $feed_media->video_link;
+                    $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_media->id)->get();
+                    foreach($feed_attachmentes as $feed_attachment)
+                    {
+                        $data['media_name'][$x][] = $feed_attachment->media_name;
+                        $data['medai_id'][$x][] = $feed_attachment->id;
+                    }
+                    $x++;
+                }
+                return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
 
         }
         else
@@ -659,7 +700,10 @@ class FeedContentController extends Controller
     }
 
 
-    
+    public function update_feed_attachment(Request $request)
+    {
+        dd($request);
+    }
     public function filter_feed(Request $request)
     {  
         $validator = Validator::make($request->all(), [
