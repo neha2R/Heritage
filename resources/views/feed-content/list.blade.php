@@ -183,18 +183,10 @@
                      @endforeach
                   </select>
                </div>
-
-               <div id="module_title_description" style="display:none">
-               </div>
                
                <div class="form-group">
                   <label for="tags"># Tags</label> 
                   <input type="text" class="@error('from') is-invalid @enderror form-control"  name="tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100" >
-               </div>
-
-               <div class="form-group">
-                  <label for="title">External Link</label>
-                  <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >
                </div>
                
                <div class="form-group">
@@ -209,37 +201,65 @@
                   <textarea class="@error('name') is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >
                    </textarea>
                </div>
+                 
+               
+           
+
                <div id="single_post" style="display:none">
+               <div class="form-group">
+                  <label for="title">External Link</label>
+                  <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link" placeholder="https://www.google.com/" >
+               </div>
                      <div class="form-group">
                         <div class="field" align="left">
-                            <h5>Upload images</h5> 
+                            <label class="img-label">Upload images</label> 
                            <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
                         </div>
                   </div>
                </div>
 
+               <div id="module_title_description" style="display:none">
+               </div>
                <div id="modules" style="display:none">
+               <div class="form-group">
+                  <select name="type[]" id="type" mytext="label0" myimage="myimage0" myvideo="myvideo0" class="@error('type') is-invalid @enderror form-control type"  >
+                     <!-- <option>Type</option> -->
+                     <option value=""> -- Select Media Type -- </option>
+                     <option value="0">Image</option>
+                     <option value="1">Video</option>
+                     </select>
+               </div>
+               <div class="form-group" id="myimage0">
+                        <div class="field" align="left">
+                            <label class="img-label">Upload images</label> 
+                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
+                        </div>
+                  </div>
 
-                                          
-                  <div class="form-group row">
-                        <div class="field col" >
-                            <h5>Upload  Videos</h5> 
+                  <div class="form-group row " id="myvideo0" style="display:none">
+                     <div class="field col" >
+                            <label class="img-label label0" >Upload  Videos</label> 
                            <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
-                        </div>
-                        <div class="col" >
-                             <span>Video Link</span>
+                     </div>
+                     <div class="col-md-6" >
+                             <label>Video Link</label>
                         <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >
-                        </div>
+                     </div>
+
+                        <div id="placeholder_image">
+                        <div class="form-group row">
+                           <div class="field col" >
+                              <label>Placeholder Image for Video</label> 
+                              <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
+                           </div>
+                        </div> 
+                     </div>
+
                   </div> 
                    <!-- ===== Placholder Image for Video ================ -->
-                  <div id="placeholder_image">
-                     <div class="form-group row">
-                        <div class="field col" >
-                            <h5>Placeholder Image for Video</h5> 
-                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
-                        </div>
-                     </div>                 
-                  </div>
+                
+                  
+
                   <div id="append"></div>
                   <button type="button" id="add_more_post" class="btn btn-sm btn-success float-right" >Add more post</button>                
                </div>              
@@ -450,10 +470,6 @@
 
          $(this).hide();
          var post = '<div class="form-group">\
-                  <label for="title">External Link</label>\
-                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="update_external_link[]" placeholder="https://www.google.com/" >\
-               </div>\
-               <div class="form-group">\
                   <label for="title">Titel</label>\
                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="update_title[]" placeholder="Title" required>\
                </div>\
@@ -465,11 +481,11 @@
                <div id="modules">\
                   <div class="form-group row">\
                         <div class="field col" >\
-                            <h3>Upload your Videos</h3>\
+                            <label class="img-label" mytext="label'+cart+'">Upload your Videos</label>\
                            <input type="file" id="videos" name="update_media_name_['+cart+'][]" accept="video/*" multiple  required/>\
                         </div>\
                         <div class="col" >\
-                             <span>Video Link</span>\
+                             <label>Video Link</label>\
                         <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="update_video_link[]" placeholder="https://www.youtube.com/" >\
                         </div>\
                   </div>\
@@ -477,12 +493,8 @@
                <div id="placeholder_image">\
                   <div class="form-group row">\
                         <div class="field col" >\
-                           <h3>Placeholder Image your Videos</h3>\
-                           <input type="file" id="palceholder_image" name="update_placeholder_image[]" accept="image/*"   required/>\
-                        </div>\
-                        <div class="col" >\
-                             <span>Placeholder Image Link</span>\
-                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="update_placeholder_image" placeholder="Palceholder Image" >\
+                           <label>Placeholder Image your Videos</label>\
+                           <input type="file" id="palceholder_image" name="update_placeholder_image[]" accept="image/*" />\
                         </div>\
                   </div>\
                   </div>\
@@ -505,6 +517,27 @@
       //    $("#palceholder_image").removeAttr("required");
          
       // }
+
+      $(document).on('change','.type', function() {
+         var a = $(this).attr('mytext');
+         var b = $(this).attr('myimage');
+         var c = $(this).attr('myvideo');
+         // alert(b); alert(c);
+         if($(this).val() == 0){
+            
+            $("."+a).text('Image');
+            $("#"+b).show();
+            $("#"+c).hide();
+
+            } 
+            if($(this).val()==1)
+            {
+               // $(".img-label").text('Video');
+               $("."+a).text('Video');
+               $("#"+b).hide();
+                $("#"+c).show();
+            }
+            });
 
       $(document).on('change','#feed_id', function() {
          if($(this).val() == 1){
@@ -532,20 +565,56 @@
                $("#modules").show(); 
 
                $("#videos").attr("required");
-               $("#placeholder_image").attr("required");
+               // $("#placeholder_image").attr("required");
+               $("#files").removeAttr("required");
+            }
+            });    
+
+
+
+      $(document).on('change','#feed_id', function() {
+         if($(this).val() == 1){
+            $("#single_post").show(); // Unchecks it
+            $("#modules").hide(); 
+           // $("#video").removeAttr("required");
+            // select value 1 than hide button add more post and empty append div
+            //$('#add_more_post').hide();
+            $('#append').empty();
+           // $('#placeholder_image').hide();
+            $("#placeholder_image").removeAttr("required");
+            $("#videos").removeAttr("required");
+            $("#files").attr("required","required");
+            $("#module_title_description").hide();
+               $('#module_title_description').empty();
+
+            //$("#files").attr("required");
+
+            } if($(this).val()==2)
+            {
+               // 
+               $('#add_more_post').show();
+               $('#placeholder_image').show();
+               $("#single_post").hide(); // Unchecks it
+               $("#modules").show(); 
+
+               $("#videos").attr("required");
+               // $("#placeholder_image").attr("required");
                $("#files").removeAttr("required");
               
 
 
                $("#module_title_description").show();
                var title_description = '<div class="form-group">\
-                   <label for="title">Title</label>\
+                   <label for="title">Card 1 Title</label>\
                    <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title_fix" placeholder="Title" >\
                </div>\
                <div class="form-group">\
-                   <label for="name" id="duration">Description</label>\
+                   <label for="name" id="duration">Card 1 Description</label>\
                    <textarea class="@error("name") is-invalid @enderror form-control"   name="description_fix" placeholder="Description" maxlength="200" id="description" >\
                    </textarea>\
+               </div><div class="form-group">\
+                  <label for="title">Card 1 External Link</label>\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
                </div>';
 
                $("#module_title_description").append(title_description);
@@ -568,44 +637,51 @@
          {
             var x = document.getElementById("signupForm");
             var post = '<div class="form-group">\
-                  <label for="title">External Link</label>\
-                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
-               </div>\
-               <div class="form-group">\
-                  <label for="title">Titel</label>\
+                  <label for="title">Card  '+parseInt(cart+1)+' Title </label>\
                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title[]" placeholder="Title" required>\
                </div>\
                <div class="form-group">\
-                   <label for="name" id="duration">description</label>\
+                   <label for="name" id="duration">Card '+parseInt(cart+1)+' Description</label>\
                   <textarea class="@error("name") is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >\
                    </textarea>\
                </div>\
-               <div id="modules">\
+               <div class="form-group">\
+                  <label for="title">Card '+parseInt(cart+1)+' External Link</label>\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
+               </div>\
+               <div class="form-group">\
+                  <select name="type[]" id="type" class="@error("type") is-invalid @enderror form-control type" mytext="label'+cart+'" myimage="myimage'+cart+'" myvideo="myvideo'+cart+'" required >\
+                     <option value=""> -- Select Media Type -- </option>\
+                     <option value="0">Image</option>\
+                     <option value="1">Video</option>\
+                     </select>\
+               </div>\
+               <div class="form-group" id="myimage'+cart+'">\
+               <div class="field" align="left">\
+               <label class="img-label">Upload images</label>\
+               <input type="file" id="files" name=""media_name_[0][]" accept="image/*" multiple>\
+                           </div>\
+                  </div>\
+                  <div id="myvideo'+cart+'" style="display:none">\
                   <div class="form-group row">\
                         <div class="field col" >\
-                            <h3>Upload your Videos</h3>\
-                           <input type="file" id="videos" name="media_name_['+cart+'][]" accept="video/*" multiple  required/>\
+                            <label class="label'+cart+'">Upload your Videos</label>\
+                           <input type="file"  id="videos" name="media_name_['+cart+'][]" accept="video/*" multiple />\
                         </div>\
                         <div class="col" >\
-                             <span>Video Link</span>\
+                             <label>Video Link</label>\
                         <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >\
                         </div>\
                   </div>\
-                  </div>\
-               <div id="placeholder_image">\
+                  <div id="placeholder_image">\
                   <div class="form-group row">\
                         <div class="field col" >\
-                           <h3>Placeholder Image your Videos</h3>\
-                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"   required/>\
-                        </div>\
-                        <div class="col" >\
-                             <span>Placeholder Image Link</span>\
-                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="placeholder_image" placeholder="Palceholder Image" >\
+                           <label>Placeholder Image your Videos</label>\
+                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*" />\
                         </div>\
                   </div>\
                   </div>\
-                  '
-               ;
+                  </div>';
 
         cart++;
          $( "#append" ).append( post );
@@ -617,10 +693,6 @@
             $('#add_more_post').hide();
          }
          
-         
-
-         
-  
       });
 
 
