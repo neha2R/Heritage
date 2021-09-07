@@ -105,7 +105,7 @@ class TournamentController extends Controller
             if($request->hasFile('sponsor_media_name'))
             {
                 $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
-                $newTournament->sponsor_media_name = $sponsor_media_name;
+                $newTournament->sponsor_media_id = $sponsor_media_name;
             }
             $newTournament->save();
             
