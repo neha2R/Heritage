@@ -63,7 +63,7 @@ class TournamentController extends Controller
           
         $validatedData = $request->validate([
             'title' => 'required|regex:/^[a-zA-Z]+$/u|max:255',
-            'subdomain_name' => 'required|integer',
+            'sub_domain_id' => 'required|integer',
             'quize_type' => 'required|integer',
             'age_group_id' => 'required|integer',
             'difficulty_level_id' => 'required|integer',
