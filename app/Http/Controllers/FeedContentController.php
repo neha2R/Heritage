@@ -97,7 +97,7 @@ class FeedContentController extends Controller
             $media->feed_content_id = $data->id;
             $media->title = $request->title['0'];
             $media->description=$request->description['0'];
-            $media->external_link=$request->external_link['0'];
+            $media->external_link=$request->external_link;
             $media->video_link=$request->video_link['0'];
             $media->save();
 
@@ -122,7 +122,7 @@ class FeedContentController extends Controller
            // dd($request->title);
             foreach($request->title as $key=>$value)
             {
-                // $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
+             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
               $videomimes = ['video/mp4']; //Add more mimes that you want to support
               
               $media = new FeedMedia;
@@ -144,15 +144,23 @@ class FeedContentController extends Controller
 
               //dd($request->file('media_name_')[$key]);
               //dd($request->files->placeholder_image);
+             
               foreach($request->file('media_name_')[$key] as $files)
               {
-                    $type = '1';
+                         if (in_array($files->getMimeType(), $imagemimes)) {
+                             $type = '0';
+                         }
+                         //validate audio
+                         if (in_array($files->getMimeType(), $videomimes)) {
+                             $type = '1';
+                         }
+                   
                      $name = $files->store('feed','public');
                     // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
                      $attachment = new FeedAttachment;
                      $attachment->feed_media_id = $media->id;
                      $attachment->media_name = $name;
-                     $attachment->media_type = $type;
+                     $attachment->media_type = $request->type[$key];
                      $attachment->save();
                    
               }

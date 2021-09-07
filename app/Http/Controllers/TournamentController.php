@@ -37,8 +37,8 @@ class TournamentController extends Controller
         $themes = Theme::OrderBy('id','DESC')->get();
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = Subdomain::OrderBy('id','DESC')->get();
-        $frequencies = Frequency::OrderBy('id','DESC');
-        // dd($frequencies);
+        $frequencies = Frequency::OrderBy('id','DESC')->get();
+       
         return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
 
@@ -63,7 +63,7 @@ class TournamentController extends Controller
           
         $validatedData = $request->validate([
             'title' => 'required|regex:/^[a-zA-Z]+$/u|max:255',
-            'subdomain_name' => 'required|integer',
+            'sub_domain_id' => 'required|integer',
             'quize_type' => 'required|integer',
             'age_group_id' => 'required|integer',
             'difficulty_level_id' => 'required|integer',
@@ -105,7 +105,7 @@ class TournamentController extends Controller
             if($request->hasFile('sponsor_media_name'))
             {
                 $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
-                $newTournament->sponsor_media_name = $sponsor_media_name;
+                $newTournament->sponsor_media_id = $sponsor_media_name;
             }
             $newTournament->save();
             
