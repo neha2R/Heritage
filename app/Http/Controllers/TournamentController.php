@@ -37,8 +37,8 @@ class TournamentController extends Controller
         $themes = Theme::OrderBy('id','DESC')->get();
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = Subdomain::OrderBy('id','DESC')->get();
-        $frequencies = Frequency::OrderBy('id','DESC');
-        // dd($frequencies);
+        $frequencies = Frequency::OrderBy('id','DESC')->get();
+       
         return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
 
