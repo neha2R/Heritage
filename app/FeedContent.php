@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FeedContent extends Model
 {
     //feedtype
+    protected $fillable = ['theme_id'];   
     public function feedtype()
     {
         return $this->hasOne('App\Feed', 'id','feed_id');

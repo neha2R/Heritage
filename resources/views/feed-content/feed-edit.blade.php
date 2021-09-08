@@ -83,6 +83,7 @@
                         <form  class="col-md-10 mx-auto" method="post" action="{{ route('update-feed-attchment') }}" enctype="multipart/form-data" >
                             <!-- novalidate="novalidate" -->
                             @csrf
+                            <input type="hidden" name="feed_content_id" value="{{$data['id']}}" >
                             <div class="form-group">
                                 <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
                                     <option selected value="{{$data['theme_id']}}">{{$data['theme_name']}}</option>
@@ -119,11 +120,12 @@
                                 <label for="tags"># Tags</label> 
                                 <input type="text" class="@error('from') is-invalid @enderror form-control" value="{{$data['tags']}}" name="tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100" >
                             </div>
-
+                            @if($feed_type==1)
                             <div class="form-group">
                                 <label for="title">External Link</label>
                                 <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" value="{{$data['external_link']['0']}}" name="external_link[]" placeholder="https://www.google.com/" >
                             </div>
+                            @endif
                
                             <div class="form-group">
                                 <label for="title">Title</label> 
@@ -132,7 +134,7 @@
 
                             <div class="form-group">
                                 <label for="name" id="duration">Description</label> 
-                                    <textarea class="@error('name') is-invalid @enderror form-control"    name="description[]" placeholder="Description" maxlength="200" id="description" >{{$data['fix_description']}}</textarea>
+                                    <textarea class="@error('name') is-invalid @enderror form-control"    name="description" placeholder="Description" maxlength="200" id="description" >{{$data['fix_description']}}</textarea>
                             </div>
                             <button class="btn btn-primary" style="float:right">Update Feed content</button>
                             <br>
@@ -154,7 +156,7 @@
                                                 
                                                     <div class="col">
                                                         @foreach($data['media_ids'] as $media_id)
-                                                         <input type="file" id="files" name="media_name[{{$media_id}}][]" accept="image/*" multiple />
+                                                         <input type="file" id="files" name="media_name[{{$media_id}}]" accept="image/*" multiple />
                                                          @endforeach
                                                     </div>
                                                     <div class="col">
@@ -170,27 +172,82 @@
                             @endif
 
                             @if($feed_type == 2)
-                            <div id="modules" >
-                                <div class="form-group row">
-                                    <div class="field col" >
-                                        <h3>Upload your Videos</h3> 
-                                        <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
-                                    </div>
-                                    <div class="col" >
-                                        <span>Video Link</span>
-                                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >
-                                    </div>
-                                </div> 
-                                <!-- ===== Placholder Image for Video ================ -->
-                                <div id="placeholder_image">
-                                    <div class="form-group row">
-                                        <div class="field col" >
-                                            <h3>Placeholder Image your Videos</h3> 
-                                            <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
-                                        </div>
-                                    </div>                 
+                            @php $x=1; @endphp
+                            @foreach($data['media'] as $key=>$value)
+                            <div  class="container">
+                                Card {{$x}}
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                        <input type="text" class="@error('title') is-invalid @enderror form-control" maxlength="50" name="media[{{$key}}][title]" value="{{$value['title']}}" placeholder="Title" >
                                 </div>
-                            </div>
+                                
+                                <div class="form-group">
+                                    <label for="name" id="duration">Description</label> 
+                                    <textarea class="@error('name') is-invalid @enderror form-control"   name="media[{{$key}}][description]"  placeholder="Description" maxlength="200" id="description" >{{$value['description']}}</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="external_link">External Link</label>
+                                        <input type="text" class="@error('title') is-invalid @enderror form-control" name="media[{{$key}}][external_link]"  value="{{$value['title']}}" placeholder="https://www.google.com/" >
+                                </div>
+                            
+                                
+                                <div class="form-group">
+                                    <label for="video_link">Video Link</label>
+                                        <input type="text" class="@error('title') is-invalid @enderror form-control" name="media[{{$key}}][video_link]"  value="{{$value['video_link']}}" placeholder="Vidoe Link" >
+                                </div>
+                                
+                                <div class="row">
+                                    
+                                        <div class = "col">
+                                           
+                                            @foreach($value['media_name'] as $attachement_id => $media_url)  
+                                                @if($value['media_type'][$attachement_id][0]==0)  
+                                                <img src="{{$media_url}}" alt="..." class="img-thumbnail"><br>
+                                                @endif
+                                                @if($value['media_type'][$attachement_id][0]==1)  
+                                                    <div class="embed-responsive embed-responsive-16by9">
+                                                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/v64KOxKVLVg" allowfullscreen></iframe>
+                                                    </div>
+                                                    <hr>
+                                                    <br>
+                                                    <div class="row">
+                                                        <div class="col-8">
+                                                            <img src="{{$value['placholder_image']}}" alt="..." class="img-thumbnail"><br>
+                                                        </div>
+                                                        <div class=col-4>
+                                                            <input type="file" id="files" name="placholder_image[{{$key}}]"  accept="Image/*"  />
+                                                        </div>
+                                                    </div>
+                                                    
+                                                @endif
+                                                
+                                            @endforeach
+                                        </div>
+                                                
+                                         <div class="col">
+                                            @foreach($value['media_name'] as $attachement_id => $media_url)
+                                                @if($value['media_type'][$attachement_id][0]==0)        
+                                                    <input type="file" id="files" name="media[{{$key}}][{{$attachement_id}}]" accept="image/*"  />
+                                                @endif  
+                                                @if($value['media_type'][$attachement_id][0]==1)
+                                                <input type="file" id="files" name="media[{{$key}}][{{$attachement_id}}]" accept="Video/*"  />
+                                                @endif
+                                            @endforeach
+                                        </div>
+                                        <div class="col">
+                                            @foreach($value['media_name'] as $attachement_id => $media_url)
+                                                <input class="form-check-input" type="checkbox" name="media[{{$key}}]['delete_media'][{{$attachement_id}}]" /><br>
+                                            @endforeach
+                                        </div> 
+                                </div>
+
+
+                            </div> 
+                            <hr>
+                            <br>
+                            @php$x= $x+1; @endphp
+                         @endforeach
                             @endif
                             <button type="submit" class="btn btn-primary">Update Feed</button>
                         </form>
