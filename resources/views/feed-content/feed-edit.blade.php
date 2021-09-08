@@ -235,7 +235,7 @@
       var add_more_btn_click=1;
 
       
-      var cart=1;
+      var cart=0;
    	$('#table').DataTable();
      // $('#add_more_post').hide();
       $("#videos").removeAttr("required");
@@ -456,8 +456,9 @@
                   '
                ;
 
-        cart++;
+        //cart++;
          $( "#append" ).append( post );
+         cart++;
          add_more_btn_click++;
          // x.insertBefore(new_field, x.childNodes[pos]);
          }
