@@ -47,7 +47,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::Post('/feed-collection-store','FeedContentController@feed_collection_store')->name('feed-collection-store');
     Route::Post('/tournament-questions-store','TournamentController@tournament_question_store')->name('tournament-questions-store');
     Route::get('/get-feed-content-by-id/{id}','FeedContentController@get_feed_content_by_id')->name('get_feed_content_by_id');
-    Route::get('/update-feed-attchment','FeedContentController@update-feed-attchment')->name('update-feed-attchment');
+    Route::Post('/update-feed-attchment','FeedContentController@update_feed_attachment')->name('update-feed-attchment');
+    
 
 });
 // Auth::routes();

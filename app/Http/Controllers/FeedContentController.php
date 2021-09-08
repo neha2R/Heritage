@@ -700,6 +700,8 @@ class FeedContentController extends Controller
         {
 
         }
+
+        dd($data);
         //return $feedContent->id;
         $feedMedia = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
       
@@ -710,7 +712,7 @@ class FeedContentController extends Controller
        return $feedMedia;
     }
 
-
+    
     public function update_feed_attachment(Request $request)
     {
         dd($request);

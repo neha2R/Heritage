@@ -80,7 +80,7 @@
                     @endforeach
                     <div class="card-body">
                         
-                        <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('feed-content.store') }}" enctype="multipart/form-data" >
+                        <form  class="col-md-10 mx-auto" method="post" action="{{ route('update-feed-attchment') }}" enctype="multipart/form-data" >
                             <!-- novalidate="novalidate" -->
                             @csrf
                             <div class="form-group">
@@ -139,7 +139,7 @@
                             <hr>
                             <br>
                             
-                            <form action="#" method="Post" >
+                           
                             @if($feed_type == 1)
                                 
                                    
@@ -159,7 +159,7 @@
                                                     </div>
                                                     <div class="col">
                                                         @foreach($data['media_ids'] as $media_id)
-                                                            <input class="form-check-input" type="checkbox" id="{{$media_id}}"/><br>
+                                                            <input class="form-check-input" type="checkbox" name="delete_media[{{$media_id}}]" id="{{$media_id}}"/><br>
                                                         @endforeach
                                                     </div>
                                                 
