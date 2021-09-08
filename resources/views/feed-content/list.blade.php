@@ -250,7 +250,7 @@
                         <div class="form-group row">
                            <div class="field col" >
                               <label>Placeholder Image for Video</label> 
-                              <input type="file" id="palceholder_image" name="card[0][placeholder_image][]" accept="image/*"  />
+                              <input type="file" id="palceholder_image" name="card[0][placeholder_image]" accept="image/*"  />
                            </div>
                         </div> 
                      </div>
