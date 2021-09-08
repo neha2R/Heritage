@@ -191,14 +191,14 @@
                
                <div class="form-group">
                    <label for="title">Title</label> 
-                  <input type="text" class="@error('title') is-invalid @enderror form-control" maxlength="50" name="title[]" placeholder="Title" >
+                  <input type="text" class="@error('title') is-invalid @enderror form-control" maxlength="50" name="title" placeholder="Title" >
                </div>
 
            
           
                <div class="form-group">
                    <label for="name" id="duration">Description</label> 
-                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >
+                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" maxlength="200" id="description" >
                    </textarea>
                </div>
                  
@@ -232,25 +232,25 @@
                <div class="form-group" id="myimage0">
                         <div class="field" align="left">
                             <label class="img-label">Upload images</label> 
-                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
+                           <input type="file" id="files" name="card[0][media_video][]" accept="image/*" multiple   />
                         </div>
                   </div>
 
                   <div class="form-group row " id="myvideo0" style="display:none">
                      <div class="field col" >
                             <label class="img-label label0" >Upload  Videos</label> 
-                           <input type="file" id="videos" name="media_name_[0][]"  accept="video/*" multiple  />
+                           <input type="file" id="videos" name="card[0][media_video][]"  accept="video/*" multiple  />
                      </div>
                      <div class="col-md-6" >
                              <label>Video Link</label>
-                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >
+                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="card[0][video_link]" placeholder="https://www.youtube.com/" >
                      </div>
 
                         <div id="placeholder_image">
                         <div class="form-group row">
                            <div class="field col" >
                               <label>Placeholder Image for Video</label> 
-                              <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*"  />
+                              <input type="file" id="palceholder_image" name="card[0][placeholder_image][]" accept="image/*"  />
                            </div>
                         </div> 
                      </div>
@@ -606,15 +606,15 @@
                $("#module_title_description").show();
                var title_description = '<div class="form-group">\
                    <label for="title">Card 1 Title</label>\
-                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title_fix" placeholder="Title" >\
+                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="card[0][title]" placeholder="Title" >\
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card 1 Description</label>\
-                   <textarea class="@error("name") is-invalid @enderror form-control"   name="description_fix" placeholder="Description" maxlength="200" id="description" >\
+                   <textarea class="@error("name") is-invalid @enderror form-control"   name="card[0][description]" placeholder="Description" maxlength="200" id="description" >\
                    </textarea>\
                </div><div class="form-group">\
                   <label for="title">Card 1 External Link</label>\
-                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="card[0][external_link]" placeholder="https://www.google.com/" >\
                </div>';
 
                $("#module_title_description").append(title_description);
@@ -638,16 +638,16 @@
             var x = document.getElementById("signupForm");
             var post = '<div class="form-group">\
                   <label for="title">Card  '+parseInt(cart+1)+' Title </label>\
-                  <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="title[]" placeholder="Title" required>\
+                  <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="card['+cart+'][title]" placeholder="Title" required>\
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card '+parseInt(cart+1)+' Description</label>\
-                  <textarea class="@error("name") is-invalid @enderror form-control"   name="description[]" placeholder="Description" maxlength="200" id="description" >\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="card['+cart+'][description]" placeholder="Description" maxlength="200" id="description" >\
                    </textarea>\
                </div>\
                <div class="form-group">\
                   <label for="title">Card '+parseInt(cart+1)+' External Link</label>\
-                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="external_link[]" placeholder="https://www.google.com/" >\
+                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="card['+cart+'][external_link]" placeholder="https://www.google.com/" >\
                </div>\
                <div class="form-group">\
                   <select name="type[]" id="type" class="@error("type") is-invalid @enderror form-control type" mytext="label'+cart+'" myimage="myimage'+cart+'" myvideo="myvideo'+cart+'" required >\
@@ -659,25 +659,25 @@
                <div class="form-group" id="myimage'+cart+'">\
                <div class="field" align="left">\
                <label class="img-label">Upload images</label>\
-               <input type="file" id="files" name=""media_name_[0][]" accept="image/*" multiple>\
+               <input type="file" id="files" name="card['+cart+'][media_video][]" accept="image/*" multiple>\
                            </div>\
                   </div>\
                   <div id="myvideo'+cart+'" style="display:none">\
                   <div class="form-group row">\
                         <div class="field col" >\
                             <label class="label'+cart+'">Upload your Videos</label>\
-                           <input type="file"  id="videos" name="media_name_['+cart+'][]" accept="video/*" multiple />\
+                           <input type="file"  id="videos" name="card['+cart+'][media_video][]" accept="video/*"  />\
                         </div>\
                         <div class="col" >\
                              <label>Video Link</label>\
-                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="video_link[]" placeholder="https://www.youtube.com/" >\
+                        <input type="text" class="@error("video_link") is-invalid @enderror form-control" maxlength="50" name="card['+cart+'][video_link]" placeholder="https://www.youtube.com/" >\
                         </div>\
                   </div>\
                   <div id="placeholder_image">\
                   <div class="form-group row">\
                         <div class="field col" >\
                            <label>Placeholder Image your Videos</label>\
-                           <input type="file" id="palceholder_image" name="placeholder_image[]" accept="image/*" />\
+                           <input type="file" id="palceholder_image" name="card['+cart+'][placeholder_image]" accept="image/*" />\
                         </div>\
                   </div>\
                   </div>\

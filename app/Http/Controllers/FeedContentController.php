@@ -48,57 +48,38 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
+     
        
-        $validatedData = $request->validate([
-            'theme_id' => 'required',
-            'domain_id' => 'required|',
-            'feed_id' => 'required',
-            'title' => 'required|max:200',
-            'tags'=>'required',
-            'external_link.*' => 'required|url',
-            'title.*'=>'required',
-            'description.*' =>'required' 
-        ]);
-        
+
+
+        if($request->feed_id == 1)
+               {
+                $validatedData = $request->validate([
+                    'theme_id' => 'required',
+                    'domain_id' => 'required|',
+                    'feed_id' => 'required',
+                    'title' => 'required|max:200',
+                    'tags'=>'required',
+                    'external_link' => 'required|url',
+                    'title'=>'required',
+                    'description' =>'required' 
+                ]);
+                        
         $data = new FeedContent;
         $data->theme_id = $request->theme_id;
         $data->domain_id = $request->domain_id;
         $data->feed_id = $request->feed_id;
         $data->tags=$request->tags;
 
-        if($request->feed_id == 1)
-        {
-            $data->title = $request->title['0'];
-            $data->description = $request->description['0'];
-        }
-        else
-        {
-            $validatedData = $request->validate([
-                
-                'title_fix.*'=>'required',
-                'description_fix.*' =>'required', 
-                'media_name_'=>'required',
-                'placeholder_image'=>'required'
-            ]);
-            $data->title = $request->title_fix;
-            $data->description = $request->description_fix;
-        }
-        
-     
-        $data->save();
-        // check feed is single than only single value store 
-        if($request->feed_id == 1)
-        { 
-
-
+            $data->title = $request->title;
+            $data->description = $request->description;            
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             // $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $media = new FeedMedia;
             $media->feed_content_id = $data->id;
-            $media->title = $request->title['0'];
-            $media->description=$request->description['0'];
+            $media->title = $request->title;
+            $media->description=$request->description;
             $media->external_link=$request->external_link;
-            $media->video_link=$request->video_link['0'];
             $media->save();
 
             if($request->hasfile('media_name'))
@@ -115,56 +96,78 @@ class FeedContentController extends Controller
                     $attachment->save();
                 }
             }
-
         }
-        else 
-        {   
-           // dd($request->title);
-            foreach($request->title as $key=>$value)
-            {
-             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
-              $videomimes = ['video/mp4']; //Add more mimes that you want to support
-              
-              $media = new FeedMedia;
-              $media->feed_content_id = $data->id;
-            
-              // array
-              $media->title = $request->title[$key];
-              
-              $media->description=$request->description[$key];
-              
-              $media->external_link=$request->external_link[$key];
-            
-              $media->video_link=$request->video_link[$key];
+        else
+        {
+            // $validatedData = $request->validate([
                 
-              // paceholder image 
-              $media->placholder_image = $request->file('placeholder_image')[$key]->store('feed','public');
-               
-              $media->save();
+            //     'title_fix.*'=>'required',
+            //     'description_fix.*' =>'required', 
+            //     'media_name_'=>'required',
+            //     'placeholder_image'=>'required'
+            // ]);
 
-              //dd($request->file('media_name_')[$key]);
-              //dd($request->files->placeholder_image);
+            // $data = new FeedContent;
+            // $data->theme_id = $request->theme_id;
+            // $data->domain_id = $request->domain_id;
+            // $data->feed_id = $request->feed_id;
+            // $data->tags=$request->tags;
+            // $data->title = $request->title_fix;
+            // $data->description = $request->description_fix;    
+            //  $data->save();
+  
+           // dd($request->title);
+           foreach($request->card as $key=>$value)
+           {
+            
+            // $file = $value['media_video'][$key];
+             dd($request);
+            // dd($value['media_video'][$key]);
+            // dd($value['media_video'][0]->store('feed','public')); 
+            $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
+             $videomimes = ['video/mp4']; //Add more mimes that you want to support
              
-              foreach($request->file('media_name_')[$key] as $files)
-              {
-                         if (in_array($files->getMimeType(), $imagemimes)) {
-                             $type = '0';
-                         }
-                         //validate audio
-                         if (in_array($files->getMimeType(), $videomimes)) {
-                             $type = '1';
-                         }
-                   
-                     $name = $files->store('feed','public');
-                    // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
-                     $attachment = new FeedAttachment;
-                     $attachment->feed_media_id = $media->id;
-                     $attachment->media_name = $name;
-                     $attachment->media_type = $request->type[$key];
-                     $attachment->save();
-                   
-              }
+             $media = new FeedMedia;
+             $media->feed_content_id = $data->id;
+           
+             // array
+             $media->title = $value['title'];
+             
+             $media->description=$value['description'];
+             
+             $media->external_link=$value['external_link'];
+           
+             $media->video_link=$value['video_link'];           
               
+              $media->save();
+      
+
+             if(isset($value['media_video'][$key]) && $value['media_video'][$key]->getClientOriginalName() != null)
+             {
+             foreach($value->file('media_video')[$key] as $files)
+             {
+                        if (in_array($value['media_video'][$key]->getMimeType(), $imagemimes)) {
+                            $type = '0';
+                        }
+                        //validate audio
+                        if (in_array($value['media_video'][$key]->getMimeType(), $videomimes)) {
+                            $type = '1';
+                        }
+                  
+                    $name = $value['media_video'][$key]->store('feed','public');
+                   // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
+                    $attachment = new FeedAttachment;
+                    $attachment->feed_media_id = $media->id;
+                    $attachment->media_name = $name;
+                    $attachment->media_type = $request->type[$key];
+                    $attachment->save();
+                  
+             }
+
+            }
+
+            }
+             
             //    if($request->hasfile('media_name'))
             //    {
             //          foreach($request->file('media_name') as $key=>$file)
@@ -187,7 +190,7 @@ class FeedContentController extends Controller
             //              $attachment->save();
             //          }
             //      }
-            }
+            
         }
     
          if ($data->id) {
@@ -656,7 +659,7 @@ class FeedContentController extends Controller
                 
                 $data['media_names'][] = $feed_attachment->media_name;
                 $data['media_ids'][] = $feed_attachment->id;
-                $data['images_url'][] = storage_path().'/app'.'/public'.'/'.$feed_attachment->media_name;
+                $data['images_url'][] = $this->imageurl($feed_attachment->media_name);
                 
             }
       //  dd($data);
