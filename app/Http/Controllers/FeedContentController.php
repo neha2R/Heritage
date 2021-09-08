@@ -48,7 +48,7 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+       
         if($request->feed_id == 1)
         {
                 $validatedData = $request->validate([

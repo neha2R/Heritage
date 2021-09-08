@@ -212,7 +212,7 @@
                             <div class = "row"> 
                                 <div class="col">
                                     <div class="form-group">
-                                        <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control" required >
+                                        <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control frequency" required >
                                             <option value="">Select Frequency</option>
                                             @foreach($frequencies as $freq)
                                                 <option value="{{$freq->id}}">{{$freq->title}}</option>
@@ -220,8 +220,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Session Per Day" name="session_per_day">
+                                <div class="col sessions">
+                                    <input type="number" class="form-control" placeholder="Session Per Day " name="session_per_day">
                                 </div>
                             </div>
                             <div class = "row"> 
@@ -243,7 +243,7 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <input type="text" name="duration" class="form-control" placeholder="Duration">
+                                    <input type="number" name="duration" class="form-control" placeholder="Duration in (Minutes)">
                                 </div>
                             </div>                  
                             <div class = "row"> 
@@ -251,7 +251,7 @@
                                     <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" name="start_time" placeholder="start time" >
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control" autocomplete="off" name="interval_session" placeholder="Interval b/w session">
+                                    <input type="number" class="form-control" autocomplete="off" name="interval_session" id="interval_session" placeholder="Interval b/w session in (Minutes)">
                                 </div>
                             </div>
                             <div class="row">
@@ -259,7 +259,7 @@
                                     <br>
                                     <div class="form-group">
                                             <div class="field" align="left">
-                                                <h3>Upload your images</h3> 
+                                                <label>Banner Image</label> 
                                                 <input type="file" id="files" name="media_name" accept="image/*" multiple   />
                                             </div>
                                     </div>
@@ -268,7 +268,7 @@
                                     <br>
                                     <div class="form-group">
                                         <div class="field" align="left">
-                                            <h3>Sponsor Images</h3> 
+                                            <label>Sponsor Images</label> 
                                             <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple   />
                                         </div>
                                     </div>
@@ -313,7 +313,7 @@
                                     </div>
                             </div>   
 </div>                    
-                            <div class = "row"> 
+                            <div class = "row "> 
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="frequency_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required >
@@ -321,8 +321,8 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <input class="form-control" type="text" name="session_per_day" placeholder=" Session Per Day" >
+                                <div class="col ">
+                                    <input class="form-control" type="text" name="session_per_day" placeholder=" Session Per " >
                                 </div>
                             </div>
                             <div class = "row"> 
@@ -417,7 +417,6 @@
 @endsection
 @section('js')
 
-<script src="/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.js" integrity="sha512-+UiyfI4KyV1uypmEqz9cOIJNwye+u+S58/hSwKEAeUMViTTqM9/L4lqu8UxJzhmzGpms8PzFJDzEqXL9niHyjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
    $(document).ready(function() {
@@ -432,7 +431,22 @@
         return c; //you can just return c because it will be true or false
     });
 
-    
+    $(document).on('change','.frequency', function() {
+          if($(this).val()==1){
+            $('.sessions').show();
+            $('#interval_session').removeAttr('readonly')
+          }else{
+              $('.sessions').hide();
+          } 
+          //interval_session
+          if($(this).val()==2){
+         $('#interval_session').attr('readonly','readonly')
+          }
+
+          if($(this).val()==3){
+            $('#interval_session').attr('readonly','readonly')
+          }
+    });
     // set on click on add tournament quize
     // $("#add_normal_quize_button").on('click',function()
     // {

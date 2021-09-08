@@ -17,6 +17,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Frequency;
 use Response;
 use Carbon\Carbon;
+use App\TournamenetUser;
+use App\SessionsPerDay;
 
 //use App\Frequency;
 
@@ -37,7 +39,7 @@ class TournamentController extends Controller
         $themes = Theme::OrderBy('id','DESC')->get();
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = Subdomain::OrderBy('id','DESC')->get();
-        $frequencies = Frequency::OrderBy('id','DESC')->get();
+        $frequencies = Frequency::get();
        
         return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
@@ -62,14 +64,13 @@ class TournamentController extends Controller
     {
           
         $validatedData = $request->validate([
-            'title' => 'required|regex:/^[a-zA-Z]+$/u|max:255',
+            'title' => 'required|',
             'sub_domain_id' => 'required|integer',
             'quize_type' => 'required|integer',
             'age_group_id' => 'required|integer',
             'difficulty_level_id' => 'required|integer',
             'theme_id' => 'required|integer',
             'domain_id' => 'required|integer',
-            'session_per_day' => 'required|integer',
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
             'duration' => 'required|integer',
@@ -81,7 +82,17 @@ class TournamentController extends Controller
 
         if($request->quize_type == "0")
         {   
-           // dd($request->duration);
+            if($request->frequency_id=='1'){
+                $validatedData = $request->validate([
+                    'session_per_day' => 'required|integer',
+                ]);
+                $interval_session = $request->interval_session;
+                $session_per_day = $request->session_per_day;
+            } else{
+                $interval_session =   1440;
+                $session_per_day = 1;
+            }
+
             $newTournament = new Tournament;
             $newTournament->title = $request->title;
             $newTournament->type = $request->quize_type;
@@ -91,11 +102,12 @@ class TournamentController extends Controller
             $newTournament->domain_id = $request->domain_id;
             $newTournament->sub_domain_id = $request->sub_domain_id;
             $newTournament->frequency_id = $request->frequency_id;
-            $newTournament->session_per_day = $request->session_per_day;
+            $newTournament->session_per_day = $session_per_day;
             $newTournament->no_players = $request->no_of_players;
             $newTournament->duration = $request->duration;
             $newTournament->start_time = $request->start_time;
-            $newTournament->interval_session = $request->interval_session;
+            
+            $newTournament->interval_session = $interval_session;
             if($request->hasfile('media_name'))
             {
 
@@ -108,6 +120,41 @@ class TournamentController extends Controller
                 $newTournament->sponsor_media_id = $sponsor_media_name;
             }
             $newTournament->save();
+            // save session for first time
+            $SessionsPerDay = new SessionsPerDay;
+            $starttime = date('H:i',strtotime($request->start_time));
+            $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+            $SessionsPerDay->start_time =$starttime; 
+            $SessionsPerDay->end_time = $endtime;
+            $SessionsPerDay->duration = $request->duration;
+            $SessionsPerDay->save();
+            $sess = $request->session_per_day-1;
+
+            if($request->frequency_id=='1'){
+             for($sess; $sess=0;$rsess-- ){
+
+                $starttime = date('H:i',strtotime("+$request->interval_session minutes", strtotime($endtime)));  
+                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+                
+                
+                $secondSession = new SessionsPerDay;
+                $secondSession->start_time =$starttime; 
+                $secondSession->end_time = $endtime;
+                $secondSession->duration = $request->duration;
+                $secondSession->save();
+             }
+            
+            }
+            if($request->frequency_id=='1'){
+
+                $starttime = date('H:i',strtotime($request->start_time));
+                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+                $secondSession = new SessionsPerDay;
+                $secondSession->start_time =$starttime; 
+                $secondSession->end_time = $endtime;
+                $secondSession->duration = $request->duration;
+                $secondSession->save();
+            }
             
         }
         else
@@ -136,15 +183,9 @@ class TournamentController extends Controller
                 $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
                 $newTournament->sponsor_media_name = $sponsor_media_name;
             }
-
-
-
-
-
-
            $newTournament->save();
 
-
+           
             
             // store excel file question 
             Excel::import(new TournamentQuestionImport($newTournament->id), $request->file('tournament_question_bluck'));
