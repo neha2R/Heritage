@@ -305,9 +305,9 @@ class TournamentController extends Controller
         {
             
             $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
-            // $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
+            $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
             $tournament->sessions = SessionsPerDay::select('start_time')->where('tournament_id',$tournament->id)->get()->toArray();
-             $tournament->frequency = $tournament->frequency_id;
+            //  $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
             $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->first();
@@ -317,6 +317,7 @@ class TournamentController extends Controller
                 $isset = 0;
             }
             $tournament->is_played = $isset ;
+            $tournament->is_attempt = $tournament->is_attempt;
           
             //
         }
