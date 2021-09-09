@@ -298,7 +298,7 @@ class TournamentController extends Controller
     public function tournament(Request $request)
     {
         //    dd($request->user_id);
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id')->OrderBy('id', 'DESC')->get();
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->OrderBy('id', 'DESC')->get();
         //Post::with('user:id,username')->get();
 
         foreach($tournaments as $tournament)
@@ -317,7 +317,7 @@ class TournamentController extends Controller
                 $isset = 0;
             }
             $tournament->is_played = $isset ;
-            $tournament->is_attempt = $tournament->is_attempt;
+            // $tournament->is_attempt = $tournament->is_attempt;
           
             //
         }
@@ -370,13 +370,14 @@ class TournamentController extends Controller
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
-
+        $TournamenetUser = TournamenetUser::find($request->user_id);
+        if(empty($TournamenetUser)){
         $savetournament = new TournamenetUser;
         $savetournament->user_id = $request->user_id;
         $savetournament->tournament_id = $request->tournament_id;
         $savetournament->status='started';
         $savetournament->save();
-
+        }
         $quiz_rules = QuizRule::first();
         $data = json_decode($quiz_rules->more);
         if (empty($quiz_rules)) {
@@ -386,5 +387,35 @@ class TournamentController extends Controller
         }
     }
  
+
+    public function join_tournament(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+             'user_id' => 'required',
+            'tournament_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }  
+        $tournament = Tournament::find($request->tournament_id);
+        if (empty($tournament)) {
+            return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
+        }
+        $TournamenetUser = TournamenetUser::find($request->user_id);
+        if(empty($TournamenetUser)){
+        $savetournament = new TournamenetUser;
+        $savetournament->user_id = $request->user_id;
+        $savetournament->tournament_id = $request->tournament_id;
+        $savetournament->status='started';
+        $savetournament->save();
+        }
+       
+        if (empty($savetournament)) {
+            return response()->json(['status' => 204, 'message' => 'Something went wrong', 'data' => '']);
+        } else {
+            return response()->json(['status' => 200, 'message' => 'User joined succesfully', 'data' => $savetournament]);
+        }
+    }
 
 }
