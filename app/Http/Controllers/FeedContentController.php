@@ -803,7 +803,7 @@ class FeedContentController extends Controller
 
 
             }
-            dd("hello");
+          
 
             foreach($request->file('media') as $key=>$file)
             {

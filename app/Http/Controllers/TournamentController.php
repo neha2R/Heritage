@@ -19,6 +19,8 @@ use Response;
 use Carbon\Carbon;
 use App\TournamenetUser;
 use App\SessionsPerDay;
+use App\QuizRule;
+use Illuminate\Support\Facades\Validator;
 
 //use App\Frequency;
 
@@ -353,6 +355,35 @@ class TournamentController extends Controller
 
     
 
+    public function tournament_rule(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+             'user_id' => 'required',
+            'tournament_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }  
+        $tournament = Tournament::find($request->tournament_id);
+        if (empty($tournament)) {
+            return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
+        }
+
+        $savetournament = new TournamenetUser;
+        $savetournament->user_id = $request->user_id;
+        $savetournament->tournament_id = $request->tournament_id;
+        $savetournament->status='started';
+        $savetournament->save();
+
+        $quiz_rules = QuizRule::first();
+        $data = json_decode($quiz_rules->more);
+        if (empty($quiz_rules)) {
+            return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
+        } else {
+            return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
+        }
+    }
  
 
 }

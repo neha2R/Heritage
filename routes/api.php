@@ -81,7 +81,7 @@ Route::post('filter_feed','FeedContentController@filter_feed');
 
 /**  Tournament APi Routes  Start from Here      */
 Route::get('tournament','TournamentController@tournament');
-Route::post('start_tournament','TournamentController@start_tournament');
+Route::post('tournament_rule','TournamentController@tournament_rule');
 /**  End from Here        */
 
 

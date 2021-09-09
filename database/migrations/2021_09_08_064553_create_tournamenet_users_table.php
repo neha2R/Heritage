@@ -15,7 +15,7 @@ class CreateTournamenetUsersTable extends Migration
     {
         Schema::create('tournamenet_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tournament_id')->constrained();
+            $table->foreignId('tournament_id');
             $table->foreignId('user_id')->constrained();
             $table->string('status')->comment('status of tournament , completed,notcompleted')->nullable();
             $table->string('marks')->comment('Obtain Marks')->nullable();
