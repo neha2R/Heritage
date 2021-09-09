@@ -224,6 +224,17 @@
                                     <input type="number" class="form-control" placeholder="Session Per Day " name="session_per_day">
                                 </div>
                             </div>
+                            <div class = "row is_attempt"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="is_attempt" class="@error('is_attempt') is-invalid @enderror form-control" required >
+                                            <option>User Frequency</option>
+                                            <option value="0">Daily</option>   
+                                            <option value="1">Once</option>  
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class = "row"> 
                                 <div class="col">
                                     <div class="form-group">
@@ -325,6 +336,8 @@
                                     <input class="form-control" type="text" name="session_per_day" placeholder=" Session Per " >
                                 </div>
                             </div>
+
+                           
                             <div class = "row"> 
                                 <div class="col">
                                     <div class="form-group">
@@ -434,8 +447,10 @@
     $(document).on('change','.frequency', function() {
           if($(this).val()==1){
             $('.sessions').show();
+            $('.is_attempt').hide();
             $('#interval_session').removeAttr('readonly')
           }else{
+            $('.is_attempt').show();
               $('.sessions').hide();
           } 
           //interval_session

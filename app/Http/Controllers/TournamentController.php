@@ -89,6 +89,10 @@ class TournamentController extends Controller
                 $interval_session = $request->interval_session;
                 $session_per_day = $request->session_per_day;
             } else{
+                $validatedData = $request->validate([
+                    'is_attempt' => 'required|integer',
+
+                ]);
                 $interval_session =   1440;
                 $session_per_day = 1;
             }
@@ -106,7 +110,8 @@ class TournamentController extends Controller
             $newTournament->no_players = $request->no_of_players;
             $newTournament->duration = $request->duration;
             $newTournament->start_time = $request->start_time;
-            
+            $newTournament->is_attempt = $request->is_attempt;
+
             $newTournament->interval_session = $interval_session;
             if($request->hasfile('media_name'))
             {
@@ -127,6 +132,7 @@ class TournamentController extends Controller
             $SessionsPerDay->start_time =$starttime; 
             $SessionsPerDay->end_time = $endtime;
             $SessionsPerDay->duration = $request->duration;
+            $SessionsPerDay->tournament_id = $newTournament->id;
             $SessionsPerDay->save();
             $sess = $request->session_per_day-1;
 
@@ -141,6 +147,8 @@ class TournamentController extends Controller
                 $secondSession->start_time =$starttime; 
                 $secondSession->end_time = $endtime;
                 $secondSession->duration = $request->duration;
+                $secondSession->tournament_id = $newTournament->id;
+
                 $secondSession->save();
              }
             
@@ -290,15 +298,27 @@ class TournamentController extends Controller
     public function tournament()
     {
 
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session')->OrderBy('id', 'DESC')->get();
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id')->OrderBy('id', 'DESC')->get();
         //Post::with('user:id,username')->get();
 
         foreach($tournaments as $tournament)
         {
+            
             $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
-            $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
+            // $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
+            $tournament->sessions = SessionsPerDay::select('start_time')->where('tournament_id',$tournament->id)->get()->toArray();
+             $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
+            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->first();
+            if($mytournamnet){
+                $isset = 1;
+            }else{
+                $isset = 0;
+            }
+            $tournament->is_played = $isset ;
+          
+            //
         }
         $currentDateTime = Carbon::now();
         
@@ -322,6 +342,7 @@ class TournamentController extends Controller
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
+            
         }
         $currentDateTime = Carbon::now();
         
