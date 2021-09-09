@@ -140,15 +140,13 @@ class TournamentController extends Controller
              for($sess; $sess=0;$rsess-- ){
 
                 $starttime = date('H:i',strtotime("+$request->interval_session minutes", strtotime($endtime)));  
-                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
-                
+                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));                
                 
                 $secondSession = new SessionsPerDay;
                 $secondSession->start_time =$starttime; 
                 $secondSession->end_time = $endtime;
                 $secondSession->duration = $request->duration;
                 $secondSession->tournament_id = $newTournament->id;
-
                 $secondSession->save();
              }
             
@@ -295,9 +293,9 @@ class TournamentController extends Controller
      }
 
     // get all tournament api 
-    public function tournament()
+    public function tournament(Request $request)
     {
-
+        //    dd($request->user_id);
         $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id')->OrderBy('id', 'DESC')->get();
         //Post::with('user:id,username')->get();
 
@@ -310,7 +308,7 @@ class TournamentController extends Controller
              $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
-            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->first();
+            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->first();
             if($mytournamnet){
                 $isset = 1;
             }else{
