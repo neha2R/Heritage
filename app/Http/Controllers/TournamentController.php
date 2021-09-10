@@ -64,7 +64,7 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-          
+         // dd($request);
         $validatedData = $request->validate([
             'title' => 'required|',
             'sub_domain_id' => 'required|integer',
@@ -81,7 +81,7 @@ class TournamentController extends Controller
         ]);
        
         
-
+        // add normal quize 
         if($request->quize_type == "0")
         {   
             if($request->frequency_id=='1'){
@@ -164,6 +164,25 @@ class TournamentController extends Controller
                 $secondSession->save();
             }
             
+            // 
+            if($request->preference_questions == "1")
+            {
+                return redirect()->route('tournament_add',['id'=>$newTournament->id]);
+            
+            }
+            else if ($request->preference_questions == "0")
+            {
+                $tournament_questions = QuestionsSetting::where('domain_id','=', $request->domain_id)->pluck('id')->toArray();
+                
+                $newQuizeQuestions = new TournamentQuizeQuestion;
+                $newQuizeQuestions->questions_id = json_encode($tournament_questions);
+                $newQuizeQuestions->tournament_id  = $newTournament->id;
+                $newQuizeQuestions->total_no_question = count($tournament_questions);
+                $newQuizeQuestions->save();
+               // dd($tournament_questions);
+               return redirect()->route('tournament.index');
+
+            }
         }
         else
         {
@@ -203,7 +222,7 @@ class TournamentController extends Controller
            
 
         }
-        return redirect()->route('tournament_add',['id'=>$newTournament->id]);
+       
     }
 
     /**
