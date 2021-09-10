@@ -262,9 +262,24 @@
                                     <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" name="start_time" placeholder="start time" >
                                 </div>
                                 <div class="col">
-                                    <input type="number" class="form-control" autocomplete="off" name="interval_session" id="interval_session" placeholder="Interval b/w session in (Minutes)">
+                                    <input id="datetimepicker2" class="form-control"  type="text" autocomplete="off" name="end_time" placeholder="End Time" >
                                 </div>
                             </div>
+
+                            <div class = "row"> 
+
+                                <div class="col">
+                                <br>
+                                    <input id="no_of_question" class="form-control"  type="number" autocomplete="off" name="no_of_question" placeholder="10" >
+                                </div>
+
+                                <div class="col">
+                                <br>
+                                    <input type="number" class="form-control" autocomplete="off" name="interval_session" id="interval_session" placeholder="Interval b/w session in (Minutes)">
+                                </div>
+
+                            </div>
+
                             <div class="row">
                                 <div class="col">
                                     <br>
@@ -381,7 +396,7 @@
                                     </div>
                                 </div>
                             </div>                
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col">
                                 <div class="form-group">
                                     <select name="negative_marking" class="@error('domain_id') is-invalid @enderror form-control" required >
@@ -392,7 +407,7 @@
                             <div class="col">
                                 <input type="text" class="form-control" name="negative_mark_per_question" placeholder="Negative Mark Per Question">
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col">
                                 <br>
@@ -475,7 +490,8 @@
 
 
  
-    $('#datetimepicker').datetimepicker();    
+    $('#datetimepicker').datetimepicker();   
+    $('#datetimepicker2').datetimepicker();   
     if (window.File && window.FileList && window.FileReader) {
         
         $("#files").on("change", function(e) {

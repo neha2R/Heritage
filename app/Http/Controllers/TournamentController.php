@@ -77,7 +77,9 @@ class TournamentController extends Controller
             'duration' => 'required|integer',
             'duration' => 'required|integer',
             'media_name' => 'required',
-            'sponsor_media_name'=>'required'
+            'sponsor_media_name'=>'required',
+            'no_of_question'=>'required',
+
         ]);
        
         
@@ -113,6 +115,8 @@ class TournamentController extends Controller
             $newTournament->duration = $request->duration;
             $newTournament->start_time = $request->start_time;
             $newTournament->is_attempt = $request->is_attempt;
+            $newTournament->no_of_question = $request->no_of_question;
+            $newTournament->end_time = $request->end_time;
 
             $newTournament->interval_session = $interval_session;
             if($request->hasfile('media_name'))
@@ -306,11 +310,11 @@ class TournamentController extends Controller
             
             $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
-            $tournament->sessions = SessionsPerDay::select('start_time')->where('tournament_id',$tournament->id)->get()->toArray();
+            $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
             //  $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
-            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->first();
+            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->first();
             if($mytournamnet){
                 $isset = 1;
             }else{
@@ -407,7 +411,7 @@ class TournamentController extends Controller
         $savetournament = new TournamenetUser;
         $savetournament->user_id = $request->user_id;
         $savetournament->tournament_id = $request->tournament_id;
-        $savetournament->status='started';
+        $savetournament->status='joined';
         $savetournament->save();
         }
        
@@ -417,5 +421,27 @@ class TournamentController extends Controller
             return response()->json(['status' => 200, 'message' => 'User joined succesfully', 'data' => $savetournament]);
         }
     }
+
+    public function tournament_questions(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tournament_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }  
+        $tournament = Tournament::find($request->tournament_id);
+        if (empty($tournament)) {
+            return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
+        }
+        TournamentQuizeQuestion::where('tournament_id',$request->tournament_id)->first();
+        if (empty($quesstions)) {
+            return response()->json(['status' => 204, 'message' => 'Something went wrong', 'data' => '']);
+        } else {
+            return response()->json(['status' => 200, 'message' => 'Question fetch succesfully', 'data' => $quesstions]);
+        }
+    }
+
 
 }

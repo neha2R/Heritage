@@ -83,6 +83,7 @@ Route::post('filter_feed','FeedContentController@filter_feed');
 Route::get('tournament','TournamentController@tournament');
 Route::post('tournament_rule','TournamentController@tournament_rule');
 Route::post('join_tournament','TournamentController@join_tournament');
+Route::get('tournament_questions','TournamentQuestionController@tournament_questions');
 
 /**  End from Here        */
 
