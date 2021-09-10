@@ -304,7 +304,8 @@
                     </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Continue</button>                       
+                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="1" >choose your preference questions</button>
+                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="0">Submit</button>
                         </div>
                     </form>
             </div>
