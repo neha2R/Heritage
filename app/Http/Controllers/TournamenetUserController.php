@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\TournamenetUser;
 use Illuminate\Http\Request;
+use App\Jobs\SaveTournamentResultJob;
 
 class TournamenetUserController extends Controller
 {
@@ -82,4 +83,29 @@ class TournamenetUserController extends Controller
     {
         //
     }
+
+
+       /**
+     * Store TOurnament Result From APi.
+     *
+     * @param  \App\TournamenetUser  $tournamenetUser
+     * @return \Illuminate\Http\Response
+     */
+    public function tournament_result(Request $request)
+    {
+    
+            $data = SaveTournamentResultJob::dispatchNow($request->all());
+            if ($data == 'error') {
+                return response()->json(['status' => 202, 'message' => 'Something went wrong', 'data' => '']);
+            }
+            if ($data == 'success') {
+                $data = [];
+                $data['user_id'] = $request->user_id;
+                return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $data]);
+            }
+    } 
+
+
+    
+    
 }

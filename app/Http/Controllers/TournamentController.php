@@ -77,7 +77,6 @@ class TournamentController extends Controller
             'domain_id' => 'required|integer',
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
-            'duration' => 'required|integer',
             'media_name' => 'required',
             'sponsor_media_name'=>'required',
             'no_of_question'=>'required',
@@ -88,19 +87,22 @@ class TournamentController extends Controller
         // add normal quize 
         if($request->quize_type == "0")
         {   
-            if($request->frequency_id=='1'){
+            if($request->frequency_id==1){
                 $validatedData = $request->validate([
                     'session_per_day' => 'required|integer',
                 ]);
                 $interval_session = $request->interval_session;
                 $session_per_day = $request->session_per_day;
-            } else{
+                $is_attempt='0';
+            }
+             else{
                 $validatedData = $request->validate([
                     'is_attempt' => 'required|integer',
 
                 ]);
                 $interval_session =   1440;
                 $session_per_day = 1;
+                $is_attempt=$request->is_attempt;
             }
 
             $newTournament = new Tournament;
@@ -116,7 +118,7 @@ class TournamentController extends Controller
             $newTournament->no_players = $request->no_of_players;
             $newTournament->duration = $request->duration;
             $newTournament->start_time = $request->start_time;
-            $newTournament->is_attempt = $request->is_attempt;
+            $newTournament->is_attempt = $is_attempt;
             $newTournament->no_of_question = $request->no_of_question;
             $newTournament->end_time = $request->end_time;
 
@@ -142,10 +144,11 @@ class TournamentController extends Controller
             $SessionsPerDay->duration = $request->duration;
             $SessionsPerDay->tournament_id = $newTournament->id;
             $SessionsPerDay->save();
-            $sess = $request->session_per_day-1;
+            $sess = $session_per_day-1;
 
-            if($request->frequency_id=='1'){
-             for($sess; $sess=0;$rsess-- ){
+            if($request->frequency_id==1){
+          
+             for($sess; $sess>=0; $sess--){
 
                 $starttime = date('H:i',strtotime("+$request->interval_session minutes", strtotime($endtime)));  
                 $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));                
@@ -156,19 +159,20 @@ class TournamentController extends Controller
                 $secondSession->duration = $request->duration;
                 $secondSession->tournament_id = $newTournament->id;
                 $secondSession->save();
+                
              }
             
             }
-            if($request->frequency_id=='1'){
+            // if($request->frequency_id=='1'){
 
-                $starttime = date('H:i',strtotime($request->start_time));
-                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
-                $secondSession = new SessionsPerDay;
-                $secondSession->start_time =$starttime; 
-                $secondSession->end_time = $endtime;
-                $secondSession->duration = $request->duration;
-                $secondSession->save();
-            }
+            //     $starttime = date('H:i',strtotime($request->start_time));
+            //     $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+            //     $secondSession = new SessionsPerDay;
+            //     $secondSession->start_time =$starttime; 
+            //     $secondSession->end_time = $endtime;
+            //     $secondSession->duration = $request->duration;
+            //     $secondSession->save();
+            // }
             
             // 
             if($request->preference_questions == "1")
@@ -334,12 +338,32 @@ class TournamentController extends Controller
             
             $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
-            // $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
-             $tournament->sessions = SessionsPerDay::where('tournament_id',$tournament->id)->pluck('start_time','id')->toArray();
+            $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
+            //  $tournament->sessions = SessionsPerDay::where('tournament_id',$tournament->id)->pluck('start_time','id')->toArray();
             //  $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
-            $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->first();
+             
+            //Current day record
+            if($tournament->frequency_id==1){
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+            }
+            // Prevoius 7 days record
+            if($tournament->frequency_id==2){
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
+            }
+                
+            // // Last Month record
+            // if($tournament->frequency_id==3){
+            //     $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereMonth('created_at', '=', Carbon::now()->subMonth()->month)->first();
+            // }
+
+              // This Month record
+            if($tournament->frequency_id==3){
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereMonth('created_at', date('m'))
+                ->whereYear('created_at', date('Y'))->first();
+            }
+          
             if($mytournamnet){
                 $isset = 1;
             }else{
