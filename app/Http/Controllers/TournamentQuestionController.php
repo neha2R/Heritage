@@ -41,7 +41,7 @@ class TournamentQuestionController extends Controller
        $tourQuestions = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
        
        if (empty($tourQuestions)) {
-           return response()->json(['status' => 204, 'message' => 'Question not created yet make sure one member has to be join request', 'data' => '']);
+           return response()->json(['status' => 204, 'message' => 'Question not created yet make sure one member has to be join the tournament', 'data' => '']);
        } else {
         $questions_ids = json_decode($tourQuestions->questions);
 

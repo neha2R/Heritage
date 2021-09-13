@@ -334,7 +334,8 @@ class TournamentController extends Controller
             
             $tournament->difficulty = Tournament::find($tournament->id)->difficulty_level->name;
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
-            $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
+            // $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
+             $tournament->sessions = SessionsPerDay::where('tournament_id',$tournament->id)->pluck('start_time','id')->toArray();
             //  $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
