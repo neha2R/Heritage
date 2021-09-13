@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Tournament;
 use App\TournamentSessionQuestion;
+use App\QuestionsSetting;
 
 class AddSessionQuestionJob implements ShouldQueue
 {
