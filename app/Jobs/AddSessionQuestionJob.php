@@ -25,8 +25,10 @@ class AddSessionQuestionJob implements ShouldQueue
     
     public function __construct($tornamnetid,$sessionid)
     {
+       
         $this->tornamnetid = $tornamnetid;
         $this->sessionid = $sessionid;
+        // dd($this->tornamnetid);
     }
 
     /**
@@ -43,22 +45,31 @@ class AddSessionQuestionJob implements ShouldQueue
             $tourQuestions = TournamentQuizeQuestion::where('tournament_id',$this->tornamnetid)->first();
 
             if($tourQuestions->question_type=='0'){
-            $tournament_questions = QuestionsSetting::where('domain_id','=', $tournament->domain_id)->pluck('id')->toArray();
+            $tournament_questions = QuestionsSetting::where('domain_id','=', $tournament->domain_id)->pluck('id')->random($tournament->no_of_question)->toArray();
+
              $questions_ids = $tournament_questions;
+         
             }
             else{
-        $num=20;
-        $questions_ids = json_decode($tourQuestions->questions_id);
-        // $questions_ids = array_rand($questions_ids, $num );
+        
+                $questions_ids = json_decode($tourQuestions->questions_id);
+            // $questions_ids = json_decode($tourQuestions->questions_id);
+                    
+            $questions_ids =array_flip($questions_ids);                
+            $questions_ids =array_rand($questions_ids,$tournament->no_of_question);
+    
             }
-         $questions_ids = array_rand($questions_ids, $tournament->no_of_question );
+           
+          shuffle($questions_ids);
+
          $newQuizeQuestions = new TournamentSessionQuestion;
          $newQuizeQuestions->questions = json_encode($questions_ids);
          $newQuizeQuestions->tournament_id  = $this->tornamnetid;
          $newQuizeQuestions->session_id = $this->sessionid;
          $newQuizeQuestions->save();
 
-        } else{
+        }
+         else{
             $questions_ids = json_decode($question->questions);
 
         }

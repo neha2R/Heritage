@@ -428,9 +428,10 @@ class TournamentController extends Controller
         $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
       
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
-         if(!empty($question)){
-            AddSessionQuestionJob::dispachNow($request->tournament_id,$request->session_id);
+         if(empty($question)){
+         $response =  AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
          }
+   
         if(empty($TournamenetUser)){
         $savetournament = new TournamenetUser;
         $savetournament->user_id = $request->user_id;
@@ -469,8 +470,8 @@ class TournamentController extends Controller
         $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
         //  TournamentSessionQuestion::find();
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
-         if(!empty($question)){
-            AddSessionQuestionJob::dispachNow($request->tournament_id,$request->session_id);
+         if(empty($question)){
+            AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
          }
         if(empty($TournamenetUser)){
         $savetournament = new TournamenetUser;

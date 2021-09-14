@@ -43,10 +43,14 @@ class TournamentQuestionController extends Controller
        if (empty($tourQuestions)) {
            return response()->json(['status' => 204, 'message' => 'Question not created yet make sure one member has to be join the tournament', 'data' => '']);
        } else {
+           $mydata=[];
         $questions_ids = json_decode($tourQuestions->questions);
-
-        $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $questions_ids)->get();
-    return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $questions]);
+                foreach($questions_ids as $ids){
+                    $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->where('id', $ids)->first()->toArray(); 
+                    $mydta[] = $questions; 
+                }
+       
+    return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $mydta]);
     
        }
 
