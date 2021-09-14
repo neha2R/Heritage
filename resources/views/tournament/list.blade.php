@@ -270,7 +270,7 @@
 
                                 <div class="col">
                                 <br>
-                                    <input id="no_of_question" class="form-control"  type="number" autocomplete="off" name="no_of_question" placeholder="10" >
+                                    <input id="no_of_question" class="form-control"  type="number" autocomplete="off" name="no_of_question" placeholder="No of questions i.e 10" >
                                 </div>
 
                                 <div class="col">
