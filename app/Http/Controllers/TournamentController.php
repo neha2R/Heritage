@@ -268,7 +268,7 @@ class TournamentController extends Controller
     public function update(Request $request, Tournament $tournament)
     {
         //
-        dd($request);
+        // dd($request);
         $validatedData = $request->validate([
             'title' => 'required|',
             'sub_domain_id' => 'required|integer',
