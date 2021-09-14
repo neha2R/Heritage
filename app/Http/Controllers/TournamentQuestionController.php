@@ -49,8 +49,13 @@ class TournamentQuestionController extends Controller
                     $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->where('id', $ids)->first()->toArray(); 
                     $mydta[] = $questions; 
                 }
-       
-    return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $mydta]);
+                $data['question'] = $mydta;
+                $data['whole_quiz_time'] = '1';
+                $data['time'] = $tournament->duration;
+                $data['total_question'] = count($questions_ids);
+                $data['total_question_in_quiz'] = count($questions_ids);
+              
+    return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
     
        }
 
