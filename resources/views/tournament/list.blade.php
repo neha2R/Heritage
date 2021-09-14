@@ -443,6 +443,403 @@
 
 <!-- special normal quize  Ends here -->
 
+
+@foreach($tournaments as $key=>$tournament)
+<!-- edit  quize Start Here   -->
+
+ @if($tournament->type == 0) 
+
+<div class="modal fade bd-example-modal-lg update_normal_quize_model" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="update_normal_quize_model" style="display: none;" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Normal Quize</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-md-10 mx-auto" method="post" action="{{ route('tournament.update',$tournament->id) }}" enctype="multipart/form-data">
+                            <div class="row">
+                                @method('PUT')
+                                @csrf
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="title" value="{{$tournament->title}}" placeholder="Title">
+                                    </div>
+                                <input type="hidden" name="quize_type" value='0'>
+                                  <div class="col">
+                                        <div class="form-group">
+                                            <select name="age_group_id" class="@error('age_group_id') is-invalid @enderror form-control" required >
+                                                <option value="{{$tournament->age_group->id}}" selected>{{$tournament->age_group->name}}</option>
+                                                <option disabled  value> -- Select Age Group --</option>
+                                                @foreach($age_groups as $age_group)
+                                                    <option value="{{$age_group->id}}">{{$age_group->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                  </div>
+
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="difficulty_level_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->difficulty_level->id}}" selected>{{$tournament->difficulty_level->name}}</option>
+                                            <option  disabled selected value > -- Select Difficulty Level --</option>
+                                            @foreach($difficulty_levels as $difficulty_level)
+                                                <option value="{{$difficulty_level->id}}">{{$difficulty_level->name}}</option>
+                                            @endforeach
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->theme->id}}" selected>{{$tournament->theme->title}}</option>
+                                            <option disabled  value > --Select Theme--</option>
+                                            @foreach($themes as $theme)
+                                                <option value="{{$theme->id}}">{{$theme->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
+                                        <option value="{{$tournament->domain->id}}" selected>{{$tournament->domain->name}}</option>    
+                                        <option  disabled  value>--Select Domain--</option>
+                                            @foreach($domains as $domain)
+                                                <option value="{{$domain->id}}">{{$domain->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->sub_domain->id}}" selected>{{$tournament->sub_domain->name}}</option>
+                                            <option  disabled value>-- Select Sub Domain--</option>
+                                            @foreach($subDomains as $subDomain)
+                                                <option value="{{$subDomain->id}}">{{$subDomain->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control frequency" required >
+                                            <option value="{{$tournament->frequency->id}}" selected>{{$tournament->frequency->title}}</option>
+                                            <option value="">Select Frequency</option>
+                                            @foreach($frequencies as $freq)
+                                                <option value="{{$freq->id}}">{{$freq->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col sessions">
+                                    <input type="number" class="form-control" placeholder="Session Per Day " value="{{$tournament->session_per_day}}" name="session_per_day">
+                                </div>
+                            </div>
+                            <div class = "row is_attempt"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="is_attempt" class="@error('is_attempt') is-invalid @enderror form-control" required >
+                                            @if($tournament->is_attempt == 0)
+                                            <option value="0" selected>Daily</option>
+                                            <option disabled value>User Frequency</option>
+                                            <option value="1">Once</option>
+                                            @endif 
+                                            
+                                            @if($tournament->is_attempt == 1)
+                                            <option value="1">Once</option>
+                                            <option disabled value>User Frequency</option>
+                                            <option value="0" selected>Daily</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="no_of_players" class="@error('domain_id') is-invalid @enderror form-control" required >
+                                            <option selected value="{{$tournament->no_players}}" >{{$tournament->no_players}}</option>
+                                            <option  disabled  value >--Select No. of Players--</option>
+                                            <option value="10">10 Players</option>
+                                            <option value="20">20 Players</option>
+                                            <option value="30">30 Players</option>
+                                            <option value="40">40 Players</option>
+                                            <option value="50">50 Players</option>
+                                            <option value="60">60 Players</option>
+                                            <option value="70">70 Players</option>
+                                            <option value="80">80 Players</option>
+                                            <option value="90">90 Players</option>
+                                            <option value="100">100 Players</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <input type="number" name="duration" class="form-control" value="{{$tournament->duration}}" placeholder="Duration in (Minutes)">
+                                </div>
+                            </div>                  
+                            <div class = "row"> 
+                                <div class="col">
+                                    <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" value="{{$tournament->start_time}}" name="start_time" placeholder="start time" >
+                                </div>
+                                <div class="col">
+                                    <input id="datetimepicker2" class="form-control"  type="text" value="{{$tournament->end_time}}" autocomplete="off" name="end_time" placeholder="End Time" >
+                                </div>
+                            </div>
+
+                            <div class = "row"> 
+
+                                <div class="col">
+                                <br>
+                                    <input id="no_of_question" class="form-control"  type="number" value="{{$tournament->no_of_question}}" autocomplete="off" name="no_of_question" placeholder="10" >
+                                </div>
+
+                                <div class="col">
+                                <br>
+                                    <input type="number" class="form-control" autocomplete="off" value="{{$tournament->interval_session}}" name="interval_session" id="interval_session" placeholder="Interval b/w session in (Minutes)">
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <br>
+                                    <div class="form-group">
+                                            <div class="field" align="left">
+                                                <label>Banner Image</label> 
+                                                <input type="file" id="files" name="media_name" accept="image/*" multiple   />
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <br>
+                                    <div class="form-group">
+                                        <div class="field" align="left">
+                                            <label>Sponsor Images</label> 
+                                            <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple   />
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>                        
+                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            
+                            <button type="submit" data-toggle="modal" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+            </div>
+    </div>
+</div>
+
+@endif 
+
+@if($tournament->type ==1 )
+<div class="modal fade bd-example-modal-lg update_normal_quize_model" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="update_normal_quize_model" style="display: none;" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Edit Normal Quize</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-md-10 mx-auto" method="post" action="{{ route('tournament.update',$tournament->id) }}" enctype="multipart/form-data">
+                            <div class="row">
+                                @method('PUT')
+                                @csrf
+                                    <div class="col">
+                                        <input type="text" class="form-control" name="title" value="{{$tournament->title}}" placeholder="Title">
+                                    </div>
+                                <input type="hidden" name="quize_type" value='0'>
+                                  <div class="col">
+                                        <div class="form-group">
+                                            <select name="age_group_id" class="@error('age_group_id') is-invalid @enderror form-control" required >
+                                                <option value="{{$tournament->age_group->id}}" selected>{{$tournament->age_group->name}}</option>
+                                                <option disabled  value> -- Select Age Group --</option>
+                                                @foreach($age_groups as $age_group)
+                                                    <option value="{{$age_group->id}}">{{$age_group->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                  </div>
+
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <!-- <div class="form-group">
+                                        <select name="difficulty_level_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->difficulty_level->id}}" selected>{{$tournament->difficulty_level->name}}</option>
+                                            <option  disabled selected value > -- Select Difficulty Level --</option>
+                                            @foreach($difficulty_levels as $difficulty_level)
+                                                <option value="{{$difficulty_level->id}}">{{$difficulty_level->name}}</option>
+                                            @endforeach
+                                            
+                                        </select>
+                                    </div> -->
+                                </div>
+                                <div class="col">
+                                    <!-- <div class="form-group">
+                                        <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->theme->id}}" selected>{{$tournament->theme->title}}</option>
+                                            <option disabled  value > --Select Theme--</option>
+                                            @foreach($themes as $theme)
+                                                <option value="{{$theme->id}}">{{$theme->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <!-- <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
+                                        <option value="{{$tournament->domain->id}}" selected>{{$tournament->domain->name}}</option>    
+                                        <option  disabled  value>--Select Domain--</option>
+                                            @foreach($domains as $domain)
+                                                <option value="{{$domain->id}}">{{$domain->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
+                                            <option value="{{$tournament->sub_domain->id}}" selected>{{$tournament->sub_domain->name}}</option>
+                                            <option  disabled value>-- Select Sub Domain--</option>
+                                            @foreach($subDomains as $subDomain)
+                                                <option value="{{$subDomain->id}}">{{$subDomain->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control frequency" required >
+                                            <option value="{{$tournament->frequency->id}}" selected>{{$tournament->frequency->title}}</option>
+                                            <option value="">Select Frequency</option>
+                                            @foreach($frequencies as $freq)
+                                                <option value="{{$freq->id}}">{{$freq->title}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col sessions">
+                                    <input type="number" class="form-control" placeholder="Session Per Day " value="{{$tournament->session_per_day}}" name="session_per_day">
+                                </div>
+                            </div>
+                            <div class = "row is_attempt"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="is_attempt" class="@error('is_attempt') is-invalid @enderror form-control" required >
+                                            @if($tournament->is_attempt == 0)
+                                            <option value="0" selected>Daily</option>
+                                            <option disabled value>User Frequency</option>
+                                            <option value="1">Once</option>
+                                            @endif 
+                                            
+                                            @if($tournament->is_attempt == 1)
+                                            <option value="1">Once</option>
+                                            <option disabled value>User Frequency</option>
+                                            <option value="0" selected>Daily</option>
+                                            @endif
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class = "row"> 
+                                <div class="col">
+                                    <div class="form-group">
+                                        <select name="no_of_players" class="@error('domain_id') is-invalid @enderror form-control" required >
+                                            <option selected value="{{$tournament->no_players}}" >{{$tournament->no_players}}</option>
+                                            <option  disabled  value >--Select No. of Players--</option>
+                                            <option value="10">10 Players</option>
+                                            <option value="20">20 Players</option>
+                                            <option value="30">30 Players</option>
+                                            <option value="40">40 Players</option>
+                                            <option value="50">50 Players</option>
+                                            <option value="60">60 Players</option>
+                                            <option value="70">70 Players</option>
+                                            <option value="80">80 Players</option>
+                                            <option value="90">90 Players</option>
+                                            <option value="100">100 Players</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <input type="number" name="duration" class="form-control" value="{{$tournament->duration}}" placeholder="Duration in (Minutes)">
+                                </div>
+                            </div>                  
+                            <div class = "row"> 
+                                <div class="col">
+                                    <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" value="{{$tournament->start_time}}" name="start_time" placeholder="start time" >
+                                </div>
+                                <div class="col">
+                                    <input id="datetimepicker2" class="form-control"  type="text" value="{{$tournament->end_time}}" autocomplete="off" name="end_time" placeholder="End Time" >
+                                </div>
+                            </div>
+
+                            <div class = "row"> 
+
+                                <div class="col">
+                                <br>
+                                    <input id="no_of_question" class="form-control"  type="number" value="{{$tournament->no_of_question}}" autocomplete="off" name="no_of_question" placeholder="10" >
+                                </div>
+
+                                <div class="col">
+                                <br>
+                                    <input type="number" class="form-control" autocomplete="off" value="{{$tournament->interval_session}}" name="interval_session" id="interval_session" placeholder="Interval b/w session in (Minutes)">
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <br>
+                                    <div class="form-group">
+                                            <div class="field" align="left">
+                                                <label>Banner Image</label> 
+                                                <input type="file" id="files" name="media_name" accept="image/*" multiple   />
+                                            </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <br>
+                                    <div class="form-group">
+                                        <div class="field" align="left">
+                                            <label>Sponsor Images</label> 
+                                            <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple   />
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>                        
+                    </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            
+                            <button type="submit" data-toggle="modal" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+            </div>
+    </div>
+</div>
+
+@endif
+
+<!--  edoit quize start here -->
+@endforeach
+
+
 @endsection
 @section('js')
 

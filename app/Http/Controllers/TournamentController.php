@@ -75,7 +75,6 @@ class TournamentController extends Controller
             'domain_id' => 'required|integer',
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
-            'duration' => 'required|integer',
             'media_name' => 'required',
             'sponsor_media_name'=>'required',
             'no_of_question'=>'required',
@@ -157,16 +156,16 @@ class TournamentController extends Controller
              }
             
             }
-            if($request->frequency_id=='1'){
+            // if($request->frequency_id=='1'){
 
-                $starttime = date('H:i',strtotime($request->start_time));
-                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
-                $secondSession = new SessionsPerDay;
-                $secondSession->start_time =$starttime; 
-                $secondSession->end_time = $endtime;
-                $secondSession->duration = $request->duration;
-                $secondSession->save();
-            }
+            //     $starttime = date('H:i',strtotime($request->start_time));
+            //     $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+            //     $secondSession = new SessionsPerDay;
+            //     $secondSession->start_time =$starttime; 
+            //     $secondSession->end_time = $endtime;
+            //     $secondSession->duration = $request->duration;
+            //     $secondSession->save();
+            // }
             
             // 
             if($request->preference_questions == "1")
@@ -261,6 +260,180 @@ class TournamentController extends Controller
     public function update(Request $request, Tournament $tournament)
     {
         //
+        dd($request);
+        $validatedData = $request->validate([
+            'title' => 'required|',
+            'sub_domain_id' => 'required|integer',
+            'quize_type' => 'required|integer',
+            'age_group_id' => 'required|integer',
+            'difficulty_level_id' => 'required|integer',
+            'theme_id' => 'required|integer',
+            'domain_id' => 'required|integer',
+            'no_of_players' => 'required|integer',
+            'duration' => 'required|integer',
+            'media_name' => 'required',
+            'sponsor_media_name'=>'required',
+            'no_of_question'=>'required',
+
+        ]);
+
+
+        // add normal quize 
+        if($request->quize_type == "0")
+        {   
+            if($request->frequency_id=='1'){
+                $validatedData = $request->validate([
+                    'session_per_day' => 'required|integer',
+                ]);
+                $interval_session = $request->interval_session;
+                $session_per_day = $request->session_per_day;
+            } else{
+                $validatedData = $request->validate([
+                    'is_attempt' => 'required|integer',
+
+                ]);
+                $interval_session =   1440;
+                $session_per_day = 1;
+            }
+
+            $updateTournament =  Tournament::find($tournament);
+            $updateTournament->title = $request->title;
+            $updateTournament->type = $request->quize_type;
+            $updateTournament->age_group_id = $request->age_group_id;
+            $updateTournament->difficulty_level_id = $request->difficulty_level_id;
+            $updateTournament->theme_id = $request->theme_id;
+            $updateTournament->domain_id = $request->domain_id;
+            $updateTournament->sub_domain_id = $request->sub_domain_id;
+            $updateTournament->frequency_id = $request->frequency_id;
+            $updateTournament->session_per_day = $session_per_day;
+            $updateTournament->no_players = $request->no_of_players;
+            $updateTournament->duration = $request->duration;
+            $updateTournament->start_time = $request->start_time;
+            $updateTournament->is_attempt = $request->is_attempt;
+            $updateTournament->no_of_question = $request->no_of_question;
+            $updateTournament->end_time = $request->end_time;
+
+            $updateTournament->interval_session = $interval_session;
+            if($request->hasfile('media_name'))
+            {
+                 // unlink(storage_path('app/folder/'.$updateTournament->media_name));
+                $media_name = $request->file('media_name')->store('tournament','public');
+                $updateTournament->media_name = $media_name;
+            }
+            if($request->hasFile('sponsor_media_name'))
+            {
+                $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
+                $updateTournament->sponsor_media_id = $sponsor_media_name;
+            }
+            $updateTournament->save();
+            //update save session for first time
+            
+            $old_sessions_per_day = SessionsPerDay::where('tournament_id','=',$tournament)->get();
+            foreach($old_sessions_per_day as $old_session_per_day)
+            {
+                $old_session_per_day->delete();
+            }
+            $SessionsPerDay = new SessionsPerDay;
+            $starttime = date('H:i',strtotime($request->start_time));
+            $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+            $SessionsPerDay->start_time =$starttime; 
+            $SessionsPerDay->end_time = $endtime;
+            $SessionsPerDay->duration = $request->duration;
+            $SessionsPerDay->tournament_id = $newTournament->id;
+            $SessionsPerDay->save();
+            $sess = $request->session_per_day-1;
+
+            if($request->frequency_id=='1'){
+             for($sess; $sess=0;$rsess-- ){
+                
+                $starttime = date('H:i',strtotime("+$request->interval_session minutes", strtotime($endtime)));  
+                $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));                
+                
+                $secondSession = new SessionsPerDay;
+                $secondSession->start_time =$starttime; 
+                $secondSession->end_time = $endtime;
+                $secondSession->duration = $request->duration;
+                $secondSession->tournament_id = $newTournament->id;
+                $secondSession->save();
+             }
+            
+            }
+            // if($request->frequency_id=='1'){
+
+            //     $starttime = date('H:i',strtotime($request->start_time));
+            //     $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));
+            //     $secondSession = new SessionsPerDay;
+            //     $secondSession->start_time =$starttime; 
+            //     $secondSession->end_time = $endtime;
+            //     $secondSession->duration = $request->duration;
+            //     $secondSession->save();
+            // }
+            
+            // 
+            if($request->preference_questions == "1")
+            {
+                return redirect()->route('tournament_add',['id'=>$newTournament->id]);
+            
+            }
+            else if ($request->preference_questions == "0")
+            {
+                $tournament_questions = QuestionsSetting::where('domain_id','=', $request->domain_id)->pluck('id')->toArray();
+                
+                $newQuizeQuestions = new TournamentQuizeQuestion;
+                $newQuizeQuestions->questions_id = json_encode($tournament_questions);
+                $newQuizeQuestions->tournament_id  = $newTournament->id;
+                $newQuizeQuestions->total_no_question = count($tournament_questions);
+                $newQuizeQuestions->save();
+               // dd($tournament_questions);
+               return redirect()->route('tournament.index');
+
+            }
+        }
+        else
+        {
+            $updateTournament =  Tournament::find($tournament);
+            $updateTournament->title = $request->title;
+            $updateTournament->type = $request->quize_type;
+            $updateTournament->age_group_id = $request->age_group_id;
+            $updateTournament->frequency_id = $request->frequency_id;
+            $updateTournament->session_per_day =$request->session_per_day;
+            $updateTournament->no_players = $request->no_of_players;
+            $updateTournament->duration = $request->duration;
+            $updateTournament->start_time = $request->start_time;
+            $updateTournament->interval_session = $request->interval_bw_session;
+            $updateTournament->no_of_question = $request->no_of_question;
+            $updateTournament->marks_per_question = $request->mark_per_question;
+            $updateTournament->negative_marking = '1';//$request->negative_marking;
+            $updateTournament->negative_marking_per_question = $request->negative_mark_per_question;
+            if($request->hasfile('media_name'))
+            {
+                $media_name = $request->file('media_name')->store('tournament','public');
+                $updateTournament->media_name = $media_name;
+            }
+            if($request->hasFile('sponsor_media_name'))
+            {
+                $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
+                $updateTournament->sponsor_media_name = $sponsor_media_name;
+            }
+           $updateTournament->save();
+
+           
+            
+            // store excel file question 
+            Excel::import(new TournamentQuestionImport($updateTournament->id), $request->file('tournament_question_bluck'));
+            return back();
+            
+            //dd($newTournament);
+           
+
+        }
+       
+
+
+
+
+
+
     }
 
     /**
