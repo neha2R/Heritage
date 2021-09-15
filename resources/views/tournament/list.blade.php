@@ -95,11 +95,11 @@
                         <tbody>    
                         @foreach($tournaments as $key=>$tournament) 
                             <tr>
-                            <th scope="row">{{$key+1}}</th>
+                            <th scope="row">{{$tournament->id}}</th>
                               <th scope="row">{{$tournament->title}}</th>
                              <td>{{$tournament->frequency->title}}</td>
                              <td></td>
-                             <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></td>
+                             <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$tournament->id}}"><i class="fas fa-pencil-alt"></i></td>
                              <td></td>
 
                             </tr>   
@@ -449,15 +449,16 @@
 
  @if($tournament->type == 0) 
 
-<div class="modal fade bd-example-modal-lg update_normal_quize_model" id="edit-model{{$key}}" tabindex="-1" role="dialog" aria-labelledby="update_normal_quize_model" style="display: none;" aria-hidden="true" >
+<div class="modal fade bd-example-modal-lg update_normal_quize_model" id="edit-model{{$tournament->id}}" tabindex="-1" role="dialog" aria-labelledby="update_normal_quize_model" style="display: none;" aria-hidden="true" >
     <div class="modal-dialog modal-lg">
             <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">Edit Normal Quize</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                     </div>
+                    
                     <div class="modal-body">
-                        <form class="col-md-10 mx-auto" method="post" action="{{ route('tournament.update',$tournament->id) }}" enctype="multipart/form-data">
+                        <form class="col-md-10 mx-auto" method="post" action="{{ route('tournament.update',$tournament) }}" enctype="multipart/form-data">
                             <div class="row">
                                 @method('PUT')
                                 @csrf
@@ -483,7 +484,7 @@
                                     <div class="form-group">
                                         <select name="difficulty_level_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required >
                                             <option value="{{$tournament->difficulty_level->id}}" selected>{{$tournament->difficulty_level->name}}</option>
-                                            <option  disabled selected value > -- Select Difficulty Level --</option>
+                                            <option  disabled  value > -- Select Difficulty Level --</option>
                                             @foreach($difficulty_levels as $difficulty_level)
                                                 <option value="{{$difficulty_level->id}}">{{$difficulty_level->name}}</option>
                                             @endforeach
@@ -504,7 +505,7 @@
                                 </div>
                             </div>
                             <div class = "row"> 
-                                <div class="col">
+                                <!-- <div class="col">
                                     <div class="form-group">
                                         <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
                                         <option value="{{$tournament->domain->id}}" selected>{{$tournament->domain->name}}</option>    
@@ -514,7 +515,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
@@ -598,7 +599,7 @@
 
                                 <div class="col">
                                 <br>
-                                    <input id="no_of_question" class="form-control"  type="number" value="{{$tournament->no_of_question}}" autocomplete="off" name="no_of_question" placeholder="10" >
+                                    <input id="no_of_question" class="form-control"  type="number" value="{{$tournament->no_of_question}}" autocomplete="off" name="no_of_question" placeholder="No of Question" >
                                 </div>
 
                                 <div class="col">

@@ -268,7 +268,7 @@ class TournamentController extends Controller
     public function update(Request $request, Tournament $tournament)
     {
         //
-        // dd($request);
+     //dd($tournament);
         $validatedData = $request->validate([
             'title' => 'required|',
             'sub_domain_id' => 'required|integer',
@@ -276,12 +276,12 @@ class TournamentController extends Controller
             'age_group_id' => 'required|integer',
             'difficulty_level_id' => 'required|integer',
             'theme_id' => 'required|integer',
-            'domain_id' => 'required|integer',
+           // 'domain_id' => 'required|integer',
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
-            'media_name' => 'required',
-            'sponsor_media_name'=>'required',
-            'no_of_question'=>'required',
+            //'media_name' => 'required',
+            //'sponsor_media_name'=>'required',
+           'no_of_question'=>'required',
 
         ]);
 
@@ -304,24 +304,27 @@ class TournamentController extends Controller
                 $session_per_day = 1;
             }
 
-            $updateTournament =  Tournament::find($tournament);
+            $updateTournament =  Tournament::find($tournament->id);
+            //dd($updateTournament);
+         //   dd($updateTournament);
             $updateTournament->title = $request->title;
             $updateTournament->type = $request->quize_type;
             $updateTournament->age_group_id = $request->age_group_id;
             $updateTournament->difficulty_level_id = $request->difficulty_level_id;
             $updateTournament->theme_id = $request->theme_id;
-            $updateTournament->domain_id = $request->domain_id;
+           // $updateTournament->domain_id = $request->domain_id;
             $updateTournament->sub_domain_id = $request->sub_domain_id;
             $updateTournament->frequency_id = $request->frequency_id;
             $updateTournament->session_per_day = $session_per_day;
             $updateTournament->no_players = $request->no_of_players;
             $updateTournament->duration = $request->duration;
-            $updateTournament->start_time = $request->start_time;
+            //$updateTournament->start_time = $request->start_time;
             $updateTournament->is_attempt = $request->is_attempt;
             $updateTournament->no_of_question = $request->no_of_question;
-            $updateTournament->end_time = $request->end_time;
-
+           // $updateTournament->end_time = $request->end_time;
             $updateTournament->interval_session = $interval_session;
+
+           // dd($updateTournament->save());
             if($request->hasfile('media_name'))
             {
                  // unlink(storage_path('app/folder/'.$updateTournament->media_name));
@@ -347,7 +350,7 @@ class TournamentController extends Controller
             $SessionsPerDay->start_time =$starttime; 
             $SessionsPerDay->end_time = $endtime;
             $SessionsPerDay->duration = $request->duration;
-            $SessionsPerDay->tournament_id = $newTournament->id;
+            $SessionsPerDay->tournament_id = $updateTournament->id;
             $SessionsPerDay->save();
             $sess = $request->session_per_day-1;
 
@@ -361,7 +364,7 @@ class TournamentController extends Controller
                 $secondSession->start_time =$starttime; 
                 $secondSession->end_time = $endtime;
                 $secondSession->duration = $request->duration;
-                $secondSession->tournament_id = $newTournament->id;
+                $secondSession->tournament_id = $updateTournament->id;
                 $secondSession->save();
              }
             
@@ -377,7 +380,7 @@ class TournamentController extends Controller
             //     $secondSession->save();
             // }
             
-            // 
+             return redirect()->route('tournament.index');
             if($request->preference_questions == "1")
             {
                 return redirect()->route('tournament_add',['id'=>$newTournament->id]);
@@ -425,11 +428,11 @@ class TournamentController extends Controller
             }
            $updateTournament->save();
 
-           
+           return redirect()->route('tournament.index');
             
             // store excel file question 
-            Excel::import(new TournamentQuestionImport($updateTournament->id), $request->file('tournament_question_bluck'));
-            return back();
+           // Excel::import(new TournamentQuestionImport($updateTournament->id), $request->file('tournament_question_bluck'));
+           // return back();
             
             //dd($newTournament);
            
