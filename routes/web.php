@@ -33,6 +33,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/quizspeed', 'QuizSpeedController');
     Route::resource('/quiztype', 'QuizTypeController');
     Route::resource('/question', 'QuestionController');
+    Route::resource('/product', 'ProductController');
     Route::view('/form_bulk','question.UploadBulk');
     Route::post('/upload_bulk','QuestionController@import')->name('upload_bulk');
     Route::resource('/faq', 'FaqController');

@@ -48,7 +48,7 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
-       
+     
         if($request->feed_id == 1)
         {
                 $validatedData = $request->validate([
@@ -69,7 +69,8 @@ class FeedContentController extends Controller
                 $data->tags=$request->tags;
 
             $data->title = $request->title;
-            $data->description = $request->description;            
+            $data->description = $request->description;   
+            $data->save();         
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
              $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $media = new FeedMedia;

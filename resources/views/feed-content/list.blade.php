@@ -210,12 +210,47 @@
                   <label for="title">External Link</label>
                   <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link" placeholder="https://www.google.com/" >
                </div>
-                     <div class="form-group">
+               <div class="form-group">
+                  <select name="type[]" id="type" mytext="label0" myimage="myimage0" myvideo="myvideo0" class="@error('type') is-invalid @enderror form-control type"  >
+                     <!-- <option>Type</option> -->
+                     <option value=""> -- Select Media Type -- </option>
+                     <option value="0">Image</option>
+                     <option value="1">Video</option>
+                     </select>
+               </div>
+               <div class="form-group" id="myimage0">
                         <div class="field" align="left">
                             <label class="img-label">Upload images</label> 
                            <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
                         </div>
                   </div>
+
+                  <div class="form-group row " id="myvideo0" style="display:none">
+                     <div class="field col" >
+                            <label class="img-label label0" >Upload  Videos</label> 
+                           <input type="file" id="videos" name="card[0][media_video][]"  accept="video/*" multiple  />
+                     </div>
+                     <div class="col-md-6" >
+                             <label>Video Link</label>
+                        <input type="text" class="@error('video_link') is-invalid @enderror form-control" maxlength="50" name="card[0][video_link]" placeholder="https://www.youtube.com/" >
+                     </div>
+
+                        <div id="placeholder_image">
+                        <div class="form-group row">
+                           <div class="field col" >
+                              <label>Placeholder Image for Video</label> 
+                              <input type="file" id="palceholder_image" name="card[0][placeholder_image]" accept="image/*"  />
+                           </div>
+                        </div> 
+                     </div>
+
+                  </div> 
+                     <!-- <div class="form-group">
+                        <div class="field" align="left">
+                            <label class="img-label">Upload images</label> 
+                           <input type="file" id="files" name="media_name[]" accept="image/*" multiple   />
+                        </div>
+                  </div> -->
                </div>
 
                <div id="module_title_description" style="display:none">

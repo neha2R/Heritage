@@ -71,7 +71,10 @@ Route::post('filter_feed','FeedContentController@filter_feed');
 
  /**  End from Here        */
 
-
+/**  Product APi Routes  Start from Here      */
+Route::get('get_all_products', 'ProductController@get_all_products');
+Route::get('product_search', 'ProductController@product_search');
+ /**  End from Here        */
 
 // Route::fallback(function () {
 //     return response()->json(['message' => 'Not Found.'], 404);
