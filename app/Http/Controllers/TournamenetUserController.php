@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\TournamenetUser;
 use Illuminate\Http\Request;
 use App\Jobs\SaveTournamentResultJob;
+use App\Jobs\XpLpOfTournament;
+use Carbon\Carbon;
 
 class TournamenetUserController extends Controller
 {
@@ -95,6 +97,13 @@ class TournamenetUserController extends Controller
     {
     
             $data = SaveTournamentResultJob::dispatchNow($request->all());
+            
+            $tournamentUsers = TournamenetUser::where('tournament_id',$result->tournament_id)->where('session_id', $result->session_id)->orderBy('id','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->get();
+            
+            if($tournamentUsers->count()==3){
+            XpLpOfTournament::dispatch($request)
+                    ->delay(now()->addMinutes(1));
+            }
             if ($data == 'error') {
                 return response()->json(['status' => 202, 'message' => 'Something went wrong', 'data' => '']);
             }
