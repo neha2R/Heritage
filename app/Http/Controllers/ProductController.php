@@ -39,7 +39,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $req)
-    {return $req->original_images;
+    {
         foreach($req->file('images') as $key=>$file)
          {
              
@@ -48,7 +48,7 @@ class ProductController extends Controller
                 echo "true";
                 }
         }
-        die();
+      
         $validator=$req->validate([
             'name'=>'required',
             'price'=>'required',
@@ -132,6 +132,7 @@ class ProductController extends Controller
      */
     public function update(Request $req, $id)
     {
+        
         $validator=$req->validate([
             'name'=>'required',
             'price'=>'required',
@@ -200,7 +201,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product = Product::find($product->id);
+
+        if ($product) {
+            $product->delete();
+            
+        }
+
+        if ($product->id) {
+            return redirect()->back()->with(['success' => 'Product Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
 
@@ -219,8 +231,8 @@ class ProductController extends Controller
 
     public function product_search(Request $req)
     {
-        if ($req->has('id')) {
-            $str = $req->id;
+        if ($req->has('search')) {
+            $str = $req->search;
         }
 
         $products=Product::where('name', 'like', '%' . $str . '%')->get()->toArray();
