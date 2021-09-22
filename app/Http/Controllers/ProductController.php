@@ -40,6 +40,7 @@ class ProductController extends Controller
      */
     public function store(Request $req)
     {
+
         $validator=$req->validate([
             'name'=>'required',
             'price'=>'required',
@@ -124,6 +125,7 @@ class ProductController extends Controller
      */
     public function update(Request $req, $id)
     {
+        
         $validator=$req->validate([
             'name'=>'required',
             'price'=>'required',
@@ -192,34 +194,83 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product = Product::find($product->id);
+
+        if ($product) {
+            $product->delete();
+            
+        }
+
+        if ($product->id) {
+            return redirect()->back()->with(['success' => 'Product Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
 
     //api function 
 
-    public function get_all_products()
-    {
-
-        $products=Product::where('status','1')->get()->toArray();
-        if(empty($products)){
-            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
-        }
-        return response()->json(['status' => 200, 'message' => 'Products Found','data' => $products]);
-
-    }
-
-    public function product_search(Request $req)
+    public function get_all_products(Request $req)
     {
         if ($req->has('search')) {
             $str = $req->search;
+            $products=Product::where('name', 'like', '%' . $str . '%')->get();
         }
+        else
+        {
+            $products=Product::where('status','1')->get();
+        }
+        
+       
+        $data=[];
+        foreach($products as $product)
+        {
+               $productData['category']=ucwords(strtolower($product->category->name));
+               $productData['name']=ucwords(strtolower($product->name));
+               $productData['price']="₹ ".$product->price;
+               $productData['description']=ucwords(strtolower($product->description));
+               $productData['link']=ucwords(strtolower($product->link));
 
-        $products=Product::where('name', 'like', '%' . $str . '%')->get()->toArray();
-        if(empty($products)){
+               $i=1;
+           
+               if(count($product->images)>0)
+               {
+                $productData['images']=$this->get_files($product->images);
+               }
+               else
+               {
+                $productData['images']="";
+               }
+               $data[]=$productData;
+                    
+        }
+        if(empty($data)){
             return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
         }
-        return response()->json(['status' => 200, 'message' => 'Products Found','data' => $products]);
+        return response()->json(['status' => 200, 'message' => 'Products Found','data' => $data]);
 
     }
+    public function get_files($files)
+    {
+        $productImages=[];
+        foreach($files as $image)
+        {
+            $productImages[]=url('/storage').'/'.$image->image;
+        }
+        return $productImages;
+    }
+    // public function product_search(Request $req)
+    // {
+    //     if ($req->has('search')) {
+    //         $str = $req->search;
+    //     }
+
+    //     $products=Product::where('name', 'like', '%' . $str . '%')->get()->toArray();
+    //     if(empty($products)){
+    //         return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
+    //     }
+    //     return response()->json(['status' => 200, 'message' => 'Products Found','data' => $products]);
+
+    // }
 }

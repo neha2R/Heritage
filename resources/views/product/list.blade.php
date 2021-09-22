@@ -376,6 +376,12 @@
 @endsection
 @section('js')
 <script>
+
+$(document).on('submit','.delete', function() {
+var c = confirm("Are you sure want to delete ?");
+return c; //you can just return c because it will be true or false
+});
+
    $(document).ready(function() {
       var add_more_btn_click=1;
 

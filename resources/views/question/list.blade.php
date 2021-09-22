@@ -241,8 +241,8 @@ use App\QuestionsSetting;
          </div>
          </div>
          <div class="col-md-2 yes" id="img5">
-         <img id="ImgPreview10"src="" class="preview5 " />
-         <input type="button" id="removeImage10" value="x" class="btn-rmv5 " />
+         <img id="ImgPreview5"src="" class="preview5 " />
+         <input type="button" id="removeImage5" value="x" class="btn-rmv5 " />
          <video width="141" class="video" id="video5" style="display:none" controls>
          <source src="" id="video_here10">
          Your browser does not support HTML5 video.

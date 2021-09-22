@@ -37,7 +37,7 @@ class FaqController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:faqs',
             'content' => 'required|max:300',
             
         ]);
@@ -87,7 +87,7 @@ class FaqController extends Controller
         $data = Faq::find($faq);
 
         $validatedData = $request->validate([
-            'title' => 'required',
+            'title' => 'required|unique:faqs'.",title,".$data->title,
             'content' => 'required|max:99',
            
         ]);
