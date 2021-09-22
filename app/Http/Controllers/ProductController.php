@@ -39,16 +39,7 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $req)
-    {return $req->original_images;
-        foreach($req->file('images') as $key=>$file)
-         {
-             
-                if(in_array($file->getClientOriginalName(),$req->original_images))
-                {
-                echo "true";
-                }
-        }
-        die();
+    {
         $validator=$req->validate([
             'name'=>'required',
             'price'=>'required',
@@ -59,6 +50,8 @@ class ProductController extends Controller
             'category_id'=>'required'
         ]);
        
+        
+      
         $product = new Product;
         $product->name=$req->name;
         $product->category_id=$req->category_id;
@@ -71,15 +64,14 @@ class ProductController extends Controller
         {
                 foreach($req->file('images') as $key=>$file)
                 {
-                    if(in_array($file,$req->original_images))
-                    {
+                    
                         $type = '0';
                         $name = $file->store('product','public');
                         $image = new Product_images;
                         $image->product_id = $product->id;
                         $image->image = $name;
                         $image->save();
-                    }
+                    
                    
                 }
      
@@ -219,8 +211,8 @@ class ProductController extends Controller
 
     public function product_search(Request $req)
     {
-        if ($req->has('id')) {
-            $str = $req->id;
+        if ($req->has('search')) {
+            $str = $req->search;
         }
 
         $products=Product::where('name', 'like', '%' . $str . '%')->get()->toArray();
