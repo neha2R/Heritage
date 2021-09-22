@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductImagesTable extends Migration
+class AddFieldAttemptIdToChanllanges extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateProductImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('product_id')->nullable();
-            $table->string('image')->nullable();
-            $table->timestamps();
+        Schema::table('challanges', function (Blueprint $table) {
+            $table->integer('attempt_id')->nullabale();
         });
     }
 
@@ -28,6 +25,8 @@ class CreateProductImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_images');
+        Schema::table('challanges', function (Blueprint $table) {
+            //
+        });
     }
 }

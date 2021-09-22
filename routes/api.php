@@ -79,11 +79,20 @@ Route::get('product_search', 'ProductController@product_search');
 // Route::fallback(function () {
 //     return response()->json(['message' => 'Not Found.'], 404);
 // });
+/**  Product APi Routes  Duel Apis from Here      */
+Route::post('create_duel', 'DuelController@create_duel');
+Route::get('get_all_users', 'DuelController@get_all_users');
+Route::get('send_invitation', 'DuelController@send_invitation');
+Route::post('accept_invitation', 'DuelController@accept_invitation');
+Route::get('generate_link', 'DuelController@generate_link');
+ /**  End from Here        */
+
 
 
 
 /**  Tournament APi Routes  Start from Here      */
 Route::get('tournament','TournamentController@tournament');
+
 Route::post('tournament_rule','TournamentController@tournament_rule');
 Route::post('join_tournament','TournamentController@join_tournament');
 Route::post('tournament_questions','TournamentQuestionController@tournament_questions');
