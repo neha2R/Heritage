@@ -213,38 +213,47 @@ class ProductController extends Controller
 
     public function get_all_products(Request $req)
     {
-        if ($req->has('search')) {
+        if ($req->search!="") {
             $str = $req->search;
             $products=Product::where('name', 'like', '%' . $str . '%')->get();
         }
         else
         {
+          
             $products=Product::where('status','1')->get();
         }
         
        
         $data=[];
-        foreach($products as $product)
+        if(!empty($products))
         {
-               $productData['category']=ucwords(strtolower($product->category->name));
-               $productData['name']=ucwords(strtolower($product->name));
-               $productData['price']="₹ ".$product->price;
-               $productData['description']=ucwords(strtolower($product->description));
-               $productData['link']=ucwords(strtolower($product->link));
-
-               $i=1;
-           
-               if(count($product->images)>0)
-               {
-                $productData['images']=$this->get_files($product->images);
-               }
-               else
-               {
-                $productData['images']="";
-               }
-               $data[]=$productData;
-                    
+            foreach($products as $product)
+            {
+                   $productData['category']=ucwords(strtolower($product->category->name));
+                   $productData['name']=ucwords(strtolower($product->name));
+                   $productData['price']="₹ ".$product->price;
+                   $productData['description']=ucwords(strtolower($product->description));
+                   $productData['link']=ucwords(strtolower($product->link));
+    
+                   $i=1;
+               
+                   if(count($product->images)>0)
+                   {
+                    $productData['images']=$this->get_files($product->images);
+                   }
+                   else
+                   {
+                    $productData['images']="";
+                   }
+                   $data[]=$productData;
+                        
+            }
         }
+        else
+        {
+            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
+        }
+        
         if(empty($data)){
             return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
         }
