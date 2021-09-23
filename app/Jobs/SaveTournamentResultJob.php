@@ -11,7 +11,7 @@ use App\TournamentSessionQuestion;
 use App\TournamentPerformance;
 use App\TournamenetUser;
 use App\Question;
-
+use App\Tournament;
 
 class SaveTournamentResultJob implements ShouldQueue
 {
@@ -37,8 +37,9 @@ class SaveTournamentResultJob implements ShouldQueue
     {
         $result = $this->result;
         // TournamenetUser
-        $user = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->first();
-        $questions = TournamentSessionQuestion::where('tournament_id', $result['tournament_id'])->where('session_id', $result['session_id'])->first('questions');
+        $tournament = Tournament::find($result['tournament_id']);
+        $user = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('id','DESC')->first();
+        $questions = TournamentSessionQuestion::where('tournament_id', $result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('id','DESC')->first('questions');
         if (empty($questions)) {
 
             return 'error';
@@ -55,9 +56,11 @@ class SaveTournamentResultJob implements ShouldQueue
             $saveperformance->selected_option = $myperformance;
             $saveperformance->question_id = $question[$key];
             $ques = Question::find($question[$key]);
+            $marks=0;
             if ($myperformance != 0) {
                 if ($ques->right_option == $myperformance) {
                     $saveperformance->result = '1';
+                    $marks=$marks+1;
                 } else {
                     $saveperformance->result = '0';
                 }
@@ -67,7 +70,17 @@ class SaveTournamentResultJob implements ShouldQueue
             $saveperformance->save();
 
         }
+
+        $marks = $marks*$tournament->marks_per_question;
+        $total = $tournament->marks_per_question*$tournament->no_of_question;
+
+        $count1 = $marks / $total;
+        $count2 = $count1 * 100;
+        $percentage = number_format($count2, 0);
+
         $user->status = 'completed';
+        $user->marks= $marks*$tournament->marks_per_question;
+        $user->percentage= $percentage;
         $user->save();
         return 'success';
     }
