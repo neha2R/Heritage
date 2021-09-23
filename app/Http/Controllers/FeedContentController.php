@@ -723,9 +723,9 @@ return $request;
             $description='';
         }
           $mydata['description'] =$description ; 
-          $mydata['external_link'] = $cont->feed_media_single->external_link; 
-          $mydata['video_link'] = $cont->feed_media_single->video_link; 
-          if(isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
+          $mydata['external_link'] = !empty($cont->feed_media_single)?$cont->feed_media_single->external_link:''; 
+          $mydata['video_link'] = !empty($cont->feed_media_single)?$cont->feed_media_single->video_link:''; 
+          if(!empty($cont->feed_media_single) && isset($cont->feed_media_single->placholder_image)) { $place = $this->imageurl($cont->feed_media_single->placholder_image);
               }
           else{
             $place =null;
@@ -747,11 +747,15 @@ return $request;
         } 
         $mydata['media_type'] =$media_type;
           $imagename=[];
-          foreach($cont->feed_media_single->feed_attachments_name as $image){
+          if(!empty($cont->feed_media_single))
+          {
+            foreach($cont->feed_media_single->feed_attachments_name as $image){
              
-           $imagename[] = $this->imageurl($image->media_name);
-           $imgdata = $imagename;
+                $imagename[] = $this->imageurl($image->media_name);
+                $imgdata = $imagename;
+               }
           }
+          
           
           $mydata['media'] = $imgdata; 
           $data[]=$mydata;
