@@ -132,7 +132,7 @@ class DuelController extends Controller
                   $challange->save();
                  
                   //notification
-                  $attempt=Attempt::where('link',$challenge->attempt_id)->first();
+                  $attempt=Attempt::where('link',$challange->attempt_id)->first();
                   
                   return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);   
             }

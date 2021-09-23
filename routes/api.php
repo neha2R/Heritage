@@ -83,7 +83,7 @@ Route::get('product_search', 'ProductController@product_search');
 Route::post('create_duel', 'DuelController@create_duel');
 Route::get('get_all_users', 'DuelController@get_all_users');
 Route::get('send_invitation', 'DuelController@send_invitation');
-Route::post('accept_invitation', 'DuelController@accept_invitation');
+Route::get('accept_invitation', 'DuelController@accept_invitation');
 Route::get('generate_link', 'DuelController@generate_link');
  /**  End from Here        */
 
