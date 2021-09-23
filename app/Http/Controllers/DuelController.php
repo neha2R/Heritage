@@ -132,8 +132,16 @@ class DuelController extends Controller
                   $challange->save();
                  
                   //notification
-                  $attempt=Attempt::where('link',$challange->attempt_id)->first();
-                  
+                 
+                 $attempt=Attempt::where('id',$challange->attempt_id)->first();
+                  $data=[
+                      'title'=>'Invitation recieved.',
+                      'token'=>$challange->to_user->token,
+                      'link'=>$attempt->link,
+                    //   'from'=>$challange->from_user->name,
+                      'message'=>'You have a new request from'.$challange->from_user->name,
+                  ];
+                  sendNotification($data);
                   return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);   
             }
         }
@@ -171,9 +179,16 @@ class DuelController extends Controller
 
                $attempt->challange_id=$req->user_id;
                $attempt->save();
+
+               $data=[
+                'title'=>'Invitation accepted.',
+                'token'=>$challenge->from_user->token,
+                'link'=>$attempt->link,
+                'message'=>User::where('id',$req->user_id)->first()->name." has been accepted the request. you can start quiz now",
+                ];
+                sendNotification($data);
                return response()->json(['status' => 200, 'message' => 'Invitation Successfully accepted.']);   
 
-               //notification
             }
          }
      }

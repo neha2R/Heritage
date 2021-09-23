@@ -243,9 +243,22 @@ class TournamentController extends Controller
      * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Tournament $tournament)
+    public function show($id)
     {
-        //
+        $tournament = Tournament::find($id);
+        if ($tournament->status == '1') {
+            $tournament->status = '0';
+        } else {
+            $tournament->status = '1';
+
+        }
+        $tournament->save();
+
+        if ($tournament->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -456,7 +469,12 @@ class TournamentController extends Controller
      */
     public function destroy(Tournament $tournament)
     {
-        //
+        $tournament->delete();
+        if ($tournament->id) {
+            return redirect()->back()->with(['success' => 'Tournament Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     public function tournament_add(Request $req)
