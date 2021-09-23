@@ -111,6 +111,21 @@
                           <a href="#">
                           <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
 
+                           Products
+                           <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                           </a>
+                        <ul class="inside2">
+                        <li>
+                           <a href="{{ route('product.index') }}" class="{{ request()->is('admin/product*') ? 'mm-active' : '' }}">
+                           <i class="fa fa-bars" aria-hidden="true"></i>Products</a>
+                        </li>
+                        </li>
+                        </ul
+
+                        <li class="dropdown">
+                          <a href="#">
+                          <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+
                            Settings
                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                            </a>
@@ -122,6 +137,7 @@
                         </li>
                         </li>
                         </ul>
+                     </li>
                         <li class="menu">
                         <a href="{{ route('feed-content.index') }}" class="{{ request()->is('admin/feed-content*') ? 'mm-active' : '' }}">
                           <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
@@ -133,6 +149,9 @@
                           Tournament Setting
                            </a>
                         </li>
+
+
+
                      </ul>
                   </div>
                </div>

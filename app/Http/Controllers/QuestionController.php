@@ -362,7 +362,7 @@ class QuestionController extends Controller
         }
 
         if ($question->id) {
-            return redirect()->back()->with(['success' => 'FAQs Deleted Successfully']);
+            return redirect()->back()->with(['success' => 'Question Deleted Successfully']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }

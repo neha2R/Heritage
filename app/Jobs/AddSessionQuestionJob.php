@@ -73,7 +73,12 @@ class AddSessionQuestionJob implements ShouldQueue
             $questions_ids = json_decode($question->questions);
 
         }
-        $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $questions_ids)->get();
+        $questions=[];
+        foreach($questions_ids as $que){
+           $data =  Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->where('id', $que)->first()->toArray();
+           $questions[] = $data; 
+        }
+        // $questions = ;
 
         return $questions;
     }

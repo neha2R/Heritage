@@ -45,7 +45,7 @@
             @endforeach
                     <div class="card-body">
                     <div class="table-responsive">
-                     <table id="table" class="mb-0 table table-striped">
+                     <table id="table" class="mb-0 table table-striped text-left">
                         <thead>
                            <tr>
                               <th>Sr. No</th>
@@ -132,7 +132,7 @@
                @csrf
                <div class="form-group">
                   <label for="name">Age Group</label>
-                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Age Group name" required>
+                  <input type="text" class="@error('name') is-invalid @enderror form-control" maxlength="50" name="name" placeholder="Age Group name" required value="{{old('name')}}">
                </div>
                <div class="form-group">
                   <label for="name">From</label>

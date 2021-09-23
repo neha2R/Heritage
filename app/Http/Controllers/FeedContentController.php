@@ -48,8 +48,8 @@ class FeedContentController extends Controller
      */
     public function store(Request $request)
     {
-       
-        if($request->feed_id == 1)
+    
+        if($request->feed_id == '1')
         {
                 $validatedData = $request->validate([
                     'theme_id' => 'required',
@@ -69,7 +69,8 @@ class FeedContentController extends Controller
                 $data->tags=$request->tags;
 
             $data->title = $request->title;
-            $data->description = $request->description;            
+            $data->description = $request->description;   
+            $data->save();         
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
              $videomimes = ['video/mp4']; //Add more mimes that you want to support
             $media = new FeedMedia;
@@ -77,6 +78,7 @@ class FeedContentController extends Controller
             $media->title = $request->title;
             $media->description=$request->description;
             $media->external_link=$request->external_link;
+            $media->video_link =isset($request->video_link)?$request->video_link:'';
             $media->save();
 
             if($request->hasfile('media_name'))
@@ -93,9 +95,40 @@ class FeedContentController extends Controller
                     $attachment->save();
                 }
             }
+            else
+            { 
+                if($request->media_video->getClientOriginalName() != null)
+                {
+                       if (in_array($request->media_video->getMimeType(), $videomimes)) {
+                           $type = '1';
+                        
+                                $v_name = $request->media_video->store('feed','public');
+                                $place_holder = $request->placeholder_image->store('feed','public');
+                             
+                                $media = new FeedMedia;
+                                $media->feed_content_id = $data->id;
+                                $media->title = $request->title;
+                                $media->description=$request->description;
+                                $media->external_link=$request->external_link;
+                                $media->video_link =isset($request->video_link)?$request->video_link:'';
+                                $media->placeholder_image=$place_holder;
+                                $media->save();
+
+                                $attachment = new FeedAttachment;
+                                $attachment->feed_media_id=$media->id;
+                                $attachment->media_name=$v_name;
+                                $attachment->media_type=$type;
+                                $attachment->save();
+
+                       }
+                   
+                }
+                 
+            }
         }
-        else
+        elseif($request->feed_id == '2')
         {
+         
             $validatedData = $request->validate([
                 
                 'title.*'=>'required',
@@ -113,7 +146,10 @@ class FeedContentController extends Controller
             $data->description = $request->description;    
              $data->save();
   
-           // dd($request->title);
+
+          
+           if(isset($request->card))
+           {
            foreach($request->card as $key=>$value)
            {
             
@@ -168,7 +204,7 @@ class FeedContentController extends Controller
              }
 
             }
-
+        }
           
              
             //    if($request->hasfile('media_name'))
@@ -195,6 +231,82 @@ class FeedContentController extends Controller
             //      }
             
         }
+        else
+        {
+            $validatedData = $request->validate([
+                
+                'title.*'=>'required',
+                'description.*' =>'required', 
+                // 'media_video'=>'required',
+                'placeholder_image.*'=>'required'
+            ]);
+
+            $data = new FeedContent;
+            $data->theme_id = $request->theme_id;
+            $data->domain_id = $request->domain_id;
+            $data->feed_id = $request->feed_id;
+            $data->tags=$request->tags;
+            $data->title = $request->title;
+            $data->description = $request->description;    
+             $data->save();
+  
+          
+           foreach($request->card as $key=>$value)
+           {
+            
+            // $file = $value['media_video'][$key];
+                
+         
+            // dd($value['media_video'][0]->store('feed','public')); 
+            $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
+             $videomimes = ['video/mp4']; //Add more mimes that you want to support
+             
+             $media = new FeedMedia;
+             $media->feed_content_id = $data->id;           
+             // array
+             $media->title = $value['title1'];
+             
+             $media->description=$value['description1'];
+             
+             $media->external_link=$value['external_link1'];
+           
+             $media->video_link=$value['video_link1'];           
+              
+              $media->save();
+      
+
+     
+             foreach($value['media_video1'] as $files)
+             {
+                
+                 if($files->getClientOriginalName() != null){
+                        if (in_array($files->getMimeType(), $imagemimes)) {
+                            $type = '0';
+                        }
+                        //validate audio
+                        if (in_array($files->getMimeType(), $videomimes)) {
+                            $type = '1';
+                            $place = $value['placeholder_image1']->store('feed','public');
+                            $feedplace = FeedMedia::find($media->id);
+                            $feedplace->placholder_image =  $place;
+                            $feedplace->save();
+
+                        }
+                        
+                    $name = $files->store('feed','public');
+                   // FeedMediaUploadJob::dispatch($files,$media->id,$type)->delay(Carbon::now()->addMinutes(1));
+                    $attachment = new FeedAttachment;
+                    $attachment->feed_media_id = $media->id;
+                    $attachment->media_name = $name;
+                    $attachment->media_type = $type;
+                    $attachment->save();
+                 }
+                  
+             }
+
+            }
+
+        }
     
          if ($data->id) {
              return redirect('admin/feed-content')->with(['success' => 'Feed saved Successfully']);
@@ -209,9 +321,22 @@ class FeedContentController extends Controller
      * @param  \App\FeedContent  $feedContent
      * @return \Illuminate\Http\Response
      */
-    public function show(FeedContent $feedContent)
+    public function show($id)
     {
-        //
+        $feedContent=FeedContent::whereId($id)->first();
+        if ($feedContent->status == '1') {
+            $feedContent->status = '0';
+        } else {
+            $feedContent->status = '1';
+
+        }
+        $feedContent->save();
+
+        if ($feedContent->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -232,9 +357,282 @@ class FeedContentController extends Controller
      * @param  \App\FeedContent  $feedContent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FeedContent $feedContent)
+    public function update(Request $request, $id)
     {
-        //
+       
+        if($request->feed_id=="1")
+        {
+            
+
+                $validatedData = $request->validate([
+                    'theme_id' => 'required',
+                    'domain_id' => 'required|',
+                    'feed_id' => 'required',
+                    'title' => 'required|max:200',
+                    'tags'=>'required',
+                    'external_link' => 'required|url',
+                    'title'=>'required',
+                    'description' =>'required' 
+                ]);
+                    
+                $data = FeedContent::whereId($id)->first();
+                $data->theme_id = $request->theme_id;
+                $data->domain_id = $request->domain_id;
+                $data->feed_id = $request->feed_id;
+                $data->tags=$request->tags;
+
+                $data->title = $request->title;
+                $data->description = $request->description;   
+                $data->save();         
+                $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
+                $videomimes = ['video/mp4']; //Add more mimes that you want to support
+               
+
+              if($request->media_type=='0')
+              {
+                  
+                  
+                $media =FeedMedia::where('feed_content_id',$data->id)->first();
+                $media->feed_content_id = $data->id;
+                $media->title = $request->title;
+                $media->description=$request->description;
+                $media->external_link=$request->external_link;
+                $media->video_link =isset($request->video_link)?$request->video_link:'';
+                $media->save();
+
+             
+                if(isset($request->old_images) && count($request->old_images)>0)
+                {   
+               
+                    if(FeedAttachment::where('feed_media_id',$media->id)->first())
+                    {
+                        FeedAttachment::where('feed_media_id',$media->id)->delete();
+                    }
+                    if(isset($request->media_name) && count($request->media_name)>0)
+                    {
+                        foreach($request->media_name as $files)
+                    {
+                      if($files->getClientOriginalName() != null){
+                            if (in_array($files->getMimeType(), $imagemimes)) {
+                                $type = '0';
+                            }
+
+                            
+                       
+                            $name = $files->store('feed','public');
+                            $attachment = new FeedAttachment;
+                            $attachment->feed_media_id = $media->id;
+                            $attachment->media_name = $name;
+                            $attachment->media_type = $type;
+                            $attachment->save();
+                        
+                      }
+                    }
+                    }
+                   
+                     
+                  
+                        foreach($request->old_images as $files)
+                        {
+                        
+
+                                $attachment = new FeedAttachment;
+                                $attachment->feed_media_id = $media->id;
+                                $attachment->media_name = $files;
+                                $attachment->media_type = '0';
+                                $attachment->save();
+                            
+                          
+                        }
+                      
+                        return redirect()->back()->with(['success' => 'Feed Updated Successfully']);
+                }
+                else
+                {
+                     
+                    $media =FeedMedia::where('feed_content_id',$data->id)->first();
+                    $media->feed_content_id = $data->id;
+                    $media->title = $request->title;
+                    $media->description=$request->description;
+                    $media->external_link=$request->external_link;
+                    $media->video_link =isset($request->video_link)?$request->video_link:'';
+                    $media->save();
+
+                    if(FeedAttachment::where('feed_media_id',$media->id)->first())
+                    {
+                        FeedAttachment::where('feed_media_id',$media->id)->delete();
+                    }
+                    foreach($request->media_name as $files)
+                    {
+                      if($files->getClientOriginalName() != null){
+                            if (in_array($files->getMimeType(), $imagemimes)) {
+                                $type = '0';
+                            }
+                          
+                            
+                            $name = $files->store('feed','public');
+                            $attachment = new FeedAttachment;
+                            $attachment->feed_media_id = $media->id;
+                            $attachment->media_name = $name;
+                            $attachment->media_type = $type;
+                            $attachment->save();
+                        
+                      }
+                    }
+                }
+            }
+                else
+                {
+                    
+                    if(FeedAttachment::where('feed_media_id',$id)->first())
+                    {
+                        FeedAttachment::where('feed_media_id',$id)->delete();
+                    }
+                    
+                      if($request->media_video->getClientOriginalName() != null){
+                        if (in_array($request->media_video->getMimeType(), $videomimes)) {
+
+                          
+                                $type = '1';
+                                $v_name = $request->media_video->store('feed','public');
+                                $place_holder = $request->placeholder_image->store('feed','public');
+                             
+                                $media = FeedMedia::where('feed_content_id',$data->id)->first();
+                                $media->title = $request->title;
+                                $media->description=$request->description;
+                                $media->external_link=$request->external_link;
+                                $media->video_link =isset($request->video_link)?$request->video_link:'';
+                                $media->placholder_image=$place_holder;
+                                $media->save();
+
+                                $attachment = new FeedAttachment;
+                                $attachment->feed_media_id=$media->id;
+                                $attachment->media_name=$v_name;
+                                $attachment->media_type=$type;
+                                $attachment->save();
+                           
+                        }
+                        
+                        
+                     }
+                     return redirect()->back()->with(['success' => 'Feed Updated Successfully']);
+                
+            }
+        
+           
+        }
+        else
+        {
+return $request;
+            $data = FeedContent::where('id',$id)->first();
+            $data->theme_id = $request->theme_id;
+            $data->domain_id = $request->domain_id;
+            $data->feed_id = $request->feed_id;
+            $data->tags=$request->tags;
+            $data->title = $request->title;
+            $data->description = $request->description;    
+            $data->save();
+
+          if(isset($request->more_title) && count($request->more_title)>0)
+          {
+              
+           
+                foreach($request->more_title as $key=>$one)
+                {
+                    if(FeedMedia::where('feed_content_id',$id)->first())
+                    {
+                        FeedMedia::where('feed_content_id',$id)->delete();
+                    }
+
+                        $media= new FeedMedia;
+                        $media->feed_content_id=$id;
+                        $media->title=$one;
+                        $media->description=$request->more_description[$key];
+                        $media->external_link=$request->more_external_link[$key];
+                        $media->save();
+                
+                    if($request->more_type[$key]=='0' )
+                    {
+                       
+                      if(isset($request->$request->more_media_name[$key]) && count($request->more_media_name[$key])>0)
+                      {
+                        foreach($request->media_name[$key] as $image)
+                        {
+                            $name = $files->store('feed','public');
+                            $media= new FeedAttachment;
+                            $media->feed_media_id=$media->id;
+                            $media->media_type=$type;
+                            $media->media_name=$name;
+                            $media->save();
+                        
+                       }
+                      }
+                       
+                    }    
+                    else
+                    {
+                           //video
+                    }               
+                   
+                    
+                }
+                return redirect()->back()->with(['success' => 'Feed Updated Successfully']);
+              
+          }
+          else
+          {
+            foreach($request->title as $key=>$one)
+            {
+                foreach($request->card as $key=>$one)
+                {
+                    if(FeedMedia::where('feed_content_id',$id)->first())
+                    {
+                        FeedMedia::where('feed_content_id',$id)->delete();
+                    }
+
+                    $media= new FeedMedia;
+                    $media->feed_content_id=$id;
+                    $media->title=$one;
+                    $media->description=$request->description[$key];
+                    $media->external_link=$request->external_link[$key];
+                    $media->save();
+        
+                if($request->media_type[$key]=='0')
+                {
+                    return $request;
+                  if(count($request->more_media_image))
+                  {
+                    foreach($request->more_media_image[$key] as $image)
+                    {
+                        $name = $files->store('feed','public');
+                        $media= new FeedAttachment;
+                        $media->feed_media_id=$media->id;
+                        $media->media_type=$type;
+                        $media->media_name=$name;
+                        $media->save();
+                    
+                   }
+                  }
+                    
+                   
+                }    
+                else
+                {
+                       //video
+                }  
+
+                return redirect()->back()->with(['success' => 'Feed Updated Successfully']);
+               }             
+               
+                
+            }
+          }
+               
+          
+
+            
+            
+        }
     }
 
     /**
@@ -245,7 +643,26 @@ class FeedContentController extends Controller
      */
     public function destroy(FeedContent $feedContent)
     {
-        //
+        $feedContent = FeedContent::find($feedContent->id);
+
+        if ($feedContent) {
+            $feedContent->delete();
+            // if($feedContent->feed_id!='1')
+            // {
+            //     $feedContent->feed_medium()->delete();
+            // }
+            // else
+            // {
+            //     $feedContent->feed_media()->delete();
+            // }
+            
+        }
+
+        if ($feedContent->id) {
+            return redirect()->back()->with(['success' => 'Feed content Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
 
@@ -632,221 +1049,354 @@ class FeedContentController extends Controller
     // get feed content data according feed_content id
     public function get_feed_content_by_id($id)
     {
-       
-        $data = [];
         $themes = Theme::OrderBy('id', 'DESC')->get();
         $domains= Domain::OrderBy('id','DESC')->get();
         $feeds = Feed::OrderBy('id','DESC')->get();
-        $feedContent =  FeedContent::find($id);
-        $feed_type = $feedContent->feed_id;
-        if($feedContent->feed_id == '1')
-        {   $data['id'] = $feedContent->id;
-            $data['theme_id'] = $feedContent->theme_id;
-            $data['theme_name'] = $feedContent->theme->title;
-            $data['domain_id'] = $feedContent->domain_id;
-            $data['domain_name'] = $feedContent->domain->name;
-            $data['feed_id'] = $feedContent->feed_id;
-            $data['feed_name'] = $feedContent->feedtype->title;
-            $data['tags'] = $feedContent->tags;
-            $data['fix_title'] = $feedContent->title;
-            $data['fix_description'] = $feedContent->description;
+        $feed=FeedContent::whereId($id)->first();
+        $feedContents=FeedMedia::where('feed_content_id',$id)->orderByDesc('id')->get();
+       return view('feed-content.feed-edit',compact('feed','themes','domains','feeds','feedContents'));
+    //     $data = [];
+  
+    //     $feedContent =  FeedContent::find($id);
+    //     $feed_type = $feedContent->feed_id;
+    //     if($feedContent->feed_id == '1')
+    //     {   $data['id'] = $feedContent->id;
+    //         $data['theme_id'] = $feedContent->theme_id;
+    //         $data['theme_name'] = $feedContent->theme->title;
+    //         $data['domain_id'] = $feedContent->domain_id;
+    //         $data['domain_name'] = $feedContent->domain->name;
+    //         $data['feed_id'] = $feedContent->feed_id;
+    //         $data['feed_name'] = $feedContent->feedtype->title;
+    //         $data['tags'] = $feedContent->tags;
+    //         $data['fix_title'] = $feedContent->title;
+    //         $data['fix_description'] = $feedContent->description;
            
         
-            $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get()->first();
-            $data['external_link'][] = $feed_mediaes->external_link;
-            $data['medai_id'] = $feed_mediaes->id;
-           // $data['video_link'][] = $feed_media->video_link;
+    //         $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get()->first();
+    //         $data['external_link'][] = $feed_mediaes->external_link;
+    //         $data['medai_id'] = $feed_mediaes->id;
+    //        // $data['video_link'][] = $feed_media->video_link;
 
-            $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_mediaes->id)->get();
-            foreach($feed_attachmentes as $feed_attachment)
-            {
+    //         $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_mediaes->id)->get();
+    //         foreach($feed_attachmentes as $feed_attachment)
+    //         {
                 
-                $data['media_names'][] = $feed_attachment->media_name;
-                $data['media_ids'][] = $feed_attachment->id;
-                $data['images_url'][] = $this->imageurl($feed_attachment->media_name);
+    //             $data['media_names'][] = $feed_attachment->media_name;
+    //             $data['media_ids'][] = $feed_attachment->id;
+    //             $data['images_url'][] = $this->imageurl($feed_attachment->media_name);
                 
-            }
-      // dd($data);
-            return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
-        }
-        else if($feedContent->feed_id == '2')
-        {
+    //         }
+    //   // dd($data);
+    //         return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
+    //     }
+    //     else if($feedContent->feed_id == '2')
+    //     {
           
-                $data['id'] = $feedContent->id;
-                $data['theme_id'] = $feedContent->theme_id;
-                $data['theme_name'] = $feedContent->theme->title;
-                $data['domain_id'] = $feedContent->domain_id;
-                $data['domain_name'] = $feedContent->domain->name;
-                $data['feed_id'] = $feedContent->feed_id;
-                $data['feed_name'] = $feedContent->feedtype->title;
-                $data['tags'] = $feedContent->tags;
-                $data['fix_title'] = $feedContent->title;
-                $data['fix_description'] = $feedContent->description;
-                $feed_type = $feedContent->feed_id;
-               //dd($feed_type);
+    //             $data['id'] = $feedContent->id;
+    //             $data['theme_id'] = $feedContent->theme_id;
+    //             $data['theme_name'] = $feedContent->theme->title;
+    //             $data['domain_id'] = $feedContent->domain_id;
+    //             $data['domain_name'] = $feedContent->domain->name;
+    //             $data['feed_id'] = $feedContent->feed_id;
+    //             $data['feed_name'] = $feedContent->feedtype->title;
+    //             $data['tags'] = $feedContent->tags;
+    //             $data['fix_title'] = $feedContent->title;
+    //             $data['fix_description'] = $feedContent->description;
+    //             $feed_type = $feedContent->feed_id;
+    //            //dd($feed_type);
                
-                $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
-                $x=0;
-                foreach($feed_mediaes as $feed_media)
-                {
+    //             $feed_mediaes = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
+    //             $x=0;
+    //             foreach($feed_mediaes as $feed_media)
+    //             {
                     
-                    $data['media'][$feed_media->id]['title'] = $feed_media->title;
-                    $data['media'][$feed_media->id]['description'] = $feed_media->description;
-                    $data['media'][$feed_media->id]['external_link'] = $feed_media->external_link;
-                    $data['media'][$feed_media->id]['video_link'] = $feed_media->video_link;
-                    $data['media'][$feed_media->id]['placholder_image'] = $this->imageurl($feed_media->placholder_image);
-                    $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_media->id)->get();
-                    foreach($feed_attachmentes as $feed_attachment)
-                    {
-                        $data['media'][$feed_media->id]['media_name'][$feed_attachment->id] = $this->imageurl($feed_attachment->media_name);
+    //                 $data['media'][$feed_media->id]['title'] = $feed_media->title;
+    //                 $data['media'][$feed_media->id]['description'] = $feed_media->description;
+    //                 $data['media'][$feed_media->id]['external_link'] = $feed_media->external_link;
+    //                 $data['media'][$feed_media->id]['video_link'] = $feed_media->video_link;
+    //                 $data['media'][$feed_media->id]['placholder_image'] = $this->imageurl($feed_media->placholder_image);
+    //                 $feed_attachmentes = FeedAttachment::where('feed_media_id','=',$feed_media->id)->get();
+    //                 foreach($feed_attachmentes as $feed_attachment)
+    //                 {
+    //                     $data['media'][$feed_media->id]['media_name'][$feed_attachment->id] = $this->imageurl($feed_attachment->media_name);
 
-                        $data['media'][$feed_media->id]['media_type'][$feed_attachment->id] = $feed_attachment->media_type;
-                        //$data['media'][$feed_media->id]['medai_id'][] = ;
-                    }
-                    $x++;
-                }
-              //dd($data);
-                return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
+    //                     $data['media'][$feed_media->id]['media_type'][$feed_attachment->id] = $feed_attachment->media_type;
+    //                     //$data['media'][$feed_media->id]['medai_id'][] = ;
+    //                 }
+    //                 $x++;
+    //             }
+    //           //dd($data);
+    //             return view('feed-content.feed-edit',compact('feed_type','themes','domains','feeds','data'));
 
-        }
-        else
-        {
+    //     }
+    //     else
+    //     {
 
-        }
+    //     }
 
-       // dd($data);
-        //return $feedContent->id;
-        $feedMedia = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
+    //    // dd($data);
+    //     //return $feedContent->id;
+    //     $feedMedia = FeedMedia::where('feed_content_id','=',$feedContent->id)->get();
       
-        $feedMediaIds = FeedMedia::where('feed_content_id','=',$feedContent->id)->pluck('id');
+    //     $feedMediaIds = FeedMedia::where('feed_content_id','=',$feedContent->id)->pluck('id');
         
-        $feedAtachment = FeedAttachment::whereIn('feed_media_id',$feedMediaIds)->get();
+    //     $feedAtachment = FeedAttachment::whereIn('feed_media_id',$feedMediaIds)->get();
        
-       return $feedMedia;
+    //    return $feedMedia;
     }
 
 
-    public function update_feed_attachment(Request $request)
+    public function update_feed_attachment(Request $req)
     {
-       // dd($request);
-        if($request->feed_id == 1)
+        
+        if($req->type=="1")
         {
-            $feed_content  = FeedContent::find($request->feed_content_id);
-           //dd($request->theme_id);
-           $feed_content->theme_id=$request->theme_id;
-           $feed_content->domain_id=$request->domain_id;
-           $feed_content->tags = $request->tags;
-           $feed_content->title = $request->fix_title;
-           $feed_content->description = $request->description;
-           $feed_content->save(); 
-
-            $feed_media = FeedMedia::where('feed_content_id','=',$request->feed_content_id)->get()->first();
-
-           // dd($feed_media);
-            $feed_media->external_link = $request->external_link[0];
-            $feed_media->title = $request->fix_title;
-            $feed_media->description = $request->description[0];
-            $feed_content->save();
             
-            // $feed_media->update(['external_link'=>$request->external_link[0],'title'=>$request->fix_title,'description'=>$request->description[0]]);
+               $feed=FeedContent::whereId($req->feed_content_id)->first();
+               $feed->title=$req->title;
+               $feed->theme_id=$req->theme_id;
+               $feed->domain_id=$req->domain_id;
+               $feed->tags=$req->tags;
+               $feed->description=$req->description;
+               $feed->save();
 
-            foreach($request->file('media_name') as $key=>$file)
-            {
-              //  dd($file);
-                $feed_attachment = FeedAttachment::find($key);
-               // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
-                $file_name = $file->store('feed','public'); 
-                $feed_attachment->media_name = $file_name;
+               $media=FeedMedia::where('feed_content_id',$req->feed_content_id)->first();
 
-                $feed_attachment->save();
-            }
-           
-            foreach($request->delete_media as $key=>$value)
-            {
-                $feed_attachment = FeedAttachment::find($key);
-               // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
-               
-                $feed_attachment->delete();
-            }
+               if($req->media_type=='0')
+               {
+              
+                    if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->first())
+                    {
+                        FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
+                    }
+                     
+                        $media->video_link="";
+                        $media->placholder_image="";
+                        $media->save();
+                        if($req->hasfile('files'))
+                        {
+                                 foreach($req->file('files') as $key=>$file)
+                                {
+                                    $type = '0';
+                                    $name = $file->store('feed','public');
+                                    $attachment = new FeedAttachment;
+                                    $attachment->feed_media_id = $media->id;
+                                    $attachment->media_name = $name;
+                                    $attachment->media_type = $type;
+                                    $attachment->save();
+                                }
+                        }
+                            
+                        
+               }
+               else
+               {  
+                    
+                   
+                            if($req->hasfile('placeholder_image'))
+                            {
+                               $placeholder_name = $req->placeholder_image->store('feed','public');
+                            }
+                            else
+                            {
+                                $placeholder_name=$req->old_placeholder;
+                            }
+                             
+                            $media->video_link=$req->video_link;
+                            $media->placholder_image=$placeholder_name;
+                            $media->save();
 
-            
+                            if(isset($req->video))
+                            {
+                                if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->first())
+                            {
+                                FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->delete(); 
+                            }
+                            
+                            
+                                if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->first())
+                                {
+                                    FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
+                                }
+                               
+                                $name = $req->video->store('feed','public');
+                                $attachment = new FeedAttachment;
+                                $attachment->feed_media_id = $media->id;
+                                $attachment->media_name = $name;
+                                $attachment->media_type = '1';
+                                $attachment->save();
+                            }
+                            else
+                            {
+                                if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->first())
+                                {
+                                    FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->delete(); 
+                                }
+                                
+                                
+                                    if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->first())
+                                    {
+                                        FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
+                                    }
+                                   
+                                   
+                                    $attachment = new FeedAttachment;
+                                    $attachment->feed_media_id = $media->id;
+                                    $attachment->media_name = $req->old_video;
+                                    $attachment->media_type = '1';
+                                    $attachment->save();
+                            }
+                            
+                            
+
+
+               }
+
+             
         }
-        else if($request->feed_id == 2)
+        elseif($req->type=="2")
         {
-           // dd($request);
-            $feed_content  = FeedContent::find($request->feed_content_id);
-            //dd($request->theme_id);
-            $feed_content->theme_id=$request->theme_id;
-            $feed_content->domain_id=$request->domain_id;
-            $feed_content->tags = $request->tags;
-            $feed_content->title = $request->fix_title;
-            $feed_content->description = $request->description;
-            $feed_content->save(); 
- 
-            foreach($request['media'] as $media_ids =>$media)
-            {
-              //  dd($media);
-                if(isset($request->placholder_image[$media_ids]))
-                {
-                    // update place hoder image 
-                }
-                $feed_media = FeedMedia::find($media_ids);
-                $feed_media->title = $media['title'];
-                $feed_media->description = $media['description'];
-                $feed_media->external_link = $media['external_link'];
-                $feed_media->video_link = $media['video_link'];
-            
-                $feed_media->save();
-
-               
-
-
-
-            }
           
-
-            foreach($request->file('media') as $key=>$file)
-            {
-              //  dd($file);
-                $feed_attachment = FeedAttachment::find($key);
-               // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
-                $file_name = $file->store('feed','public'); 
-                $feed_attachment->media_name = $file_name;
-
-                $feed_attachment->save();
-            }
+                $feed=FeedContent::whereId($req->feed_content_id)->first();
+                $feed->title=$req->fix_title;
+                $feed->theme_id=$req->theme_id;
+                $feed->domain_id=$req->domain_id;
+                $feed->tags=$req->tags;
+                $feed->description=$req->description;
+                $feed->save();
              
- 
-            // dd($feed_media);
-           //  $feed_media->external_link = $request->external_link[0];
-           
-             
-             // $feed_media->update(['external_link'=>$request->external_link[0],'title'=>$request->fix_title,'description'=>$request->description[0]]);
- 
-             foreach($request->file('media_name') as $key=>$file)
-             {
-               //  dd($file);
-                 $feed_attachment = FeedAttachment::find($key);
-                // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
-                 $file_name = $file->store('feed','public'); 
-                 $feed_attachment->media_name = $file_name;
- 
-                 $feed_attachment->save();
-             }
-            
-             foreach($request->delete_media as $key=>$value)
-             {
-                 $feed_attachment = FeedAttachment::find($key);
-                // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
                 
-                 $feed_attachment->delete();
-             }
-
         }
         else
         {
-
+            $feed=FeedContent::whereId($req->feed_content_id)->first();
+            $feed->title=$req->fix_title;
+            $feed->theme_id=$req->theme_id;
+            $feed->domain_id=$req->domain_id;
+            $feed->tags=$req->tags;
+            $feed->description=$req->description;
+            $feed->save();
         }
+    //    dd($request);
+    //     if($request->feed_id == 1)
+    //     {
+    //         $feed_content  = FeedContent::find($request->feed_content_id);
+    //        //dd($request->theme_id);
+    //        $feed_content->theme_id=$request->theme_id;
+    //        $feed_content->domain_id=$request->domain_id;
+    //        $feed_content->tags = $request->tags;
+    //        $feed_content->title = $request->fix_title;
+    //        $feed_content->description = $request->description;
+    //        $feed_content->save(); 
+
+    //         $feed_media = FeedMedia::where('feed_content_id','=',$request->feed_content_id)->get()->first();
+
+    //        // dd($feed_media);
+    //         $feed_media->external_link = $request->external_link[0];
+    //         $feed_media->title = $request->fix_title;
+    //         $feed_media->description = $request->description[0];
+    //         $feed_content->save();
+            
+    //         // $feed_media->update(['external_link'=>$request->external_link[0],'title'=>$request->fix_title,'description'=>$request->description[0]]);
+
+    //         foreach($request->file('media_name') as $key=>$file)
+    //         {
+    //           //  dd($file);
+    //             $feed_attachment = FeedAttachment::find($key);
+    //            // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
+    //             $file_name = $file->store('feed','public'); 
+    //             $feed_attachment->media_name = $file_name;
+
+    //             $feed_attachment->save();
+    //         }
+           
+    //         foreach($request->delete_media as $key=>$value)
+    //         {
+    //             $feed_attachment = FeedAttachment::find($key);
+    //            // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
+               
+    //             $feed_attachment->delete();
+    //         }
+
+            
+    //     }
+    //     else if($request->feed_id == 2)
+    //     {
+    //        // dd($request);
+    //         $feed_content  = FeedContent::find($request->feed_content_id);
+    //         //dd($request->theme_id);
+    //         $feed_content->theme_id=$request->theme_id;
+    //         $feed_content->domain_id=$request->domain_id;
+    //         $feed_content->tags = $request->tags;
+    //         $feed_content->title = $request->fix_title;
+    //         $feed_content->description = $request->description;
+    //         $feed_content->save(); 
+ 
+    //         foreach($request['media'] as $media_ids =>$media)
+    //         {
+    //           //  dd($media);
+    //             if(isset($request->placholder_image[$media_ids]))
+    //             {
+    //                 // update place hoder image 
+    //             }
+    //             $feed_media = FeedMedia::find($media_ids);
+    //             $feed_media->title = $media['title'];
+    //             $feed_media->description = $media['description'];
+    //             $feed_media->external_link = $media['external_link'];
+    //             $feed_media->video_link = $media['video_link'];
+            
+    //             $feed_media->save();
+
+               
+
+
+
+    //         }
+     
+    //         if(!empty($request->media) && count($request->media)>0)
+    //         {
+    //         foreach($request->file('media') as $key=>$file)
+    //         {
+    //           //  dd($file);
+    //             $feed_attachment = FeedAttachment::find($key);
+    //            // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
+    //             $file_name = $file->store('feed','public'); 
+    //             $feed_attachment->media_name = $file_name;
+
+    //             $feed_attachment->save();
+    //         }
+    //       }
+ 
+    //         // dd($feed_media);
+    //        //  $feed_media->external_link = $request->external_link[0];
+           
+             
+    //          // $feed_media->update(['external_link'=>$request->external_link[0],'title'=>$request->fix_title,'description'=>$request->description[0]]);
+ 
+    //          foreach($request->file('media_name') as $key=>$file)
+    //          {
+    //            //  dd($file);
+    //              $feed_attachment = FeedAttachment::find($key);
+    //             // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
+    //              $file_name = $file->store('feed','public'); 
+    //              $feed_attachment->media_name = $file_name;
+ 
+    //              $feed_attachment->save();
+    //          }
+            
+    //          foreach($request->delete_media as $key=>$value)
+    //          {
+    //              $feed_attachment = FeedAttachment::find($key);
+    //             // unlink(storage_path('app/folder/'.$feed_attachment->media_name));
+                
+    //              $feed_attachment->delete();
+    //          }
+
+    //     }
+    //     else
+    //     {
+
+    //     }
     }
     public function filter_feed(Request $request)
     {  
@@ -906,6 +1456,148 @@ class FeedContentController extends Controller
         return response()->json(['status' => 200, 'message' => 'Domain data','data' => $data]);
 
 
+    }
+    public function edit_media(Request $req)
+    {
+        $feed=FeedMedia::where('id',$req->id)->first();
+        return view('feed-content.edit_media',compact('feed'));
+    }
+    public function update_feed_media(Request $req)
+    {
+        
+         $media=FeedMedia::whereId($req->id)->first();
+         $media->title=$req->title;
+         $media->description=$req->description;
+         $media->external_link=$req->external_link;
+        if($req->media_type=='1')
+        {
+            if($req->hasfile('placeholder_image'))
+            {
+                $media->placholder_image = $req->file('placeholder_image')->store('feed','public');
+            }
+            else
+            {
+                $media->placholder_image=$req->old_placeholder;
+            }
+            $media->video_link=$req->video_link;
+        }
+         
+         else
+         {
+                    $media->placholder_image="";
+                    $media->video_link="";
+         }
+ 
+         $media->save();
+
+         if($req->media_type=="0" && count($req->files))
+         {
+            if(FeedAttachment::where('feed_media_id',$req->id)->where('media_type','1')->first())
+            {
+                FeedAttachment::where('feed_media_id',$req->id)->where('media_type','1')->delete();
+            }
+             foreach($req->file('files') as $file)
+             {
+                $type = '0';
+                $name = $file->store('feed','public');
+                $attachment = new FeedAttachment;
+                $attachment->feed_media_id = $media->id;
+                $attachment->media_name = $name;
+                $attachment->media_type = $type;
+                $attachment->save();
+             }
+         
+         }
+         else
+         {
+            if(FeedAttachment::where('feed_media_id',$req->id)->where('media_type','0')->first())
+            {
+                FeedAttachment::where('feed_media_id',$req->id)->where('media_type','0')->delete();
+            }
+
+            if($req->hasfile('video'))
+            {
+             
+                $type = '1';
+                $name = $req->file('video')->store('feed','public');
+                $attachment = new FeedAttachment;
+                $attachment->feed_media_id = $media->id;
+                $attachment->media_name = $name;
+                $attachment->media_type = $type;
+                $attachment->save();
+            }  
+               
+
+              
+             
+         }
+
+         $media->save();
+         return redirect("admin/get-feed-content-by-id/$req->feed_content_id");
+    }
+    public function add_media(Request $req)
+    {
+        $id=$req->id;
+        return view('feed-content.add_media',compact('id'));
+    }
+    public function add_feed_media(Request $req)
+    {
+
+        $media=new FeedMedia;
+        $media->feed_content_id=$req->feed_content_id;
+        $media->title=$req->title;
+        $media->description=$req->description;
+        $media->external_link=$req->external_link;
+
+        if($req->hasfile('placeholder_image'))
+        {
+            $media->placholder_image = $req->file('placeholder_image')->store('feed','public');
+            $media->video_link=$req->video_link;
+        }
+        else
+        {
+            $media->placholder_image="";
+            $media->video_link="";
+        }
+
+        $media->save();
+       
+
+        if($req->media_type=="0" && count($req->files))
+        {
+           
+            foreach($req->file('files') as $file)
+            {
+               $type = '0';
+               $name = $file->store('feed','public');
+               $attachment = new FeedAttachment;
+               $attachment->feed_media_id = $media->id;
+               $attachment->media_name = $name;
+               $attachment->media_type = $type;
+               $attachment->save();
+            }
+          
+        }
+        else
+        {
+          
+           if($req->hasfile('video'))
+           {
+            
+               $type = '1';
+               $name = $req->file('video')->store('feed','public');
+               $attachment = new FeedAttachment;
+               $attachment->feed_media_id = $media->id;
+               $attachment->media_name = $name;
+               $attachment->media_type = $type;
+               $attachment->save();
+           }  
+               
+            
+        }
+
+        
+        return redirect("admin/get-feed-content-by-id/$req->feed_content_id");
     }
       
 }

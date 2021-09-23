@@ -117,15 +117,17 @@
             <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('quizrules.store') }}" >
             <!-- novalidate="novalidate" -->
                @csrf
-               <div class="form-group">
-                  <select class="@error('quiz_type_id') is-invalid @enderror form-control" name="quiz_type_id" id="type" required onchange="addType(this.value)">
+               <lable for="type"class="m-2">Quiz Type</lable>
+               <div class="form-group mt-2">
+                  <select class="@error('quiz_type_id') is-invalid @enderror form-control" name="quiz_type_id" id="type"  onchange="addType(this.value)" required>
                   <option>Select Any</option>
                   @foreach($quizType as $type)
                   <option value="{{$type->id}}">{{ucwords(strtolower($type->name))}}</option>
                   @endforeach
                    </select>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Quiz Speed</lable>
+               <div class="form-group mt-2">
                   <select class="@error('quiz_speed_id') is-invalid @enderror form-control" name="quiz_speed_id"  id="speed" required onchange="addSpeed(this.value)">
                   <option>Select Any</option>
                   @foreach($quizSpeed as $speed)
@@ -133,21 +135,26 @@
                   @endforeach
                    </select>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Scoring</lable>
+               <div class="form-group mt-2">
                   <input type="text" maxlength="50" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Negative Marking</lable>
+               <div class="form-group mt-2">
                   <input type="text" maxlength="50" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required>
                </div>
-               <div class="form-group row">
+               <lable class="m-2">Time Limit</lable>
+               <div class="form-group row mt-2">
+              
                   <div class="col-md-8">
                       <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-4 ">
                       <input type="text" maxlength="50" class=" form-control time_limit"  disabled placeholder="0" required>
                   </div>
                </div>
-               <div class="form-group row">
+               <lable class="m-2">No Of Players</lable>
+               <div class="form-group row mt-2">
                   <div class="col-md-8">
                     <input type="text"  maxlength="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required>
                     </div>
@@ -155,10 +162,12 @@
                       <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required>
                   </div>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Hint Guide</lable>
+               <div class="form-group row mt-2">
                   <input type="text" maxlength="50" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Question Navigation</lable>
+               <div class="form-group row mt-2">
                   <input type="text" maxlength="50" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required>
                </div>
                <div class="form-group more" >
@@ -193,7 +202,8 @@
             <!-- novalidate="novalidate" -->
             @method('PUT')
                @csrf
-               <div class="form-group">
+               <lable class="m-2">Quiz Type</lable>
+               <div class="form-group mt-2">
                   <select class="@error('quiz_type_id') is-invalid @enderror form-control" name="quiz_type_id" id="type" required onchange="addType(this.value)">
                   <option>Select Any</option>
                   @foreach($quizType as $type)
@@ -204,7 +214,8 @@
                   @endforeach
                    </select>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Quiz Speed</lable>
+               <div class="form-group mt-2">
                   <select class="@error('quiz_speed_id') is-invalid @enderror form-control" name="quiz_speed_id"  id="speed" required onchange="addSpeed(this.value)">
                   <option>Select Any</option>
                   @foreach($quizSpeed as $speed)
@@ -215,13 +226,16 @@
                   @endforeach
                    </select>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Scoring</lable>
+               <div class="form-group mt-2">
                   <input type="text" maxlength="50" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
                </div>
-               <div class="form-group">
+               <lable class="m-2">Negative Marking</lable>
+               <div class="form-group mt-2">
                   <input type="text" maxlength="50" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required value="{{$rule->negative_marking}}">
                </div>
-               <div class="form-group row">
+               <lable class="m-2">Time Limit</lable>
+               <div class="form-group row mt-2">
                   <div class="col-md-8">
                       <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
                   </div>
@@ -229,7 +243,8 @@
                       <input type="text" maxlength="50" class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
                   </div>
                </div>
-               <div class="form-group row">
+               <lable class="m-2">No Of Players</lable>
+               <div class="form-group row mt-2">
                   <div class="col-md-8">
                     <input type="text" maxlength="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
                     </div>
@@ -237,10 +252,12 @@
                       <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
                   </div>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Hint Guide</lable>
+               <div class="form-group row mt-2">
                   <input type="text" maxlength="50" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required value="{{$rule->hint_guide}}">
                </div>
-               <div class="form-group">
+               <lable class="m-2">Question Navigation</lable>
+               <div class="form-group row mt-2">
                   <input type="text" maxlength="50" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
                <div class="form-group moreone">
@@ -284,13 +301,16 @@
          </div>
          <div class="modal-body">
 
-               <div class="form-group">
+         <lable class="m-2">Scoring</lable>
+               <div class="form-group mt-2">
                   <input type="text"   disabled class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
                </div>
-               <div class="form-group">
+               <lable class="m-2">Negative Marking</lable>
+               <div class="form-group mt-2">
                   <input type="text"   disabled class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required value="{{$rule->negative_marking}}">
                </div>
-               <div class="form-group row">
+               <lable class="m-2">Time Limit</lable>
+               <div class="form-group row mt-2">
                   <div class="col-md-8">
                       <input type="text" disabled class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
                   </div>
@@ -298,7 +318,8 @@
                       <input type="text" disabled class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
                   </div>
                </div>
-               <div class="form-group row">
+               <lable class="m-2">No Of Players</lable>
+               <div class="form-group row mt-2">
                   <div class="col-md-8">
                     <input type="number" disabled min="0" max="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
                     </div>
@@ -306,10 +327,12 @@
                       <input type="text" disabled class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
                   </div>
                </div>
-               <div class="form-group">
+               <lable class="m-2">Hint Guide</lable>
+               <div class="form-group row mt-2">
                   <input type="text" disabled class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required value="{{$rule->hint_guide}}">
                </div>
-               <div class="form-group">
+               <lable class="m-2">Question Navigation</lable>
+               <div class="form-group row mt-2">
                   <input type="text" disabled class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
                <div class="form-group more">
@@ -395,11 +418,11 @@ function addSpeed(val){
 }
 
 function addMoreOne(){
-   $('.moreone').append('<div class="row box"><div class="form-group col-md-10"><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
+   $('.moreone').append('<div class="row box"><div class="form-group col-md-10 "><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
 }
 
 function addMore(){
-   $('.more').append('<div class="row box"><div class="form-group col-md-10"><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
+   $('.more').append('<div class="row box "><div class="form-group col-md-10 "><input type="text" maxlength="50" class=" form-control box" name="more[]" placeholder="More Value" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
 }
 
 
