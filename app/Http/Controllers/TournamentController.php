@@ -37,6 +37,7 @@ class TournamentController extends Controller
     {
         //
         $tournaments = Tournament::OrderBy('id', 'DESC')->get();
+      //  dd($tournaments);
         $age_groups = AgeGroup::OrderBy('id','DESc')->get();
         $difficulty_levels = DifficultyLevel::OrderBy('id','DESC')->get();
         
