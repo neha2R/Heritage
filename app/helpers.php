@@ -4,7 +4,7 @@ function sendNotification($data)
 {
         $msg = array
         (
-            'title1' => $data['title'],
+            'title' => $data['title'],
             'body' => $data['message'],
             'link' => $data['link'],
             'vibrate' => 1,
