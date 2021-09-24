@@ -112,7 +112,7 @@ class TournamenetUserController extends Controller
             $data = SaveTournamentResultJob::dispatchNow($request->all());
             
             $tournamentUsers = TournamenetUser::where('tournament_id',$request->tournament_id)->where('session_id', $request->session_id)->orderBy('id','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->get();
-           
+           dd($tournamentUsers->count());
             if($tournamentUsers->count()==5){
             
                 $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(1));
