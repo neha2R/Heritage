@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Carbon\Carbon;
+use App\TournamenetUser;
 
 class XpLpOfTournament implements ShouldQueue
 {
@@ -31,12 +32,16 @@ class XpLpOfTournament implements ShouldQueue
      */
     public function handle()
     {
-        //
+        // dd($this->result);
+        
+        $result = $this->result;
+        // dd($result);
         $tournamentUsers = TournamenetUser::select('user_id','marks','lp','rank')->where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->get();
         $newrank = array();
         $i = 0;
         $last_v = null;
        foreach($tournamentUsers as $key=>$user){
+           
         if ($user->marks != $last_v) {
             $i++;
             $last_v = $user->marks;
@@ -57,12 +62,14 @@ class XpLpOfTournament implements ShouldQueue
         if($i>10){
             $lp = 10;
         }
-        $user->rank = $i;
-        $user->lp = $lp;
-        $user->save();
-        // $singleuser = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $user->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+          $singleuser = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $user->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+        $singleuser->rank = $i;
+        $singleuser->lp = $lp;
+        $singleuser->save();
+      
 
        }
+       
  
     }
 }

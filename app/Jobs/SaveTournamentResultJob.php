@@ -38,7 +38,13 @@ class SaveTournamentResultJob implements ShouldQueue
         $result = $this->result;
         // TournamenetUser
         $tournament = Tournament::find($result['tournament_id']);
-        $user = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('id','DESC')->first();
+        $user = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $result['user_id'])->orderBy('id','DESC')->first();
+       
+        if($user->status=='completed'){
+         $data=array('status'=>'success','per'=> $user->percentage );
+          return  $data; 
+        }
+        
         $questions = TournamentSessionQuestion::where('tournament_id', $result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('id','DESC')->first('questions');
         if (empty($questions)) {
 
@@ -49,6 +55,7 @@ class SaveTournamentResultJob implements ShouldQueue
         $ans = explode(",", $result['answer']);
         $question = json_decode($questions['questions']);
         // dd($ans);
+        $marks=0;
         foreach ($ans as $key => $myperformance) {
             $saveperformance = new TournamentPerformance;
             $saveperformance->tournamenet_users_id
@@ -56,11 +63,11 @@ class SaveTournamentResultJob implements ShouldQueue
             $saveperformance->selected_option = $myperformance;
             $saveperformance->question_id = $question[$key];
             $ques = Question::find($question[$key]);
-            $marks=0;
+            
             if ($myperformance != 0) {
                 if ($ques->right_option == $myperformance) {
                     $saveperformance->result = '1';
-                    $marks=$marks+1;
+                    $marks++;
                 } else {
                     $saveperformance->result = '0';
                 }
@@ -71,17 +78,26 @@ class SaveTournamentResultJob implements ShouldQueue
 
         }
 
-        $marks = $marks*$tournament->marks_per_question;
-        $total = $tournament->marks_per_question*$tournament->no_of_question;
+        if($tournament->type=='0'){
+            $newmarks = $marks*$tournament->difficulty_level->weitage_per_question;
 
-        $count1 = $marks / $total;
+            $total = $tournament->difficulty_level->weitage_per_question*$tournament->no_of_question;
+
+        }else{
+            // For specila quiz
+            $newmarks = $marks*$tournament->marks_per_question;
+        $total = $tournament->marks_per_question*$tournament->no_of_question;
+        }
+        $count1 = $newmarks / $total;
         $count2 = $count1 * 100;
         $percentage = number_format($count2, 0);
 
         $user->status = 'completed';
-        $user->marks= $marks*$tournament->marks_per_question;
+        $user->marks= $newmarks;
         $user->percentage= $percentage;
         $user->save();
-        return 'success';
+        $data=array('status'=>'success','per'=> $percentage );
+        return  $data;
+       
     }
 }

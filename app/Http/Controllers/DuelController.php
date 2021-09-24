@@ -78,7 +78,7 @@ class DuelController extends Controller
                 }
                 else
                 {
-                    $allUsers['age_group']="N/A";
+                    $allUsers['age_group']="";
                 }
                 $allUsers['flag_icon']=public_path('/flags/').strtolower($user->country->sortname).".png";
                 $allUsers['status']="Online";

@@ -97,6 +97,8 @@ Route::post('tournament_rule','TournamentController@tournament_rule');
 Route::post('join_tournament','TournamentController@join_tournament');
 Route::post('tournament_questions','TournamentQuestionController@tournament_questions');
 Route::post('tournament_result','TournamenetUserController@tournament_result');
+Route::post('get_tournament_rank','TournamenetUserController@get_tournament_rank');
+Route::post('get_tournament_answer','TournamenetUserController@get_tournament_answer');
 
 /**  End from Here        */
 
