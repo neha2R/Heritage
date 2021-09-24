@@ -74,7 +74,7 @@ class SaveTournamentResultJob implements ShouldQueue
             }else{
                 $saveperformance->result =null;
             }
-            $saveperformance->save();
+            // $saveperformance->save();
 
         }
 
