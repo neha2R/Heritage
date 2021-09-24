@@ -36,7 +36,7 @@ class XpLpOfTournament implements ShouldQueue
         
         $result = $this->result;
         // dd($result);
-        $tournamentUsers = TournamenetUser::select('user_id','marks','lp','rank')->where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->get();
+        $tournamentUsers = TournamenetUser::select('user_id','marks','lp','rank')->where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->orderBy('marks','ASC')->where('status','completed')->whereDate('created_at', Carbon::today())->get();
         $newrank = array();
         $i = 0;
         $last_v = null;
