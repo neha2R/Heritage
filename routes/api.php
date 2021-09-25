@@ -99,6 +99,9 @@ Route::post('tournament_questions','TournamentQuestionController@tournament_ques
 Route::post('tournament_result','TournamenetUserController@tournament_result');
 Route::post('get_tournament_rank','TournamenetUserController@get_tournament_rank');
 Route::post('get_tournament_answer','TournamenetUserController@get_tournament_answer');
+Route::get('userleague','TournamenetUserController@userleague');
+Route::get('leaguerank','TournamenetUserController@leaguerank');
+Route::get('xprewards','TournamenetUserController@xprewards');
 
 /**  End from Here        */
 

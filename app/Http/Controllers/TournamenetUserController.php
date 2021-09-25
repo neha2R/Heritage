@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use App\TournamentPerformance;
 use App\Question;
+use App\League;
 
 class TournamenetUserController extends Controller
 {
@@ -129,6 +130,10 @@ class TournamenetUserController extends Controller
             if ($data['status'] == 'success') {
                 $response = [];
                 $response['user_id'] = $request->user_id;
+                if($data['per']==null){
+                    $data['per']=0;
+                }
+             
                 $response['percentage'] = $data['per'];
                 return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $response]);
             }
@@ -206,7 +211,9 @@ class TournamenetUserController extends Controller
        if ($validator->fails()) {
            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
        } 
+
        $data = [];
+
        $singleuser = TournamenetUser::where('tournament_id',$request->tournament_id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
 
        if(empty($singleuser)){
@@ -259,6 +266,152 @@ class TournamenetUserController extends Controller
     }
 
 
+
+     /**
+     * Get user league on tournamnet page.
+     *
+     * @param  \App\TournamenetUser  $tournamenetUser
+     * @return \Illuminate\Http\Response
+     */
+    public function userleague(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+
+       ]);
+
+       $response=[];
+
+       if ($validator->fails()) {
+           return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
+       } 
+
+       $leagues = League::select('id','title')->get()->toArray();
+       $user['title']='Debler';
+       $user['id']=1;
+
+       for($i=0; $i<=28; $i++){
+       $rank[] = rand(1,50);
+       }
+       $response['user'] = $user;
+       $response['league'] = $leagues;
+       $response['rank'] = $rank;
+
+       return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
+
+    }
+
+
+
+     /**
+     * Get user league and other league with top 5 players on tournamnet page.
+     *
+     * @param  \App\TournamenetUser  $tournamenetUser
+     * @return \Illuminate\Http\Response
+     */
+    public function leaguerank(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+
+       ]);
+
+       $response=[];
+
+       if ($validator->fails()) {
+           return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
+       } 
+
+       $leagues = League::select('id','title')->get();
+       $top=[];
+       $middle=[];
+       $bottom=[];
+
+       for($i=1; $i<=5; $i++){
+       $top1['rank'] = $i;
+       $top1['percentage'] = rand(10,70);
+       $top1['user_id'] = $i;
+       $top[]= $top1;
+       }
+
+       for($i=1; $i<=5; $i++){
+        $middel1['rank'] = $i;
+        $middel1['percentage'] = rand(10,70);
+        $middel1['user_id'] = $i;
+        $middle[]= $middel1;
+        }
+
+        for($i=1; $i<=5; $i++){
+            $bottom1['rank'] = $i;
+            $bottom1['percentage'] = rand(10,70);
+            $bottom1['user_id'] = $i;
+            $bottom[]= $bottom1;
+            }
+            $leaguedata=[];
+            foreach($leagues as $league){
+                $bottom=[];
+            for($i=1; $i<=5; $i++){
+                $bottom1['rank'] = $i;
+                $bottom1['percentage'] = rand(10,70);
+                $bottom1['user_id'] = $i;
+                $bottom[]= $bottom1;
+                }  
+         $leaguedata[$league->title] = $bottom;
+            }
+
+    //    $response['user'] = $user;
+       $response['league'] = $leaguedata;
+    //    $response['rank'] = $rank;
+
+       return response()->json(['status' => 200, 'data' => $response,'top'=>$top,'middle'=>$middle,'bottom'=>$bottom, 'message' => 'Success']);
+
+    }
+
+
+
+    /**
+     * Get user xprewards and other xprewards with tournamnet page.
+     *
+     * @param  \App\TournamenetUser  $tournamenetUser
+     * @return \Illuminate\Http\Response
+     */
+    public function xprewards(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+
+       ]);
+
+       $response=[];
+
+       if ($validator->fails()) {
+           return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
+       } 
+
+       $leagues = League::select('id','title')->get();
+       
+       $your_leage = [];
+       $other_league=[];
+       $your_leage['user_id'] =2;
+       $your_leage['league_id'] =4;
+       $your_leage['league'] ='Initiate';
+       $your_leage['xp'] =400;
+
+       foreach($leagues as $league){
+        $data['league_id'] =$league->id;
+        $data['league'] =$league->title;
+        $data['xp'] =   $league->xp;
+        $other_league[] = $data;
+       }
+
+    //    $response['user'] = $user;
+       $response['other_league'] = $other_league;
+       $response['your_leage'] = $your_leage;
+    //    $response['rank'] = $rank;
+
+       return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
+
+    }
 
 
     
