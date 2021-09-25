@@ -153,18 +153,18 @@ class TournamenetUserController extends Controller
        if ($validator->fails()) {
            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
        }  
-
+       $response=[];
        $singleuser = TournamenetUser::where('tournament_id',$request->tournament_id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
 
        if(empty($singleuser)){
-        return response()->json(['status' => 204, 'message' => 'No tournament found', 'data' => '',]);
+        return response()->json(['status' => 204, 'message' => 'No tournament found', 'data' =>$response,]);
        }
 
        if($singleuser->rank==null){
         return response()->json(['status' => 200, 'message' => 'Rank will be not calculated yet', 'data' => '','result'=>'0']);
        } else{
            $user=[];
-           $response=[];
+           
            $user['user_id'] = $singleuser->user_id;
            $user['rank'] = $singleuser->rank;
            $user['lp'] = $singleuser->lp;
@@ -206,17 +206,17 @@ class TournamenetUserController extends Controller
        if ($validator->fails()) {
            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
        } 
-
+       $data = [];
        $singleuser = TournamenetUser::where('tournament_id',$request->tournament_id)->where('session_id', $request->session_id)->where('user_id', $request->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
 
        if(empty($singleuser)){
-        return response()->json(['status' => 204, 'message' => 'No record found', 'data' => '',]);
+        return response()->json(['status' => 204, 'message' => 'No record found', 'data' => $data,]);
        }
 
        
             $questions = TournamentPerformance::where('tournamenet_users_id', $singleuser->id)->get();
      
-            $data = [];
+           
             foreach ($questions as $question) {
                 $res = [];
                 $que = Question::where('id', $question->question_id)->first();
