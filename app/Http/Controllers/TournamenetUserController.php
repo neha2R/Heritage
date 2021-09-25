@@ -388,7 +388,7 @@ class TournamenetUserController extends Controller
            return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
        } 
 
-       $leagues = League::select('id','title')->get();
+       $leagues = League::select('id','title','xp')->get();
        
        $your_leage = [];
        $other_league=[];
@@ -398,10 +398,12 @@ class TournamenetUserController extends Controller
        $your_leage['xp'] =400;
 
        foreach($leagues as $league){
+           if($your_leage['league_id'] != $league->id){
         $data['league_id'] =$league->id;
         $data['league'] =$league->title;
         $data['xp'] =   $league->xp;
         $other_league[] = $data;
+           }
        }
 
     //    $response['user'] = $user;
