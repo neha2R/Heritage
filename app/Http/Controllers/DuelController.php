@@ -12,6 +12,8 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\QuizType;
+
 class DuelController extends Controller
 {
      public function create_duel(Request $request)
@@ -27,10 +29,14 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-
+        $quiz_type = QuizType::where('name','like','%Dual%')->where('no_of_player',2)->latest()->first();
+        
+        if(empty($quiz_type)){
+      return response()->json(['status' => 204, 'message' => 'Dual type quiz not found','data' => array()]);
+        }
         $data = new Attempt;
         $data->user_id = $request->user_id;
-        $data->quiz_type_id = '2';
+        $data->quiz_type_id = $quiz_type->id;
         $data->difficulty_level_id = $request->difficulty_level_id;
         $data->quiz_speed_id = $request->quiz_speed_id;
         $data->save();

@@ -327,6 +327,9 @@ class TournamenetUserController extends Controller
        $middle=[];
        $bottom=[];
 
+       $your_leage['league_id'] =4;
+       $your_leage['league_name'] ='Initiate';
+
        for($i=1; $i<=5; $i++){
        $top1['rank'] = $i;
        $top1['percentage'] = rand(10,70);
@@ -348,22 +351,37 @@ class TournamenetUserController extends Controller
             $bottom[]= $bottom1;
             }
             $leaguedata=[];
+
+
             foreach($leagues as $league){
-                $bottom=[];
+                $alldatas=[];
+             if($your_leage['league_id'] != $league->id){   
             for($i=1; $i<=5; $i++){
-                $bottom1['rank'] = $i;
-                $bottom1['percentage'] = rand(10,70);
-                $bottom1['user_id'] = $i;
-                $bottom[]= $bottom1;
-                }  
-         $leaguedata[$league->title] = $bottom;
+
+                $alldatas1['rank'] = $i;
+                $alldatas1['percentage'] = rand(10,70);
+                $alldatas1['user_id'] = $i;
+                $alldatas[]= $alldatas1;
+                } 
+    $response['oleague'.$league->id]['league_id'] =$league->id;
+    $response['oleague'.$league->id]['league_name'] =$league->title;
+    $response['oleague'.$league->id]['data'] =$alldatas;
             }
 
+        //  $leaguedata[$league->title] = $bottom;
+            }
+
+         $your_leage['top'] =$top;
+         $your_leage['middle'] =$middle;
+         $your_leage['bottom'] =$bottom;
+
+        $response['your_leage'] = $your_leage;
+
     //    $response['user'] = $user;
-       $response['league'] = $leaguedata;
+    //    $response['league'] = $leaguedata;
     //    $response['rank'] = $rank;
 
-       return response()->json(['status' => 200, 'data' => $response,'top'=>$top,'middle'=>$middle,'bottom'=>$bottom, 'message' => 'Success']);
+       return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
 
     }
 
@@ -402,12 +420,12 @@ class TournamenetUserController extends Controller
         $data['league_id'] =$league->id;
         $data['league'] =$league->title;
         $data['xp'] =   $league->xp;
-        $other_league[] = $data;
+        $response['oleague'.$league->id] = $data;
            }
        }
 
     //    $response['user'] = $user;
-       $response['other_league'] = $other_league;
+    //    $response['other_league'] = $other_league;
        $response['your_leage'] = $your_leage;
     //    $response['rank'] = $rank;
 
