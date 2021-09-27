@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\QuizType;
+use App\Domain;
 
 class DuelController extends Controller
 {
@@ -40,17 +41,22 @@ class DuelController extends Controller
         $data->difficulty_level_id = $request->difficulty_level_id;
         $data->quiz_speed_id = $request->quiz_speed_id;
         $data->save();
+
+        // Create dual link
         $dual=Attempt::where('id',$data->id)->first();
-        $dual->link="Heritage/Dual#".$data->id;
+        $dual->link="cul.tre/dual#".$data->id;
         $dual->save();
+
         $domain = new QuizDomain;
         $domain->attempts_id = $data->id;
         $domain->domain_id = $request->domains;
         $domain->save();
         
           $dual=[];
+          $dual['dual_id']= $data->id;
          $dual['user']=ucwords(strtolower($data->user->name));
-         $dual['domain']=ucwords(strtolower($data->dual_domain->domain->name));
+         $domains = explode(',',$request->domains);
+         $dual['domain']=Domain::select('id','name')->whereIn('id',$domains)->get()->toArray();
          $dual['quiz_speed']=ucwords(strtolower($data->quiz_speed->name));
          $dual['difficulty']=ucwords(strtolower($data->difficulty->name));
          $dual['quiz_type']=ucwords(strtolower($data->quiz_type->name));
@@ -116,15 +122,24 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+     $challenge=   Challange::where('attempt_id',$req->dual_id)
+      ->where('status','0')
+     ->where('from_user_id',$req->from_id)->whereDate('created_at',carbon::now())->latest();
 
-
-        if(Challange::where('attempt_id',$req->dual_id)->where('to_user_id',$req->to_id)->where('from_user_id',$req->from_id)->whereDate('created_at',carbon::now())->first())
+        if(carbon::now()->parse($challenge->created_at)->diffInSeconds()<60)
         {
-                return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+           return response()->json(['status' => 200, 'message' => 'Sorry! Wait for 1 minutes or till accept the request.']);   
         }
-        else
-        {
-            $challange=Challange::where('attempt_id',$req->dual_id)->where('from_user_id',$req->from_id)->whereDate('created_at',carbon::now())->get()->count();
+
+        // if($challenge)
+        // {
+        //         return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        // }
+        // else
+        // {
+            $challange=Challange::where('attempt_id',$req->dual_id)->where('from_user_id',$req->from_id)
+            ->where('to_user_id',$req->to_id)
+            ->whereDate('created_at',carbon::now())->get()->count();
             if($challange>=3)
             {
                 return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations more then 3 Users in single day."]);
@@ -150,7 +165,7 @@ class DuelController extends Controller
                   sendNotification($data);
                   return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);   
             }
-        }
+        // }
        
      }
      public function accept_invitation(Request $req)
@@ -167,8 +182,14 @@ class DuelController extends Controller
 
        
          $attempt=Attempt::where('link',$req->dual_link)->first();
+         if(empty($attempt)){
+            return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']); 
+         }
          $challenge=Challange::where('attempt_id',$attempt->id)->where('to_user_id',$req->user_id)->first();
-        
+
+         if(empty($challenge)){
+            return response()->json(['status' => 204, 'message' => 'Invitation not send yet']); 
+         }
          if(carbon::now()->parse($challenge->created_at)->diffInSeconds()>60)
          {
             return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);   
@@ -212,6 +233,7 @@ class DuelController extends Controller
         
         if($attempt=Attempt::where('user_id',$req->user_id)->where('id',$req->dual_id)->first())
         {
+       
             $data=[];
             $data['link']=$attempt->link;
             return response()->json(['status' => 200, 'message' => 'Generated Link','data'=>$data]);   
