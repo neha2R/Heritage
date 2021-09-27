@@ -355,6 +355,7 @@ class TournamenetUserController extends Controller
 
             foreach($leagues as $league){
                 $alldatas=[];
+                $myname = 1;
              if($your_leage['league_id'] != $league->id){   
             for($i=1; $i<=5; $i++){
 
@@ -365,7 +366,8 @@ class TournamenetUserController extends Controller
                 } 
     $response['oleague'.$league->id]['league_id'] =$league->id;
     $response['oleague'.$league->id]['league_name'] =$league->title;
-    $response['oleague'.$league->id]['data'] =$alldatas;
+    $response['oleague'.$myname]['data'] =$alldatas;
+    $myname++;
             }
 
         //  $leaguedata[$league->title] = $bottom;
@@ -416,11 +418,13 @@ class TournamenetUserController extends Controller
        $your_leage['xp'] =400;
 
        foreach($leagues as $league){
+        $myname=1;
            if($your_leage['league_id'] != $league->id){
         $data['league_id'] =$league->id;
         $data['league'] =$league->title;
         $data['xp'] =   $league->xp;
-        $response['oleague'.$league->id] = $data;
+        $response['oleague'.$myname] = $data;
+        $myname++;
            }
        }
 
