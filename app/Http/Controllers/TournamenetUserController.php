@@ -352,10 +352,10 @@ class TournamenetUserController extends Controller
             }
             $leaguedata=[];
 
-
+            $myname = 1;
             foreach($leagues as $league){
                 $alldatas=[];
-                $myname = 1;
+             
              if($your_leage['league_id'] != $league->id){   
             for($i=1; $i<=5; $i++){
 
@@ -416,9 +416,9 @@ class TournamenetUserController extends Controller
        $your_leage['league_id'] =4;
        $your_leage['league'] ='Initiate';
        $your_leage['xp'] =400;
-
+       $myname=1;
        foreach($leagues as $league){
-        $myname=1;
+       
            if($your_leage['league_id'] != $league->id){
         $data['league_id'] =$league->id;
         $data['league'] =$league->title;
