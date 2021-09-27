@@ -364,8 +364,8 @@ class TournamenetUserController extends Controller
                 $alldatas1['user_id'] = $i;
                 $alldatas[]= $alldatas1;
                 } 
-    $response['oleague'.$league->id]['league_id'] =$league->id;
-    $response['oleague'.$league->id]['league_name'] =$league->title;
+    $response['oleague'.$myname]['league_id'] =$league->id;
+    $response['oleague'.$myname]['league_name'] =$league->title;
     $response['oleague'.$myname]['data'] =$alldatas;
     $myname++;
             }
