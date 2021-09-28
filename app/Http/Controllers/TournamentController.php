@@ -648,7 +648,7 @@ class TournamentController extends Controller
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
         $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest();
-        
+
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
          if(empty($question)){
          $response =  AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
@@ -689,19 +689,23 @@ class TournamentController extends Controller
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
-        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest();
+        $tournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest();
+        dd($tournamenetUser);
         //  TournamentSessionQuestion::find();
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->first();
+
          if(empty($question)){
             AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
          }
-        if(empty($TournamenetUser)){
+        if(empty($tournamenetUser)){
+
         $savetournament = new TournamenetUser;
         $savetournament->user_id = $request->user_id;
         $savetournament->tournament_id = $request->tournament_id;
         $savetournament->session_id = $request->session_id;
         $savetournament->status='joined';
         $savetournament->save();
+
         }
        
         if (empty($savetournament)) {
