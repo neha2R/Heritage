@@ -649,7 +649,8 @@ class TournamentController extends Controller
         }
         $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest()->first();
 
-         $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
+         $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->first();
+
          if(empty($question)){
          $response =  AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
          }
@@ -686,6 +687,7 @@ class TournamentController extends Controller
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }  
         $tournament = Tournament::find($request->tournament_id);
+
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }

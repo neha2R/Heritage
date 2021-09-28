@@ -128,7 +128,7 @@ class DuelController extends Controller
         }
      $challenge=   Challange::where('attempt_id',$req->dual_id)
       ->where('status','0')
-     ->where('from_user_id',$req->from_id)->whereDate('created_at',carbon::now())->latest();
+     ->where('from_user_id',$req->from_id)->whereDate('created_at',carbon::now())->latest()->first();
 
         if(carbon::now()->parse($challenge->created_at)->diffInSeconds()<60)
         {
