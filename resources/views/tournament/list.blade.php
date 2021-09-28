@@ -521,25 +521,25 @@
                                 </div>
                             </div>
                             <div class = "row"> 
-                                <!-- <div class="col">
+                                <div class="col">
                                     <div class="form-group">
                                         <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required >
-                                        <option value="{{$tournament->domain->id}}" selected>{{$tournament->domain->name}}</option>    
-                                        <option  disabled  value>--Select Domain--</option>
+                                        <option value="{{$tournament->domain->id}}" disabled selected>{{$tournament->domain->name}}</option>    
+                                        <!-- <option  disabled  value>--Select Domain--</option>
                                             @foreach($domains as $domain)
                                                 <option value="{{$domain->id}}">{{$domain->name}}</option>
-                                            @endforeach
+                                            @endforeach -->
                                         </select>
                                     </div>
-                                </div> -->
+                                </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
-                                            <option value="{{$tournament->sub_domain->id}}" selected>{{$tournament->sub_domain->name}}</option>
-                                            <option  disabled value>-- Select Sub Domain--</option>
+                                            <option value="{{$tournament->sub_domain->id}}" disabled selected>{{$tournament->sub_domain->name}}</option>
+                                            <!-- <option  disabled value>-- Select Sub Domain--</option>
                                             @foreach($subDomains as $subDomain)
                                                 <option value="{{$subDomain->id}}">{{$subDomain->name}}</option>
-                                            @endforeach
+                                            @endforeach -->
                                         </select>
                                     </div>
                                 </div>
