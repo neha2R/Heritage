@@ -142,7 +142,7 @@ class DuelController extends Controller
             ->whereDate('created_at',carbon::now())->get()->count();
             if($challange>=3)
             {
-                return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations more then 3 Users in single day."]);
+                return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations more then 3 times in single day."]);
             }
             else
             {
@@ -190,7 +190,7 @@ class DuelController extends Controller
          if(empty($challenge)){
             return response()->json(['status' => 204, 'message' => 'Invitation not send yet']); 
          }
-         if(carbon::now()->parse($challenge->created_at)->diffInSeconds()>60)
+         if(carbon::now()->parse($challenge->created_at)->diffInSeconds()>300)
          {
             return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);   
          }
