@@ -706,6 +706,8 @@ class TournamentController extends Controller
         $savetournament->status='joined';
         $savetournament->save();
 
+        } else{
+            return response()->json(['status' => 200, 'message' => 'User joined already', 'data' => $tournamenetUser]);
         }
        
         if (empty($savetournament)) {
