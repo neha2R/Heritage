@@ -23,6 +23,7 @@ use App\QuizRule;
 use Illuminate\Support\Facades\Validator;
 use App\TournamentSessionQuestion;
 use App\Jobs\AddSessionQuestionJob;
+use App\User;
 
 //use App\Frequency;
 
@@ -525,10 +526,34 @@ class TournamentController extends Controller
     // get all tournament api 
     public function tournament(Request $request)
     {
-        //    dd($request->user_id);
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->OrderBy('id', 'DESC')->get();
-        //Post::with('user:id,username')->get();
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+       ]);
 
+       if ($validator->fails()) {
+           return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+       } 
+            $user = User::find($request->user_id);
+            $age=Carbon::parse($user->dob)->age;
+            
+         $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
+         
+         if($request->search){
+            $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')
+            ->where('title', 'like', '%' . $request->search . '%')
+            ->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+         }else{
+        //    dd($request->user_id);
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+         }
+        //Post::with('user:id,username')->get();
+        $currentDateTime = Carbon::now();
+        
+        $date=  $currentDateTime->toDateString();
+         $time=  $currentDateTime->toTimeString(); 
+         if(empty($tournaments)){
+            return response()->json(['status' => 204, 'data' => array(), 'message' => 'No tournament found for the age group','date'=>$date,'time'=>$time]);
+         }
         foreach($tournaments as $tournament)
         {
             
@@ -574,10 +599,7 @@ class TournamentController extends Controller
           
             //
         }
-        $currentDateTime = Carbon::now();
-        
-       $date=  $currentDateTime->toDateString();
-        $time=  $currentDateTime->toTimeString(); 
+     
         return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data','date'=>$date,'time'=>$time]);
         
 
@@ -625,8 +647,8 @@ class TournamentController extends Controller
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
-        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
-      
+        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest();
+        
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
          if(empty($question)){
          $response =  AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);

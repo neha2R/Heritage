@@ -105,7 +105,8 @@ Route::get('xprewards','TournamenetUserController@xprewards');
 
 /**  End from Here        */
 
-
+// user report for a quiz 
+Route::post('report','UserReportController@userreport');
 
 
 /*

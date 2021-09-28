@@ -76,12 +76,12 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-             $users=User::where('id','!=',$req->user_id)->get(); 
+             $users=User::where('id','!=',$req->user_id)->where('type','2')->get(); 
              $data=[];
              foreach($users as $user)
              {
                 $age=Carbon::parse($user->dob)->age;
-              
+                $allUsers['id']=$user->id;
                 $allUsers['name']=ucwords(strtolower($user->name));
 
                 if($ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
@@ -92,7 +92,11 @@ class DuelController extends Controller
                 {
                     $allUsers['age_group']="";
                 }
-                $allUsers['flag_icon']=public_path('/flags/').strtolower($user->country->sortname).".png";
+                if($user->country){
+                $allUsers['flag_icon']=url('/flags').'/'.strtolower($user->country->sortname).".png";
+                } else{
+                    $allUsers['flag_icon']=url('/flags/').strtolower('in').".png"; 
+                }
                 $allUsers['status']="Online";
                 if(Challange::where('attempt_id',$req->dual_id)->where('to_user_id',$user->id)->whereDate('created_at',carbon::now())->first())
                 {

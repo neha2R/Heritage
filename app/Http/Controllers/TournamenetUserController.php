@@ -116,7 +116,7 @@ class TournamenetUserController extends Controller
            
             if($tournamentUsers->count()==5){
             
-                $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(5));
+                $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(1));
                 $this->dispatch($job);
 
 

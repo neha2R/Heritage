@@ -62,7 +62,7 @@ class XpLpOfTournament implements ShouldQueue
         if($i>10){
             $lp = 10;
         }
-          $singleuser = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $user->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+        $singleuser = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $user->user_id)->orderBy('marks','DESC')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
         $singleuser->rank = $i;
         $singleuser->lp = $lp;
         $singleuser->save();
