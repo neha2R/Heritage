@@ -83,7 +83,7 @@ Route::get('product_search', 'ProductController@product_search');
 Route::post('create_duel', 'DuelController@create_duel');
 Route::get('get_all_users', 'DuelController@get_all_users');
 Route::get('send_invitation', 'DuelController@send_invitation');
-Route::get('accept_invitation', 'DuelController@accept_invitation');
+Route::post('accept_invitation', 'DuelController@accept_invitation');
 Route::get('generate_link', 'DuelController@generate_link');
  /**  End from Here        */
 
@@ -97,10 +97,16 @@ Route::post('tournament_rule','TournamentController@tournament_rule');
 Route::post('join_tournament','TournamentController@join_tournament');
 Route::post('tournament_questions','TournamentQuestionController@tournament_questions');
 Route::post('tournament_result','TournamenetUserController@tournament_result');
+Route::post('get_tournament_rank','TournamenetUserController@get_tournament_rank');
+Route::post('get_tournament_answer','TournamenetUserController@get_tournament_answer');
+Route::get('userleague','TournamenetUserController@userleague');
+Route::get('leaguerank','TournamenetUserController@leaguerank');
+Route::get('xprewards','TournamenetUserController@xprewards');
 
 /**  End from Here        */
 
-
+// user report for a quiz 
+Route::post('report','UserReportController@userreport');
 
 
 /*

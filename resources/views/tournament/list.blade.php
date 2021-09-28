@@ -98,9 +98,25 @@
                             <th scope="row">{{$tournament->id}}</th>
                               <th scope="row">{{$tournament->title}}</th>
                              <td>{{$tournament->frequency->title}}</td>
-                             <td></td>
+                             <td><label class="switch">
+                                 @if($tournament->status=='1')
+                                 @php $status='checked'; @endphp
+                                 @else
+                                 @php $status=''; @endphp
+                                 @endif
+                                 <input {{$status}}  type="checkbox" class="status" tournament_id="{{$tournament->id}}">
+                                 <span class="slider round"></span>
+                                 </label>
+
+                              </td>
                              <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$tournament->id}}"><i class="fas fa-pencil-alt"></i></td>
-                             <td></td>
+                             <td>
+                                 <form class="delete" action="{{route('tournament.destroy',$tournament->id)}}" method="POST">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button type="submit" class=" btn mr-2 mb-2 btn-primary " ><i class="far fa-trash-alt"></i></button>
+                                 </form>
+                              </td>
 
                             </tr>   
                             @endforeach            
@@ -858,6 +874,22 @@
         return c; //you can just return c because it will be true or false
     });
 
+    $(document).on('change','.status', function() {
+
+
+if(confirm("Are you sure want to change the status ?")) {
+    var tournament_id = $(this).attr('tournament_id');
+    window.location.href = "/admin/tournament/"+tournament_id;
+   }
+   else{
+     if($(this).prop('checked') == true){
+        $(this).prop('checked', false); // Unchecks it
+     } else{
+        $(this).prop('checked', true);
+
+     }
+   }
+  });
     $(document).on('change','.frequency', function() {
           if($(this).val()==1){
             $('.sessions').show();

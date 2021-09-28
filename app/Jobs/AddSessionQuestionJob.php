@@ -42,10 +42,11 @@ class AddSessionQuestionJob implements ShouldQueue
 
         $question = TournamentSessionQuestion::where('session_id',$this->sessionid)->where('tournament_id',$this->tornamnetid)->first();
         if(empty($question)){
+           
             $tourQuestions = TournamentQuizeQuestion::where('tournament_id',$this->tornamnetid)->first();
 
             if($tourQuestions->question_type=='0'){
-            $tournament_questions = QuestionsSetting::where('domain_id','=', $tournament->domain_id)->pluck('id')->random($tournament->no_of_question)->toArray();
+            $tournament_questions = QuestionsSetting::where('domain_id','=', $tournament->domain_id)->inRandomOrder()->limit($tournament->no_of_question)->pluck('question_id')->toArray();
 
              $questions_ids = $tournament_questions;
          

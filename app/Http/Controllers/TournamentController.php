@@ -23,6 +23,7 @@ use App\QuizRule;
 use Illuminate\Support\Facades\Validator;
 use App\TournamentSessionQuestion;
 use App\Jobs\AddSessionQuestionJob;
+use App\User;
 
 //use App\Frequency;
 
@@ -243,9 +244,22 @@ class TournamentController extends Controller
      * @param  \App\Tournament  $tournament
      * @return \Illuminate\Http\Response
      */
-    public function show(Tournament $tournament)
+    public function show($id)
     {
-        //
+        $tournament = Tournament::find($id);
+        if ($tournament->status == '1') {
+            $tournament->status = '0';
+        } else {
+            $tournament->status = '1';
+
+        }
+        $tournament->save();
+
+        if ($tournament->id) {
+            return redirect()->back()->with(['success' => 'Status updated Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -456,7 +470,12 @@ class TournamentController extends Controller
      */
     public function destroy(Tournament $tournament)
     {
-        //
+        $tournament->delete();
+        if ($tournament->id) {
+            return redirect()->back()->with(['success' => 'Tournament Deleted Successfully']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     public function tournament_add(Request $req)
@@ -507,10 +526,34 @@ class TournamentController extends Controller
     // get all tournament api 
     public function tournament(Request $request)
     {
-        //    dd($request->user_id);
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->OrderBy('id', 'DESC')->get();
-        //Post::with('user:id,username')->get();
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+       ]);
 
+       if ($validator->fails()) {
+           return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+       } 
+            $user = User::find($request->user_id);
+            $age=Carbon::parse($user->dob)->age;
+            
+         $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
+         
+         if($request->search){
+            $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')
+            ->where('title', 'like', '%' . $request->search . '%')
+            ->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+         }else{
+        //    dd($request->user_id);
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+         }
+        //Post::with('user:id,username')->get();
+        $currentDateTime = Carbon::now();
+        
+        $date=  $currentDateTime->toDateString();
+         $time=  $currentDateTime->toTimeString(); 
+         if(empty($tournaments)){
+            return response()->json(['status' => 204, 'data' => array(), 'message' => 'No tournament found for the age group','date'=>$date,'time'=>$time]);
+         }
         foreach($tournaments as $tournament)
         {
             
@@ -524,11 +567,13 @@ class TournamentController extends Controller
              
             //Current day record
             if($tournament->frequency_id==1){
-                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','joined')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
             }
             // Prevoius 7 days record
             if($tournament->frequency_id==2){
-                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
+                ->where('status','joined')
+                ->where('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
             }
                 
             // // Last Month record
@@ -538,7 +583,9 @@ class TournamentController extends Controller
 
               // This Month record
             if($tournament->frequency_id==3){
-                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereMonth('created_at', date('m'))
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
+                ->where('status','joined')
+                ->where('status','completed')->whereMonth('created_at', date('m'))
                 ->whereYear('created_at', date('Y'))->first();
             }
           
@@ -552,10 +599,7 @@ class TournamentController extends Controller
           
             //
         }
-        $currentDateTime = Carbon::now();
-        
-       $date=  $currentDateTime->toDateString();
-        $time=  $currentDateTime->toTimeString(); 
+     
         return response()->json(['status' => 200, 'data' => $tournaments, 'message' => 'Domain Data','date'=>$date,'time'=>$time]);
         
 
@@ -603,8 +647,8 @@ class TournamentController extends Controller
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
-        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
-      
+        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest()->first();
+
          $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
          if(empty($question)){
          $response =  AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
@@ -645,19 +689,25 @@ class TournamentController extends Controller
         if (empty($tournament)) {
             return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
         }
-        $TournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
+        $tournamenetUser = TournamenetUser::where('user_id',$request->user_id)->where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->latest()->first();
+       
         //  TournamentSessionQuestion::find();
-         $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
+         $question = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->whereDate('created_at', Carbon::today())->first();
+
          if(empty($question)){
             AddSessionQuestionJob::dispatchNow($request->tournament_id,$request->session_id);
          }
-        if(empty($TournamenetUser)){
+        if(empty($tournamenetUser)){
+
         $savetournament = new TournamenetUser;
         $savetournament->user_id = $request->user_id;
         $savetournament->tournament_id = $request->tournament_id;
         $savetournament->session_id = $request->session_id;
         $savetournament->status='joined';
         $savetournament->save();
+
+        } else{
+            return response()->json(['status' => 200, 'message' => 'User joined already', 'data' => $tournamenetUser]);
         }
        
         if (empty($savetournament)) {
