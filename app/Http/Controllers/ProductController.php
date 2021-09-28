@@ -251,11 +251,11 @@ class ProductController extends Controller
         }
         else
         {
-            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
+            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
         }
         
         if(empty($data)){
-            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => '']);
+            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
         }
         return response()->json(['status' => 200, 'message' => 'Products Found','data' => $data]);
 
