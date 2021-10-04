@@ -162,92 +162,92 @@ use App\QuestionsSetting;
                               <div class="form-group inner-addon right-addon">
                               <!-- <label for="name">Quiz Speed</label> -->
                               <span class="image-upload">
-                              <label for="file-input2">
+                              <!-- <label for="file-input2">
                               <i class="fa fa-paperclip form-control-feedback"></i>
-                              </label>
-                              <input id="file-input2" name="option1_media" class="file-input" type="file" accept="image/*"/>
+                              </label> -->
+                              <!-- <input id="file-input2" name="option1_media" class="file-input" type="file" accept="image/*"/> -->
                               </span>
                               <input type="text" class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
                               </div>
                         </div>
-                           <div class="col-md-2 yes" id="img2">
+                           <!-- <div class="col-md-2 yes" id="img2">
                               <img id="ImgPreview2" src="" class="preview2 " />
                               <input type="button" id="removeImage2" value="x" class="btn-rmv2 " />
                               <video width="141" class="video" id="video2" style="display:none" controls>
                               <source src="" id="video_here7">
                               Your browser does not support HTML5 video.
                               </video>
-                           </div>
+                           </div> -->
                      </div>
 
                      <div class="row">
                         <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                               <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
+                              <!-- <span class="image-upload">
                               <label for="file-input3">
                               <i class="fa fa-paperclip form-control-feedback"></i>
                               </label>
                               <input id="file-input3" name="option2_media" class="file-input" type="file" accept="image/*"/>
-                              </span>
+                              </span> -->
                               <input type="text" class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
                               </div>
                         </div>
-                        <div class="col-md-2 yes" id="img3">
+                        <!-- <div class="col-md-2 yes" id="img3">
                            <img id="ImgPreview3" src="" class="preview3 " />
                            <input type="button" id="removeImage3" value="x" class="btn-rmv3 " />
                            <video width="141" class="video" id="video3" style="display:none" controls>
                            <source src="" id="video_here8">
                            Your browser does not support HTML5 video.
                            </video>
-                        </div>
+                        </div> -->
                      </div>
 
                <div class="row">
                   <div class="col-md-10">
                         <div class="form-group inner-addon right-addon">
                         <!-- <label for="name">Quiz Speed</label> -->
-                        <span class="image-upload">
+                        <!-- <span class="image-upload">
                         <label for="file-input4">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
                         <input id="file-input4"  name="option3_media" class="file-input" type="file" accept="image/*"/>
                         <input type="hidden" name="option3_media_old" />
-                        </span>
+                        </span> -->
                         <input type="text" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
                         </div>
                   </div>
-                  <div class="col-md-2 yes" id="img4">
+                  <!-- <div class="col-md-2 yes" id="img4">
                      <img id="ImgPreview4"src="" class=" preview4 " />
                      <input type="button" id="removeImage4" value="x" class=" btn-rmv4 "  />
                      <video width="141" class="video" id="video4" style="display:none" controls>
                      <source src="" id="video_here9">
                      Your browser does not support HTML5 video.
                      </video>
-                  </div>
+                  </div> -->
               </div>
 
          <div class="row">
          <div class="col-md-10">
          <div class="form-group inner-addon right-addon">
          <!-- <label for="name">Quiz Speed</label> -->
-         <span class="image-upload">
+         <!-- <span class="image-upload">
          <label for="file-input5">
          <i class="fa fa-paperclip form-control-feedback"></i>
          </label>
          <input id="file-input5"  name="option4_media" class="file-input" type="file" accept="image/*"/>
-         </span>
+         </span> -->
          <input type="text" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
          </div>
          </div>
-         <div class="col-md-2 yes" id="img5">
+         <!-- <div class="col-md-2 yes" id="img5">
          <img id="ImgPreview5"src="" class="preview5 " />
          <input type="button" id="removeImage5" value="x" class="btn-rmv5 " />
          <video width="141" class="video" id="video5" style="display:none" controls>
          <source src="" id="video_here10">
          Your browser does not support HTML5 video.
          </video>
-         </div>
+         </div> -->
          </div>
          <div class="form-group inner-addon right-addon">
          <select class="@error('option3') is-invalid @enderror form-control" required  name="right_option" >
@@ -329,6 +329,9 @@ use App\QuestionsSetting;
          </div>
          <div class="modal-body">
             <!-- novalidate="novalidate" -->
+            <form id="editform" enctype="multipart/form-data" class="col-md-10 mx-auto" method="post" action="{{ route('question.update',$question->id) }}"  >
+            @method('PUT')
+               @csrf
                   <div class="row">
                      <div class="col-md-10">
                         <div class="form-group inner-addon right-addon">
@@ -351,17 +354,19 @@ use App\QuestionsSetting;
                         </div>
                      </div>
                      <div class="col-md-2 yes" id="img1">
-                        @if($question->type=='1')
+                        @if($question->type=='2')
                         <audio controls>
 
                            <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
                            Your browser does not support the audio tag.
                            </audio>
-                        @else
+                       @endif
+                        @if($question->type=='1')
 
                         <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
                         <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
-                        <video width="141" class="video" id="video1" style="display:none" controls>
+                        @endif                        @if($question->type=='3')
+                        <video width="141" class="video" id="video1"  controls>
                            <source src="" id="video_here6">
                            Your browser does not support HTML5 video.
                         </video>
@@ -372,93 +377,93 @@ use App\QuestionsSetting;
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
                         <!-- <label for="name">Quiz Speed</label> -->
-                        <span class="image-upload">
+                        <!-- <span class="image-upload">
                         <label for="file-input7">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
                         <input id="file-input7" name="option1_media" class="file-input" type="file" accept="*"/>
                         <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
-                        </span>
+                        </span> -->
                         <input type="text" value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
                      </div>
                   </div>
-                  <div class="col-md-2 yes" id="img2">
+                  <!-- <div class="col-md-2 yes" id="img2">
                      <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
                      <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
                      <video width="141" class="video" id="video2" style="display:none" controls>
                         <source src="" id="video_here7">
                         Your browser does not support HTML5 video.
                      </video>
-                  </div>
+                  </div> -->
                </div>
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
                         <!-- <label for="name">Quiz Speed</label> -->
-                        <span class="image-upload">
+                        <!-- <span class="image-upload">
                         <label for="file-input8">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
                         <input id="file-input8" name="option2_media" class="file-input" type="file" accept="*"/>
                         <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
-                        </span>
+                        </span> -->
                         <input type="text" value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
                      </div>
                   </div>
-                  <div class="col-md-2 yes" id="img3">
+                  <!-- <div class="col-md-2 yes" id="img3">
                      <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
                      <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
                      <video width="141" class="video" id="video3" style="display:none" controls>
                         <source src="" id="video_here8">
                         Your browser does not support HTML5 video.
                      </video>
-                  </div>
+                  </div> -->
                </div>
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
                         <!-- <label for="name">Quiz Speed</label> -->
-                        <span class="image-upload">
+                        <!-- <span class="image-upload">
                         <label for="file-input9">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
                         <input id="file-input9"  name="option3_media" class="file-input" type="file" accept="*"/>
                         <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
-                        </span>
+                        </span> -->
                         <input type="text" value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
                      </div>
                   </div>
-                  <div class="col-md-2 yes" id="img4">
+                  <!-- <div class="col-md-2 yes" id="img4">
                      <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
                      <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
                      <video width="141" class="video" id="video4" style="display:none" controls>
                         <source src="" id="video_here9">
                         Your browser does not support HTML5 video.
                      </video>
-                  </div>
+                  </div> -->
                </div>
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
                         <!-- <label for="name">Quiz Speed</label> -->
-                        <span class="image-upload">
+                        <!-- <span class="image-upload">
                         <label for="file-input10">
                         <i class="fa fa-paperclip form-control-feedback"></i>
                         </label>
                         <input id="file-input10"  name="option4_media" class="file-input" type="file" accept="*"/>
                         <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
-                        </span>
+                        </span> -->
                         <input type="text" value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
                      </div>
                   </div>
-                  <div class="col-md-2 yes" id="img5">
+                  <!-- <div class="col-md-2 yes" id="img5">
                      <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
                      <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
                      <video width="141" class="video" id="video5" style="display:none" controls>
                         <source src="" id="video_here10">
                         Your browser does not support HTML5 video.
                      </video>
-                  </div>
+                  </div> -->
                </div>
                <div class="form-group inner-addon right-addon">
                   <select class="@error('option3') is-invalid @enderror form-control" required  name="right_option" >
@@ -552,6 +557,7 @@ use App\QuestionsSetting;
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Continue</button>
                </div>
+           </form>
          </div>
      </div>
    </div>
@@ -603,89 +609,89 @@ use App\QuestionsSetting;
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 <span class="image-upload">
+                                 <!-- <span class="image-upload">
                                  <label for="file-input7">
                                  <i class="fa fa-paperclip form-control-feedback"></i>
                                  </label>
                                  <input type="hidden" name="option1_media_old" value="{{$question->option1_media}}"/>
-                                 </span>
+                                 </span> -->
                                  <input type="text" disabled value="{{$question->option1}}"  class="@error('option1') is-invalid @enderror form-control"  name="option1" placeholder="Option 1" required>
                               </div>
                            </div>
-                           <div class="col-md-2 yes" id="img2">
+                           <!-- <div class="col-md-2 yes" id="img2">
                               <img id="ImgPreview7"src="{{asset('storage/'.$question->option1_media)}}" class="preview-show2 preview2 it" />
                               <input type="button" id="removeImage7" value="x" class="edit-btn2 btn-rmv2 rmv" />
                               <video width="141" class="video" id="video2" style="display:none" controls>
                                  <source src="" id="video_here7">
                                  Your browser does not support HTML5 video.
                               </video>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="row">
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 <span class="image-upload">
+                                 <!-- <span class="image-upload">
                                  <label for="file-input8">
                                  <i class="fa fa-paperclip form-control-feedback"></i>
                                  </label>
                                  <input type="hidden" name="option2_media_old" value="{{$question->option2_media}}"/>
-                                 </span>
+                                 </span> -->
                                  <input type="text" disabled value="{{$question->option2}}"  class="@error('option2') is-invalid @enderror form-control"  name="option2" placeholder="Option 2" required>
                               </div>
                            </div>
-                           <div class="col-md-2 yes" id="img3">
+                           <!-- <div class="col-md-2 yes" id="img3">
                               <img id="ImgPreview8"src="{{asset('storage/'.$question->option2_media)}}" class="preview-show3 preview3 it" />
                               <input type="button" id="removeImage8" value="x" class="edit-btn3 btn-rmv3 rmv" />
                               <video width="141" class="video" id="video3" style="display:none" controls>
                                  <source src="" id="video_here8">
                                  Your browser does not support HTML5 video.
                               </video>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="row">
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 <span class="image-upload">
+                                 <!-- <span class="image-upload">
                                  <label for="file-input9">
                                  <i class="fa fa-paperclip form-control-feedback"></i>
                                  </label>
                                  <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
-                                 </span>
+                                 </span> -->
                                  <input type="text" disabled value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control"  name="option3" placeholder="Option 3" required>
                               </div>
                            </div>
-                           <div class="col-md-2 yes" id="img4">
+                           <!-- <div class="col-md-2 yes" id="img4">
                               <img id="ImgPreview9"src="{{asset('storage/'.$question->option3_media)}}" class="preview-show4 preview4 it" />
                               <input type="button" id="removeImage9" value="x" class="edit-btn4 btn-rmv4 rmv"  />
                               <video width="141" class="video" id="video4" style="display:none" controls>
                                  <source src="" id="video_here9">
                                  Your browser does not support HTML5 video.
                               </video>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="row">
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 <span class="image-upload">
+                                 <!-- <span class="image-upload">
                                  <label for="file-input10">
                                  <i class="fa fa-paperclip form-control-feedback"></i>
                                  </label>
                                  <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
-                                 </span>
+                                 </span> -->
                                  <input type="text" disabled  value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control"  name="option4" placeholder="Option 4" required>
                               </div>
                            </div>
-                           <div class="col-md-2 yes" id="img5">
+                           <!-- <div class="col-md-2 yes" id="img5">
                               <img id="ImgPreview10"src="{{asset('storage/'.$question->option4_media)}}" class="preview-show5 preview5 it" />
                               <input type="button" id="removeImage10" value="x" class="edit-btn5 btn-rmv5 rmv" />
                               <video width="141" class="video" id="video5" style="display:none" controls>
                                  <source src="" id="video_here10">
                                  Your browser does not support HTML5 video.
                               </video>
-                           </div>
+                           </div> -->
                         </div>
                         <div class="form-group inner-addon right-addon">
                            <select class="@error('option3') is-invalid @enderror form-control" disabled  name="right_option" >
@@ -873,16 +879,16 @@ use App\QuestionsSetting;
     reader.onload = function(e) {
       var extension = input.files[0]['name'].split('.').pop().toLowerCase();
       var validExtensions = ["jpg","pdf","jpeg","gif","png"];
-      // if (validExtensions.indexOf(extension))
-      // {
-      //    $('.video').show();
-      //    $("#ImgPreview1").hide();
-      //    $('#img1').removeClass('yes');
-      //    var $source = $('#video_here');
-      //    $source[0].src = URL.createObjectURL(input.files[0]);
-      //    $source.parent()[0].load();
+      if (validExtensions.indexOf(extension))
+      {
+         $('.video').show();
+         $("#ImgPreview1").hide();
+         $('#img1').removeClass('yes');
+         var $source = $('#video_here');
+         $source[0].src = URL.createObjectURL(input.files[0]);
+         $source.parent()[0].load();
 
-      // }
+      }
       if(imgControlName=='#ImgPreview1')
       {
          $('#question_media_type').val(extension);
@@ -895,8 +901,8 @@ use App\QuestionsSetting;
 
       var validExtensions2 = ["mp4"];
       if (validExtensions2.indexOf(extension)) {
-         // $("#video1").hide();
-         // $("#ImgPreview1").show();
+         $("#video1").hide();
+         $("#ImgPreview1").show();
          $(imgControlName).attr('src', e.target.result);
       }
     }

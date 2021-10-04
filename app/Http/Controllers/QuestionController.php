@@ -74,10 +74,10 @@ class QuestionController extends Controller
             'difficulty_level_name' => 'required',
             // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
         ]);
-        $option1_media = '';
-        $option2_media = '';
-        $option3_media = '';
-        $option4_media = '';
+        // $option1_media = '';
+        // $option2_media = '';
+        // $option3_media = '';
+        // $option4_media = '';
         $question_media = '';
         $type = '0';
         if ($request->has('question_media')) {
@@ -89,38 +89,44 @@ class QuestionController extends Controller
             $audiomimes = ['audio/mpeg']; //Add more mimes that you want to support
 
             $question_media = $file->store('question', 'public');
-
+            $mediadata=[];
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
+                $mediadata =$request->file('question_media');
+
             }
 
             //validate audio
             if (in_array($file->getMimeType(), $audiomimes)) {
                 $type = '2';
+                $mediadata[] =$request->file('question_media')->getSize();
+
             }
 
             //Validate video
             if (in_array($file->getMimeType(), $videomimes)) {
                 $type = '3';
+                $mediadata[] =$request->file('question_media')->getSize();
+
             }
 
         }
-        if ($request->has('option1_media')) {
-            $foldername = 'option1';
-            $option1_media = $request->file('option1_media')->store($foldername, 'public');
-        }
-        if ($request->has('option2_media')) {
-            $foldername = 'option2';
-            $option2_media = $request->file('option2_media')->store($foldername, 'public');
-        }
-        if ($request->has('option3_media')) {
-            $foldername = 'option3';
-            $option3_media = $request->file('option3_media')->store($foldername, 'public');
-        }
-        if ($request->has('option4_media')) {
-            $foldername = 'option4';
-            $option4_media = $request->file('option4_media')->store($foldername, 'public');
-        }
+        // if ($request->has('option1_media')) {
+        //     $foldername = 'option1';
+        //     $option1_media = $request->file('option1_media')->store($foldername, 'public');
+        // }
+        // if ($request->has('option2_media')) {
+        //     $foldername = 'option2';
+        //     $option2_media = $request->file('option2_media')->store($foldername, 'public');
+        // }
+        // if ($request->has('option3_media')) {
+        //     $foldername = 'option3';
+        //     $option3_media = $request->file('option3_media')->store($foldername, 'public');
+        // }
+        // if ($request->has('option4_media')) {
+        //     $foldername = 'option4';
+        //     $option4_media = $request->file('option4_media')->store($foldername, 'public');
+        // }
 
         $data = new Question;
         $data->question = $request->question;
@@ -129,13 +135,14 @@ class QuestionController extends Controller
         $data->option3 = $request->option3;
         $data->option4 = $request->option4;
         $data->question_media = $question_media;
-        $data->option1_media = $option1_media;
-        $data->option2_media = $option2_media;
-        $data->option3_media = $option3_media;
-        $data->option4_media = $option4_media;
+        // $data->option1_media = $option1_media;
+        // $data->option2_media = $option2_media;
+        // $data->option3_media = $option3_media;
+        // $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type;
         $data->type = $type;
+       $data->attachment_details= json_encode($mediadata);
         $data->save();
 
         $quessetting = new QuestionsSetting;
@@ -217,16 +224,17 @@ class QuestionController extends Controller
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
         ]);
-        $option1_media = '';
-        $option2_media = '';
-        $option3_media = '';
-        $option4_media = '';
+        // $option1_media = '';
+        // $option2_media = '';
+        // $option3_media = '';
+        // $option4_media = '';
         $question_media = '';
         $type = '';
         if ($request->has('question_media')) {
             $foldername = 'question';
 
-            if (file_exists(storage_path('app/public/' . $request->question_media_old))) {
+            if ($request->question_media_old) {
+
                 unlink(storage_path('app/public/' . $request->question_media_old));
             }
             $file = $request->file('question_media');
@@ -236,61 +244,67 @@ class QuestionController extends Controller
             $audiomimes = ['audio/mpeg', 'audio/mp3']; //Add more mimes that you want to support
 
             $question_media = $file->store('question', 'public');
-
+            $mediadata =[];
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
+                $mediadata =$request->file('question_media');
+
             }
 
             //validate audio
             if (in_array($file->getMimeType(), $audiomimes)) {
                 $type = '2';
+                $mediadata[] =$request->file('question_media')->getSize();
+
             }
 
             //Validate video
             if (in_array($file->getMimeType(), $videomimes)) {
                 $type = '3';
+                $mediadata[] =$request->file('question_media')->getSize();
+
             }
 
             $question_media = $request->file('question_media')->store($foldername, 'public');
         } else {
             $question_media = $request->question_media_old;
         }
-        if ($request->has('option1_media')) {
-            $foldername = 'option1';
-            if (file_exists(storage_path('app/public/' . $request->option1_media_old))) {
-                unlink(storage_path('app/public/' . $request->option1_media_old));
-            }
-            $option1_media = $request->file('option1_media')->store($foldername, 'public');
-        } else {
-            $option1_media = $request->option1_media_old;
-        }
-        if ($request->has('option2_media')) {
-            $foldername = 'option2';
-            if (file_exists(storage_path('app/public/' . $request->option2_media_old))) {
-                unlink(storage_path('app/public/' . $request->option2_media_old));
-            }
-            $option2_media = $request->file('option2_media')->store($foldername, 'public');
-        } else {
-            $option2_media = $request->option2_media_old;
-        }
-        if ($request->has('option3_media')) {
-            $foldername = 'option3';
-            if (file_exists(storage_path('app/public/' . $request->option3_media_old))) {
-                unlink(storage_path('app/public/' . $request->option3_media_old));
-            }
-            $option3_media = $request->file('option3_media')->store($foldername, 'public');
-        } else {
-            $option3_media = $request->option3_media_old;
-        }
-        if ($request->has('option4_media')) {
-            $foldername = 'option4';
-            if (file_exists(storage_path('app/public/' . $request->option4_media_old))) {
-                unlink(storage_path('app/public/' . $request->option4_media_old));
-            }
-            $option4_media = $request->file('option4_media')->store($foldername, 'public');
-        } else {
-            $option4_media = $request->option4_media_old;
-        }
+        // if ($request->has('option1_media')) {
+        //     $foldername = 'option1';
+        //     if (file_exists(storage_path('app/public/' . $request->option1_media_old))) {
+        //         unlink(storage_path('app/public/' . $request->option1_media_old));
+        //     }
+        //     $option1_media = $request->file('option1_media')->store($foldername, 'public');
+        // } else {
+        //     $option1_media = $request->option1_media_old;
+        // }
+        // if ($request->has('option2_media')) {
+        //     $foldername = 'option2';
+        //     if (file_exists(storage_path('app/public/' . $request->option2_media_old))) {
+        //         unlink(storage_path('app/public/' . $request->option2_media_old));
+        //     }
+        //     $option2_media = $request->file('option2_media')->store($foldername, 'public');
+        // } else {
+        //     $option2_media = $request->option2_media_old;
+        // }
+        // if ($request->has('option3_media')) {
+        //     $foldername = 'option3';
+        //     if (file_exists(storage_path('app/public/' . $request->option3_media_old))) {
+        //         unlink(storage_path('app/public/' . $request->option3_media_old));
+        //     }
+        //     $option3_media = $request->file('option3_media')->store($foldername, 'public');
+        // } else {
+        //     $option3_media = $request->option3_media_old;
+        // }
+        // if ($request->has('option4_media')) {
+        //     $foldername = 'option4';
+        //     if (file_exists(storage_path('app/public/' . $request->option4_media_old))) {
+        //         unlink(storage_path('app/public/' . $request->option4_media_old));
+        //     }
+        //     $option4_media = $request->file('option4_media')->store($foldername, 'public');
+        // } else {
+        //     $option4_media = $request->option4_media_old;
+        // }
 
         $data = Question::whereId($question->id)->first();
         $data->question = $request->question;
@@ -299,13 +313,15 @@ class QuestionController extends Controller
         $data->option3 = $request->option3;
         $data->option4 = $request->option4;
         $data->question_media = $question_media;
-        $data->option1_media = $option1_media;
-        $data->option2_media = $option2_media;
-        $data->option3_media = $option3_media;
-        $data->option4_media = $option4_media;
+        // $data->option1_media = $option1_media;
+        // $data->option2_media = $option2_media;
+        // $data->option3_media = $option3_media;
+        // $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type_old;
         $data->type = $type;
+        $data->attachment_details= json_encode($mediadata);
+
         $data->save();
 
         if (QuestionsSetting::where('question_id', $data->id)->first()) {
