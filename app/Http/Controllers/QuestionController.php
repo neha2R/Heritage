@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\AgeGroup;
 use App\Attempt;
 use App\DifficultyLevel;
@@ -92,7 +91,7 @@ class QuestionController extends Controller
             $mediadata=[];
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
-                $mediadata =$request->file('question_media');
+                $mediadata =getimagesize($request->file('question_media'));
 
             }
 
@@ -230,6 +229,7 @@ class QuestionController extends Controller
         // $option4_media = '';
         $question_media = '';
         $type = '';
+   
         if ($request->has('question_media')) {
             $foldername = 'question';
 
@@ -244,10 +244,11 @@ class QuestionController extends Controller
             $audiomimes = ['audio/mpeg', 'audio/mp3']; //Add more mimes that you want to support
 
             $question_media = $file->store('question', 'public');
+        
             $mediadata =[];
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
-                $mediadata =$request->file('question_media');
+                $mediadata =getimagesize($request->file('question_media'));
 
             }
 
@@ -484,7 +485,7 @@ class QuestionController extends Controller
         shuffle($question_ids);
 
         $data = [];
-        $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->whereIn('id', $question_ids)->get();
+       
         $data['quiz_type'] = $quiz_type->name;
         if ($speed->quiz_speed_type == 'single') {
             $data['time'] = $speed->duration;
@@ -503,13 +504,61 @@ class QuestionController extends Controller
             $data['time'] = $speed->duration;
         }
 
-        $quizques = new QuizQuestion;
-        $quizques->attempts_id = $request->quiz_id;
-        $quizques->questions = implode(",", $question_ids);
-        $quizques->total = count($question_ids);
-        $quizques->save();
+       
 
-        $data['question'] = $questions;
+        $quizQuestions = QuizQuestion::where('attempts_id',$request->quiz_id)->latest()->first();
+     
+        if (empty($quizQuestions)) {
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type','type')->whereIn('id', $question_ids)->get(); 
+
+            $quizques = new QuizQuestion;
+            $quizques->attempts_id = $request->quiz_id;
+            $quizques->questions = implode(",", $question_ids);
+            $quizques->total = count($question_ids);
+            $quizques->save();
+        } 
+        else{
+            $ques = explode(",", $quizQuestions->questions);
+
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint','attachment_details','type')->whereIn('id', $ques)->get();
+          
+        }
+        $response=[];
+        foreach($questions as $que){
+          
+        $quesdata['id'] = $que->id;
+        $quesdata['question'] = $que->question;
+        if(isset($que->question_media)){
+            $quesdata['question_media'] = url('/storage').'/'.$que->question_media;
+           $detail = (array)json_decode($que->attachment_details);
+           
+            if($que->type=='1'){
+                $quesdata['width']  =$detail['0'];
+                $quesdata['height']  =$detail['1'];
+
+            }
+        }else{
+            $quesdata['question_media'] = '';
+            $quesdata['width']  ='';
+            $quesdata['height']  ='';
+        }
+        
+        $quesdata['option1'] = $que->option1;
+        $quesdata['option1_media'] = $que->option1_media;
+        $quesdata['option2'] = $que->option2;
+        $quesdata['option2_media'] = $que->option2_media;
+        $quesdata['option3'] = $que->option3;
+        $quesdata['option3_media'] = $que->option3_media;
+        $quesdata['option4'] = $que->option4;
+        $quesdata['option4_media'] = $que->option4_media;
+        $quesdata['right_option'] = $que->right_option;
+        $quesdata['hint'] = $que->hint;
+        $quesdata['question_media_type'] = $que->question_media_type;
+
+        $response[] =$quesdata;
+        }  
+
+        $data['question'] = $response;
 
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
 
@@ -520,5 +569,25 @@ class QuestionController extends Controller
         Excel::import(new QuestionImport, $request->file('bulk'));
         return back();
 
+    }
+
+    public function question_media(Request $request)
+    {
+        $quizQuestions = QuizQuestion::where('attempts_id',$request->quiz_id)->latest()->first();
+        if (empty($quizQuestions)) {
+            return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
+        }
+
+        $ques = explode(",", $quizQuestions->questions);
+
+        $questions = Question::select('question_media')->whereIn('id', $ques)->where('question_media','!=',null)->get();
+        $response=[];
+        foreach($questions as $que){
+          
+        $response[] = url('/storage').'/'.$que->question_media;
+
+
+        }
+        return response()->json(['status' => 200, 'message' => 'Question media data', 'data' => $response]);
     }
 }

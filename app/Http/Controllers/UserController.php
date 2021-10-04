@@ -214,6 +214,41 @@ class UserController extends Controller
         return response()->json(['status' => 200, 'message' => 'Domain data', 'currentTime' => $currentTime,'currentDate'=>$currentDate]);
     }
 
+
+    public function profile(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            // 'email' => 'required|email|unique:users',
+            'mobile' => 'required|unique:users',
+            'first_name' => 'required',
+            'dob' => 'required',
+            'user_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'gender' => 'required',
+            'last_name' => 'required',
+
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $age = date_diff(date_create($request->dob), date_create('today'))->y;
+        $user = User::find($request->user_id);
+        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->age = $age;
+        $user->dob = date('Y-m-d', strtotime($request->dob));
+        $user->mobile = $request->mobile;
+        $user->state_id = $request->state_id;
+        $user->city_id = $request->city_id;
+        $user->profile_complete = '1';
+
+
+        $user->save();
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data'=>$user]);
+    }
    
 
 

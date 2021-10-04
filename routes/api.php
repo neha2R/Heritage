@@ -25,6 +25,7 @@ Route::get('city/{id}', 'StatesController@fetchCity');
 Route::post('stepone', 'UserController@stepone');
 // Email verification
 Route::post('email_verify', 'UserController@email_verify');
+Route::post('update-profile', 'UserController@profile');
 
 
 /*
@@ -50,6 +51,7 @@ Route::post('get_answerkey', 'AttemptController@get_answerkey');
 Route::post('helpandsupport', 'HelpAndSupportController@store');
 // Get all themes
 Route::get('theme', 'ThemeController@getAllThemes');
+Route::post('question_media', 'QuestionController@question_media');
 
       
 /**  Feed APi Routes  Start from Here      */
