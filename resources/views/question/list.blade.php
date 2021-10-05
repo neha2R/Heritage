@@ -949,11 +949,11 @@ use App\QuestionsSetting;
 
 
       var validExtensions2 = ["mp4"];
-      if (!validExtensions2.indexOf(extension)) {
+      // if (validExtensions2.indexOf(extension)) {
          $("#video1").hide();
          $(imgControlName).show();
          $(imgControlName).attr('src', e.target.result);
-      }
+      // }
     }
     reader.readAsDataURL(input.files[0]);
    }
