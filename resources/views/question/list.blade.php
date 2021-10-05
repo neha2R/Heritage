@@ -280,6 +280,7 @@ use App\QuestionsSetting;
          </div>
          </div>
          </div>
+
          <div class="row append">
          <div class="col-md-6">
          <div class="form-group inner-addon right-addon">
@@ -302,6 +303,7 @@ use App\QuestionsSetting;
                   </div>
             </div>
          </div>
+
             <div class="form-group more">
             </div>
             <div class="form-group row">
@@ -316,10 +318,12 @@ use App\QuestionsSetting;
    </div>
 </div>
 </div>
-</div>
+
 <!-- Add Model Ends here -->
 <!-- edit Model Start Here -->
+@php $i=1; @endphp
 @foreach($questions as $key=>$question)
+@php $i++; @endphp
 <div class="modal fade bd-example-modal-lg show edit-model"  tabindex="-1" id="edit-model{{$key}}" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
    <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -337,12 +341,13 @@ use App\QuestionsSetting;
                         <div class="form-group inner-addon right-addon">
                            <!-- <label for="name">Quiz Speed</label> -->
                            <span class="image-upload">
-                           <label for="file-input6">
-                           <i class="fa fa-paperclip form-control-feedback"></i>
+                           <label for="file-input{{$i}}">
+                           <i class="fa fa-paperclip form-control-feedback file-input{{$i}}"  ></i>
                            </label>
-                           <input id="file-input6" name="question_media" class="file-input" type="file" accept="*"/>
+                           <input id="file-input{{$i}}" name="question_media" class="file-input" type="file" myattr="#file-input00{{$i}}" accept="*"/>
                            <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
                            <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
+                           <input type="hidden" name="question_media_type_edit" value="" id="question_media_type_edit"/>
                            </span>
                            <input type="text" value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
                            <!-- <span class="image-upload form-control-feedback">
@@ -363,13 +368,18 @@ use App\QuestionsSetting;
                        @endif
                         @if($question->type=='1')
 
-                        <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
+                        <img id="file-input00{{$i}}" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
                         <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
                         @endif                        @if($question->type=='3')
                         <video width="141" class="video" id="video1"  controls>
                            <source src="{{asset('storage/'.$question->question_media)}}" id="video_here6">
                            Your browser does not support HTML5 video.
                         </video>
+                        @endif
+
+                        @if($question->type=='0')
+                        <img id="file-input00{{$i}}"  class="preview-show1 preview1 it" />
+                        <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
                         @endif
                      </div>
                   </div>
@@ -396,6 +406,7 @@ use App\QuestionsSetting;
                      </video>
                   </div> -->
                </div>
+
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
@@ -419,6 +430,7 @@ use App\QuestionsSetting;
                      </video>
                   </div> -->
                </div>
+
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
@@ -442,6 +454,7 @@ use App\QuestionsSetting;
                      </video>
                   </div> -->
                </div>
+
                <div class="row">
                   <div class="col-md-10">
                      <div class="form-group inner-addon right-addon">
@@ -465,6 +478,7 @@ use App\QuestionsSetting;
                      </video>
                   </div> -->
                </div>
+
                <div class="form-group inner-addon right-addon">
                   <select class="@error('option3') is-invalid @enderror form-control" required  name="right_option" >
                      <option value="">Correct Option</option>
@@ -474,6 +488,7 @@ use App\QuestionsSetting;
                      <option value="4" @if ($question->right_option=='4')  selected="selected" @endif>Option 4</option>
                   </select>
                </div>
+
                      @php
                      $setting=QuestionsSetting::where('question_id',$question->id)->where('name','parent')->first();
                      @endphp
@@ -499,6 +514,7 @@ use App\QuestionsSetting;
                      </div>
                   </div>
                </div>
+
                <div class="row append">
                   <div class="col-md-6">
                      <div class="form-group inner-addon right-addon">
@@ -521,6 +537,7 @@ use App\QuestionsSetting;
                      </div>
                   </div>
                </div>
+
                <div class="form-group moreone">
                      @php
                      $settings=QuestionsSetting::where('question_id',$question->id)->where('name','sub')->get();
@@ -550,15 +567,19 @@ use App\QuestionsSetting;
                         @endif
                      </div>
                </div>
+
                <div class="form-group row">
                   <a href="#" class="form-group btn btn-success ml-auto" onclick="addMoreOne()">Add more..</a>
                </div>
+
                <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Continue</button>
                </div>
+
            </form>
          </div>
+
      </div>
    </div>
 </div>
@@ -614,6 +635,12 @@ use App\QuestionsSetting;
                            Your browser does not support HTML5 video.
                         </video>
                         @endif
+                        @if($question->type=='0')
+
+                     <img id="ImgPreview6" src="" class="preview-show1 preview1 it" />
+                     <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                     @endif 
+                      
                      </div>
 
 
@@ -924,7 +951,7 @@ use App\QuestionsSetting;
       var validExtensions2 = ["mp4"];
       if (validExtensions2.indexOf(extension)) {
          $("#video1").hide();
-         $("#ImgPreview1").show();
+         $(imgControlName).show();
          $(imgControlName).attr('src', e.target.result);
       }
     }
@@ -1027,10 +1054,12 @@ use App\QuestionsSetting;
 
    //edit
 
-   $(document).on('change','#file-input6', function() {
+   $(document).on('change','.file-input', function(e) {
 
    // add your logic to decide which image control you'll use
-   var imgControlName = "#ImgPreview6";
+   // var imgControlName = "#ImgPreview6";
+   var imgControlName = $(this).attr('myattr');
+   console.log(imgControlName);
    readURL(this, imgControlName);
    $('.preview-show1').addClass('it');
    $('.edit-btn1').addClass('rmv');

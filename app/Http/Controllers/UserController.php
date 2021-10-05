@@ -217,9 +217,12 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
+        $user = User::find($request->user_id);
+
         $validator = Validator::make($request->all(), [
             // 'email' => 'required|email|unique:users',
-            'mobile' => 'required|unique:users',
+            // 'mobile' => 'required|unique:users',
+            'mobile' => 'required|unique:users,mobile,' . $user->id,
             'first_name' => 'required',
             'dob' => 'required',
             'user_id' => 'required',
@@ -235,11 +238,11 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        if($req->has('image'))
+        if($request->has('image'))
         {
-            $file = $req->file('image');
-            $format = $req->image->extension();
-            $patch = $req->image->store('images','public');
+            $file = $request->file('image');
+            // $format = $file->extension();
+            $patch = $file->store('images','public');
             $image = $patch;
         }
         else
@@ -249,7 +252,6 @@ class UserController extends Controller
         }
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
-        $user = User::find($request->user_id);
         $user->name = $request->first_name . ' ' . $request->last_name;
         $user->age = $age;
         $user->dob = date('Y-m-d', strtotime($request->dob));
@@ -257,6 +259,7 @@ class UserController extends Controller
         $user->state_id = $request->state_id;
         $user->city_id = $request->city_id;
         $user->profile_complete = '1';
+        $user->profile_image = $image;
 
 
         $user->save();
