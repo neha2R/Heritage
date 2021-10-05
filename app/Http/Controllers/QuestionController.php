@@ -71,7 +71,7 @@ class QuestionController extends Controller
             'subdomain_id' => 'required',
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
-             'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|required|max:10000',
+            //  'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|required|max:10000',
         ]);
         // $option1_media = '';
         // $option2_media = '';
