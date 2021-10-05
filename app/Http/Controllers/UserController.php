@@ -235,6 +235,19 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
+        // if($req->has('image'))
+        // {
+        //     $file = $req->file('image');
+        //     $format = $req->image->extension();
+        //     $patch = $req->image->store('images','public');
+        //     $image = $patch;
+        // }
+        // else
+        // {
+        //     $image=$user->image;
+             
+        // }
+
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
         $user = User::find($request->user_id);
         $user->name = $request->first_name . ' ' . $request->last_name;
