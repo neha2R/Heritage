@@ -925,10 +925,10 @@ use App\QuestionsSetting;
 
    if (input.files && input.files[0]) {
     var reader = new FileReader();
-    reader.onchange = function(e) {
+    reader.onload = function(e) {
       var extension = input.files[0]['name'].split('.').pop().toLowerCase();
       var validExtensions = ["jpg","pdf","jpeg","gif","png"];
-      if (!validExtensions.indexOf(extension))
+      if (validExtensions.indexOf(extension))
       {
          $('.video').show();
          $("#ImgPreview1").hide();
