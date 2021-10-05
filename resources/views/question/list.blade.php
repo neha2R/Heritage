@@ -933,7 +933,7 @@ use App\QuestionsSetting;
          $('.video').show();
          $("#ImgPreview1").hide();
          $('#img1').removeClass('yes');
-         var $source = $('#video_here');
+         var $source = $('#video1');
          $source[0].src = URL.createObjectURL(input.files[0]);
          $source.parent()[0].load();
 
