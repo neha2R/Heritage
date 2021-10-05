@@ -167,7 +167,7 @@ class UserController extends Controller
         if ($request->is_social == 0) {
             $user = Unverified::where('email', $request->email)->where('otp', $request->otp)->first();
             if (empty($user)) {
-                return response()->json(['status' => 204, 'message' => "Otp not verified.", 'data' => ''], 204);
+                return response()->json(['status' => 204, 'message' => "Otp not verified.", 'data' => '']);
             } else {
                 if ($user->otp != $request->otp) {
                     return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 200);
