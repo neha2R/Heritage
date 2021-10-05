@@ -71,7 +71,7 @@ class QuestionController extends Controller
             'subdomain_id' => 'required',
             'age_group_name' => 'required',
             'difficulty_level_name' => 'required',
-            // 'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|max:10000',
+             'question_media'=>'mimes:mp4,mov,ogg,jpeg,jpg,png,gif|required|max:10000',
         ]);
         // $option1_media = '';
         // $option2_media = '';
@@ -320,9 +320,12 @@ class QuestionController extends Controller
         // $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type_old;
-        $data->type = $type;
-        $data->attachment_details= json_encode($mediadata);
-
+        if($request->has('question_media'))
+        {
+            
+            $data->type = $type;
+            $data->attachment_details= json_encode($mediadata);
+        }
         $data->save();
 
         if (QuestionsSetting::where('question_id', $data->id)->first()) {
