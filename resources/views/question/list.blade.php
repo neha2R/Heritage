@@ -928,7 +928,7 @@ use App\QuestionsSetting;
     reader.onload = function(e) {
       var extension = input.files[0]['name'].split('.').pop().toLowerCase();
       var validExtensions = ["jpg","pdf","jpeg","gif","png"];
-      if (validExtensions.indexOf(extension))
+      if (!validExtensions.indexOf(extension))
       {
          $('.video').show();
          $("#ImgPreview1").hide();
@@ -949,7 +949,7 @@ use App\QuestionsSetting;
 
 
       var validExtensions2 = ["mp4"];
-      if (validExtensions2.indexOf(extension)) {
+      if (!validExtensions2.indexOf(extension)) {
          $("#video1").hide();
          $(imgControlName).show();
          $(imgControlName).attr('src', e.target.result);
