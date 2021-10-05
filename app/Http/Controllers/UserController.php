@@ -167,7 +167,7 @@ class UserController extends Controller
         if ($request->is_social == 0) {
             $user = Unverified::where('email', $request->email)->where('otp', $request->otp)->first();
             if (empty($user)) {
-                return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 200);
+                return response()->json(['status' => 204, 'message' => "Otp not verified.", 'data' => ''], 204);
             } else {
                 if ($user->otp != $request->otp) {
                     return response()->json(['status' => 200, 'message' => "Otp not verified.", 'data' => ''], 200);
@@ -235,18 +235,18 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        // if($req->has('image'))
-        // {
-        //     $file = $req->file('image');
-        //     $format = $req->image->extension();
-        //     $patch = $req->image->store('images','public');
-        //     $image = $patch;
-        // }
-        // else
-        // {
-        //     $image=$user->image;
+        if($req->has('image'))
+        {
+            $file = $req->file('image');
+            $format = $req->image->extension();
+            $patch = $req->image->store('images','public');
+            $image = $patch;
+        }
+        else
+        {
+            $image=$user->image;
              
-        // }
+        }
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
         $user = User::find($request->user_id);
