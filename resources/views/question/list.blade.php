@@ -378,7 +378,7 @@ use App\QuestionsSetting;
                         @endif
 
                         @if($question->type=='0')
-                        <img id="file-input00{{$i}}"  class="preview-show1 preview1 it" />
+                        <img id="file-input00{{$i}}" src="" class="preview-show1 preview1 it" />
                         <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
                         @endif
                      </div>
