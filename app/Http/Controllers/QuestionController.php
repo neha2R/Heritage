@@ -556,7 +556,7 @@ class QuestionController extends Controller
         $quesdata['option4_media'] = $que->option4_media;
         $quesdata['right_option'] = $que->right_option;
         $quesdata['hint'] = $que->hint;
-        $quesdata['question_media_type'] = $que->question_media_type;
+        $quesdata['question_media_type'] = $que->type;
 
         $response[] =$quesdata;
         }  
