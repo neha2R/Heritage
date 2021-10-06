@@ -203,7 +203,7 @@
                   </select>
                </div>
                <div class="form-group">
-                  <select name="feed_id" id="feed_id" class="@error('feed_id') is-invalid @enderror form-control" required >
+                  <select name="feed_id" onchange="showModules(this.value)" class="@error('feed_id') is-invalid @enderror form-control" required >
                      <!-- <option>Type</option> -->
                      <option onchnage  disabled selected value> -- Select Feed Type -- </option>
                      @foreach($feeds as $feed)
@@ -239,7 +239,7 @@
                            <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link" placeholder="https://www.google.com/" >
                         </div>
                         <div class="form-group">
-                           <select name="media_type" id="type_add" class="@error('type') is-invalid @enderror form-control type"  > 
+                           <select name="media_type" id="type_add" class="@error('type') is-invalid @enderror form-control " onchange="showType(this.value)"  > 
                               <option>Type</option>
                               <option value=""> -- Select Media Type -- </option>
                               <option value="0">Image</option>
@@ -471,7 +471,7 @@
                
            
 
-               <div id="single_post" style="display:{{$feedContent->feed_id=='1'?'show':'none'}}">
+               <div id="single_pos" style="display:{{$feedContent->feed_id=='1'?'show':'none'}}">
                         <div class="form-group">
                            <label for="title">External Link</label>
 
@@ -523,7 +523,7 @@
                            </div>  
                </div> 
 
-               <div id="collection" style="display:{{$feedContent->feed_id=='3'?'show':'none'}}">
+               <div id="collections" style="display:{{$feedContent->feed_id=='3'?'show':'none'}}">
                </div>
                <div id="modules" style="display:{{$feedContent->feed_id=='2'?'show':'none'}}">
              @php $i="0"; @endphp
@@ -611,7 +611,72 @@
       
      
       var cart_edit=1;
+      function showType(val)
+      {
+        
+         if(val=='0')
+         {
+             
+             $('#myimage1').css('display','block');
+             $('#myvideo1').css('display','none');
+         }
+         else
+         {
+            $('#myimage1').css('display','none');
+             $('#myvideo1').css('display','block');
+         }
+      }
+      function showModules(val) {
+      
+         if(val == '1'){
+          
+            $("#single_post").css('display','block'); // Unchecks it
+            $("#modules").css('display','none'); 
+           // $("#video").removeAttr("required");
+            // select value 1 than hide button add more post and empty append div
+            //$('#add_more_post').hide();
+            $('#append').empty();
+            $("#collection").css('display','none'); 
+            
+           // $('#placeholder_image').hide();
+            // $("#placeholder_image").removeAttr("required");
+            // $("#videos").removeAttr("required");
+            // $("#files").attr("required","required");
+            $("#module_title_description").hide();
+               $('#module_title_description').empty();
 
+            //$("#files").attr("required");
+
+            }else if(val=='2')
+            {
+               
+               // 
+               $('#add_more_post').show();
+               $('#placeholder_image').show();
+               $("#single_post").css('display','none'); // Unchecks it
+               $("#modules").css('display','block'); 
+               $("#collection").css('display','none'); 
+
+               // $("#videos").attr("required");
+               // $("#placeholder_image").attr("required");
+               // $("#files").removeAttr("required");
+            }
+            else
+            {
+            
+               $('#add_more_post_collection').show();
+               $('#placeholder_image_collection').show();
+               $("#single_post").css('display','none'); // Unchecks it
+               $("#modules").css('display','none'); 
+                $("#collection").css('display','block'); 
+              // $("#videos_collection").attr("required");
+               // $("#placeholder_image").attr("required");
+              // $("#files_collection").removeAttr("required");
+            }
+      }
+
+           
+               
 function add_post(val)
         {
            var i=$('#edit_key_'+val).val()
@@ -846,149 +911,69 @@ $(document).on('change','.palceholder_image_1', function(e) {
            }
             });
 
-      $(document).on('change','#feed_id', function() {
-         if($(this).val() == 1){
-            $("#single_post").show(); // Unchecks it
-            $("#modules").hide(); 
-           // $("#video").removeAttr("required");
-            // select value 1 than hide button add more post and empty append div
-            //$('#add_more_post').hide();
-            $('#append').empty();
-           // $('#placeholder_image').hide();
-            $("#placeholder_image").removeAttr("required");
-            $("#videos").removeAttr("required");
-            $("#files").attr("required","required");
-            $("#module_title_description").hide();
-               $('#module_title_description').empty();
-
-            //$("#files").attr("required");
-
-            } if($(this).val()==2)
-            {
-               // 
-               $('#add_more_post').show();
-               $('#placeholder_image').show();
-               $("#single_post").hide(); // Unchecks it
-               $("#modules").show(); 
-               $("#collection").hide(); 
-
-               $("#videos").attr("required");
-               // $("#placeholder_image").attr("required");
-               $("#files").removeAttr("required");
-            }
-            else
-            {
-               $('#add_more_post_collection').show();
-               $('#placeholder_image_collection').show();
-               $("#single_post").hide(); // Unchecks it
-               $("#modules").hide(); 
-               $("#collection").show(); 
-               $("#videos_collection").attr("required");
-               // $("#placeholder_image").attr("required");
-               $("#files_collection").removeAttr("required");
-            }
-            });  
-
-            $(document).on('change','#type_add', function() {
-               if($(this).val() == 0){
-                     $('#myimage1').show();
-                     $('#myvideo1').hide();
-                     // $("#placeholder_image_1").removeAttr("required");
-                     // $("#videos_1").removeAttr("required");
-                     // $("#files_1").attr("required","required");
-                  }
-                  else
-                  {
-                     $('#myimage1').hide();
-                     $('#myvideo1').show();
-                     // $("#placeholder_image_1").attr("required");
-                     // $("#videos_1").attr("required");
-                     // $("#files_1").removeAttr("required","required");
-                     
-                  }
-             });   
-
-             $(document).on('change','.type_add_edit', function() {
-            
-               if($(this).val() == 0){
-                     $('.myimage1').show();
-                     $('.myvideo1').hide();
-                     // $(".placeholder_image_1").removeAttr("required");
-                     // $(".videos_1").removeAttr("required");
-                     // $(".edit_files").attr("required","required");
-                  }
-                  else
-                  {
-                     $('.myimage1').hide();
-                     $('.myvideo1').show();
-                     // $(".placeholder_image_1").attr("required");
-                     // $(".videos_1").attr("required");
-                     // $(".edit_files").removeAttr("required","required");
-                     
-                  }
-             });      
+        
            
 
 
-      $(document).on('change','#feed_id', function() {
-         if($(this).val() == 1){
-            $("#single_post").show(); // Unchecks it
-            $("#modules").hide(); 
-           // $("#video").removeAttr("required");
-            // select value 1 than hide button add more post and empty append div
-            //$('#add_more_post').hide();
-            $('#append').empty();
-           // $('#placeholder_image').hide();
-            // $("#placeholder_image").removeAttr("required");
-            // $("#videos").removeAttr("required");
-            // $("#files").attr("required","required");
-            $("#videos").removeAttr("required");
-               // $("#placeholder_image").attr("required");
-               $("#files").removeAttr("required");
-            $("#module_title_description").hide();
-               $('#module_title_description').empty();
+      // $(document).on('change','#feed_id', function() {
+      //    if($(this).val() == 1){
+      //       $("#single_post").show(); // Unchecks it
+      //       $("#modules").hide(); 
+      //      // $("#video").removeAttr("required");
+      //       // select value 1 than hide button add more post and empty append div
+      //       //$('#add_more_post').hide();
+      //       $('#append').empty();
+      //      // $('#placeholder_image').hide();
+      //       // $("#placeholder_image").removeAttr("required");
+      //       // $("#videos").removeAttr("required");
+      //       // $("#files").attr("required","required");
+      //       $("#videos").removeAttr("required");
+      //          // $("#placeholder_image").attr("required");
+      //          $("#files").removeAttr("required");
+      //       $("#module_title_description").hide();
+      //          $('#module_title_description').empty();
 
-            //$("#files").attr("required");
+      //       //$("#files").attr("required");
 
-            } if($(this).val()==2)
-            {
-               // 
-               $('#add_more_post').show();
-               $('#placeholder_image').show();
-               $("#single_post").hide(); // Unchecks it
-               $("#modules").show(); 
+      //       } if($(this).val()==2)
+      //       {
+      //          // 
+      //          $('#add_more_post').show();
+      //          $('#placeholder_image').show();
+      //          $("#single_post").hide(); // Unchecks it
+      //          $("#modules").show(); 
 
-               $("#videos").attr("required");
-               // $("#placeholder_image").attr("required");
-               $("#files").removeAttr("required");
+      //          $("#videos").attr("required");
+      //          // $("#placeholder_image").attr("required");
+      //          $("#files").removeAttr("required");
               
 
 
-               $("#module_title_description").show();
-               var title_description = '<div class="form-group">\
-                   <label for="title">Card 1 Title</label>\
-                   <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="card[0][title]" placeholder="Title" >\
-               </div>\
-               <div class="form-group">\
-                   <label for="name" id="duration">Card 1 Description</label>\
-                   <textarea class="@error("name") is-invalid @enderror form-control"   name="card[0][description]" placeholder="Description" maxlength="200" id="description" >\
-                   </textarea>\
-               </div><div class="form-group">\
-                  <label for="title">Card 1 External Link</label>\
-                  <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="card[0][external_link]" placeholder="https://www.google.com/" >\
-               </div>';
+      //          $("#module_title_description").show();
+      //          var title_description = '<div class="form-group">\
+      //              <label for="title">Card 1 Title</label>\
+      //              <input type="text" class="@error("title") is-invalid @enderror form-control" maxlength="50" name="card[0][title]" placeholder="Title" >\
+      //          </div>\
+      //          <div class="form-group">\
+      //              <label for="name" id="duration">Card 1 Description</label>\
+      //              <textarea class="@error("name") is-invalid @enderror form-control"   name="card[0][description]" placeholder="Description" maxlength="200" id="description" >\
+      //              </textarea>\
+      //          </div><div class="form-group">\
+      //             <label for="title">Card 1 External Link</label>\
+      //             <input type="text" class="@error("external_link") is-invalid @enderror form-control" maxlength="50" name="card[0][external_link]" placeholder="https://www.google.com/" >\
+      //          </div>';
 
-               $("#module_title_description").append(title_description);
-            }
-            else{
-              // $("#single_post").hide(); // Unchecks it
-               $("#modules").hide(); 
-               // $('#add_more_post').hide();
-               // $('#placeholder_image').hide();
-               //$('#append').empty();
-         }
+      //          $("#module_title_description").append(title_description);
+      //       }
+      //       else{
+      //         // $("#single_post").hide(); // Unchecks it
+      //          $("#modules").hide(); 
+      //          // $('#add_more_post').hide();
+      //          // $('#placeholder_image').hide();
+      //          //$('#append').empty();
+      //    }
        
-      });
+      // });
 
 
 
