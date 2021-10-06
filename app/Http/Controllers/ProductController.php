@@ -213,6 +213,7 @@ class ProductController extends Controller
 
     public function get_all_products(Request $req)
     {
+        
         if ($req->search!="") {
             $str = $req->search;
             $products=Product::where('name', 'like', '%' . $str . '%')->get();

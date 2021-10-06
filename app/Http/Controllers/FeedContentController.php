@@ -113,7 +113,7 @@ class FeedContentController extends Controller
                                     $media->description=$request->description;
                                     $media->external_link=$request->external_link;
                                     $media->video_link =isset($request->video_link)?$request->video_link:'';
-                                    $media->placeholder_image=$place_holder;
+                                    $media->placholder_image=$place_holder;
                                     $media->save();
     
                                     $attachment = new FeedAttachment;
