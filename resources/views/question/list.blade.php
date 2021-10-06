@@ -154,6 +154,11 @@ use App\QuestionsSetting;
                               <source src="" id="video_here6">
                               Your browser does not support HTML5 video.
                            </video>
+
+                           <audio width="141" class="audio" id="audio1" style="display:none; width:171px;" controls>
+                              <source src="" id="audio_here6">
+                              Your browser does not support HTML5 video.
+                           </audio>
                         </div>
                      </div>
 
@@ -337,7 +342,7 @@ use App\QuestionsSetting;
             @method('PUT')
                @csrf
                   <div class="row">
-                     <div class="col-md-10">
+                     <div class="col-md-9">
                         <div class="form-group inner-addon right-addon">
                            <!-- <label for="name">Quiz Speed</label> -->
                            <span class="image-upload">
@@ -358,11 +363,11 @@ use App\QuestionsSetting;
                               </span> -->
                         </div>
                      </div>
-                     <div class="col-md-2 yes" id="img1">
+                     <div class="col-md-3 yes" id="img1">
                         @if($question->type=='2')
                         <audio controls>
 
-                           <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
+                           <source style="width:100px" src="{{asset('storage/'.$question->question_media)}}" type="audio/mpeg">
                            Your browser does not support the audio tag.
                            </audio>
                        @endif
@@ -593,10 +598,9 @@ use App\QuestionsSetting;
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
                   </div>
                   <div class="modal-body">
-                     <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('question.update',$question->id) }}" enctype='multipart/form-data' >
+                     <form id="signupForm" class="col-md-10 mx-auto" >
                         <!-- novalidate="novalidate" -->
-                        @method('PUT')
-                        @csrf
+                      
                         <div class="row">
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
@@ -621,7 +625,7 @@ use App\QuestionsSetting;
                         @if($question->type=='2')
                         <audio controls>
 
-                           <source style="width:100px" src="{{storage_path('app/public/')}}{{$question->question_media}}" type="audio/mpeg">
+                           <source style="width:100px" src="{{asset('storage/'.$question->question_media)}}" type="audio/mpeg">
                            Your browser does not support the audio tag.
                            </audio>
                        @endif
@@ -927,17 +931,13 @@ use App\QuestionsSetting;
     var reader = new FileReader();
     reader.onload = function(e) {
       var extension = input.files[0]['name'].split('.').pop().toLowerCase();
-      var validExtensions = ["jpg","pdf","jpeg","gif","png"];
-      if (validExtensions.indexOf(extension))
-      {
-         $('.video').show();
-         $("#ImgPreview1").hide();
-         $('#img1').removeClass('yes');
-         var $source = $('#video1');
-         $source[0].src = URL.createObjectURL(input.files[0]);
-         $source.parent()[0].load();
-
-      }
+      // var validExtensions = ["jpg","pdf","jpeg","gif","png"];
+      
+      // if (validExtensions.indexOf(extension))
+      // {
+     
+       
+      // }
       if(imgControlName=='#ImgPreview1')
       {
          $('#question_media_type').val(extension);
@@ -946,14 +946,44 @@ use App\QuestionsSetting;
       {
          $('#question_media_type_edit').val(extension);
       }
-
-
-      var validExtensions2 = ["mp4"];
-      // if (validExtensions2.indexOf(extension)) {
+      switch (extension) {
+            case 'png': case 'jpeg': case 'jpg':
+               
+                console.log(extension);
          $("#video1").hide();
          $(imgControlName).show();
          $(imgControlName).attr('src', e.target.result);
-      // }
+         break;
+            case 'mp4':
+      // console.log(extension);
+         $('.video').show();
+         $("#ImgPreview1").hide();
+         $('#img1').removeClass('yes');
+         var $source = $('#video1');
+         $source[0].src = URL.createObjectURL(input.files[0]);
+         $source.parent()[0].load();
+                break;
+
+            case 'mp3':
+               $('.video').hide();
+         $("#ImgPreview1").hide();
+         $('#img1').removeClass('yes');
+         $('.audio').show();
+         var $source = $('#audio1');
+         $source[0].src = URL.createObjectURL(input.files[0]);
+         $source.parent()[0].load();
+                break;
+
+            default:
+                $('#divFiles').text('File type: Unknown');
+                break;
+        }
+
+      // var validExtensions2 = ["mp4"];
+      // if (validExtensions2.indexOf(extension)) {
+         
+
+      //          }
     }
     reader.readAsDataURL(input.files[0]);
    }
@@ -972,6 +1002,13 @@ use App\QuestionsSetting;
    e.preventDefault();
    $("#file-input1").val("");
    $("#ImgPreview1").attr("src", "");
+   // $("#video1").attr("src", " ");
+   $(".video").attr("src", "");
+    $(".audio").attr("src", "");
+     $(".video").hide();
+    $(".audio").hide();
+  
+
    $('.preview1').removeClass('it');
    $('.btn-rmv1').removeClass('rmv');
 
