@@ -751,16 +751,16 @@ return $request;
         } 
         $mydata['media_type'] =$media_type;
           $imagename=[];
+          $imgdata =''; 
           if(!empty($cont->feed_media_single))
           {
-            foreach($cont->feed_media_single->feed_attachments_name as $image){
+        foreach($cont->feed_media_single->feed_attachments_name as $image){
              
                 $imagename[] = $this->imageurl($image->media_name);
                 $imgdata = $imagename;
                }
-          }else{
-            $imgdata ='';  
           }
+          
           
           
           $mydata['media'] = $imgdata; 
