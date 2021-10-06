@@ -79,6 +79,7 @@ class QuestionController extends Controller
         // $option4_media = '';
         $question_media = '';
         $type = '0';
+        $mediadata=[];
         if ($request->has('question_media')) {
             $foldername = 'question';
             $file = $request->file('question_media');
@@ -88,7 +89,7 @@ class QuestionController extends Controller
             $audiomimes = ['audio/mpeg']; //Add more mimes that you want to support
 
             $question_media = $file->store('question', 'public');
-            $mediadata=[];
+          
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
                 $mediadata =getimagesize($request->file('question_media'));

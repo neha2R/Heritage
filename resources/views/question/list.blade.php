@@ -349,7 +349,7 @@ use App\QuestionsSetting;
                            <label for="file-input{{$i}}">
                            <i class="fa fa-paperclip form-control-feedback file-input{{$i}}"  ></i>
                            </label>
-                           <input id="file-input{{$i}}" name="question_media" class="file-input" type="file" myattr="#file-input00{{$i}}" accept="*"/>
+                           <input id="file-input{{$i}}" name="question_media" class="file-input" type="file" myattr="file-input00{{$i}}" accept="*"/>
                            <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
                            <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
                            <input type="hidden" name="question_media_type_edit" value="" id="question_media_type_edit"/>
@@ -364,28 +364,30 @@ use App\QuestionsSetting;
                         </div>
                      </div>
                      <div class="col-md-3 yes" id="img1">
-                        @if($question->type=='2')
-                        <audio controls>
+                        @php $display = 'style=display:none' @endphp
+                     {{-- @if($question->type=='2') --}}
+                        <audio controls  @if($question->type!='2'){{$display}} @endif >
 
-                           <source style="width:100px" src="{{asset('storage/'.$question->question_media)}}" type="audio/mpeg">
+<source  style="width:100px" src="{{asset('storage/'.$question->question_media)}}" type="audio/mpeg">
                            Your browser does not support the audio tag.
                            </audio>
-                       @endif
-                        @if($question->type=='1')
+                     {{-- @endif
+                        @if($question->type=='1') --}}
 
-                        <img id="file-input00{{$i}}" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
-                        <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
-                        @endif                        @if($question->type=='3')
-                        <video width="141" class="video" id="video1"  controls>
+                        <img  @if($question->type!='1'){{$display}} @endif id="file-input00{{$i}}" src="{{asset('storage/'.$question->question_media)}}" class="it preview-show1 preview1" />
+                        <!-- <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" /> -->
+                        {{-- @endif                        @if($question->type=='3') --}}
+                        <video @if($question->type!='2'){{$display}} @endif width="141" class="video" id="videofile-input00{{$i}}" controls>
                            <source src="{{asset('storage/'.$question->question_media)}}" id="video_here6">
                            Your browser does not support HTML5 video.
                         </video>
-                        @endif
 
-                        @if($question->type=='0')
-                        <img id="file-input00{{$i}}" src="" class="preview-show1 preview1 it" />
+                        {{--  @endif
+
+                        @if($question->type=='0') --}}
+                        <img  @if($question->type!='0'){{$display}} @endif id="file-input00{{$i}}" src="" class="preview-show1 preview1 it" />
                         <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
-                        @endif
+                        {{-- @endif --}}
                      </div>
                   </div>
                <div class="row">
@@ -605,13 +607,13 @@ use App\QuestionsSetting;
                            <div class="col-md-10">
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 <span class="image-upload">
+                                 <!-- <span class="image-upload">
                                  <label for="file-input6">
                                  <i class="fa fa-paperclip form-control-feedback"></i>
                                  </label>
                                  <input type="hidden" name="question_media_old" value="{{$question->question_media}}"/>
                                  <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old"/>
-                                 </span>
+                                 </span> -->
                                  <input type="text" disabled value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control"  name="question" placeholder="Type a question" required>
                                  <!-- <span class="image-upload form-control-feedback">
                                     <label for="file-input">
@@ -632,7 +634,7 @@ use App\QuestionsSetting;
                         @if($question->type=='1')
 
                         <img id="ImgPreview6" src="{{asset('storage/'.$question->question_media)}}" class="preview-show1 preview1 it" />
-                        <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                       
                         @endif                        @if($question->type=='3')
                         <video width="141" class="video" id="video1"  controls>
                            <source src="{{asset('storage/'.$question->question_media)}}" id="video_here6">
@@ -642,7 +644,7 @@ use App\QuestionsSetting;
                         @if($question->type=='0')
 
                      <img id="ImgPreview6" src="" class="preview-show1 preview1 it" />
-                     <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                    
                      @endif 
                       
                      </div>
@@ -990,6 +992,85 @@ use App\QuestionsSetting;
 
 
    }
+
+
+
+
+   // edit read url 
+   function editreadURL(input, imgControlName) {
+
+if (input.files && input.files[0]) {
+ var reader = new FileReader();
+ reader.onload = function(e) {
+   var extension = input.files[0]['name'].split('.').pop().toLowerCase();
+   // var validExtensions = ["jpg","pdf","jpeg","gif","png"];
+   
+   // if (validExtensions.indexOf(extension))
+   // {
+  
+    
+   // }
+   if(imgControlName=='#ImgPreview1')
+   {
+      $('#question_media_type').val(extension);
+   }
+   if(imgControlName=='#ImgPreview6')
+   {
+      $('#question_media_type_edit').val(extension);
+   }
+   switch (extension) {
+         case 'png': case 'jpeg': case 'jpg':
+            
+            //  console.log(extension);
+      $('#video'+imgControlName).hide();
+      $('#'+imgControlName).show();
+      $('#'+imgControlName).attr('src', e.target.result);
+      break;
+         case 'mp4':
+ 
+      $('#video'+imgControlName).show();
+      $('#'+imgControlName).hide();
+      $('#video'+imgControlName).removeAttr('src');
+      $('#img1').removeClass('yes');
+      var $source = $('#video'+imgControlName);
+      
+         console.log($source);
+      $source[0].src = URL.createObjectURL(input.files[0]);
+      $source.parent()[0].load();
+             break;
+
+         case 'mp3':
+            $('.video').hide();
+      $("#ImgPreview1").hide();
+      $('#img1').removeClass('yes');
+      $('.audio').show();
+      var $source = $('#audio1');
+      $source[0].src = URL.createObjectURL(input.files[0]);
+      $source.parent()[0].load();
+             break;
+
+         default:
+             $('#divFiles').text('File type: Unknown');
+             break;
+     }
+
+   // var validExtensions2 = ["mp4"];
+   // if (validExtensions2.indexOf(extension)) {
+      
+
+   //          }
+ }
+ reader.readAsDataURL(input.files[0]);
+}
+
+
+}
+   
+
+
+
+
+
    $(document).on('change','#file-input1', function() {
 
    // add your logic to decide which image control you'll use
@@ -1097,7 +1178,7 @@ use App\QuestionsSetting;
    // var imgControlName = "#ImgPreview6";
    var imgControlName = $(this).attr('myattr');
    console.log(imgControlName);
-   readURL(this, imgControlName);
+   editreadURL(this, imgControlName);
    $('.preview-show1').addClass('it');
    $('.edit-btn1').addClass('rmv');
    });

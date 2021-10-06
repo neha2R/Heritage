@@ -755,7 +755,7 @@ return $request;
         } 
         $mydata['media_type'] =$media_type;
           $imagename=[];
-          $imgdata =''; 
+          $imgdata =[]; 
           if(!empty($cont->feed_media_single))
           {
         foreach($cont->feed_media_single->feed_attachments_name as $image){
