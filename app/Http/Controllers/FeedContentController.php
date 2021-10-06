@@ -758,6 +758,8 @@ return $request;
                 $imagename[] = $this->imageurl($image->media_name);
                 $imgdata = $imagename;
                }
+          }else{
+            $imgdata ='';  
           }
           
           
