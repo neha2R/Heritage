@@ -751,7 +751,7 @@ return $request;
           { 
               $media_type = $cont->feed_media_single->feed_attachments_single->media_type ; 
         } else {
-               $media_type =  null;
+               $media_type =  '';
         } 
         $mydata['media_type'] =$media_type;
           $imagename=[];
