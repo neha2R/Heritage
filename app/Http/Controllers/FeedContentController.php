@@ -72,17 +72,19 @@ class FeedContentController extends Controller
             $data->description = $request->description;   
             $data->save();         
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
-             $videomimes = ['video/mp4']; //Add more mimes that you want to support
-            $media = new FeedMedia;
-            $media->feed_content_id = $data->id;
-            $media->title = $request->title;
-            $media->description=$request->description;
-            $media->external_link=$request->external_link;
-            $media->video_link =isset($request->video_link)?$request->video_link:'';
-            $media->save();
-
+            $videomimes = ['video/mp4']; //Add more mimes that you want to support
+                $media = new FeedMedia;
+                $media->feed_content_id = $data->id;
+                $media->title = $request->title;
+                $media->description=$request->description;
+                $media->external_link=$request->external_link;
+              
             if($request->hasfile('media_name'))
             {
+                
+
+                $media->video_link =isset($request->video_link)?$request->video_link:'';
+        
                 foreach($request->file('media_name') as $key=>$file)
                 {
                     $type = '0';
@@ -107,14 +109,14 @@ class FeedContentController extends Controller
                                     $v_name = $request->media_video->store('feed','public');
                                     $place_holder = $request->placeholder_image->store('feed','public');
                                  
-                                    $media = new FeedMedia;
-                                    $media->feed_content_id = $data->id;
-                                    $media->title = $request->title;
-                                    $media->description=$request->description;
-                                    $media->external_link=$request->external_link;
+                                    // $media = new FeedMedia;
+                                    // $media->feed_content_id = $data->id;
+                                    // $media->title = $request->title;
+                                    // $media->description=$request->description;
+                                    //$media->external_link=$request->external_link;
                                     $media->video_link =isset($request->video_link)?$request->video_link:'';
                                     $media->placholder_image=$place_holder;
-                                    $media->save();
+                                    
     
                                     $attachment = new FeedAttachment;
                                     $attachment->feed_media_id=$media->id;
@@ -129,6 +131,8 @@ class FeedContentController extends Controller
                 
                  
             }
+
+            $media->save();
         }
         elseif($request->feed_id == '2')
         {
