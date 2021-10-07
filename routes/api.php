@@ -26,7 +26,8 @@ Route::post('stepone', 'UserController@stepone');
 // Email verification
 Route::post('email_verify', 'UserController@email_verify');
 Route::post('update-profile', 'UserController@profile');
-
+Route::post('change-password', 'UserController@change_password');
+Route::get('get-profile', 'UserController@get_profile');
 
 /*
 These are the auth routes

@@ -42,4 +42,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\Country', 'id', 'state_id');
     }
+
+    
 }

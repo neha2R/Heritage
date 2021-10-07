@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Hash;
 
 class UserController extends Controller
 {
@@ -267,7 +268,69 @@ class UserController extends Controller
     }
    
 
+    public function change_password(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'current_password' => 'required',
+            'new_password' => 'required',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
 
+        $user=User::whereId($req->user_id)->first();
+        if($user)
+        {
+            if (Hash::check($req->current_password, $user->password)) {
+                $user->password=bcrypt($req->new_password);
+                $user->save();
+                return response()->json(['status' => 200, 'data' => '', 'message' => "Your password has been updated successfully."]);
+            }
+            else
+            {
+                return response()->json(['status' => 422, 'data' => '', 'message' => "please check your current password."]);
+            }
+        }
+        else
+        {
+            return response()->json(['status' => 422, 'data' => '', 'message' => "No user found."]);
+        }
+    }
 
+     public function get_profile(Request $req)
+     {
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $user=User::whereId($req->user_id)->first();
+        $data=[];
+        if($user)
+        {
+              $data['first_name']=$user->name;
+              $data['last_name']=$user->last_name;
+              $data['email']=$user->email;
+              $data['country']=\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name;
+              $data['country_id']=\App\State::whereId($user->state_id)->first()->country_id;
+              $data['state']=\App\State::whereId($user->state_id)->first()->name;
+              $data['state_id']=$user->state_id;
+              $data['city']=\App\City::whereId($user->city_id)->first()->name;
+              $data['city_id']=$user->city_id;
+              $data['gender']=$user->gender;
+              $data['dob']=date('d-m-Y',strtotime($user->dob));
+                
+                return response()->json(['status' => 200, 'data' => $data , 'message' => "Use profile."]);
+            
+        }
+        else
+        {
+            return response()->json(['status' => 422, 'data' => '', 'message' => "No user found."]);
+        }
+     }
 }
