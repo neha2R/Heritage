@@ -1,4 +1,7 @@
 <?php
+use App\User;
+use App\AgeGroup;
+use Carbon\Carbon;
 
 function sendNotification($data)
 {
@@ -43,3 +46,15 @@ function sendNotification($data)
         curl_close($ch);
         return true;
 }
+
+function age_group_by_user($user_id){
+    $user = User::find($user_id);
+    $age=Carbon::parse($user->dob)->age;
+    
+ $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
+ return $ageGroup;
+  
+}
+
+
+

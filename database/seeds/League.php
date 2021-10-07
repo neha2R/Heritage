@@ -17,7 +17,7 @@ class League extends Seeder
             array('title' => 'Scholar',
             'description' => 'Scholar league','xp' =>1600),
             array('title' => 'Culture Vulutre',
-            'description' => 'Scholar league','xp' =>1600),
+            'description' => 'Scholar league','xp' =>1200),
             array('title' => 'Dabbler',
             'description' => 'Dabbler league','xp' =>800),
             array('title' => 'Initiate',

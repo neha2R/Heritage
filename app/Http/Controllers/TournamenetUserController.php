@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use App\TournamentPerformance;
 use App\Question;
 use App\League;
+use App\Tournament;
 
 class TournamenetUserController extends Controller
 {
@@ -285,14 +286,66 @@ class TournamenetUserController extends Controller
        if ($validator->fails()) {
            return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
        } 
+       $group= age_group_by_user($request->user_id);
+    //   $tournaments = Tournament::select('id')->where('age_group_id',$group->id)->whereMonth('end_time', '>', date('m'))->get()->toArray();
+
+      $daily = Tournament::where('age_group_id',$group->id)->where('frequency_id',1)->count();
+      
+      $weekly = Tournament::where('age_group_id',$group->id)->where('frequency_id',2)->count();
+
+      $month = Tournament::where('age_group_id',$group->id)->where('frequency_id',3)->count();
+
+      $week = Carbon::now()->weekOfMonth;
+      $day =  Carbon::now()->day;
+      $totaltour = ($daily*$day)+($weekly*$week)+$month;
+      $totallp = $totaltour* $totaltour;
+
+    //   dd($daily,$weekly,$month); 
+      // get all user with comulative lp (sum of lp)
+    //    $userTours = TournamenetUser::whereIn('tournament_id',$tournaments)->selectRaw("SUM(lp) as cu_lp,user_id")->groupBy('user_id')->whereMonth('created_at', date('m'))->pluck('cu_lp','user_id')->toArray();
+
+    $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->first();
+    //    arsort($userTours);
+      $count1 = $userTours->cu_lp / $totallp;
+        $count2 = $count1 * 100;
+        $percentage = number_format($count2, 0);
+        if($percentage>=0 && $percentage<=30){
+       
+            $user['title']='Initiate';
+             $user['id']=1;
+        }
+        if($percentage>=31 && $percentage<=50){
+            $user['title'] = 'Debler';
+            $user['id']=2;
+        }
+        if($percentage>=51 && $percentage<=70){
+            $user['title'] = 'Scholar';
+            $user['id']=3;
+        }
+        if($percentage>=71 && $percentage<=90){
+            $user['title'] = 'Culture Vulture';
+            $user['id']=4;
+        }
+        if($percentage>=91 && $percentage<=100){
+            $user['title'] = 'Expert';
+            $user['id']=5;
+        }
+    //   dd($league);
+
+      
 
        $leagues = League::select('id','title')->get()->toArray();
-       $user['title']='Debler';
-       $user['id']=1;
 
-       for($i=0; $i<=28; $i++){
-       $rank[] = rand(1,50);
-       }
+    //    $user['title']='Debler';
+    //    $user['id']=1;
+
+    //    for($i=0; $i<=28; $i++){
+    //    $rank[] = rand(1,50);
+    //    }
+       $rank = TournamenetUser::where('user_id',$request->user_id)->pluck('rank')->toArray();
+       $rank = array_map(function($rank){
+        return (is_null($rank)) ? 0 : $rank;
+    },$rank);
        $response['user'] = $user;
        $response['league'] = $leagues;
        $response['rank'] = $rank;

@@ -100,8 +100,9 @@ class UserController extends Controller
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
 
         $user = User::find($request->user_id);
-        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->name = $request->first_name ;
         // $user->email = $request->email;
+        $user->last_name = $request->last_name;
         $user->age = $age;
         $user->dob = date('Y-m-d', strtotime($request->dob));
         // $user->password = bcrypt($request->password);
@@ -253,7 +254,8 @@ class UserController extends Controller
         }
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
-        $user->name = $request->first_name . ' ' . $request->last_name;
+        $user->name = $request->first_name;
+        $user->last_name = $request->last_name;
         $user->age = $age;
         $user->dob = date('Y-m-d', strtotime($request->dob));
         $user->mobile = $request->mobile;
