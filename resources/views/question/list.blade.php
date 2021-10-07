@@ -366,7 +366,7 @@ use App\QuestionsSetting;
                      <div class="col-md-3 yes" id="img1">
                         @php $display = 'style=display:none' @endphp
                      {{-- @if($question->type=='2') --}}
-                        <audio controls  @if($question->type!='2'){{$display}} @endif >
+                        <audio controls  @if($question->type!='2'){{$display}} @endif id="audiofile-input00{{$i}}" >
 
 <source  style="width:100px" src="{{asset('storage/'.$question->question_media)}}" type="audio/mpeg">
                            Your browser does not support the audio tag.
@@ -386,7 +386,7 @@ use App\QuestionsSetting;
 
                         @if($question->type=='0') --}}
                         <img  @if($question->type!='0'){{$display}} @endif id="file-input00{{$i}}" src="" class="preview-show1 preview1 it" />
-                        <input type="button" id="removeImage6" value="x" class="edit-btn1 btn-rmv1 rmv" />
+                        <input type="button" id="removeImage6" myattr="file-input00{{$i}}" value="x" class="edit-btn1 btn-rmv1 rmv removeImage6" />
                         {{-- @endif --}}
                      </div>
                   </div>
@@ -1183,12 +1183,19 @@ if (input.files && input.files[0]) {
    $('.edit-btn1').addClass('rmv');
    });
 
-   $(document).on('click','#removeImage6', function(e) {
+   $(document).on('click','.removeImage6', function(e) {
    e.preventDefault();
-   $("#file-input6").val("");
-   $("#ImgPreview6").attr("src", "");
+   var imgControlName = $(this).attr('myattr');
+console.log(imgControlName);
+    $("#"+imgControlName).val("");
+   $("#"+imgControlName).attr("src","");
+    $("#"+imgControlName).hide();
+   // $("#video"+imgControlName).attr("src", "");
+   //  $("#audio"+imgControlName).attr("src", "");
    $('.preview-show1').removeClass('it');
    $('.edit-btn1').removeClass('rmv');
+
+   
 
    });
 
