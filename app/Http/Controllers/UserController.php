@@ -318,16 +318,16 @@ class UserController extends Controller
               $data['first_name']=$user->name;
               $data['last_name']=$user->last_name;
               $data['email']=$user->email;
-              $data['country']=\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name;
-              $data['country_id']=\App\State::whereId($user->state_id)->first()->country_id;
-              $data['state']=\App\State::whereId($user->state_id)->first()->name;
+              $data['country']=$user->country_id!=""?\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name:'null';
+              $data['country_id']=$user->country_id!=""?\App\State::whereId($user->state_id)->first()->country_id:'N/A';
+              $data['state']=$user->state_id!=""?\App\State::whereId($user->state_id)->first()->name:'Null';
               $data['state_id']=$user->state_id;
-              $data['city']=\App\City::whereId($user->city_id)->first()->name;
+              $data['city']=$user->city_id!=""?\App\City::whereId($user->city_id)->first()->name:'N/A';
               $data['city_id']=$user->city_id;
               $data['gender']=$user->gender;
               $data['dob']=date('d-m-Y',strtotime($user->dob));
                 
-                return response()->json(['status' => 200, 'data' => $data , 'message' => "Use profile."]);
+                return response()->json(['status' => 200, 'data' => $data , 'message' => "User profile."]);
             
         }
         else
