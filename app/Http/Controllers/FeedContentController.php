@@ -1184,6 +1184,7 @@ return $request;
                         FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
                     }
                      
+                        $media->description=$req->description;
                         $media->video_link="";
                         $media->placholder_image="";
                         $media->save();
@@ -1215,7 +1216,7 @@ return $request;
                             {
                                 $placeholder_name=$req->old_placeholder;
                             }
-                             
+                            $media->description=$req->description;
                             $media->video_link=$req->video_link;
                             $media->placholder_image=$placeholder_name;
                             $media->save();
