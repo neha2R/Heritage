@@ -82,7 +82,7 @@
 
                             <div class="form-group">
                                 <label for="name" id="duration">Description</label> 
-                                    <textarea class="@error('name') is-invalid @enderror form-control"    name="description" placeholder="Description" maxlength="200" id="description" required ></textarea>
+                                    <textarea class="@error('name') is-invalid @enderror form-control"    name="description" placeholder="Description"  id="description" required ></textarea>
                             </div>
                            
                             <br>
