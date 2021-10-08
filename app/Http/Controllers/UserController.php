@@ -224,7 +224,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             // 'email' => 'required|email|unique:users',
             // 'mobile' => 'required|unique:users',
-            'mobile' => 'required|unique:users,mobile,' . $user->id,
+            // 'mobile' => 'required|unique:users,mobile,' . $user->id,
             'first_name' => 'required',
             'dob' => 'required',
             'user_id' => 'required',
