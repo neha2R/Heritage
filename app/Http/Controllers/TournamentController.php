@@ -536,7 +536,7 @@ class TournamentController extends Controller
             $user = User::find($request->user_id);
             $age=Carbon::parse($user->dob)->age;
             
-         $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
+      return   $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
          
          if($request->search){
             $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')
