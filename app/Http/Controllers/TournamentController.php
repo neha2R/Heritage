@@ -534,9 +534,9 @@ class TournamentController extends Controller
            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
        } 
             $user = User::find($request->user_id);
-      return $age=Carbon::parse($user->dob)->age;
+            $age=Carbon::parse($user->dob)->age;
             
-      $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
+            $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
          
          if($request->search){
             $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')
