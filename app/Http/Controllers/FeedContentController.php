@@ -772,11 +772,21 @@ return $request;
           $last_page = $cont->id;
           $i++;
         }
-       
+         
+
+        //for pagination 
+
+        $paginate = 5;
+        $page=isset($request->page)?$request->page:'1';
+        $offset= ($page * $paginate) - $paginate;
+        $item= array_slice($feedContents->toArray(),$offset,$paginate,true);
+        $result= new\Illuminate\Pagination\LengthAwarePaginator($item, count($feedContents).$paginate, $page);
+
+        $result= $result->toArray();
         if(empty($feedContents)){
             return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
         }
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'last_id'=>$last_page,'data' => $data]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'last_id'=>$last_page,'data' => $result]);
 
     }
 
