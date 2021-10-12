@@ -528,6 +528,7 @@ class QuestionController extends Controller
           
         }
         $response=[];
+        dd($questions);
         foreach($questions as $que){
           
         $quesdata['id'] = $que->id;
