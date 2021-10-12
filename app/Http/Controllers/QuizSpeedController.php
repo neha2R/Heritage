@@ -45,7 +45,13 @@ class QuizSpeedController extends Controller
 
         $data = new QuizSpeed;
         $data->name = $request->name;
-        $data->duration = $request->duration;
+        if($request->quiz_speed_type=='all'){
+          $dur =  $request->duration*60;
+        }else{
+            $dur =  $request->duration;
+  
+        }
+        $data->duration = $dur;
         $data->no_of_question = $request->no_of_question;
         $data->quiz_speed_type=$request->quiz_speed_type;
         $data->status = '1';

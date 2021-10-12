@@ -567,7 +567,7 @@ class TournamentController extends Controller
              
             //Current day record
             if($tournament->frequency_id==1){
-                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','joined')->where('status','completed')->whereDate('created_at', Carbon::today())->first();
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','joined')->orWhere('status','completed')->whereDate('created_at', Carbon::today())->first();
             }
             // Prevoius 7 days record
             if($tournament->frequency_id==2){
