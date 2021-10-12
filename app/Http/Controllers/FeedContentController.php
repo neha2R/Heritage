@@ -711,7 +711,7 @@ return $request;
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->OrderBy('id', 'DESC')->paginate(5);
+        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->OrderBy('id', 'DESC')->paginate(2);
         $data=[];
     //    $last_page='';
         $i=1;
