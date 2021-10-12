@@ -528,7 +528,7 @@ class QuestionController extends Controller
           
         }
         $response=[];
-        dd($questions);
+   
         foreach($questions as $que){
           
         $quesdata['id'] = $que->id;
@@ -536,7 +536,7 @@ class QuestionController extends Controller
         if(isset($que->question_media)){
             $quesdata['question_media'] = url('/storage').'/'.$que->question_media;
            $detail = (array)json_decode($que->attachment_details);
-           
+           dd($detail);
             if($que->type=='1'){
                 $quesdata['width']  =$detail['0'];
                 $quesdata['height']  =$detail['1'];
