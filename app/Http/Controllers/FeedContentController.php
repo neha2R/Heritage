@@ -776,7 +776,7 @@ return $request;
         if(empty($feedContents)){
             return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
         }
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'last_id'=>$last_page,'data' => $data]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'last_id'=>'','data' => $data]);
 
     }
 
