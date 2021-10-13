@@ -84,7 +84,6 @@ use App\QuestionsSetting;
                                  @endforeach
                               </tbody>
                            </table>
-                           
                         </div>
                      </div>
 
