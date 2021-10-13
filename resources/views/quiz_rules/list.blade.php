@@ -261,7 +261,7 @@
                   <input type="text" maxlength="100" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
                <div class="form-group moreone">
-                  @if(isset($rule->more))
+                  @if($rule->more != null)
                   @foreach(json_decode($rule->more) as $Rule)
                   <div class="row box">
                      <div class="form-group col-md-10">
