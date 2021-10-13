@@ -341,7 +341,9 @@
                   <input type="text" disabled class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
                <div class="form-group more">
-                  @foreach(json_decode($rule->more) as $Rule)
+               @php $myrule = json_decode($rule->more);@endphp
+                  @if(isset($myrule))
+                  @foreach($myrule as $Rule)
                   <div class="form-group">
 
                         <input type="text" disabled class=" form-control box" name="more[]" value="{{$Rule}}" placeholder="More Value" required>
@@ -350,6 +352,7 @@
 
 
                   @endforeach
+                  @endif
                </div>
 
 
