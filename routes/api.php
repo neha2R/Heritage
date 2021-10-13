@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/forgetPassword','UserController@forgetPassword');
+
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
 Route::get('country', 'StatesController@index');

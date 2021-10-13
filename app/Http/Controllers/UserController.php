@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\Setotp;
 use App\Unverified;
 use App\User;
+use App\ForgetPasswords;
+use App\Mail\ForgetPassword;
 use App\AgeGroup;
 use Auth;
 use Illuminate\Http\Request;
@@ -417,4 +419,117 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => "No user found."]);
         }
      }
+
+     public function forgetPassword(Request $req)
+    {
+        
+        $validator = Validator::make($req->all(), [
+            'email' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }  
+        $users=User::where('email',$req->email)->first();
+       
+        if(!empty($users))
+        {
+            if($user=ForgetPasswords::where('user_id',$req->id)->whereDate('created_at',carbon::now())->first())
+            {
+                $user->changed="0";
+                $user->user_id=$users->id;
+                $user->save();
+            }
+            else
+            {
+                $data=new ForgetPasswords;
+                $data->user_id=$users->id;
+                $data->save();
+            }
+           
+        
+            \Mail::to($users->email)->send(new ForgetPassword($users));
+            return response()->json(['status' => 200, 'data' => '', 'message' => "Change password link has been sent to your email. Please check your email!"]);
+        }
+        else
+        {
+            return response()->json(['status' => 422, 'data' => '', 'message' => "No User Found."]);
+        }
+        
+    }
+    public function change_passwords($id)
+    {
+        // $id=\Crypt::Decrypt($id);
+        $token=$id;
+        $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($id))->whereDate('created_at',carbon::now())->first();
+            if($user->changed=='1')
+            {
+                return view('auth.passwords.not_found')->with('error','Your email link has been expired. please apply for change password again through application.');
+            }
+            else
+            {  
+                return view('auth.passwords.reset1',compact('token'));
+            }
+       
+    }
+    public function password_update(Request $req)
+    {
+
+        if($req->password_confirmation!=$req->password)
+        {
+            return redirect()->back()->with('error','Your password doesnot match. Try again!');
+        }
+        else
+        {
+            $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($req->token))->whereDate('created_at',carbon::now())->first();
+            if($user)
+            {
+                   if($user->changed=='1')
+                   {
+                   return redirect()->back()->with('error','Your email link has been expired. please apply for change password again through application.');
+                         
+                   }
+                   else{
+                        $user->changed="1";
+                        $user->save();
+                     
+                        $data=User::whereId(\Crypt::Decrypt($req->token))->first();
+                        $data->password=$req->password;
+                        $data->save();
+                        return redirect('success')->with('success','Your password has been changed successfully thanks!');    
+                   }
+                   
+            }
+            else
+            {
+                return redirect()->back()->with('error','Sorry change password link has been expired. Try again1!');
+            }
+        }
+    }
+    public function new_password(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'current_password' => 'required',
+            'new_password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }       
+        $user = User::whereId($req->user_id)->first();
+        if (!$user) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => 'No user found']);
+        }
+        if (!Hash::check($req->current_password, $user->password)) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => 'Sorry your current password is incorrect.']);
+        }
+        else
+        {
+            $user->password=bcrypt($req->new_password);
+            $user->save();
+            return response()->json(['status' => 200, 'data' => '', 'message' => "Successfully password has been changed."]);
+        }
+        
+    }
 }
