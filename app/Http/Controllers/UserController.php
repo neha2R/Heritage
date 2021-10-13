@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\Setotp;
 use App\Unverified;
 use App\User;
+use App\AgeGroup;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -32,30 +33,53 @@ class UserController extends Controller
 
         if ($request->is_social == 1) {
             $user = User::where('email', '=', request('email'))->first();
+ 
+            
 
             if (Auth::loginUsingId($user->id)) {
                 $user = Auth::user();
+
+                
 
                 if ($user->profile_complete == 0) {
                     return response()->json(['status' => 202, 'message' => "Your profile is not completed", 'data' => ''], 200);
                 }
 
+                $age=carbon::now()->parse($user->dob)->age;
+            
+                if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
+                {
+                     $group=$group->name;
+                }
+                else
+                {
+                    $group="N/A";
+                }
+
+                if($user->state_id!="")
+                {
+                    $country_name=$user->country->name;
+                    $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+                }
                 $token = $user->createToken($user->email)->plainTextToken;
                 // $token = $this->generateRandomString();
                 // $user->app_id = $request->app_id;
                 // $user->save();
 
-                // if ($user->avatar) {
-                //     $user_avatar = Storage::url($user->avatar);
-                // } else {
-                //     $user_avatar = "http://via.placeholder.com/50X50";
-                // }
-
+                if ($user->avatar) {
+                    $user_avatar = Storage::url($user->avatar);
+                } else {
+                    $user_avatar = "http://via.placeholder.com/50X50";
+                }
+                
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
                     'data' => $user,
                     'profile_complete' => $user->profile_complete,
+                    'age_group'=>ucwords(strtolower($group)),
+                    'country'=>$country_name,
+                    'flag'=>$country_flag,
                     'avatar' => $user_avatar], 200);
             } else {
 
@@ -66,15 +90,36 @@ class UserController extends Controller
                 $user = Auth::user();
                 $token = $user->createToken($user->email)->plainTextToken;
 
+                
+
                 if ($user->profile_complete == 0) {
                     return response()->json(['status' => 202, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
                         'data' => $user], 200);
                 }
 
+                $age=carbon::now()->parse($user->dob)->age;
+
+                if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
+                {
+                    $group=$group->name;
+                }
+                else
+                {
+                    $group="N/A";
+                }
+                
+                if($user->state_id!="")
+                {
+                    $country_name=$user->country->name;
+                    $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+                }
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
                     'profile_complete' => $user->profile_complete,
+                    'age_group'=>$group,
+                    'country'=>$country_name,
+                    'flag'=>$country_flag,
                     'data' => $user], 200);
             } else {
                 return response()->json(['status' => 202, 'message' => "Email or password is invalid.", 'data' => ''], 200);

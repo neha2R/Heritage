@@ -113,6 +113,13 @@ Route::post('report','UserReportController@userreport');
 
 
 /*
+
+/** add help  */
+Route::post('add_help','HelpAndSupportController@add_help');
+
+
+/*
+
 These are the auth routes
 End Here
 */

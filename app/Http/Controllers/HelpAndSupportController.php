@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\HelpAndSupport;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 class HelpAndSupportController extends Controller
 {
     /**
@@ -85,5 +85,29 @@ class HelpAndSupportController extends Controller
     public function destroy(HelpAndSupport $helpAndSupport)
     {
         //
+    }
+
+    public function add_help(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+      
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $data = new HelpAndSupport;
+        $data->user_id=$req->user_id;
+        $data->title=$req->title;
+        $data->description=$req->description;
+        $data->save();
+
+        
+          return response()->json(['status' => 200, 'data' => $data, 'message' => 'Help added successfully']);
+        
+
     }
 }
