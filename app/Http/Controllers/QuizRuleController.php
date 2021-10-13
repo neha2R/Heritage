@@ -124,7 +124,7 @@ class QuizRuleController extends Controller
             'no_of_players' => 'required',
             'hint_guide' => 'required',
             'que_navigation' => 'required',
-            'more' => 'required',
+            // 'more' => 'required',
         ]);
 
         $data->quiz_type_id = $request->quiz_type_id;
