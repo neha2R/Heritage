@@ -412,7 +412,7 @@ class QuestionController extends Controller
         $quesdis = strtolower($diff->name);
        
         switch ($quesdis) {
-            case "easy":
+            case "beginner":
                 //Easy level question distribution
                 // Easy    (75% E, 25% H/I)
                 // dd($speed->no_of_question);
@@ -461,7 +461,7 @@ class QuestionController extends Controller
 
                 // $question_ids->get()->toArray();
                 break;
-            case "hard":
+            case "advance":
                 $dis1 = round(($speed->no_of_question / 100) * 75);
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();

@@ -137,38 +137,38 @@
                </div>
                <lable class="m-2">Scoring</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="50" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required>
+                  <input type="text" maxlength="100" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required>
                </div>
                <lable class="m-2">Negative Marking</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="50" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required>
+                  <input type="text" maxlength="100" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required>
                </div>
                <lable class="m-2">Time Limit</lable>
                <div class="form-group row mt-2">
               
                   <div class="col-md-8">
-                      <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required>
+                      <input type="text" maxlength="100" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required>
                   </div>
                   <div class="col-md-4 ">
-                      <input type="text" maxlength="50" class=" form-control time_limit"  disabled placeholder="0" required>
+                      <input type="text" maxlength="100" class=" form-control time_limit"  disabled placeholder="0" required>
                   </div>
                </div>
                <lable class="m-2">No Of Players</lable>
                <div class="form-group row mt-2">
                   <div class="col-md-8">
-                    <input type="text"  maxlength="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required>
+                    <input type="text"  maxlength="100" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required>
                     </div>
                   <div class="col-md-4">
-                      <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required>
+                      <input type="text" maxlength="100" class=" form-control no_of_player" placeholder="0"  disabled required>
                   </div>
                </div>
                <lable class="m-2">Hint Guide</lable>
                <div class="form-group row mt-2">
-                  <input type="text" maxlength="50" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required>
+                  <input type="text" maxlength="100" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required>
                </div>
                <lable class="m-2">Question Navigation</lable>
                <div class="form-group row mt-2">
-                  <input type="text" maxlength="50" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required>
+                  <input type="text" maxlength="100" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required>
                </div>
                <div class="form-group more" >
                </div>
@@ -228,43 +228,43 @@
                </div>
                <lable class="m-2">Scoring</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="50" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
+                  <input type="text" maxlength="100" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
                </div>
                <lable class="m-2">Negative Marking</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="50" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required value="{{$rule->negative_marking}}">
+                  <input type="text" maxlength="100" class="@error('negative_marking') is-invalid @enderror form-control" name="negative_marking"  placeholder="Negative Marking" required value="{{$rule->negative_marking}}">
                </div>
                <lable class="m-2">Time Limit</lable>
                <div class="form-group row mt-2">
                   <div class="col-md-8">
-                      <input type="text" maxlength="50" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
+                      <input type="text" maxlength="100" class="@error('time_limit') is-invalid @enderror form-control" name="time_limit" placeholder="Time Limit"  required value="{{$rule->time_limit}}">
                   </div>
                   <div class="col-md-4">
-                      <input type="text" maxlength="50" class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
+                      <input type="text" maxlength="100" class=" form-control time_limit" disabled placeholder="0" required value="{{$rule->speeds->duration}}">
                   </div>
                </div>
                <lable class="m-2">No Of Players</lable>
                <div class="form-group row mt-2">
                   <div class="col-md-8">
-                    <input type="text" maxlength="50" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
+                    <input type="text" maxlength="100" class="@error('no_of_players') is-invalid @enderror form-control" name="no_of_players" placeholder="No. Of Players" required value="{{$rule->no_of_players}}" >
                     </div>
                   <div class="col-md-4">
-                      <input type="text" maxlength="50" class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
+                      <input type="text" maxlength="100" class=" form-control no_of_player" placeholder="0"  disabled required value="@if(isset($rule->types)){{$rule->types->no_of_player}}@endif">
                   </div>
                </div>
                <lable class="m-2">Hint Guide</lable>
                <div class="form-group row mt-2">
-                  <input type="text" maxlength="50" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required value="{{$rule->hint_guide}}">
+                  <input type="text" maxlength="100" class="@error('hint_guide') is-invalid @enderror form-control" name="hint_guide"  placeholder="Hint Guide" required value="{{$rule->hint_guide}}">
                </div>
                <lable class="m-2">Question Navigation</lable>
                <div class="form-group row mt-2">
-                  <input type="text" maxlength="50" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
+                  <input type="text" maxlength="100" class="@error('que_navigation') is-invalid @enderror form-control" name="que_navigation" placeholder="Question Navigation" required value="{{$rule->que_navigation}}">
                </div>
                <div class="form-group moreone">
                   @foreach(json_decode($rule->more) as $Rule)
                   <div class="row box">
                      <div class="form-group col-md-10">
-                        <input type="text" maxlength="50" class=" form-control box" name="more[]" value="{{$Rule}}" placeholder="More Value" required>
+                        <input type="text" maxlength="100" class=" form-control box" name="more[]" value="{{$Rule}}" placeholder="More Value" required>
                      </div>
                      <div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a>
                   </div>
