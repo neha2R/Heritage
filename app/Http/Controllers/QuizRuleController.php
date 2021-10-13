@@ -49,7 +49,7 @@ class QuizRuleController extends Controller
             'no_of_players' => 'required',
             'hint_guide' => 'required',
             'que_navigation' => 'required',
-            'more' => 'required',
+            // 'more' => 'required',
         ]);
 
         $data = new QuizRule;
@@ -62,6 +62,7 @@ class QuizRuleController extends Controller
         $data->hint_guide = $request->hint_guide;
         $data->que_navigation = $request->que_navigation;
         $data->more = json_encode($request->more);
+        $data->status = '1';
         $data->save();
 
         if ($data->id) {
@@ -124,7 +125,7 @@ class QuizRuleController extends Controller
             'no_of_players' => 'required',
             'hint_guide' => 'required',
             'que_navigation' => 'required',
-            'more' => 'required',
+            // 'more' => 'required',
         ]);
 
         $data->quiz_type_id = $request->quiz_type_id;
@@ -180,7 +181,9 @@ class QuizRuleController extends Controller
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
         } else {
-            $data = json_decode($quiz_rules->more);
+            // $data = json_decode($quiz_rules->more);
+            $quiz_rules->more = json_decode($quiz_rules->more);
+            $data = $quiz_rules->toArray();
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }

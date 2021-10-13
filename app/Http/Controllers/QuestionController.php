@@ -410,22 +410,30 @@ class QuestionController extends Controller
         $domains = (explode(",", $domains));
 
         $quesdis = strtolower($diff->name);
+    
         switch ($quesdis) {
-            case "easy":
+            case "beginner":
                 //Easy level question distribution
                 // Easy    (75% E, 25% H/I)
+                // dd($speed->no_of_question);
+                // dd($age_group->id);
                 $dis1 = round(($speed->no_of_question / 100) * 75);
+                
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
                 $dis2 = round(($speed->no_of_question - $dis1) / 2);
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
-
+       
                 $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
+
+                // dd($dis1,$dis2,$dis3);
 
                 $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+
+                //  dd($question_id1,$question_id2,$question_id3);
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
@@ -440,7 +448,7 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
                 $dis2 = round(($speed->no_of_question - $dis1) / 2);
-
+                dd($question_id1,$age_group->id,$diff->id,$dis1);
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
@@ -450,10 +458,10 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
-
+           
                 // $question_ids->get()->toArray();
                 break;
-            case "hard":
+            case "advance":
                 $dis1 = round(($speed->no_of_question / 100) * 75);
                 $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
@@ -567,6 +575,8 @@ class QuestionController extends Controller
         }  
 
         $data['question'] = $response;
+        $quiz->started_at= date('Y-m-d h:i:s');
+        $quiz->save();
 
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
 
