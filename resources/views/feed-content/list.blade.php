@@ -226,7 +226,7 @@
           
                <div class="form-group">
                    <label for="name" id="duration">Description</label> 
-                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" maxlength="200" id="description" >
+                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description id="description" >
                    </textarea>
                </div>
                  
@@ -293,7 +293,7 @@
           
                <div class="form-group">
                    <label for="name" id="duration">Description</label> 
-                  <textarea class="@error('name') is-invalid @enderror form-control"  name="card[0][description1]" name="description" placeholder="Description" maxlength="200" id="description" >
+                  <textarea class="@error('name') is-invalid @enderror form-control"  name="card[0][description1]" name="description" placeholder="Description"  id="description" >
                    </textarea>
                </div>
                <div class="form-group">
@@ -352,7 +352,7 @@
           
                <div class="form-group">
                    <label for="name" id="duration">Description</label> 
-                  <textarea class="@error('name') is-invalid @enderror form-control"  name="card[0][description]" name="description" placeholder="Description" maxlength="200" id="description" >
+                  <textarea class="@error('name') is-invalid @enderror form-control"  name="card[0][description]" name="description" placeholder="Description"  id="description" >
                    </textarea>
                </div>
                <div class="form-group">
@@ -464,7 +464,7 @@
           
                <div class="form-group">
                    <label for="name" id="duration">Description</label> 
-                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" maxlength="200" id="description" >
+                  <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description"  id="description" >
                   {{$feedContent->description}}</textarea>
                </div>
                  
@@ -539,7 +539,7 @@
                
                      <div class="form-group">
                         <label for="name" id="duration">Description</label> 
-                        <textarea class="@error('name') is-invalid @enderror form-control"   name="more_description[]" placeholder="Description" maxlength="200" >
+                        <textarea class="@error('name') is-invalid @enderror form-control"   name="more_description[]" placeholder="Description"  >
                         {{$feed->description}}</textarea>
                      </div>
                      
@@ -690,7 +690,7 @@ function add_post(val)
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card '+parseInt(cart_edit+1)+' Description</label>\
-                  <textarea class="@error("name") is-invalid @enderror form-control"   name="more_description_'+i+'[]" placeholder="Description" maxlength="200" id="description" >\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="more_description_'+i+'[]" placeholder="Description" id="description" >\
                    </textarea>\
                </div>\
                <div class="form-group">\
@@ -956,7 +956,7 @@ $(document).on('change','.palceholder_image_1', function(e) {
       //          </div>\
       //          <div class="form-group">\
       //              <label for="name" id="duration">Card 1 Description</label>\
-      //              <textarea class="@error("name") is-invalid @enderror form-control"   name="card[0][description]" placeholder="Description" maxlength="200" id="description" >\
+      //              <textarea class="@error("name") is-invalid @enderror form-control"   name="card[0][description]" placeholder="Description"  id="description" >\
       //              </textarea>\
       //          </div><div class="form-group">\
       //             <label for="title">Card 1 External Link</label>\
@@ -988,7 +988,7 @@ $(document).on('change','.palceholder_image_1', function(e) {
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card '+parseInt(cart+1)+' Description</label>\
-                  <textarea class="@error("name") is-invalid @enderror form-control"   name="card['+cart+'][description]" placeholder="Description" maxlength="200" id="description" >\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="card['+cart+'][description]" placeholder="Description"  id="description" >\
                    </textarea>\
                </div>\
                <div class="form-group">\
@@ -1054,7 +1054,7 @@ $(document).on('change','.palceholder_image_1', function(e) {
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card '+parseInt(cart+1)+' Description</label>\
-                  <textarea class="@error("name") is-invalid @enderror form-control"   name="card['+cart+'][description1]" placeholder="Description" maxlength="200" id="description" >\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="card['+cart+'][description1]" placeholder="Description"  id="description" >\
                    </textarea>\
                </div>\
                <div class="form-group">\

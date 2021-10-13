@@ -15,7 +15,7 @@ class AddModuleTitleToFeedContentsTable extends Migration
     {
         Schema::table('feed_contents', function (Blueprint $table) {
             $table->string('title')->nullable()->comment('Main title of a feed');
-            $table->string('description')->nullable()->comment('Main description of a feed');
+            $table->longText('description')->nullable()->comment('Main description of a feed');
         });
     }
 

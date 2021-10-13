@@ -1,0 +1,24 @@
+$(document).ready(function(){
+
+	var dataTable = $('#appointment_list_table').DataTable({
+		"processing" : true,
+		"serverSide" : true,
+		"order" : [],
+		"ajax" : {
+			url:"action.php",
+			type:"POST",
+			data:{action:'fetch_appointment'}
+		},
+		"columnDefs":[
+			{
+                "targets":[6, 7],				
+				"orderable":false,
+			},
+		],
+	});
+$(document).on('click', '.cancel_appointment', function(){
+
+					dataTable.ajax.reload();
+	});
+
+    });

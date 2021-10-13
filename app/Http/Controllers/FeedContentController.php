@@ -711,7 +711,7 @@ return $request;
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(5)->OrderBy('id', 'DESC')->get();
+        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(5)->get();
         $data=[];
         $last_page='';
         $i=1;
@@ -772,7 +772,17 @@ return $request;
           $last_page = $cont->id;
           $i++;
         }
-       
+         
+
+        //for pagination 
+
+        // $paginate = 5;
+        // $page=isset($request->page)?$request->page:'1';
+        // $offset= ($page * $paginate) - $paginate;
+        // $item= array_slice($feedContents->toArray(),$offset,$paginate,true);
+        // $result= new\Illuminate\Pagination\LengthAwarePaginator($item, count($feedContents).$paginate, $page);
+
+        // $result= $result->toArray();
         if(empty($feedContents)){
             return response()->json(['status' => 200, 'message' => 'Feed not available', 'data' => '']);
         }
@@ -1184,6 +1194,7 @@ return $request;
                         FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
                     }
                      
+                        $media->description=$req->description;
                         $media->video_link="";
                         $media->placholder_image="";
                         $media->description=$req->description;

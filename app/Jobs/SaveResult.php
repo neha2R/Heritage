@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Attempt;
 
 class SaveResult implements ShouldQueue
 {
@@ -37,6 +38,7 @@ class SaveResult implements ShouldQueue
         $respreformance = $this->performance;
 
         $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions');
+        $attempt = Attempt::find($$respreformance['quiz_id']);
         if (empty($questions)) {
 
             return 'error';

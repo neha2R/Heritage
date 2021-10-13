@@ -244,7 +244,7 @@ class ProductController extends Controller
                    }
                    else
                    {
-                    $productData['images']="";
+                    $productData['images']=[];
                    }
                    $data[]=$productData;
                         

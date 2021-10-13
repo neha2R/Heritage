@@ -172,7 +172,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                       
-                                        <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" maxlength="200" id="description" >
+                                        <textarea class="@error('name') is-invalid @enderror form-control"   name="description" placeholder="Description" id="description" >
                                         </textarea>
                                     </div>
                                 </div>
