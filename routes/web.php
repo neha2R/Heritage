@@ -19,6 +19,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
+Route::get('/change_password/{id}','UserController@change_passwords');
+Route::post('/password_update','UserController@password_update');
+Route::view('/success','auth.passwords.success');
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('admin')->middleware(['auth'])->group(function () {
