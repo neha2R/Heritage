@@ -26,7 +26,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::OrderBy('id', 'DESC')->get();
+        $questions = Question::OrderBy('id', 'DESC')->limit(500)->get();
         $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
         $domains = Domain::OrderBy('id', 'DESC')->get();
         $subdomains = Subdomain::OrderBy('id', 'DESC')->get();
