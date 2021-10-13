@@ -410,7 +410,7 @@ class QuestionController extends Controller
         $domains = (explode(",", $domains));
 
         $quesdis = strtolower($diff->name);
-       
+       dd($quesdis);
         switch ($quesdis) {
             case "beginner":
                 //Easy level question distribution
