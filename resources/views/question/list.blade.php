@@ -64,8 +64,9 @@ use App\QuestionsSetting;
                               <tbody>
                                  @foreach($questions as $key=>$question)
                                  <tr>
-                                    <th scope="row">{{$key+1}}</th>
-                                    <th scope="row">{{$question->question}}</th>
+                                    <!-- <th scope="row">{{$key+1}}</th> -->
+                                    <th scope="row">{{$question->id}}</th>
+  <th scope="row">{{$question->question}}</th>
                                     <td>{{ucwords($question->questionsetting->domain->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->age_group->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->difflevel->name)}}</td>
@@ -84,6 +85,7 @@ use App\QuestionsSetting;
                                  @endforeach
                               </tbody>
                            </table>
+                           {!! $questions->links() !!}
                         </div>
                      </div>
 
