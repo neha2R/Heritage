@@ -60,8 +60,8 @@ class UserController extends Controller
 
                 if($user->state_id!="")
                 {
-                    $country_name=$user->country->name;
-                    $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+                    $country_name=$user->country->country_name->name;
+            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
                 }
                 $token = $user->createToken($user->email)->plainTextToken;
                 // $token = $this->generateRandomString();
@@ -112,8 +112,8 @@ class UserController extends Controller
                 
                 if($user->state_id!="")
                 {
-                    $country_name=$user->country->name;
-                    $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+                    $country_name=$user->country->country_name->name;
+                    $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
                 }
                 return response()->json(['status' => 200,
                     'message' => "Authenticated Successfully.",
@@ -185,8 +185,8 @@ class UserController extends Controller
 
         if($user->state_id!="")
         {
-            $country_name=$user->country->name;
-            $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+            $country_name=$user->country->country_name->name;
+            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
         }
 
         return response()->json(['status' => 200, 'profile_complete' => $user->profile_complete,
@@ -346,8 +346,8 @@ class UserController extends Controller
 
         if($user->state_id!="")
         {
-            $country_name=$user->country->name;
-            $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+            $country_name=$user->country->country_name->name;
+            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
         }
 
         return response()->json(['status' => 200, 'message' => 'Domain data', 'data'=>$user,'age_group'=>$group,'country'=>$country_name,'flag'=>$country_flag]);
