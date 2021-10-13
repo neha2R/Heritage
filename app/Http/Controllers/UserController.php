@@ -461,8 +461,8 @@ class UserController extends Controller
     {
         // $id=\Crypt::Decrypt($id);
         $token=$id;
-        $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($id))->whereDate('created_at',carbon::now())->first();
-            if($user->changed=='1')
+        $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($id))->first();
+            if(empty($user))
             {
                 return view('auth.passwords.not_found')->with('error','Your email link has been expired. please apply for change password again through application.');
             }
@@ -484,20 +484,23 @@ class UserController extends Controller
             $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($req->token))->whereDate('created_at',carbon::now())->first();
             if($user)
             {
-                   if($user->changed=='1')
-                   {
-                   return redirect()->back()->with('error','Your email link has been expired. please apply for change password again through application.');
+                //    if($user->changed=='1')
+                //    {
+                //      return redirect()->back()->with('error','Your email link has been expired. please apply for change password again through application.');
                          
-                   }
-                   else{
+                //    }
+                //    else{
                         $user->changed="1";
                         $user->save();
                      
                         $data=User::whereId(\Crypt::Decrypt($req->token))->first();
                         $data->password=$req->password;
                         $data->save();
+
+                        $user->delete();
+
                         return redirect('success')->with('success','Your password has been changed successfully thanks!');    
-                   }
+                  // }
                    
             }
             else
