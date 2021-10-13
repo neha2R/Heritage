@@ -169,8 +169,26 @@ class UserController extends Controller
 
         // $user = $user->toArray();
 
+
+        $age=carbon::now()->parse($user->dob)->age;
+            
+        if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
+        {
+             $group=$group->name;
+        }
+        else
+        {
+            $group="N/A";
+        }
+
+        if($user->state_id!="")
+        {
+            $country_name=$user->country->name;
+            $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+        }
+
         return response()->json(['status' => 200, 'profile_complete' => $user->profile_complete,
-            'message' => 'User updated successfully', 'data' => $user]);
+            'message' => 'User updated successfully', 'data' => $user,'age_group'=>$group,'country'=>$country_name,'flag'=>$country_flag]);
 
     }
 
@@ -311,7 +329,26 @@ class UserController extends Controller
         $user->gender = $request->gender;
 
         $user->save();
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'data'=>$user]);
+
+
+        $age=carbon::now()->parse($user->dob)->age;
+            
+        if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
+        {
+             $group=$group->name;
+        }
+        else
+        {
+            $group="N/A";
+        }
+
+        if($user->state_id!="")
+        {
+            $country_name=$user->country->name;
+            $country_flag=url('/flags/'.strtolower($user->country->sortname).".png");
+        }
+
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data'=>$user,'age_group'=>$group,'country'=>$country_name,'flag'=>$country_flag]);
     }
    
 
