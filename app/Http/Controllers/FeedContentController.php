@@ -1186,6 +1186,7 @@ return $request;
                      
                         $media->video_link="";
                         $media->placholder_image="";
+                        $media->description=$req->description;
                         $media->save();
                         if($req->hasfile('files'))
                         {
@@ -1215,7 +1216,7 @@ return $request;
                             {
                                 $placeholder_name=$req->old_placeholder;
                             }
-                             
+                            $media->description=$req->description;
                             $media->video_link=$req->video_link;
                             $media->placholder_image=$placeholder_name;
                             $media->save();
