@@ -906,7 +906,10 @@ use App\QuestionsSetting;
 <script>
    $(document).ready(function() {
 
-   	$('#table').DataTable();
+   	// $('#table').DataTable();
+      $('#table').dataTable({
+    "paging": false
+});
 
    $(document).on('change','.status', function() {
     if(confirm("Are you sure want to change the status ?")) {
