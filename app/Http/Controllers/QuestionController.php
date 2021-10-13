@@ -448,7 +448,7 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
                 $dis2 = round(($speed->no_of_question - $dis1) / 2);
-
+                dd($question_id1,$age_group->id,$diff->id,$dis1);
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
@@ -458,7 +458,7 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
-            dd($question_ids);
+           
                 // $question_ids->get()->toArray();
                 break;
             case "advance":
