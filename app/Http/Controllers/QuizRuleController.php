@@ -62,6 +62,7 @@ class QuizRuleController extends Controller
         $data->hint_guide = $request->hint_guide;
         $data->que_navigation = $request->que_navigation;
         $data->more = json_encode($request->more);
+        $data->status = '1';
         $data->save();
 
         if ($data->id) {
@@ -175,12 +176,13 @@ class QuizRuleController extends Controller
 
     public function quiz_rules(Request $request)
     {
-        $quiz_rules = QuizRule::where('quiz_type_id', $request->quiz_type_id)->where('quiz_speed_id', $request->quiz_speed_id)->first();
+        $quiz_rules = QuizRule::where('quiz_type_id', $request->quiz_type_id)->where('quiz_speed_id', $request->quiz_speed_id)->first()->toArray();
         
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
         } else {
-            $data = json_decode($quiz_rules->more);
+            // $data = json_decode($quiz_rules->more);
+            $data = $quiz_rule;
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }
