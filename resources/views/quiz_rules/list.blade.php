@@ -137,7 +137,7 @@
                </div>
                <lable class="m-2">Scoring</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="100" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required>
+                  <input type="text" maxlength="250" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required>
                </div>
                <lable class="m-2">Negative Marking</lable>
                <div class="form-group mt-2">
@@ -228,7 +228,7 @@
                </div>
                <lable class="m-2">Scoring</lable>
                <div class="form-group mt-2">
-                  <input type="text" maxlength="100" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
+                  <input type="text" maxlength="250" class="@error('scoring') is-invalid @enderror form-control" name="scoring" placeholder="Scoring" required value="{{$rule->scoring}}">
                </div>
                <lable class="m-2">Negative Marking</lable>
                <div class="form-group mt-2">
