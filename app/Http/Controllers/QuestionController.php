@@ -410,7 +410,7 @@ class QuestionController extends Controller
         $domains = (explode(",", $domains));
 
         $quesdis = strtolower($diff->name);
-       dd($quesdis);
+    
         switch ($quesdis) {
             case "beginner":
                 //Easy level question distribution
@@ -458,7 +458,7 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
-
+            dd($question_ids);
                 // $question_ids->get()->toArray();
                 break;
             case "advance":
