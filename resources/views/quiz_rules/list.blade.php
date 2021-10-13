@@ -262,7 +262,8 @@
                </div>
                <div class="form-group moreone">
                   @if($rule->more != null)
-                  @foreach(json_decode($rule->more) as $Rule)
+                  @php $myrule = json_decode($rule->more) @endphp
+                  @foreach($myrule as $Rule)
                   <div class="row box">
                      <div class="form-group col-md-10">
                         <input type="text" maxlength="100" class=" form-control box" name="more[]" value="{{$Rule}}" placeholder="More Value" required>
