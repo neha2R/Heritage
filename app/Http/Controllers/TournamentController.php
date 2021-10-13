@@ -573,7 +573,7 @@ class TournamentController extends Controller
             if($tournament->frequency_id==2){
                 $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
                 ->where('status','joined')
-                ->where('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
+                ->orWhere('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
             }
                 
             // // Last Month record
@@ -585,7 +585,7 @@ class TournamentController extends Controller
             if($tournament->frequency_id==3){
                 $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
                 ->where('status','joined')
-                ->where('status','completed')->whereMonth('created_at', date('m'))
+                ->orWhere('status','completed')->whereMonth('created_at', date('m'))
                 ->whereYear('created_at', date('Y'))->first();
             }
           
