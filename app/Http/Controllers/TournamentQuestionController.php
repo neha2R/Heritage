@@ -38,6 +38,12 @@ class TournamentQuestionController extends Controller
            return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
        }
 
+    //    $sessions = SessionsPerDay::where('tournament_id',$request->tournament_id)->where('id',$request->session_id)->first();
+    //    if ($sessions->)) {
+    //        return response()->json(['status' => 204, 'message' => 'Tournament expired or not found', 'data' => '']);
+    //    }
+
+       
        $tourQuestions = TournamentSessionQuestion::where('session_id',$request->session_id)->where('tournament_id',$request->tournament_id)->first();
        
        if (empty($tourQuestions)) {
