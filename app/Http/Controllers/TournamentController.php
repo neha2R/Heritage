@@ -569,13 +569,17 @@ class TournamentController extends Controller
              
             //Current day record
             if($tournament->frequency_id==1){
-                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','joined')->orWhere('status','completed')->whereDate('created_at', Carbon::today())->first();
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','joined')->whereDate('created_at', Carbon::today())->first();
+
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)->where('status','completed')->whereDate('created_at', Carbon::today())->first();
             }
             // Prevoius 7 days record
             if($tournament->frequency_id==2){
                 $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
-                ->where('status','joined')
-                ->orWhere('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
+                ->where('status','joined')->where('created_at','>=',Carbon::now()->subdays(7))->first();
+
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
+                ->where('status','completed')->where('created_at','>=',Carbon::now()->subdays(7))->first();
             }
                 
             // // Last Month record
@@ -586,8 +590,11 @@ class TournamentController extends Controller
               // This Month record
             if($tournament->frequency_id==3){
                 $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
-                ->where('status','joined')
-                ->orWhere('status','completed')->whereMonth('created_at', date('m'))
+                ->where('status','joined')->whereMonth('created_at', date('m'))
+                ->whereYear('created_at', date('Y'))->first();
+
+                $mytournamnet = TournamenetUser::where('tournament_id',$tournament->id)->where('user_id',$request->user_id)
+                ->where('status','completed')->whereMonth('created_at', date('m'))
                 ->whereYear('created_at', date('Y'))->first();
             }
           
