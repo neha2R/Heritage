@@ -114,6 +114,9 @@ Route::get('xprewards','TournamenetUserController@xprewards');
 // user report for a quiz 
 Route::post('report','UserReportController@userreport');
 
+// Dispute if any
+Route::post('raise_dispute','DisputeController@store');
+
 
 /*
 
