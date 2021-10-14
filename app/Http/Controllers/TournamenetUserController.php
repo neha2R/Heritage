@@ -120,7 +120,7 @@ class TournamenetUserController extends Controller
                 $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(1));
                 $this->dispatch($job);
 
-
+                
                
             // XpLpOfTournament::dispatch($request->all());
             }
@@ -167,8 +167,11 @@ class TournamenetUserController extends Controller
        }
 
        if($singleuser->rank==null){
+        $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(1));
+        $this->dispatch($job);
         return response()->json(['status' => 200, 'message' => 'Rank will be not calculated yet', 'data' => '','result'=>'0']);
-       } else{
+       } 
+       else{
            $user=[];
            
            $user['user_id'] = $singleuser->user_id;

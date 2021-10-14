@@ -14,7 +14,7 @@ class Frequency extends Seeder
         $data = array(
             array('title' => 'Daily',
             'description' => 'Daily quiz play one time a day by user',),
-            array('title' => 'Weekely',
+            array('title' => 'Weekly',
             'description' => 'Weekely quiz play one time in a week',),
             array('title' => 'Monthly',
             'description' => 'Monthly quiz user play one time in a month',),
