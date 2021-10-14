@@ -69,9 +69,9 @@ use App\QuestionsSetting;
                                     <td>{{ucwords($question->questionsetting->domain->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->age_group->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->difflevel->name)}}</td>
-                                    <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button>
+                                    <td><button type="button" class="view-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button>
                                     </td>
-                                    <td><a href="{{route('question.edit',$question->id)}}"><i class="fas fa-pencil-alt"></i></a>
+                                    <td><a class="edit-btn-bg btn mr-2 mb-2 btn-primary" href="{{route('question.edit',$question->id)}}"><i class="fas fa-pencil-alt"></i></a>
                                     </td>
                                     <td>
                                        <form class="delete" action="{{route('question.destroy',$question->id)}}" method="POST">
