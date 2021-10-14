@@ -82,6 +82,7 @@ class FeedContentController extends Controller
             if($request->hasfile('media_name'))
             {
                 
+              
 
                 $media->video_link =isset($request->video_link)?$request->video_link:'';
         
@@ -101,6 +102,7 @@ class FeedContentController extends Controller
             { 
                 if($request->has('media_video'))
                 {
+                  
                     if($request->media_video->getClientOriginalName() != null)
                     {
                            if (in_array($request->media_video->getMimeType(), $videomimes)) {
@@ -1188,10 +1190,27 @@ return $request;
 
                if($req->media_type=='0')
                {
+
+                if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->first())
+                    {
+                       
+                        FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->delete(); 
+
+                        foreach($req->old_images as $image)
+                        {
+                            $images=new FeedAttachment;
+                            $images->feed_media_id=$media->id;
+                            $images->media_type='0';
+                            $images->media_name=$image;
+                            $images->save();
+                        }
+                    }
               
                     if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->first())
                     {
                         FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->delete(); 
+
+                       
                     }
                      
                         $media->description=$req->description;
