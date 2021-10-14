@@ -434,21 +434,22 @@ class UserController extends Controller
        
         if(!empty($users))
         {
-            if($user=ForgetPasswords::where('user_id',$req->id)->whereDate('created_at',carbon::now())->first())
-            {
-                $user->changed="0";
-                $user->user_id=$users->id;
-                $user->save();
-            }
-            else
-            {
+            // if($user=ForgetPasswords::where('user_id',$req->id)->whereDate('created_at',carbon::now())->first())
+            // {
+            //     $user->changed="0";
+            //     $user->user_id=$users->id;
+            //     $user->save();
+            // }
+            // else
+            // {
                 $data=new ForgetPasswords;
                 $data->user_id=$users->id;
                 $data->save();
-            }
+            // }
            
-        
-            \Mail::to($users->email)->send(new ForgetPassword($users));
+            // Mail::to($request->email)->send(new Setotp($otp));
+
+            Mail::to($users->email)->send(new ForgetPassword($users));
             return response()->json(['status' => 200, 'data' => '', 'message' => "Change password link has been sent to your email. Please check your email!"]);
         }
         else

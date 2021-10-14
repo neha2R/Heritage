@@ -30,7 +30,8 @@ class ForgetPassword extends Mailable
      */
     public function build()
     {
-        return $this->subject('Heritage')
-        ->view('emails.forgetpassword');
+        return $this->from('prince.aadil@neologicx.com', 'Heritage')
+        ->markdown('emails.forgetpassword');
+       
     }
 }
