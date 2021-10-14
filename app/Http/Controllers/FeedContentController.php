@@ -1195,7 +1195,7 @@ return $request;
                     {
                        
                         FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->delete(); 
-
+             if(count($req->old_images)>0){
                         foreach($req->old_images as $image)
                         {
                             $images=new FeedAttachment;
@@ -1204,6 +1204,8 @@ return $request;
                             $images->media_name=$image;
                             $images->save();
                         }
+                    }
+                    
                     }
               
                     if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','1')->first())
