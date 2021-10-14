@@ -172,8 +172,8 @@ class AttemptController extends Controller
             }
             // $per = round(($obtain / $total) * 100);
             $per = $quiz->result;
-
-            return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => $per]);
+            $xp = $quiz->xp;
+            return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => $per,'xp' => $xp]);
             // foreach ($questions as $question) {
 
             // }
