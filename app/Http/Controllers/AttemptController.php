@@ -170,7 +170,8 @@ class AttemptController extends Controller
                 $obtain = $obtain + $diff->weitage_per_question;
 
             }
-            $per = round(($obtain / $total) * 100);
+            // $per = round(($obtain / $total) * 100);
+            $per = $quiz->result;
 
             return response()->json(['status' => 200, 'message' => 'Result succes', 'result' => $per]);
             // foreach ($questions as $question) {

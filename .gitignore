@@ -22,3 +22,7 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 storage/
+
+app/Http/Livewire
+resources/views/livewire/
+resources/views/vendor/livewire/
