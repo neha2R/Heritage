@@ -58,6 +58,7 @@
                
 
                <button type="button" class="float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Add Tournament Quiz</button>
+               <button type="button" class="float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-rule-model"> <i class="fas fa-plus-circle"></i> Add Tournament Rule</button>
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
@@ -132,6 +133,53 @@
 @endsection
 @section('model')
 
+<!-- Tournament Add Rule Model Start here -->
+<div class="modal fade bd-example-modal-lg show add-rule-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;" aria-hidden="true">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Tournament Rule</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+         </div>
+         <div class="modal-body">
+            <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('tourrule.store') }}" >
+            <!-- novalidate="novalidate" -->
+               @csrf
+               <lable for="type"class="m-2">Tournament </lable>
+               <div class="form-group mt-2">
+                  <select class="@error('quiz_type_id') is-invalid @enderror form-control" name="tournament_id" id="tournament_id" required>
+                  <option>Select Tournament</option>
+                  @foreach($tournaments as $type)
+                  <option value="{{$type->id}}">{{ucwords(strtolower($type->title))}}</option>
+                  @endforeach
+                   </select>
+               </div>
+               
+               <div class="row box"><div class="form-group col-md-10 "><input type="text" maxlength="100" class=" form-control box" name="details[]" placeholder="Details here" required></div><div class="form-group col-md-2"></div>
+               </div>
+
+               <div class="row box"><div class="form-group col-md-10 "><input type="text" maxlength="100" class=" form-control box" name="details[]" placeholder="Details here" required></div><div class="form-group col-md-2"></div>
+               </div>
+
+               <div class="row box"><div class="form-group col-md-10 "><input type="text" maxlength="100" class=" form-control box" name="details[]" placeholder="Details here" required></div><div class="form-group col-md-2"></div>
+               </div>
+
+               <div class="form-group more" >
+               </div>
+
+               <div class="form-group row">
+                  <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
+               </div>
+         </div>
+         <div class="modal-footer">
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+         <button type="submit" class="btn btn-primary">Continue</button>
+         </form>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Tournament Add Rule Model Ends here -->
 
 <!-- strat model quize type button  -->
     <div class="modal fade bd-example-modal-lg add-model" id="add-model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" style="display: none;     top: 200px;" aria-hidden="true">
@@ -974,6 +1022,14 @@ if(confirm("Are you sure want to change the status ?")) {
         alert("Your browser doesn't support to File API");
     }
 
+});
+
+function addMore(){
+   $('.more').append('<div class="row box "><div class="form-group col-md-10 "><input type="text" maxlength="50" class=" form-control box" name="details[]" placeholder="Details Here" required></div><div class="form-group col-md-2"><a href="#" class="btn btn-danger button-remove" >Remove</a></div></div>')
+}
+
+$(document).on("click", ".button-remove", function() {
+    $(this).closest(".box").remove();
 });
 </script>
       @endsection

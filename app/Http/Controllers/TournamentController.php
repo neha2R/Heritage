@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Validator;
 use App\TournamentSessionQuestion;
 use App\Jobs\AddSessionQuestionJob;
 use App\User;
+use App\TournamentRule;
 
 //use App\Frequency;
 
@@ -539,12 +540,12 @@ class TournamentController extends Controller
            $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
          
          if($request->search){
-            $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')
+            $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt','sponsor_media_id')
             ->where('title', 'like', '%' . $request->search . '%')
             ->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
          }else{
         //    dd($request->user_id);
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt','sponsor_media_id')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
          }
         //Post::with('user:id,username')->get();
         $currentDateTime = Carbon::now();
@@ -564,6 +565,7 @@ class TournamentController extends Controller
             //  $tournament->frequency = $tournament->frequency_id;
             $url_image = url('/storage').'/'.Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
+            $tournament->sponsor_media_id = url('/storage').'/'.$tournament->sponsor_media_id;
              
             //Current day record
             if($tournament->frequency_id==1){
@@ -664,8 +666,8 @@ class TournamentController extends Controller
         $savetournament->save();
         }
 
-        $quiz_rules = QuizRule::first();
-        $data = json_decode($quiz_rules->more);
+        $quiz_rules = TournamentRule::where('tournament_id',$request->tournament_id);
+        $data = json_decode($quiz_rules->details);
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
         } else {
