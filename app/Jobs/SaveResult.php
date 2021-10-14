@@ -73,22 +73,20 @@ class SaveResult implements ShouldQueue
         $count1 = $marks / $total;
         $count2 = $count1 * 100;
         $percentage = number_format($count2, 0);
-        if($percentage>=80){
-            $xp = 50;
-        }
-        if($percentage>=80){
-            $xp = 50;
-        }
-        if($percentage<80 && $percentage>=60){
-            $xp = 40;
-        } 
-        if($percentage<60 && $percentage>=40){
-            $xp = 30;
-        } 
-        if($percentage<40 && $percentage>=20){
+       
+        if($percentage>=91){
             $xp = 20;
+        }
+        if($percentage<=90 && $percentage>=51){
+            $xp = 14;
         } 
-        if($percentage<20 ){
+        if($percentage<=50 && $percentage>=34){
+            $xp = 10;
+        } 
+        if($percentage<=33 && $percentage>=10){
+            $xp = 6;
+        } 
+        if($percentage<10 ){
             $xp = 0;
         } 
         $attempt->status = 'completed';
