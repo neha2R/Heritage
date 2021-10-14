@@ -196,9 +196,15 @@ class QuestionController extends Controller
      * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question)
+    public function edit($id)
     {
-        //
+        $question = Question::whereId($id)->first();
+        $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->get();
+        $subdomains = Subdomain::OrderBy('id', 'DESC')->get();
+        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->get();
+
+        return view('question.edit_question', compact('question', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains'));
     }
 
     /**
