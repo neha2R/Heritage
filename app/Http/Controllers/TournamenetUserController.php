@@ -464,14 +464,62 @@ class TournamenetUserController extends Controller
            return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
        } 
 
+       $group= age_group_by_user($request->user_id);
+    //   $tournaments = Tournament::select('id')->where('age_group_id',$group->id)->whereMonth('end_time', '>', date('m'))->get()->toArray();
+
+      $daily = Tournament::where('age_group_id',$group->id)->where('frequency_id',1)->count();
+      
+      $weekly = Tournament::where('age_group_id',$group->id)->where('frequency_id',2)->count();
+
+      $month = Tournament::where('age_group_id',$group->id)->where('frequency_id',3)->count();
+
+      $week = Carbon::now()->weekOfMonth;
+      $day =  Carbon::now()->day;
+      $totaltour = ($daily*$day)+($weekly*$week)+$month;
+      $totallp = $totaltour* $totaltour;
+
+      $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->first();
+      //    arsort($userTours);
+      $your_leage = [];
+      $other_league=[];
+
+        $count1 = $userTours->cu_lp / $totallp;
+          $count2 = $count1 * 100;
+          $percentage = number_format($count2, 0);
+          if($percentage>=0 && $percentage<=30){
+         
+              $your_leage['league']='Initiate';
+               $your_leage['league_id']=5;
+               $your_leage['xp'] = 400;
+          }
+          if($percentage>=31 && $percentage<=50){
+              $your_leage['league'] = 'Dabbler';
+              $your_leage['league_id']=4;
+              $your_leage['xp'] = 800;
+          }
+          if($percentage>=51 && $percentage<=70){
+              $your_leage['league'] = 'Scholar';
+              $your_leage['league_id']=3;
+              $your_leage['xp'] = 1200;
+          }
+          if($percentage>=71 && $percentage<=90){
+              $your_leage['league'] = 'Culture Vulture';
+              $your_leage['league_id']=2;
+              $your_leage['xp'] = 1600;
+          }
+          if($percentage>=91 && $percentage<=100){
+              $your_leage['league'] = 'Expert';
+              $your_leage['league_id']=1;
+              $your_leage['xp'] = 2000;
+          }
+
        $leagues = League::select('id','title','xp')->get();
        
-       $your_leage = [];
-       $other_league=[];
-       $your_leage['user_id'] =2;
-       $your_leage['league_id'] =4;
-       $your_leage['league'] ='Initiate';
-       $your_leage['xp'] =400;
+      
+    //    $your_leage['user_id'] =$request->user_id;
+    //    $your_leage['league_id'] =4;
+    //    $your_leage['league'] ='Initiate';
+    //    $your_leage['xp'] =400;
        $myname=1;
        foreach($leagues as $league){
        

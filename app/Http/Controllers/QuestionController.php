@@ -549,9 +549,10 @@ class QuestionController extends Controller
         $quesdata['question'] = $que->question;
         if($que->question_media != null){
             $quesdata['question_media'] = url('/storage').'/'.$que->question_media;
-           $detail = (array)json_decode($que->attachment_details);
+         
           
             if($que->type=='1'){
+                $detail = (array)json_decode($que->attachment_details);
                 $quesdata['width']  =$detail['0'];
                 $quesdata['height']  =$detail['1'];
 
