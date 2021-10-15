@@ -574,7 +574,7 @@ class QuestionController extends Controller
                 $detail = json_decode($que->attachment_details,true);
                 $h = "0";
                 $w = "1";
-                // dd();
+                dd($detail);
               
                 $quesdata['width']  =$detail->$h;
                 $quesdata['height']  =$detail->$w;
