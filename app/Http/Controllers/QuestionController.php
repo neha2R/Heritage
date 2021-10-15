@@ -16,6 +16,7 @@ use App\Subdomain;
 use App\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
@@ -491,6 +492,17 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
                 // $question_ids->get()->toArray();
         }
+
+        $all[] = date('d-m-y h:i:s'); 
+        $all[] = $user; 
+       $all['Level'] = $quesdis;
+       $all['Questions'] =$question_ids;
+    //    $all[] =  $dis1;
+    //    $all[] = $dis2;
+       $all['speed'] = $speed->no_of_question;
+       $all['age'] =$age_group->id;
+    Storage::append('file.log', json_encode($all)); 
+
 
         // if (count($question_ids) < $speed->no_of_question) {
         //     $dis3 = $speed->no_of_question - count($question_ids);

@@ -562,7 +562,7 @@ class TournamentController extends Controller
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
             $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
 
-            $tournament->duration  = $tournament->duration*60;
+            $tournament->duration  = $tournament->duration;
 
             //  $tournament->sessions = SessionsPerDay::where('tournament_id',$tournament->id)->pluck('start_time','id')->toArray();
             //  $tournament->frequency = $tournament->frequency_id;
