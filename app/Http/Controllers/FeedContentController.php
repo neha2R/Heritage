@@ -752,7 +752,12 @@ return $request;
           $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->get()->toArray();
           $mydata['savepost'] = count($savefeeds); 
                 if(isset($cont->savefeed)){
-                    $save = 1;
+                    if($cont->savefeed->user_id == $request->user_id){
+                        $save = 1;
+                    }else{
+                        $save = 0;
+                    }
+                   
                 }else{
                     $save=0;
                 }
