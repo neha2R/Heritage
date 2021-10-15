@@ -571,7 +571,7 @@ class QuestionController extends Controller
          
           
             if($que->type=='1'){
-                $detail = json_decode($que->attachment_details);
+                $detail = json_decode($que->attachment_details,true);
                 $h = '0';
                 $w = '1';
                 // dd();
