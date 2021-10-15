@@ -56,7 +56,7 @@ use App\QuestionsSetting;
                                     <th>Domain </th>
                                     <th>Group Name</th>
                                     <th>Difficulty Level</th>
-                                    <th>View</th>
+                                    <!-- <th>View</th> -->
                                     <th>Edit</th>
                                     <th>Delete</th>
                                  </tr>
@@ -69,7 +69,7 @@ use App\QuestionsSetting;
                                     <td>{{ucwords($question->questionsetting->domain->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->age_group->name)}}</td>
                                     <td>{{ucwords($question->questionsetting->difflevel->name)}}</td>
-                                    <td><button type="button" class="view-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button>
+                                    <!-- <td><button type="button" class="view-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button> -->
                                     </td>
                                     <td><a class="edit-btn-bg btn mr-2 mb-2 btn-primary" href="{{route('question.edit',$question->id)}}"><i class="fas fa-pencil-alt"></i></a>
                                     </td>
