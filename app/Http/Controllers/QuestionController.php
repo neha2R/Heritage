@@ -576,11 +576,11 @@ class QuestionController extends Controller
                 $w = 1;
                 // dd($detail);
               
-                $quesdata['width']  =$detail['0'];
-                $quesdata['height']  =$detail['1'];
-            //      $quesdata['width']  =1932;
-            //  $quesdata['height']  =2500;
-             $quesdata['media_data']  =$detail;
+                // $quesdata['width']  =$detail['0'];
+                // $quesdata['height']  =$detail['1'];
+                 $quesdata['width']  =600;
+             $quesdata['height']  =600;
+            //  $quesdata['media_data']  =$detail;
              
 
             }
