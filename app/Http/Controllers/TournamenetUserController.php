@@ -516,7 +516,7 @@ class TournamenetUserController extends Controller
        $leagues = League::select('id','title','xp')->get();
        
       
-    //    $your_leage['user_id'] =$request->user_id;
+       $your_leage['user_id'] =$request->user_id;
     //    $your_leage['league_id'] =4;
     //    $your_leage['league'] ='Initiate';
     //    $your_leage['xp'] =400;
