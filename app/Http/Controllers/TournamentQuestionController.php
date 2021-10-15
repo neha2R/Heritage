@@ -57,7 +57,7 @@ class TournamentQuestionController extends Controller
                 }
                 $data['question'] = $mydta;
                 $data['whole_quiz_time'] = '1';
-                $data['time'] = $tournament->duration;
+                $data['time'] = $tournament->duration*60;
                 $data['total_question'] = count($questions_ids);
                 $data['total_question_in_quiz'] = count($questions_ids);
               
