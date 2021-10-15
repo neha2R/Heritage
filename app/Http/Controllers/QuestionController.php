@@ -454,7 +454,7 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
                 $dis2 = round(($speed->no_of_question - $dis1) / 2);
-                dd($question_id1,$age_group->id,$diff->id,$dis1);
+                // dd($question_id1,$age_group->id,$diff->id,$dis1);
                 $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
                     ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
