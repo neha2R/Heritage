@@ -713,7 +713,13 @@ return $request;
        
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
         
-        $feedContents = $feedContents->where('id','>=',$request->feed_page_id)->take(5)->get();
+        if($request->feed_page_id==0){
+            $feedContents = $feedContents->orderBy('id','DESC')->take(5)->get();    
+        }else{
+            $feedContents = $feedContents->where('id','<',$request->feed_page_id)->orderBy('id','DESC')->take(5)->get();
+        }
+
+       
         $data=[];
         $last_page='';
         $i=1;
