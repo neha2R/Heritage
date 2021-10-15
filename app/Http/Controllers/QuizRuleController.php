@@ -176,7 +176,7 @@ class QuizRuleController extends Controller
 
     public function quiz_rules(Request $request)
     {
-        $quiz_rules = QuizRule::where('quiz_type_id', $request->quiz_type_id)->where('quiz_speed_id', $request->quiz_speed_id)->first();
+        $quiz_rules = QuizRule::select('scoring','negative_marking','time_limit','no_of_players','hint_guide','que_navigation','more')->where('quiz_type_id', $request->quiz_type_id)->where('quiz_speed_id', $request->quiz_speed_id)->first();
         
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);
@@ -184,6 +184,7 @@ class QuizRuleController extends Controller
             // $data = json_decode($quiz_rules->more);
             $quiz_rules->more = json_decode($quiz_rules->more);
             $data = $quiz_rules->toArray();
+             $data = array_values($data);
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }
