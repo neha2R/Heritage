@@ -683,15 +683,17 @@ return $request;
             // 'domain_id' => 'required',
             // 'feed_type_id' => 'required',
             'feed_page_id' => 'required',
+            'user_id'=> 'required',
         ]);
-
+        
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
 
         
         $feedContents = FeedContent::select('id','feed_id','type','tags','title','description');
-        
+
+        $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
            
         if ($request->theme_id) {
            
@@ -747,7 +749,7 @@ return $request;
             $place =null;
               }
           $mydata['placeholder_image'] =$place;  
-          $mydata['savepost'] = 20; 
+          $mydata['savepost'] = count($savefeeds); 
                 if(isset($cont->savefeed)){
                     $save = 1;
                 }else{
@@ -989,6 +991,11 @@ return $request;
                   }
               $mydata['placeholder_image'] =$place;  
               $mydata['savepost'] = count($feeds); 
+            //   if(in_array($cont->id,$feeds->toArray())){
+            //       $issave =1;
+            //   }else{
+            //     $issave =0; 
+            //   }
               $mydata['is_saved'] = 1; 
               $mydata['share'] = $this->sharepath($cont->id); 
               $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
