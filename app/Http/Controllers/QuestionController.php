@@ -494,13 +494,15 @@ class QuestionController extends Controller
         }
 
         $all[] = date('d-m-y h:i:s'); 
-        $all[] = $user; 
+        $myuser[] = $user->name;
+        $myuser[] = $user->id;
+        $all['user'] = $myuser; 
        $all['Level'] = $quesdis;
        $all['Questions'] =$question_ids;
     //    $all[] =  $dis1;
     //    $all[] = $dis2;
-       $all['speed'] = $speed->no_of_question;
-       $all['age'] =$age_group->id;
+       $all['speed'] = $speed->name;
+       $all['age'] =$age_group->name;
     Storage::append('file.log', json_encode($all)); 
 
 
