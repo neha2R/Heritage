@@ -483,7 +483,7 @@ class QuestionController extends Controller
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
                 // $question_ids->get()->toArray();
-                dd($question_id1, $dis1, $dis2, $speed->no_of_question,$age_group->id,$domains,$diff->id);
+                // dd($question_id1, $dis1, $dis2, $speed->no_of_question,$age_group->id,$domains,$diff->id);
                 break;
             default:
                 $dis1 = $speed->no_of_question;
