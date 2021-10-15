@@ -506,6 +506,10 @@ class QuestionController extends Controller
     Storage::append('file.log', json_encode($all)); 
 
 
+    if(empty($question_ids)){
+        return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
+    }
+
         // if (count($question_ids) < $speed->no_of_question) {
         //     $dis3 = $speed->no_of_question - count($question_ids);
 

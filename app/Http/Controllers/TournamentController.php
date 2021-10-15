@@ -287,11 +287,11 @@ class TournamentController extends Controller
      //dd($tournament);
         $validatedData = $request->validate([
             'title' => 'required|',
-            'sub_domain_id' => 'required|integer',
+            // 'sub_domain_id' => 'required|integer',
             'quize_type' => 'required|integer',
             'age_group_id' => 'required|integer',
             'difficulty_level_id' => 'required|integer',
-            'theme_id' => 'required|integer',
+            // 'theme_id' => 'required|integer',
            // 'domain_id' => 'required|integer',
             'no_of_players' => 'required|integer',
             'duration' => 'required|integer',
