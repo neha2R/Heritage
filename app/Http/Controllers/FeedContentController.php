@@ -887,7 +887,8 @@ return $request;
           $place =null;
             }
         $mydata['placeholder_image'] =$place;  
-        $mydata['savepost'] = 20; 
+        $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->pluck('feed_contents_id');
+        $mydata['savepost'] = count($savefeeds); 
                 if(isset($cont->savefeed)){
                     $save = 1;
                 }else{
@@ -990,14 +991,20 @@ return $request;
               else{
                 $place =null;
                   }
-              $mydata['placeholder_image'] =$place;  
-              $mydata['savepost'] = count($feeds); 
+              $mydata['placeholder_image'] =$place; 
+              $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->pluck('feed_contents_id'); 
+              $mydata['savepost'] = count($savefeeds); 
             //   if(in_array($cont->id,$feeds->toArray())){
             //       $issave =1;
             //   }else{
             //     $issave =0; 
             //   }
-              $mydata['is_saved'] = 1; 
+            if(isset($cont->savefeed)){
+                $save = 1;
+            }else{
+                $save=0;
+            }
+              $mydata['is_saved'] = $save; 
               $mydata['share'] = $this->sharepath($cont->id); 
               if(isset($cont->feed_media_single->feed_attachments_single)){
                   $mediatype = $cont->feed_media_single->feed_attachments_single->media_type;
@@ -1067,8 +1074,9 @@ return $request;
           else{
             $place =null;
               }
-          $mydata['placeholder_image'] =$place;  
-          $mydata['savepost'] = 20; 
+          $mydata['placeholder_image'] =$place; 
+          $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->pluck('feed_contents_id'); 
+          $mydata['savepost'] = count($savefeeds); 
           $mydata['is_saved'] = fmod($i,2); 
           $mydata['share'] = $this->sharepath($cont->id); 
           $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type; 
@@ -1502,8 +1510,14 @@ return $request;
             $place =null;
               }
           $mydata['placeholder_image'] =$place;  
-          $mydata['savepost'] = 20; 
-          $mydata['is_saved'] = 1; 
+          $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->pluck('feed_contents_id');
+          $mydata['savepost'] = count($savefeeds); 
+          if(isset($cont->savefeed)){
+            $save = 1;
+        }else{
+            $save=0;
+        }
+          $mydata['is_saved'] = $save; 
           $mydata['share'] = $this->sharepath($cont->id); 
           if(isset($cont->feed_media_single->feed_attachments_single)){
             $mediatype = $cont->feed_media_single->feed_attachments_single->media_type;
