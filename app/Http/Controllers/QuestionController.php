@@ -571,13 +571,13 @@ class QuestionController extends Controller
          
           
             if($que->type=='1'){
-                $detail = json_decode($que->attachment_details,true);
+                $detail = (array) json_decode($que->attachment_details,true);
                 $h = 0;
                 $w = 1;
                 // dd($detail);
               
-                $quesdata['width']  =$detail->$h;
-                $quesdata['height']  =$detail->$w;
+                $quesdata['width']  =$detail['0'];
+                $quesdata['height']  =$detail['1'];
             //      $quesdata['width']  =1932;
             //  $quesdata['height']  =2500;
              $quesdata['media_data']  =$detail;
