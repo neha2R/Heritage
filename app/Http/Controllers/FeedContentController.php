@@ -693,7 +693,7 @@ return $request;
         
         $feedContents = FeedContent::select('id','feed_id','type','tags','title','description');
 
-        $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
+        // $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
            
         if ($request->theme_id) {
            
