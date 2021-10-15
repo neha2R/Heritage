@@ -1505,8 +1505,14 @@ return $request;
           $mydata['savepost'] = 20; 
           $mydata['is_saved'] = 1; 
           $mydata['share'] = $this->sharepath($cont->id); 
+          if(isset($cont->feed_media_single->feed_attachments_single)){
+            $mediatype = $cont->feed_media_single->feed_attachments_single->media_type;
+          }else{
+            $mediatype = '';
+          }
           $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
           $imagename=[];
+          $imgdata=[];
           foreach($cont->feed_media_single->feed_attachments_name as $image){
              
            $imagename[] = $this->imageurl($image->media_name);
