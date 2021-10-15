@@ -575,6 +575,7 @@ class QuestionController extends Controller
                 $h = '0';
                 $w = '1';
                 // dd();
+                dd($que->id);
                 $quesdata['width']  =$detail->$h;
                 $quesdata['height']  =$detail->$w;
             //      $quesdata['width']  =1932;
