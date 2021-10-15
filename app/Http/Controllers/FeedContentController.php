@@ -749,19 +749,20 @@ return $request;
             $place =null;
               }
           $mydata['placeholder_image'] =$place;  
-          $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->get()->toArray();
-          $mydata['savepost'] = count($savefeeds); 
-                if(isset($cont->savefeed)){
-                    if($cont->savefeed->user_id == $request->user_id){
-                        $save = 1;
+
+          $savefeeds = SaveFeed::where('feed_contents_id','=',$cont->id)->get();
+          $mydata['savepost'] = count($savefeeds->toArray()); 
+
+          $save = SaveFeed::where('feed_contents_id','=',$cont->id)->where('user_id','=',$request->user_id)->first();
+               
+                    if($save){
+                        $mysave = 1;
                     }else{
-                        $save = 0;
+                        $mysave = 0;
                     }
                    
-                }else{
-                    $save=0;
-                }
-        $mydata['is_saved'] = $save; 
+              
+        $mydata['is_saved'] = $mysave; 
           $mydata['share'] = $this->sharepath($cont->id); 
         if(isset($cont->feed_media_single->feed_attachments_single))
           { 
