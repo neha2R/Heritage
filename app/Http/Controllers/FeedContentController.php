@@ -749,7 +749,7 @@ return $request;
             $place =null;
               }
           $mydata['placeholder_image'] =$place;  
-          $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->pluck('feed_contents_id');
+          $savefeeds = SaveFeed::where('feed_contents_id',$cont->id)->get()->toArray();
           $mydata['savepost'] = count($savefeeds); 
                 if(isset($cont->savefeed)){
                     $save = 1;
