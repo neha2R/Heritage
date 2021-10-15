@@ -40,7 +40,7 @@ class FeedContent extends Model
 
     public function savefeed()
     {
-        return $this->hasOne('App\SaveFeed', 'id','feed_contents_id');
+        return $this->hasOne('App\SaveFeed', 'feed_contents_id','id');
     }
 
 }
