@@ -315,11 +315,11 @@ class TournamenetUserController extends Controller
         if($percentage>=0 && $percentage<=30){
        
             $user['title']='Initiate';
-             $user['id']=1;
+             $user['id']=5;
         }
         if($percentage>=31 && $percentage<=50){
-            $user['title'] = 'Debler';
-            $user['id']=2;
+            $user['title'] = 'Dabbler';
+            $user['id']=4;
         }
         if($percentage>=51 && $percentage<=70){
             $user['title'] = 'Scholar';
@@ -327,11 +327,11 @@ class TournamenetUserController extends Controller
         }
         if($percentage>=71 && $percentage<=90){
             $user['title'] = 'Culture Vulture';
-            $user['id']=4;
+            $user['id']=2;
         }
         if($percentage>=91 && $percentage<=100){
             $user['title'] = 'Expert';
-            $user['id']=5;
+            $user['id']=1;
         }
     //   dd($league);
 
@@ -352,7 +352,7 @@ class TournamenetUserController extends Controller
        $response['user'] = $user;
        $response['league'] = $leagues;
        $response['rank'] = $rank;
-
+       $response['percentage'] = $percentage;
        return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
 
     }
