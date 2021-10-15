@@ -988,7 +988,7 @@ return $request;
                 $place =null;
                   }
               $mydata['placeholder_image'] =$place;  
-              $mydata['savepost'] = 20; 
+              $mydata['savepost'] = count($feeds); 
               $mydata['is_saved'] = 1; 
               $mydata['share'] = $this->sharepath($cont->id); 
               $mydata['media_type'] = $cont->feed_media_single->feed_attachments_single->media_type; 
