@@ -184,7 +184,7 @@ class QuizRuleController extends Controller
             // $data = json_decode($quiz_rules->more);
             $quiz_rules->more = json_decode($quiz_rules->more);
             $data = $quiz_rules->toArray();
-             $data = array_values($data);
+             $data = array_filter(array_values($data));
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }
