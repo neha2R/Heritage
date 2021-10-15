@@ -443,7 +443,7 @@ class QuestionController extends Controller
 
                 $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
-                // dd($question_id1, $dis1, $dis2, $speed->no_of_question);
+                 dd($question_id1, $dis1, $dis2, $speed->no_of_question);
                 // $question_ids = $question_ids->get()->toArray();
                 break;
             case "intermediate":
