@@ -1006,6 +1006,7 @@ return $request;
               }
               $mydata['media_type'] = $mediatype; 
               $imagename=[];
+              $imgdata=[];
               foreach($cont->feed_media_single->feed_attachments_name as $image){
                  
                $imagename[] = $this->imageurl($image->media_name);
