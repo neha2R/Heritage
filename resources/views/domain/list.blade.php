@@ -254,6 +254,26 @@
 	  @method('PUT')
 
                @csrf
+
+               <div class="form-group">
+                  <label for="theme_id">Select Theme</label>
+                  @php $mythem = explode(',',$domain->themes_id); @endphp
+                  <select class="@error('theme_id') is-invalid @enderror form-control" id="theme_id" multiple="multiple" name="theme_id[]" required>
+                     <option value="">Select Theme</option>
+                     @foreach($themes as $theme)
+                     @if(in_array($theme->id,$mythem))
+                     @php   $selected = 'selected="selected"' @endphp
+                     @else
+                      @php  $selected = ''; @endphp
+                     @endif
+                     <option {{$selected}} value="{{$theme->id}}">{{$theme->title}}</option>
+                     @endforeach
+                  </select>
+                  @error('theme_id')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                  @enderror
+               </div>
+
                <div class="form-group">
                   <label for="name">Domain name</label>
                   <input type="text" class="@error('name') is-invalid @enderror form-control" value="{{$domain->name}}"  name="name" placeholder="Domain name" required> @error('name')
@@ -287,6 +307,18 @@
          <div class="modal-body">
             <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('domain.store') }}" novalidate="novalidate">
                @csrf
+               <div class="form-group">
+                  <label for="theme_id">Select Theme</label>
+                  <select class="@error('theme_id') is-invalid @enderror form-control" id="theme_id" multiple="multiple" name="theme_id[]" required>
+                     <option value="">Select Theme</option>
+                     @foreach($themes as $theme)
+                     <option value="{{$theme->id}}">{{$theme->title}}</option>
+                     @endforeach
+                  </select>
+                  @error('theme_id')
+                  <div class="alert alert-danger">{{ $message }}</div>
+                  @enderror
+               </div>
                <div class="form-group">
                   <label for="name">Domain name</label>
                   <input type="text" class="@error('name') is-invalid @enderror form-control" name="name" placeholder="Domain name required"> @error('name')

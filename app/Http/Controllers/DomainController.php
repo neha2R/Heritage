@@ -6,6 +6,7 @@ use App\Domain;
 use App\Subdomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Theme;
 
 class DomainController extends Controller
 {
@@ -18,8 +19,9 @@ class DomainController extends Controller
     {
         $domains = Domain::OrderBy('id', 'DESC')->get();
         $subdomains = Subdomain::OrderBy('id', 'DESC')->get();
+        $themes = Theme::OrderBy('id', 'DESC')->get();
 
-        return view('domain.list', compact('domains', 'subdomains'));
+        return view('domain.list', compact('themes','domains', 'subdomains'));
     }
 
     /**
@@ -42,11 +44,12 @@ class DomainController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|unique:domains',
+            'theme_id' => 'required',
         ]);
         $data = new Domain;
         $data->name = strtolower($request->name);
         $data->status = '1';
-        $data->themes_id = '1';
+        $data->themes_id = implode(',',$request->theme_id);
         $data->save();
 
         if ($data->id) {
@@ -102,6 +105,8 @@ class DomainController extends Controller
     {
 
         $domain->name = strtolower($request->name);
+        $domain->themes_id = implode(',',$request->theme_id);
+
         $domain->save();
         if ($domain->id) {
             return redirect()->back()->with(['success' => 'Domain Updated Successfully']);
@@ -213,8 +218,9 @@ class DomainController extends Controller
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        $id = explode(',', $request->theme_id);
-        $domains = Domain::select('id','name')->whereIn('themes_id',$id)->get();
+        // $id = explode(',', $request->theme_id);
+        $id = $request->theme_id;
+        $domains = Domain::select('id','name')->where('themes_id','like', '%'.$id.'%')->get();
         // $domains = Domain::select('id','name')->get();
         $domains = $domains->toArray();
         if(empty($domains)){

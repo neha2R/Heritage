@@ -546,7 +546,7 @@ class QuestionController extends Controller
         $quizQuestions = QuizQuestion::where('attempts_id',$request->quiz_id)->latest()->first();
      
         if (empty($quizQuestions)) {
-            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type','type')->whereIn('id', $question_ids)->get(); 
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type','type')->whereIn('id', $question_ids)->orderByRaw("field(id,".implode(',',$question_ids).")")->get(); 
 
             $quizques = new QuizQuestion;
             $quizques->attempts_id = $request->quiz_id;
@@ -557,7 +557,8 @@ class QuestionController extends Controller
         else{
             $ques = explode(",", $quizQuestions->questions);
 
-            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint','attachment_details','type')->whereIn('id', $ques)->get();
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint','attachment_details','type')->whereIn('id', $ques)->orderByRaw("field(id,".implode(',',$ques).")")
+            ->get();
           
         }
         $response=[];
