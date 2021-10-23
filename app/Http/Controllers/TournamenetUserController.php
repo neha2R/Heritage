@@ -12,6 +12,7 @@ use App\TournamentPerformance;
 use App\Question;
 use App\League;
 use App\Tournament;
+use App\UserLeagueWithPer;
 
 class TournamenetUserController extends Controller
 {
@@ -353,6 +354,21 @@ class TournamenetUserController extends Controller
        $response['league'] = $leagues;
        $response['rank'] = $rank;
        $response['percentage'] = $percentage;
+       $userleague = UserLeagueWithPer::where('user_id',$request->user_id)->first();
+      
+       if($userleague){
+        $userleague->league_id = $user['id'];
+        $userleague->percentage = $percentage;
+        $userleague->save();
+
+       }else{
+    
+        $userleague = new UserLeagueWithPer;
+        $userleague->user_id = $request->user_id;
+        $userleague->league_id = $user['id'];
+        $userleague->percentage = $percentage;
+        $userleague->save();
+       }
        return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
 
     }
@@ -377,14 +393,38 @@ class TournamenetUserController extends Controller
        if ($validator->fails()) {
            return response()->json(['status' => 201, 'data' => $response, 'message' => $validator->errors()]);
        } 
-
+      $userleague= UserLeagueWithPer::where('user_id',$request->user_id)->first();
        $leagues = League::select('id','title')->get();
        $top=[];
        $middle=[];
        $bottom=[];
 
-       $your_leage['league_id'] =4;
-       $your_leage['league_name'] ='Initiate';
+       if(empty($userleague)){
+        $your_leage['league_id'] =5;
+        $your_leage['league_name'] = 'Initiate';
+        $alluserleague=[];
+       }else{
+       $your_leage['league_id'] =$userleague->league_id;
+       $your_leage['league_name'] = League::find($userleague->league_id)->title;
+       $alluserleague= UserLeagueWithPer::where('league_id',$userleague->league_id)->orderBy('percentage','DESC')->get();
+       }
+   
+
+       if(empty($alluserleague)){
+           $user_league = [];
+       }else{
+           $rank=1;
+         foreach($alluserleague as $alluser){
+    $user_league1['rank'] = $rank;
+    $user_league1['percentage'] = $alluser->percentage;
+        $user_league1['user_id'] = $alluser->user_id;
+        $user_league[]= $user_league1;
+        $rank++;
+        if($alluser->user_id==$request->user_id){
+            break;
+        }
+         }  
+       }
 
        for($i=1; $i<=5; $i++){
        $top1['rank'] = $i;
@@ -413,28 +453,35 @@ class TournamenetUserController extends Controller
                 $alldatas=[];
              
              if($your_leage['league_id'] != $league->id){   
-            for($i=1; $i<=5; $i++){
 
-                $alldatas1['rank'] = $i;
-                $alldatas1['percentage'] = rand(10,70);
-                $alldatas1['user_id'] = $i;
+                $leagueWiseData= UserLeagueWithPer::where('league_id',$league->id)->orderBy('percentage','DESC')->take(5)->get();
+                if(!empty($leagueWiseData)){
+            $rank =1;
+         foreach($leagueWiseData as $leagueWise){
+
+                $alldatas1['rank'] = $rank;
+                $alldatas1['percentage'] = $leagueWise->percentage;
+                $alldatas1['user_id'] = $leagueWise->user_id;
                 $alldatas[]= $alldatas1;
+                $rank++;
                 } 
+            }
     $response['oleague'.$myname]['league_id'] =$league->id;
     $response['oleague'.$myname]['league_name'] =$league->title;
     $response['oleague'.$myname]['data'] =$alldatas;
+          
     $myname++;
             }
 
         //  $leaguedata[$league->title] = $bottom;
             }
 
-         $your_leage['top'] =$top;
-         $your_leage['middle'] =$middle;
-         $your_leage['bottom'] =$bottom;
+        //  $your_leage['top'] =$top;
+        //  $your_leage['middle'] =$middle;
+        //  $your_leage['bottom'] =$bottom;
+         $your_leage['top'] = $user_league;
 
         $response['your_leage'] = $your_leage;
-
     //    $response['user'] = $user;
     //    $response['league'] = $leaguedata;
     //    $response['rank'] = $rank;

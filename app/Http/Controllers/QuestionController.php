@@ -81,6 +81,8 @@ class QuestionController extends Controller
         $question_media = '';
         $type = '0';
         $mediadata=[];
+        $width = 0;
+        $height = 0;
         if ($request->has('question_media')) {
             $foldername = 'question';
             $file = $request->file('question_media');
@@ -94,7 +96,8 @@ class QuestionController extends Controller
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
                 $mediadata =getimagesize($request->file('question_media'));
-
+                $width = $mediadata[0];
+                $height = $mediadata[1];
             }
 
             //validate audio
@@ -143,7 +146,9 @@ class QuestionController extends Controller
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type;
         $data->type = $type;
-       $data->attachment_details= json_encode($mediadata);
+        $data->height = $height;
+        $data->width = $width;
+        $data->attachment_details= json_encode($mediadata);
         $data->save();
 
         $quessetting = new QuestionsSetting;
@@ -237,13 +242,16 @@ class QuestionController extends Controller
         // $option4_media = '';
         $question_media = '';
         $type = '';
-   
+        $data = Question::whereId($question->id)->first();
+        $width = $data->width;
+        $height = $data->height;
+
         if ($request->has('question_media')) {
             $foldername = 'question';
 
             if ($request->question_media_old) {
 
-                unlink(storage_path('app/public/' . $request->question_media_old));
+                // unlink(storage_path('app/public/' . $request->question_media_old));
             }
             $file = $request->file('question_media');
 
@@ -257,6 +265,8 @@ class QuestionController extends Controller
             if (in_array($file->getMimeType(), $imagemimes)) {
                 $type = '1';
                 $mediadata =getimagesize($request->file('question_media'));
+                $width = $mediadata[0];
+                $height = $mediadata[1];
 
             }
 
@@ -315,7 +325,7 @@ class QuestionController extends Controller
         //     $option4_media = $request->option4_media_old;
         // }
 
-        $data = Question::whereId($question->id)->first();
+       
         $data->question = $request->question;
         $data->option1 = $request->option1;
         $data->option2 = $request->option2;
@@ -328,6 +338,9 @@ class QuestionController extends Controller
         // $data->option4_media = $option4_media;
         $data->right_option = $request->right_option;
         $data->question_media_type = "." . $request->question_media_type_old;
+        $data->height = $height;
+        $data->width = $width;
+
         if($request->has('question_media'))
         {
             
