@@ -44,7 +44,11 @@ class SaveResult implements ShouldQueue
 
             return 'error';
         } else {
+            if($attempt->status=='completed'){
+                return 'success';   
+            } else{
             $questions = $questions->toArray();
+            }
         }
         $ans = explode(",", $respreformance['quiz_answer']);
         $question = explode(",", $questions['questions']);
