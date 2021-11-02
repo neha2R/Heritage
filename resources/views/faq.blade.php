@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Heritage FAQs</title>
+  <title>Heritage Qlympiad</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -67,7 +67,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>                        
       </button> -->
-      <a class="navbar-brand" href="#">Heritage FAQs</a>
+      <a class="navbar-brand" href="#">Heritage Qlympiad FAQs</a>
     </div>
     <!-- <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
@@ -85,7 +85,7 @@
 
 <div class="jumbotron ">
   <div class="container text-center">
-    <h1 >Heritage FAQs</h1>      
+    <h1 >Heritage Qlympiad FAQs</h1>      
     <!-- <p>Some text that represents "Me"...</p> -->
   </div>
 </div>

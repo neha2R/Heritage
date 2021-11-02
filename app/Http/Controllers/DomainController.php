@@ -217,10 +217,15 @@ class DomainController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
+              $query = Domain::select('id','name');
+         $ids = explode(',', $request->theme_id);
+         foreach($ids as $myid){
+         $query->orWhere('themes_id',$myid);
+         $query->orWhere('themes_id','like', '%'.$myid.'%');
+         }
 
-        // $id = explode(',', $request->theme_id);
         $id = $request->theme_id;
-        $domains = Domain::select('id','name')->where('themes_id','like', '%'.$id.'%')->get();
+        $domains = $query->orWhere('themes_id','like', '%'.$id.'%')->get();
         // $domains = Domain::select('id','name')->get();
         $domains = $domains->toArray();
         if(empty($domains)){
