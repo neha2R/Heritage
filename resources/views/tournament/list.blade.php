@@ -276,7 +276,7 @@
                             <div class = "row"> 
                                 <div class="col">
                                     <div class="form-group">
-                                        <select name="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control frequency" required >
+                                        <select name="frequency_id" id="frequency_id" class="@error('frequency_id') is-invalid @enderror form-control frequency" required >
                                             <option value="">Select Frequency</option>
                                             @foreach($frequencies as $freq)
                                                 <option value="{{$freq->id}}">{{$freq->title}}</option>
@@ -321,13 +321,15 @@
                                     <input type="number" name="duration" class="form-control" placeholder="Duration in (Minutes)">
                                 </div>
                             </div>                  
-                            <div class = "row"> 
+                            <div class = "row" >
+                                <p id="datepicker_div"></p></br> 
                                 <div class="col">
                                     <input id="datetimepicker" class="form-control"  type="text" autocomplete="off" name="start_time" placeholder="start time" >
                                 </div>
                                 <div class="col">
                                     <input id="datetimepicker2" class="form-control"  type="text" autocomplete="off" name="end_time" placeholder="End Time" >
                                 </div>
+                                
                             </div>
 
                             <div class = "row"> 
@@ -368,8 +370,8 @@
                     </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="1" >choose your preference questions</button>
-                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="0">Submit</button>
+                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="1" id="submit_pre_question" >choose your preference questions</button>
+                            <button type="submit" data-toggle="modal" class="btn btn-primary" name="preference_questions" value="0" id="submit_tour_question">Submit</button>
                         </div>
                     </form>
             </div>
@@ -583,7 +585,12 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="sub_domain_id" class="@error('sub_domain_id') is-invalid @enderror form-control" required >
-                                            <option value="{{$tournament->sub_domain->id}}" disabled selected>{{$tournament->sub_domain->name}}</option>
+                                            @if(!isset($tournament->sub_domain->id))
+                                                <option value="" disabled selected>None</option>
+                                            @else
+                                                <option value="{{$tournament->sub_domain->id}}" disabled selected>{{$tournament->sub_domain->name}}</option>
+                                            @endif
+                                           
                                             <!-- <option  disabled value>-- Select Sub Domain--</option>
                                             @foreach($subDomains as $subDomain)
                                                 <option value="{{$subDomain->id}}">{{$subDomain->name}}</option>
@@ -956,6 +963,10 @@ if(confirm("Are you sure want to change the status ?")) {
             $('#interval_session').attr('readonly','readonly')
           }
     });
+
+
+
+   
     // set on click on add tournament quize
     // $("#add_normal_quize_button").on('click',function()
     // {
@@ -971,6 +982,95 @@ if(confirm("Are you sure want to change the status ?")) {
  
     $('#datetimepicker').datetimepicker();   
     $('#datetimepicker2').datetimepicker();   
+    $(document).on('change','#datetimepicker2',function(){
+            var start_date = $('#datetimepicker').val();
+            var end_date = $('#datetimepicker2').val();
+            var frequency = $('#frequency_id').val();
+
+            var startDay = new Date(start_date.split(' ')[0]);  
+            var endDay = new Date(end_date.split(' ')[0]);  
+  
+            // Determine the time difference between two dates     
+            var millisBetween = startDay.getTime() - endDay.getTime();  
+  
+            // Determine the number of days between two dates  
+            var days = millisBetween / (1000 * 3600 * 24);  
+  
+            // Show the final number of days between dates     
+            days = Math.round(Math.abs(days));  
+              
+            switch(frequency) 
+            {
+                case '1':
+                    // for day 
+                    if(start_date.split(' ')[0] != end_date.split(' ')[0])
+                    {
+                        // for day one 
+                          console.log("for day manish");
+                        $("#submit_pre_question").attr("disabled", true);
+                        $("#submit_tour_question").attr("disabled", true);
+                        
+                        $("#datepicker_div").text("Please Select Correct Date and Time");
+                        $("#datepicker_div").css({ 'color': 'red'});
+                    }
+                    else
+                    {
+                        $("#submit_pre_question").removeAttr("disabled");
+                        $("#submit_tour_question").removeAttr("disabled");
+                        $("#datepicker_div").text("");
+                        
+                        
+                    }
+                    break;
+                case '2':
+                    // for weekly
+                    console.log("for week");
+                    if(days != 7)
+                    {
+                          console.log("for week manish");
+                        $("#submit_pre_question").attr("disabled", true);
+                        $("#submit_tour_question").attr("disabled", true);
+                         $("#datepicker_div").text("Please Select Correct Date and Time");
+                        $("#datepicker_div").css({ 'color': 'red'});
+                    }  
+                    else
+                    {
+                        $("#submit_pre_question").removeAttr("disabled");
+                        $("#submit_tour_question").removeAttr("disabled");
+                        $("#datepicker_div").text("");
+                        
+                    }
+                    break;
+                case '3':
+                    // for monthly
+                    console.log("for month");
+                     if(days != 30 &&  days != 31 )
+                    {
+                        $("#submit_pre_question").attr("disabled", true);
+                        $("#submit_tour_question").attr("disabled", true);
+                        $("#datepicker_div").text("Please Select Correct Date and Time");
+                        $("#datepicker_div").css({ 'color': 'red'});
+                    }
+                    else
+                    {
+                        $("#submit_pre_question").removeAttr("disabled");
+                        $("#submit_tour_question").removeAttr("disabled");
+                        $("#datepicker_div").text("");
+                        
+                    }
+
+
+                    break;
+                default:
+                    // code block
+                    console.log("null mans");
+            }
+            
+         
+        
+            console.log( );
+          
+    });
     if (window.File && window.FileList && window.FileReader) {
         
         $("#files").on("change", function(e) {
