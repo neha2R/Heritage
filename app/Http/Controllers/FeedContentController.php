@@ -57,7 +57,7 @@ class FeedContentController extends Controller
                     'feed_id' => 'required',
                     'title' => 'required|max:200',
                     'tags'=>'required',
-                    'external_link' => 'required|url',
+                    'external_link' => 'required',
                     'title'=>'required',
                     'description' =>'required' 
                 ]);
@@ -691,7 +691,7 @@ return $request;
         }
 
         
-        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description');
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->where('status','1');
 
         // $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
            

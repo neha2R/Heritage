@@ -70,26 +70,27 @@ class TournamentController extends Controller
     public function store(Request $request)
     {
          // dd($request);
-        $validatedData = $request->validate([
-            'title' => 'required|',
-            'sub_domain_id' => 'required|integer',
-            'quize_type' => 'required|integer',
-            'age_group_id' => 'required|integer',
-            'difficulty_level_id' => 'required|integer',
-            'theme_id' => 'required|integer',
-            'domain_id' => 'required|integer',
-            'no_of_players' => 'required|integer',
-            'duration' => 'required|integer',
-            'media_name' => 'required',
-            'sponsor_media_name'=>'required',
-            'no_of_question'=>'required',
-
-        ]);
-       
+        
         
         // add normal quize 
         if($request->quize_type == "0")
         {   
+            $validatedData = $request->validate([
+                'title' => 'required|',
+                'sub_domain_id' => 'required|integer',
+                'quize_type' => 'required|integer',
+                'age_group_id' => 'required|integer',
+                'difficulty_level_id' => 'required|integer',
+                'theme_id' => 'required|integer',
+                'domain_id' => 'required|integer',
+                'no_of_players' => 'required|integer',
+                'duration' => 'required|integer',
+                'media_name' => 'required',
+                'sponsor_media_name'=>'required',
+                'no_of_question'=>'required',
+    
+            ]);
+           
             if($request->frequency_id==1){
                 $validatedData = $request->validate([
                     'session_per_day' => 'required|integer',
@@ -200,6 +201,23 @@ class TournamentController extends Controller
         }
         else
         {
+            // Special Quiz
+            
+            $validatedData = $request->validate([
+                'title' => 'required|',
+                'age_group_id' => 'required|integer',
+                'session_per_day' => 'required|integer',
+                'start_time' => 'required',
+                'no_of_players' => 'required|integer',
+                'duration' => 'required|integer',
+                'interval_bw_session' => 'required',
+                'sponsor_media_name'=>'required',
+                'no_of_question'=>'required',
+                'mark_per_question'=>'required|integer',
+                'media_name'=>'required',
+    
+            ]);
+           
             $newTournament = new Tournament;
             $newTournament->title = $request->title;
             $newTournament->type = $request->quize_type;
@@ -214,14 +232,14 @@ class TournamentController extends Controller
             $newTournament->marks_per_question = $request->mark_per_question;
             $newTournament->negative_marking = '1';//$request->negative_marking;
             $newTournament->negative_marking_per_question = $request->negative_mark_per_question;
-            if($request->hasfile('media_name'))
+            // if($request->hasfile('media_name'))
+            // {
+            //     $media_name = $request->file('media_name')->store('tournament','public');
+            //     $newTournament->media_name = $media_name;
+            // }
+            if($request->hasFile('media_name'))
             {
-                $media_name = $request->file('media_name')->store('tournament','public');
-                $newTournament->media_name = $media_name;
-            }
-            if($request->hasFile('sponsor_media_name'))
-            {
-                $sponsor_media_name = $request->file('sponsor_media_name')->store('sponsor','public');
+                $sponsor_media_name = $request->file('media_name')->store('sponsor','public');
                 $newTournament->sponsor_media_name = $sponsor_media_name;
             }
            $newTournament->save();
@@ -229,7 +247,7 @@ class TournamentController extends Controller
            
             
             // store excel file question 
-            Excel::import(new TournamentQuestionImport($newTournament->id), $request->file('tournament_question_bluck'));
+            Excel::import(new TournamentQuestionImport($newTournament->id), $request->file('sponsor_media_name'));
             return back();
             
             //dd($newTournament);
