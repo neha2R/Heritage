@@ -53,7 +53,7 @@ class FeedContentController extends Controller
         {
                 $validatedData = $request->validate([
                     'theme_id' => 'required',
-                    'domain_id' => 'required|',
+                    'domain_id' => 'required',
                     'feed_id' => 'required',
                     'title' => 'required|max:200',
                     'tags'=>'required',
