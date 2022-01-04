@@ -70,7 +70,7 @@ class FeedContentController extends Controller
 
             $data->title = $request->title;
             $data->description = $request->description;   
-            $data->save();         
+             $data->save();         
             $imagemimes = ['image/png', 'image/jpg', 'image/jpeg', 'image_gif']; //Add more mimes that you want to support
             $videomimes = ['video/mp4']; //Add more mimes that you want to support
                 $media = new FeedMedia;
@@ -85,9 +85,11 @@ class FeedContentController extends Controller
               
 
                 $media->video_link =isset($request->video_link)?$request->video_link:'';
+                $media->save();
         
                 foreach($request->file('media_name') as $key=>$file)
                 {
+                    
                     $type = '0';
                     // FeedMediaUploadJob::dispatchNow($file,$media->id,$type);
                     $name = $file->store('feed','public');
@@ -95,6 +97,7 @@ class FeedContentController extends Controller
                     $attachment->feed_media_id = $media->id;
                     $attachment->media_name = $name;
                     $attachment->media_type = $type;
+                    // dd($attachment);
                     $attachment->save();
                 }
             }
@@ -118,7 +121,7 @@ class FeedContentController extends Controller
                                     //$media->external_link=$request->external_link;
                                     $media->video_link =isset($request->video_link)?$request->video_link:'';
                                     $media->placholder_image=$place_holder;
-                                    
+                                    $media->save();
     
                                     $attachment = new FeedAttachment;
                                     $attachment->feed_media_id=$media->id;
@@ -134,7 +137,7 @@ class FeedContentController extends Controller
                  
             }
 
-            $media->save();
+           
         }
         elseif($request->feed_id == '2')
         {
@@ -369,7 +372,7 @@ class FeedContentController extends Controller
      */
     public function update(Request $request, $id)
     {
-       
+        
         if($request->feed_id=="1")
         {
             
@@ -380,7 +383,7 @@ class FeedContentController extends Controller
                     'feed_id' => 'required',
                     'title' => 'required|max:200',
                     'tags'=>'required',
-                    'external_link' => 'required|url',
+                    'external_link' => 'required',
                     'title'=>'required',
                     'description' =>'required' 
                 ]);
@@ -459,7 +462,7 @@ class FeedContentController extends Controller
                 }
                 else
                 {
-                     
+                   
                     $media =FeedMedia::where('feed_content_id',$data->id)->first();
                     $media->feed_content_id = $data->id;
                     $media->title = $request->title;
@@ -533,7 +536,7 @@ class FeedContentController extends Controller
         }
         else
         {
-return $request;
+          
             $data = FeedContent::where('id',$id)->first();
             $data->theme_id = $request->theme_id;
             $data->domain_id = $request->domain_id;
@@ -1208,7 +1211,7 @@ return $request;
 
     public function update_feed_attachment(Request $req)
     {
-        
+       
         if($req->type=="1")
         {
             
@@ -1226,10 +1229,10 @@ return $request;
                {
 
                 if(FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->first())
-                    {
+                {
                        
                         FeedAttachment::where('feed_media_id',$media->id)->where('media_type','0')->delete(); 
-             if(isset($req->old_images)){
+                   if(isset($req->old_images)){
                         foreach($req->old_images as $image)
                         {
                             $images=new FeedAttachment;
@@ -1253,6 +1256,7 @@ return $request;
                         $media->video_link="";
                         $media->placholder_image="";
                         $media->description=$req->description;
+                        $media->external_link=$req->external_link;
                         $media->save();
                         if($req->hasfile('files'))
                         {
@@ -1269,7 +1273,7 @@ return $request;
                         }
                             
                         
-               }
+                 }
                else
                {  
                     

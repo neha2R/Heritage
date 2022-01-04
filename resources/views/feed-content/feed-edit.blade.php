@@ -120,7 +120,7 @@
                         <div id="single_post" >
                            <div class="form-group">
                               <label for="external_link">External Link</label>
-                              <input type="text" class="@error('title') is-invalid @enderror form-control" name=""  value="{{$feed->feed_medium->external_link}}" placeholder="https://www.google.com/" >
+                              <input type="text" class="@error('external_link') is-invalid @enderror form-control" name="external_link"  value="{{$feed->feed_medium->external_link}}" placeholder="https://www.google.com/" >
                            </div>
                            <div class="form-group">
                               <label for="external_link">Media Type</label>

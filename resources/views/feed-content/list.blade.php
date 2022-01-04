@@ -235,8 +235,8 @@
 
                <div id="single_post" style="display:none">
                         <div class="form-group">
-                           <label for="title">External Link</label>
-                           <input type="text" class="@error('external_link') is-invalid @enderror form-control" maxlength="50" name="external_link" placeholder="https://www.google.com/" >
+                           <label for="external_link">External Link</label>
+                           <input type="text" class="@error('external_link') is-invalid @enderror form-control"  name="external_link" placeholder="https://www.google.com/" >
                         </div>
                         <div class="form-group">
                            <select name="media_type" id="type_add" class="@error('type') is-invalid @enderror form-control " onchange="showType(this.value)"  > 
