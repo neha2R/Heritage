@@ -22,10 +22,21 @@ class FeedContentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $feedContents=  FeedContent::query();
+        if ($request->search) {
+         $searchTerm =$request->search;
+            $feedContents =  $feedContents->whereHas('theme', function ($query) use ($searchTerm) {
+                return $query->where('title', 'LIKE', '%' . $searchTerm . '%');
+            })->orWhereHas('feedtype', function ($query) use ($searchTerm) {
+                return $query->where('title', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->orWhere('title', 'LIKE', "%{$searchTerm}%");
+        }
         $themes = Theme::OrderBy('id', 'DESC')->get();
-        $feedContents = FeedContent::OrderBy('id', 'DESC')->get();$domains = Domain::OrderBy('id', 'DESC')->get();
+        $feedContents = $feedContents->OrderBy('id', 'DESC')->paginate(10);
+        $domains = Domain::OrderBy('id', 'DESC')->get();
         $feeds = Feed::OrderBy('id', 'ASC')->get();
         return view('feed-content.list', compact('feedContents','themes','feeds','domains'));
     }
@@ -1112,12 +1123,14 @@ class FeedContentController extends Controller
     // get feed content data according feed_content id
     public function get_feed_content_by_id($id)
     {
+      $page = $_GET['page'];
+
         $themes = Theme::OrderBy('id', 'DESC')->get();
         $domains= Domain::OrderBy('id','DESC')->get();
         $feeds = Feed::OrderBy('id','DESC')->get();
         $feed=FeedContent::whereId($id)->first();
         $feedContents=FeedMedia::where('feed_content_id',$id)->orderByDesc('id')->get();
-       return view('feed-content.feed-edit',compact('feed','themes','domains','feeds','feedContents'));
+       return view('feed-content.feed-edit',compact('feed','themes','domains','feeds','feedContents','page'));
     //     $data = [];
   
     //     $feedContent =  FeedContent::find($id);
@@ -1211,7 +1224,7 @@ class FeedContentController extends Controller
 
     public function update_feed_attachment(Request $req)
     {
-       
+      
         if($req->type=="1")
         {
             
@@ -1363,7 +1376,7 @@ class FeedContentController extends Controller
             $feed->save();
         }
 
-        return redirect('admin/feed-content')->with('success','feed content has been updated successfully.');
+        return redirect("admin/feed-content?page=$req->page")->with('success','feed content has been updated successfully.');
     //    dd($request);
     //     if($request->feed_id == 1)
     //     {

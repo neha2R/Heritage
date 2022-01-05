@@ -77,6 +77,13 @@
 
                <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".card-type-model"> <i class="fas fa-plus-circle"></i> Create Feed</button>
             </div>
+            <div class="card-header display-inline mt-3">
+             
+            <form  method="GET" action="feed-content"  >
+               <button type="submit" class=" float-right btn mr-2 mb-2 btn-primary" > <i class="fa fa-search"></i> Search</button>
+               <input type="text" name="search" required class=" float-right  mr-2 mb-2 form-control " style="width:200px" />
+            </form>
+            </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
                <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> <strong>
@@ -98,7 +105,7 @@
             @endforeach
                     <div class="card-body">
                     <div class="table-responsive">
-                     <table id="table" class="mb-0 table table-striped text-left">
+                     <table  class="mb-0 table table-striped text-left">
                         <thead>
                            <tr>
                               <th>#</th>
@@ -111,9 +118,16 @@
                            </tr>
                         </thead>
                         <tbody>
+                        @if($feedContents->count() < 1)
+                        
+                           <tr class="text-center">
+                              <td colspan="7" >No Record Found</td>
+                           </tr>
+                           @endif
                            @foreach($feedContents as $key=>$feedContent)
+                           @php $i =  $feedContents->perPage() * ($feedContents->currentPage() - 1); $key++;@endphp
                            <tr>
-                              <th scope="row">{{$key+1}}</th>
+                              <th scope="row">{{$i+=$key}}</th>
                               <th scope="row">{{$feedContent->title}}</th>  
                               <th scope="row">{{!empty($feedContent->feedtype)?$feedContent->feedtype->title:'N/A'}}</th>
                              <td>{{$feedContent->theme->title}}</td>
@@ -128,7 +142,8 @@
                                  </label>
 
                               </td>
-                              <td><a href="{{route('get_feed_content_by_id',['id'=>$feedContent->id])}}" class="edit-btn-bg btn mr-2 mb-2 btn-primary" ><i class="fas fa-pencil-alt"></i></button>
+                              @php $page =$feedContents->currentPage(); @endphp
+                              <td><a href="{{route('get_feed_content_by_id',['id'=>$feedContent->id,'page'=>$page])}}" class="edit-btn-bg btn mr-2 mb-2 btn-primary" ><i class="fas fa-pencil-alt"></i></button>
                               </td>
                               <td>
                                  <form class="delete" action="{{route('feed-content.destroy',$feedContent->id)}}" method="POST">
@@ -139,8 +154,13 @@
                               </td>
                            </tr>
                            @endforeach
+                           
                         </tbody>
+                        
                      </table>
+                     <div style="float:right">
+                     {{$feedContents->withQueryString()->links()}}
+                     </div>
                   </div>
                     </div>
             </div>
@@ -186,6 +206,7 @@
             <form id="signupForm" class="col-md-10 mx-auto" method="post" action="{{ route('feed-content.store') }}" enctype="multipart/form-data" >
             <!-- novalidate="novalidate" -->
                @csrf
+
                <div class="form-group">
                   <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
                      <option disabled selected value>-- Select Theme --</option>

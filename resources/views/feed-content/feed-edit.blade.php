@@ -81,6 +81,9 @@
                         <!-- novalidate="novalidate" -->
                         @csrf
                         <input type="hidden" name="feed_content_id" value="{{$feed->id}}" >
+                        
+                        <input type="hidden" name="page" value="{{$page}}" >
+
                         <div class="form-group">
                            <select name="theme_id" class="@error('theme_id') is-invalid @enderror form-control" required >
                               <option disabled  value> -- Select Theme --</option>
