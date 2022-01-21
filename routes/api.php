@@ -132,3 +132,22 @@ End Here
 
 // For server date and time
 Route::get('currentDateTime','UserController@currentDateTime');
+
+
+/* Account Page API 
+      Start Here
+      */
+//========= Notification API
+Route::get('notification/{id}','NotificationController@fetchNotification');
+Route::post('notification','NotificationController@save');
+// ========= Contact API
+Route::post('import_contact','ContactController@import_contact');
+Route::get('get_all_contacts/{id}','ContactController@fetchContacts');
+
+
+
+
+
+      /* Account Page API 
+      ENDS Here
+      */
