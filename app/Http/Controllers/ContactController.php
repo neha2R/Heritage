@@ -130,12 +130,12 @@ class ContactController extends Controller
 
             }
             if(empty($data)){
-                return response()->json(['status' => 200, 'data' => '', 'message' => 'No new user found']);
+                return response()->json(['status' => 201, 'data' => '', 'message' => 'No new user found']);
             }else{
             return response()->json(['status' => 200, 'data' => $data, 'message' => 'New user added to your friend list']);
             }
          }else{
-            return response()->json(['status' => 200, 'data' => '', 'message' => 'User not found']);
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'User not found']);
          }
         
     }
@@ -151,10 +151,8 @@ class ContactController extends Controller
     public function fetchContacts($id){
     $totalfiends = Contact::where('friend_one',$id)->pluck('friend_two')->toArray();
     $blockuser = BlockUser::where('blocked_by',$id)->pluck('blocked_to')->toArray();
-
     $onlyfriends = array_diff($totalfiends, $blockuser);
-
- $users = User::whereIn('id',$onlyfriends)->get();
+    $users = User::whereIn('id',$onlyfriends)->get();
     foreach($users as $user)
     {
        $age=Carbon::parse($user->dob)->age;
@@ -174,20 +172,111 @@ class ContactController extends Controller
        } else{
            $allUsers['flag_icon']=url('/flags/').strtolower('in').".png"; 
        }
-       $allUsers['status']="Online";
-       
-       
+       $allUsers['status']="Online";  
        $data[]=$allUsers;
            
     }
     if(empty($data)){
-        return response()->json(['status' => 200, 'data' => '', 'message' => 'No  user found']);
+    return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
     }
     else{
     return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
     }
 
  }
+
+
+    /** 
+     * Get all Block User
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+ public function blockUser($id){
+    $blockuser = BlockUser::where('blocked_by',$id)->pluck('blocked_to')->toArray();
+    $users = User::whereIn('id',$blockuser)->get();
+    foreach($users as $user)
+    {
+       $age=Carbon::parse($user->dob)->age;
+       $allUsers['id']=$user->id;
+       $allUsers['name']=ucwords(strtolower($user->name));
+
+       if($ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
+       {
+           $allUsers['age_group']=ucwords(strtolower($ageGroup->name));
+       }
+       else
+       {
+           $allUsers['age_group']="";
+       }
+       if($user->country){
+       $allUsers['flag_icon']=url('/flags').'/'.strtolower($user->country->sortname).".png";
+       } else{
+           $allUsers['flag_icon']=url('/flags/').strtolower('in').".png"; 
+       }
+       $allUsers['status']="Online";  
+       $data[]=$allUsers;
+           
+    }
+    if(empty($data)){
+    return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
+    }
+    else{
+    return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
+    }
+
+ }
+
+     /** 
+     * Block user 
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+        public function blockAUser(Request $request){
+
+            $validator = Validator::make($request->all(), [
+                'user_id' => 'required',
+                'block_id' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            }
+             $savedata = new BlockUser;
+             $savedata->blocked_by = $request->user_id;
+             $savedata->blocked_to = $request->block_id;
+             $savedata->save();
+             return response()->json(['status' => 200, 'data' => '', 'message' => 'User blocked succesfully']);
+
+        } 
+
+     /** 
+     * Delete a user from friend List
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteUser(Request $request){
+      
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'delete_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $deleteUser = Contact::where('friend_one',$request->id)
+        ->where('friend_two',$request->delete_id)->first();
+       if(empty($deleteUser)){
+        return response()->json(['status' => 201, 'data' => '', 'message' => 'No user found']);   
+       }
+        $deleteUser->deleted_at = date('Y-m-d H:i:s');
+        $deleteUser->save();
+        
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User Deleted succesfully']);
+
+    }
 
 
 

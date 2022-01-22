@@ -143,11 +143,13 @@ Route::post('notification','NotificationController@save');
 // ========= Contact API
 Route::post('import_contact','ContactController@import_contact');
 Route::get('get_all_contacts/{id}','ContactController@fetchContacts');
+Route::get('get_block_user/{id}','ContactController@blockUser');
+Route::post('blockuser','ContactController@blockAUser');
+Route::post('deleteuser','ContactController@deleteUser');
+//========= Privacy API
+Route::get('privacy/{id}','PrivacyController@fetchPrivacy');
+Route::post('privacy','PrivacyController@save');
 
-
-
-
-
-      /* Account Page API 
+/* Account Page API 
       ENDS Here
       */
