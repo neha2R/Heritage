@@ -27,12 +27,13 @@ class PrivacyController extends Controller
 
         $userId = $request->id;
 
-        $notifications = Privacy::select('id','title')->get();
+        $notifications = Privacy::select('id','title','hint')->get();
         $data=[];
         foreach($notifications as $noti){
             $details= PrivacyDetail::where('privacy_id',$noti->id)->get();
             $data['id'] = $noti->id;
             $data['title'] = $noti->title;
+            $data['hint'] = $noti->hint;
             $assigndata=[];
             foreach($details as $detail){
                       

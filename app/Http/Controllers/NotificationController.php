@@ -27,12 +27,13 @@ class NotificationController extends Controller
 
         $userId = $request->id;
 
-        $notifications = Notification::select('id','title')->get();
+        $notifications = Notification::select('id','title','hint')->get();
         $data=[];
         foreach($notifications as $noti){
             $details= NotificationDetail::where('notification_id',$noti->id)->get();
             $data['id'] = $noti->id;
             $data['title'] = $noti->title;
+            $data['hint'] = $noti->hint;
             $assigndata=[];
             foreach($details as $detail){
                       
