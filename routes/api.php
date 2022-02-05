@@ -147,12 +147,13 @@ Route::get('notification/{id}','NotificationController@fetchNotification');
 Route::post('notification','NotificationController@save');
 // ========= Contact API
 Route::post('import_contact','ContactController@import_contact');
-Route::get('get_all_contacts/{id}','ContactController@fetchContacts');
-Route::get('get_block_user/{id}','ContactController@blockUser');
+Route::post('get_all_contacts','ContactController@fetchContacts');
+Route::post('get_block_user','ContactController@blockUser');
 Route::post('blockuser','ContactController@blockAUser');
 Route::post('deleteuser','ContactController@deleteUser');
-Route::get('invite_contact/{user_id}','ContactController@invite_contact');
+Route::post('invite_contact','ContactController@invite_contact');
 Route::post('accept_link_invitation','ContactController@accept_link_invitation');
+Route::post('add_friend','ContactController@add_friend');
 
 //========= Privacy API
 Route::get('privacy/{id}','PrivacyController@fetchPrivacy');
