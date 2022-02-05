@@ -125,7 +125,7 @@ class ContactController extends Controller
             return response()->json(['status' => 200, 'data' => $data, 'message' => 'New user added to your friend list']);
             }
          }else{
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'User not found']);
+            return response()->json(['status' => 201, 'data' => $data, 'message' => 'User not found']);
          }
         
     }
