@@ -141,11 +141,16 @@ class AttemptController extends Controller
                 return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
             }
             if ($data == 'success') {
-                $quiz = Attempt::find($request->quiz_id);
                 $data = [];
+                $quiz = Attempt::find($request->quiz_id);
+                if($quiz->quiz_type_id==2){
+
+                } else{
+                
                 $data['quiz_id'] = $request->quiz_id;
                 $data['xp'] = $quiz->xp;
                 $data['per'] = $quiz->result;
+                }
                 return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $data]);
             }
         } else {

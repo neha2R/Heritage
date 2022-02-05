@@ -126,7 +126,7 @@ class ContactController extends Controller
                 $savedata->status = '1';
                 $savedata->save();
                
-                $data[] = $userData->name;
+                $data[] = $userData->mobile;
               }
 
             }
