@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Challange;
 use App\AgeGroup;
 use App\BlockUser;
+use Illuminate\Support\Facades\Crypt;
 
 class ContactController extends Controller
 {
@@ -277,6 +278,52 @@ class ContactController extends Controller
         return response()->json(['status' => 200, 'data' => '', 'message' => 'User Deleted succesfully']);
 
     }
+
+
+    public function invite_contact($user_id){
+    //    $user_id= Crypt::encryptString($user_id);
+        $link="cul.tre/invite#".$user_id;
+        return response()->json(['status' => 200, 'data' => $link, 'message' => 'Link generated']);
+
+    }
+
+    public function accept_link_invitation(Request $request){
+       
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'link' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $send_user = explode("#", $request->link);
+       if(!User::find($send_user[1])){
+        return response()->json(['status' => 201, 'data' => '', 'message' => 'Link is not valid']);
+  
+       }
+        $oldFriend = Contact::where('friend_one',$send_user[1])->where('friend_two',$request->user_id)->first();
+        $oldFriend2 = Contact::where('friend_one',$request->user_id)->where('friend_two',$send_user[1])->first();
+          
+          if(!isset($oldFriend) && !isset($oldFriend2) ){
+            $savedata = new Contact;
+            $savedata->friend_one = $send_user[1];
+            $savedata->friend_two = $request->user_id;
+            $savedata->invited_via = 'link';
+            $savedata->status = '1';
+            $savedata->save();
+        
+          }
+        else{
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'Friend already added']);
+  
+        }
+        
+        if(!$savedata){
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'No new user found']);
+        }else{
+        return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
+        }
+        }
 
 
 

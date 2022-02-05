@@ -129,8 +129,11 @@ class AttemptController extends Controller
     {
         $quiz = Attempt::find($request->quiz_id);
         if (!empty($quiz)) {
+            
            $alreadysave= Performance::where('attempt_id', $request->quiz_id)->get('question_id');
+
            if(!empty($alreadysave)){
+           
             $data = SaveResult::dispatchNow($request->all());
            }
             

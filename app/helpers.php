@@ -2,7 +2,7 @@
 use App\User;
 use App\AgeGroup;
 use Carbon\Carbon;
-
+use App\CheckUserState;
 function sendNotification($data)
 {
         $msg = array
@@ -54,6 +54,11 @@ function age_group_by_user($user_id){
  $ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first();
  return $ageGroup;
   
+}
+
+
+function checkUser($id){
+   return CheckUserState::where('user_id',$id)->first();
 }
 
 

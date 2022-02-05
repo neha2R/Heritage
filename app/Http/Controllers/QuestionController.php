@@ -416,6 +416,13 @@ class QuestionController extends Controller
         if (empty($quiz)) {
             return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
         }
+        $quiz->started_at= date('Y-m-d h:i:s');
+        $quiz->save();
+        if(isset($quiz->parent_id)){
+               
+            $quiz = Attempt::find($quiz->parent_id);  
+           
+        }
         $user = User::find($quiz->user_id);
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
         $quiz_type = QuizType::find($quiz->quiz_type_id);
@@ -556,7 +563,7 @@ class QuestionController extends Controller
 
        
 
-        $quizQuestions = QuizQuestion::where('attempts_id',$request->quiz_id)->latest()->first();
+        $quizQuestions = QuizQuestion::where('attempts_id',$quiz->id)->latest()->first();
      
         if (empty($quizQuestions)) {
             $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type','type')->whereIn('id', $question_ids)->orderByRaw("field(id,".implode(',',$question_ids).")")->get(); 
@@ -623,8 +630,6 @@ class QuestionController extends Controller
         }  
 
         $data['question'] = $response;
-        $quiz->started_at= date('Y-m-d h:i:s');
-        $quiz->save();
 
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
 

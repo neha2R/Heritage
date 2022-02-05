@@ -91,7 +91,12 @@ Route::get('get_all_users', 'DuelController@get_all_users');
 Route::get('send_invitation', 'DuelController@send_invitation');
 Route::post('accept_invitation', 'DuelController@accept_invitation');
 Route::get('generate_link', 'DuelController@generate_link');
- /**  End from Here        */
+Route::get('dual/{id}', 'DuelController@dual');
+Route::post('savedual', 'DuelController@submit_exam');
+Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');
+
+
+/**  End from Here        */
 
 
 
@@ -146,6 +151,9 @@ Route::get('get_all_contacts/{id}','ContactController@fetchContacts');
 Route::get('get_block_user/{id}','ContactController@blockUser');
 Route::post('blockuser','ContactController@blockAUser');
 Route::post('deleteuser','ContactController@deleteUser');
+Route::get('invite_contact/{user_id}','ContactController@invite_contact');
+Route::post('accept_link_invitation','ContactController@accept_link_invitation');
+
 //========= Privacy API
 Route::get('privacy/{id}','PrivacyController@fetchPrivacy');
 Route::post('privacy','PrivacyController@save');
@@ -153,3 +161,8 @@ Route::post('privacy','PrivacyController@save');
 /* Account Page API 
       ENDS Here
       */
+
+      //========= Check user status free or busy
+Route::get('busy/{user_id}','UserController@busyUser');
+Route::get('free/{user_id}','UserController@freeUser');
+

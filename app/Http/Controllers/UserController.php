@@ -8,6 +8,7 @@ use App\User;
 use App\ForgetPasswords;
 use App\Mail\ForgetPassword;
 use App\AgeGroup;
+use App\CheckUserState;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -535,5 +536,50 @@ class UserController extends Controller
             return response()->json(['status' => 200, 'data' => '', 'message' => "Successfully password has been changed."]);
         }
         
+    }
+
+     /** 
+     * Busy a user
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function busyUser(Request $request){
+
+        // $validator = Validator::make($request->all(), [
+        //     'user_id' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        // }
+         $savedata = new CheckUserState;
+         $savedata->user_id = $request->user_id;
+         $savedata->save();
+         return response()->json(['status' => 200, 'data' => '', 'message' => 'User is busy']);
+
+    } 
+
+     /** 
+     * Delete a user from friend List // Free user
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function freeUser(Request $request){
+     
+        // $validator = Validator::make($request->all(), [
+        //     'user_id' => 'required',
+        // ]);
+        // if ($validator->fails()) {
+        //     return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        // }
+      $data = CheckUserState::where('user_id', $request->user_id)->get();
+       
+      if($data->count()>0){
+            $data->each->delete();
+            }
+        
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User is free']);
+
     }
 }

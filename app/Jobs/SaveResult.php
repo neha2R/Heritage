@@ -37,10 +37,14 @@ class SaveResult implements ShouldQueue
     public function handle()
     {
         $respreformance = $this->performance;
-
-        $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions');
         $attempt = Attempt::find($respreformance['quiz_id']);
-        if (empty($questions)) {
+if(isset($attempt->parent_id)){
+    $questions = QuizQuestion::where('attempts_id', $attempt->parent_id)->first('questions');
+   
+}else{
+        $questions = QuizQuestion::where('attempts_id', $respreformance['quiz_id'])->first('questions');
+  }
+    if (empty($questions)) {
 
             return 'error';
         } else {
