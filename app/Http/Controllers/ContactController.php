@@ -170,8 +170,13 @@ class ContactController extends Controller
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
-            $allUsers['image'] = $user->profile_image;
-            $data[] = $allUsers;
+          
+            if(isset($user->profile_image)){
+                $allUsers['image'] = url('/images') . '/' .$user->profile_image;
+                } else{
+                    $allUsers['image'] ='';  
+                }          
+                 $data[] = $allUsers;
         }
         if (empty($data)) {
             return response()->json(['status' => 201, 'data' => $data, 'message' => 'No  user found']);
@@ -214,8 +219,11 @@ class ContactController extends Controller
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
-            $allUsers['image'] = $user->profile_image;
-
+            if(isset($user->profile_image)){
+            $allUsers['image'] = url('/images') . '/' .$user->profile_image;
+            } else{
+                $allUsers['image'] ='';  
+            }
             $data[] = $allUsers;
         }
         if (empty($data)) {

@@ -129,7 +129,11 @@ class DuelController extends Controller
             } else {
                 $allUsers['request'] = "0";
             }
-
+            if(isset($user->profile_image)){
+                $allUsers['image'] = url('/images') . '/' .$user->profile_image;
+                } else{
+                    $allUsers['image'] ='';  
+                }
             $data[] = $allUsers;
         }
 
@@ -362,7 +366,12 @@ class DuelController extends Controller
             $response['user_id'] = $otheruser_data->user_id;
             $response['xp'] = $otheruser_data->xp;
             $response['percentage'] = $otheruser_data->result;
-            $response['image'] = $user_data->user->profile_image;
+            if(isset($user_data->user->profile_image)){
+                $response['image']  = url('/images') . '/' .$user_data->user->profile_image;
+                } else{
+                    $response['image']  ='';  
+                }
+           
 
 
             return response()->json(['status' => 200, 'user_data' => $user, 'data' => $response, 'message' => 'Dual data']);
