@@ -307,15 +307,17 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         $send_user = explode("#", $request->link);
-        if (!User::where('refrence_code', $send_user[1])->first()) {
+        $user = User::where('refrence_code', $send_user[1])->first();
+        if (!$user) {
             return response()->json(['status' => 201, 'data' => '', 'message' => 'Link is not valid']);
         }
-        $oldFriend = Contact::where('friend_one', $send_user[1])->where('friend_two', $request->user_id)->first();
-        $oldFriend2 = Contact::where('friend_one', $request->user_id)->where('friend_two', $send_user[1])->first();
+
+        $oldFriend = Contact::where('friend_one', $user->id)->where('friend_two', $request->user_id)->first();
+        $oldFriend2 = Contact::where('friend_one', $request->user_id)->where('friend_two', $user->id)->first();
 
         if (!isset($oldFriend) && !isset($oldFriend2)) {
             $savedata = new Contact;
-            $savedata->friend_one = $send_user[1];
+            $savedata->friend_one = $user->id;
             $savedata->friend_two = $request->user_id;
             $savedata->invited_via = 'link';
             $savedata->status = '1';
