@@ -119,7 +119,7 @@ class DuelController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
-                $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->sortname) . ".png";
+                $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
