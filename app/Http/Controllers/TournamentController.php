@@ -389,7 +389,7 @@ class TournamentController extends Controller
             $sess = $request->session_per_day-1;
 
             if($request->frequency_id=='1'){
-             for($sess; $sess=0;$rsess-- ){
+             for($sess; $sess==0;$sess-- ){
                 
                 $starttime = date('H:i',strtotime("+$request->interval_session minutes", strtotime($endtime)));  
                 $endtime = date('H:i',strtotime("+$request->duration minutes", strtotime($starttime)));                
@@ -529,7 +529,7 @@ class TournamentController extends Controller
               'Content-Type: application/csv',
             );
 
-        return Response::download($file, 'sponsor-sample.csv', $headers);   
+            return response()->download($file, 'sponsor-sample.csv', $headers);   
     }
 
     public  function imageurl($image)

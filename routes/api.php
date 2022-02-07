@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+      return $request->user();
 });
 
-Route::post('/forgetPassword','UserController@forgetPassword');
+Route::post('/forgetPassword', 'UserController@forgetPassword');
 
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
@@ -57,7 +57,7 @@ Route::post('helpandsupport', 'HelpAndSupportController@store');
 Route::get('theme', 'ThemeController@getAllThemes');
 Route::post('question_media', 'QuestionController@question_media');
 
-      
+
 /**  Feed APi Routes  Start from Here      */
 // Get domains according to theme id
 Route::get('feed_domains', 'DomainController@getDomainAccordingTheme');
@@ -71,29 +71,29 @@ Route::get('tagfilter', 'FeedContentController@tagfilter');
 // Get feed according to module and collections
 Route::post('/module', 'FeedContentController@module');
 //Get all saved feeds of user
-Route::get('save_feed','FeedContentController@save_feed');
+Route::get('save_feed', 'FeedContentController@save_feed');
 // Filter saved feeds
-Route::post('filter_feed','FeedContentController@filter_feed');
+Route::post('filter_feed', 'FeedContentController@filter_feed');
 
- /**  End from Here        */
+/**  End from Here        */
 
 /**  Product APi Routes  Start from Here      */
 Route::get('get_all_products', 'ProductController@get_all_products');
 Route::get('product_search', 'ProductController@product_search');
- /**  End from Here        */
+/**  End from Here        */
 
-// Route::fallback(function () {
-//     return response()->json(['message' => 'Not Found.'], 404);
-// });
+
 /**  Product APi Routes  Duel Apis from Here      */
 Route::post('create_duel', 'DuelController@create_duel');
-Route::get('get_all_users', 'DuelController@get_all_users');
-Route::get('send_invitation', 'DuelController@send_invitation');
+Route::post('get_all_users', 'DuelController@get_all_users');
+Route::post('send_invitation', 'DuelController@send_invitation');
 Route::post('accept_invitation', 'DuelController@accept_invitation');
-Route::get('generate_link', 'DuelController@generate_link');
+Route::post('generate_link', 'DuelController@generate_link');
 Route::get('dual/{id}', 'DuelController@dual');
-Route::post('savedual', 'DuelController@submit_exam');
-Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');
+Route::post('get_dual_result', 'DuelController@get_dual_result');
+
+// Route::post('savedual', 'DuelController@submit_exam');
+// Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');
 
 
 /**  End from Here        */
@@ -102,31 +102,31 @@ Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');
 
 
 /**  Tournament APi Routes  Start from Here      */
-Route::get('tournament','TournamentController@tournament');
+Route::get('tournament', 'TournamentController@tournament');
 
-Route::post('tournament_rule','TournamentController@tournament_rule');
-Route::post('join_tournament','TournamentController@join_tournament');
-Route::post('tournament_questions','TournamentQuestionController@tournament_questions');
-Route::post('tournament_result','TournamenetUserController@tournament_result');
-Route::post('get_tournament_rank','TournamenetUserController@get_tournament_rank');
-Route::post('get_tournament_answer','TournamenetUserController@get_tournament_answer');
-Route::get('userleague','TournamenetUserController@userleague');
-Route::get('leaguerank','TournamenetUserController@leaguerank');
-Route::get('xprewards','TournamenetUserController@xprewards');
+Route::post('tournament_rule', 'TournamentController@tournament_rule');
+Route::post('join_tournament', 'TournamentController@join_tournament');
+Route::post('tournament_questions', 'TournamentQuestionController@tournament_questions');
+Route::post('tournament_result', 'TournamenetUserController@tournament_result');
+Route::post('get_tournament_rank', 'TournamenetUserController@get_tournament_rank');
+Route::post('get_tournament_answer', 'TournamenetUserController@get_tournament_answer');
+Route::get('userleague', 'TournamenetUserController@userleague');
+Route::get('leaguerank', 'TournamenetUserController@leaguerank');
+Route::get('xprewards', 'TournamenetUserController@xprewards');
 
 /**  End from Here        */
 
 // user report for a quiz 
-Route::post('report','UserReportController@userreport');
+Route::post('report', 'UserReportController@userreport');
 
 // Dispute if any
-Route::post('raise_dispute','DisputeController@store');
+Route::post('raise_dispute', 'DisputeController@store');
 
 
 /*
 
 /** add help  */
-Route::post('add_help','HelpAndSupportController@add_help');
+Route::post('add_help', 'HelpAndSupportController@add_help');
 
 
 /*
@@ -136,34 +136,37 @@ End Here
 */
 
 // For server date and time
-Route::get('currentDateTime','UserController@currentDateTime');
+Route::get('currentDateTime', 'UserController@currentDateTime');
 
 
 /* Account Page API 
       Start Here
       */
 //========= Notification API
-Route::get('notification/{id}','NotificationController@fetchNotification');
-Route::post('notification','NotificationController@save');
+Route::get('notification/{id}', 'NotificationController@fetchNotification');
+Route::post('notification', 'NotificationController@save');
 // ========= Contact API
-Route::post('import_contact','ContactController@import_contact');
-Route::post('get_all_contacts','ContactController@fetchContacts');
-Route::post('get_block_user','ContactController@blockUser');
-Route::post('blockuser','ContactController@blockAUser');
-Route::post('deleteuser','ContactController@deleteUser');
-Route::post('invite_contact','ContactController@invite_contact');
-Route::post('accept_link_invitation','ContactController@accept_link_invitation');
-Route::post('add_friend','ContactController@add_friend');
+Route::post('import_contact', 'ContactController@import_contact');
+Route::post('get_all_contacts', 'ContactController@fetchContacts');
+Route::post('get_block_user', 'ContactController@blockUser');
+Route::post('blockuser', 'ContactController@blockAUser');
+Route::post('deleteuser', 'ContactController@deleteUser');
+Route::post('invite_contact', 'ContactController@invite_contact');
+Route::post('accept_link_invitation', 'ContactController@accept_link_invitation');
+Route::post('add_friend', 'ContactController@add_friend');
 
 //========= Privacy API
-Route::get('privacy/{id}','PrivacyController@fetchPrivacy');
-Route::post('privacy','PrivacyController@save');
+Route::get('privacy/{id}', 'PrivacyController@fetchPrivacy');
+Route::post('privacy', 'PrivacyController@save');
 
 /* Account Page API 
       ENDS Here
       */
 
-      //========= Check user status free or busy
-Route::get('busy/{user_id}','UserController@busyUser');
-Route::get('free/{user_id}','UserController@freeUser');
+//========= Check user status free or busy
+Route::get('busy/{user_id}', 'UserController@busyUser');
+Route::get('free/{user_id}', 'UserController@freeUser');
 
+// Route::fallback(function () {
+//     return response()->json(['message' => 'Not Found.'], 404);
+// });

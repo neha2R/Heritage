@@ -99,7 +99,8 @@ class ContactController extends Controller
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function import_contact(Request $request){
+    public function import_contact(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'mobiles' => 'required|json',
@@ -109,25 +110,24 @@ class ContactController extends Controller
         }
 
         $mobiles = json_decode($request->mobiles);
-      
-         $userDatas = User::whereIn('mobile',$mobiles)->where('type','2')->get();
 
-         $data=[];
+        $userDatas = User::whereIn('mobile', $mobiles)->where('type', '2')->get();
 
-         if($userDatas->count()>0){
-            foreach($userDatas as $userData){
-          
-              $data[] = $userData->mobile;
+        $data = [];
+
+        if ($userDatas->count() > 0) {
+            foreach ($userDatas as $userData) {
+
+                $data[] = $userData->mobile;
             }
-            if(empty($data)){
+            if (empty($data)) {
                 return response()->json(['status' => 201, 'data' => $data, 'message' => 'No new user found']);
-            }else{
-            return response()->json(['status' => 200, 'data' => $data, 'message' => 'New user added to your friend list']);
+            } else {
+                return response()->json(['status' => 200, 'data' => $data, 'message' => 'User found']);
             }
-         }else{
+        } else {
             return response()->json(['status' => 201, 'data' => $data, 'message' => 'User not found']);
-         }
-        
+        }
     }
 
 
@@ -138,7 +138,8 @@ class ContactController extends Controller
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function fetchContacts(Request $request){
+    public function fetchContacts(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
         ]);
@@ -146,41 +147,35 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         $id = $request->user_id;
-    $totalfiends = Contact::where('friend_one',$id)->pluck('friend_two')->toArray();
-    $blockuser = BlockUser::where('blocked_by',$id)->pluck('blocked_to')->toArray();
-    $onlyfriends = array_diff($totalfiends, $blockuser);
-    $users = User::whereIn('id',$onlyfriends)->get();
-    foreach($users as $user)
-    {
-       $age=Carbon::parse($user->dob)->age;
-       $allUsers['id']=$user->id;
-       $allUsers['name']=ucwords(strtolower($user->name));
+        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
+        $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
+        $onlyfriends = array_diff($totalfiends, $blockuser);
+        $users = User::whereIn('id', $onlyfriends)->get();
+        $data =[];
+        foreach ($users as $user) {
+            $age = Carbon::parse($user->dob)->age;
+            $allUsers['id'] = $user->id;
+            $allUsers['name'] = ucwords(strtolower($user->name));
 
-       if($ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-       {
-           $allUsers['age_group']=ucwords(strtolower($ageGroup->name));
-       }
-       else
-       {
-           $allUsers['age_group']="";
-       }
-       if($user->country){
-       $allUsers['flag_icon']=url('/flags').'/'.strtolower($user->country->sortname).".png";
-       } else{
-           $allUsers['flag_icon']=url('/flags/').strtolower('in').".png"; 
-       }
-       $allUsers['status']="Online";  
-       $data[]=$allUsers;
-           
+            if ($ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+                $allUsers['age_group'] = ucwords(strtolower($ageGroup->name));
+            } else {
+                $allUsers['age_group'] = "";
+            }
+            if ($user->country) {
+                $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->sortname) . ".png";
+            } else {
+                $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
+            }
+            $allUsers['status'] = "Online";
+            $data[] = $allUsers;
+        }
+        if (empty($data)) {
+            return response()->json(['status' => 201, 'data' => $data, 'message' => 'No  user found']);
+        } else {
+            return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
+        }
     }
-    if(empty($data)){
-    return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
-    }
-    else{
-    return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
-    }
-
- }
 
 
     /** 
@@ -189,79 +184,74 @@ class ContactController extends Controller
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
- public function blockUser(Request $request){
-    $validator = Validator::make($request->all(), [
-        'user_id' => 'required',
-    ]);
-    if ($validator->fails()) {
-        return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-    }
-    $id = $request->user_id;
-    $blockuser = BlockUser::where('blocked_by',$id)->pluck('blocked_to')->toArray();
-    $users = User::whereIn('id',$blockuser)->get();
-    foreach($users as $user)
+    public function blockUser(Request $request)
     {
-       $age=Carbon::parse($user->dob)->age;
-       $allUsers['id']=$user->id;
-       $allUsers['name']=ucwords(strtolower($user->name));
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $id = $request->user_id;
+        $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
+        $users = User::whereIn('id', $blockuser)->get();
+        foreach ($users as $user) {
+            $age = Carbon::parse($user->dob)->age;
+            $allUsers['id'] = $user->id;
+            $allUsers['name'] = ucwords(strtolower($user->name));
 
-       if($ageGroup=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-       {
-           $allUsers['age_group']=ucwords(strtolower($ageGroup->name));
-       }
-       else
-       {
-           $allUsers['age_group']="";
-       }
-       if($user->country){
-       $allUsers['flag_icon']=url('/flags').'/'.strtolower($user->country->sortname).".png";
-       } else{
-           $allUsers['flag_icon']=url('/flags/').strtolower('in').".png"; 
-       }
-       $allUsers['status']="Online";  
-       $data[]=$allUsers;
-           
-    }
-    if(empty($data)){
-    return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
-    }
-    else{
-    return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
+            if ($ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+                $allUsers['age_group'] = ucwords(strtolower($ageGroup->name));
+            } else {
+                $allUsers['age_group'] = "";
+            }
+            if ($user->country) {
+                $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->sortname) . ".png";
+            } else {
+                $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
+            }
+            $allUsers['status'] = "Online";
+            $data[] = $allUsers;
+        }
+        if (empty($data)) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
+        } else {
+            return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
+        }
     }
 
- }
-
-     /** 
+    /** 
      * Block user 
      *
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-        public function blockAUser(Request $request){
+    public function blockAUser(Request $request)
+    {
 
-            $validator = Validator::make($request->all(), [
-                'user_id' => 'required',
-                'block_id' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-            }
-             $savedata = new BlockUser;
-             $savedata->blocked_by = $request->user_id;
-             $savedata->blocked_to = $request->block_id;
-             $savedata->save();
-             return response()->json(['status' => 200, 'data' => '', 'message' => 'User blocked succesfully']);
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'block_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $savedata = new BlockUser;
+        $savedata->blocked_by = $request->user_id;
+        $savedata->blocked_to = $request->block_id;
+        $savedata->save();
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User blocked succesfully']);
+    }
 
-        } 
-
-     /** 
+    /** 
      * Delete a user from friend List
      *
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function deleteUser(Request $request){
-      
+    public function deleteUser(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'delete_id' => 'required',
@@ -270,20 +260,20 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        $deleteUser = Contact::where('friend_one',$request->id)
-        ->where('friend_two',$request->delete_id)->first();
-       if(empty($deleteUser)){
-        return response()->json(['status' => 201, 'data' => '', 'message' => 'No user found']);   
-       }
+        $deleteUser = Contact::where('friend_one', $request->id)
+            ->where('friend_two', $request->delete_id)->first();
+        if (empty($deleteUser)) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'No user found']);
+        }
         $deleteUser->deleted_at = date('Y-m-d H:i:s');
         $deleteUser->save();
-        
-        return response()->json(['status' => 200, 'data' => '', 'message' => 'User Deleted succesfully']);
 
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User Deleted succesfully']);
     }
 
 
-    public function invite_contact(Request $request){
+    public function invite_contact(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
         ]);
@@ -292,23 +282,23 @@ class ContactController extends Controller
         }
         $user_id = $request->user_id;
         // $user_id= Crypt::encryptString($user_id);
-        
+
         $user = User::find($user_id);
-        if(isset($user->refrence_code)){
+        if (isset($user->refrence_code)) {
             $code = $user->refrence_code;
-        }else{
+        } else {
             $code = mt_rand(111, 9999);
 
-            $user->refrence_code = $code ;  
-            $user->save(); 
+            $user->refrence_code = $code;
+            $user->save();
         }
-        $link="cul.tre/invite#".$code;
+        $link = "cul.tre/invite#" . $code;
         return response()->json(['status' => 200, 'data' => $link, 'message' => 'Link generated']);
-
     }
 
-    public function accept_link_invitation(Request $request){
-       
+    public function accept_link_invitation(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'link' => 'required',
@@ -317,68 +307,58 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         $send_user = explode("#", $request->link);
-       if(!User::where('refrence_code',$send_user[1])->first()){
-        return response()->json(['status' => 201, 'data' => '', 'message' => 'Link is not valid']);
-  
-       }
-        $oldFriend = Contact::where('friend_one',$send_user[1])->where('friend_two',$request->user_id)->first();
-        $oldFriend2 = Contact::where('friend_one',$request->user_id)->where('friend_two',$send_user[1])->first();
-          
-          if(!isset($oldFriend) && !isset($oldFriend2) ){
+        if (!User::where('refrence_code', $send_user[1])->first()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'Link is not valid']);
+        }
+        $oldFriend = Contact::where('friend_one', $send_user[1])->where('friend_two', $request->user_id)->first();
+        $oldFriend2 = Contact::where('friend_one', $request->user_id)->where('friend_two', $send_user[1])->first();
+
+        if (!isset($oldFriend) && !isset($oldFriend2)) {
             $savedata = new Contact;
             $savedata->friend_one = $send_user[1];
             $savedata->friend_two = $request->user_id;
             $savedata->invited_via = 'link';
             $savedata->status = '1';
             $savedata->save();
-        
-          }
-        else{
+        } else {
             return response()->json(['status' => 201, 'data' => '', 'message' => 'Friend already added']);
-  
         }
-        
-        if(!$savedata){
+
+        if (!$savedata) {
             return response()->json(['status' => 201, 'data' => '', 'message' => 'No new user found']);
-        }else{
-        return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
+        } else {
+            return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
         }
-        }
-
-public function add_friend(Request $request){
-    $validator = Validator::make($request->all(), [
-        'user_id' => 'required',
-        'mobile' => 'required',
-    ]);
-    if ($validator->fails()) {
-        return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
     }
-    $userData = User::where('mobile',$request->mobile)->where('type','2')->first();
-if(!isset($userData)){
-    return response()->json(['status' => 201, 'data' => '', 'message' => 'User not found']);
 
-}
-       $oldFriend = Contact::where('friend_one',$request->user_id)->where('friend_two',$userData->id)->first();
-       if(!isset($oldFriend)){
-       $oldFriend = Contact::where('friend_one',$userData->id)->where('friend_two',$request->user_id)->first();
-    
-          }
-             //    dd($oldFriend);
-              if(!isset($oldFriend)){
-                $savedata = new Contact;
-                $savedata->friend_one = $request->user_id;
-                $savedata->friend_two = $userData->id;
-                $savedata->invited_via = 'mobile';
-                $savedata->status = '1';
-                $savedata->save();
-                return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend added succesfully']);
-
-               
-              }else{
-                return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend already added']);
- 
-              }
-
-}
-
+    public function add_friend(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'mobile' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $userData = User::where('mobile', $request->mobile)->where('type', '2')->first();
+        if (!isset($userData)) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'User not found']);
+        }
+        $oldFriend = Contact::where('friend_one', $request->user_id)->where('friend_two', $userData->id)->first();
+        if (!isset($oldFriend)) {
+            $oldFriend = Contact::where('friend_one', $userData->id)->where('friend_two', $request->user_id)->first();
+        }
+        //    dd($oldFriend);
+        if (!isset($oldFriend)) {
+            $savedata = new Contact;
+            $savedata->friend_one = $request->user_id;
+            $savedata->friend_two = $userData->id;
+            $savedata->invited_via = 'mobile';
+            $savedata->status = '1';
+            $savedata->save();
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend added succesfully']);
+        } else {
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend already added']);
+        }
+    }
 }
