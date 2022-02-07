@@ -148,8 +148,10 @@ class ContactController extends Controller
         }
         $id = $request->user_id;
         $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
+        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
+       $toaluser = array_unique (array_merge ($totalfiends, $whoinvited));
         $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
-        $onlyfriends = array_diff($totalfiends, $blockuser);
+        $onlyfriends = array_diff($toaluser, $blockuser);
         $users = User::whereIn('id', $onlyfriends)->get();
         $data =[];
         foreach ($users as $user) {
