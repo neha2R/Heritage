@@ -106,7 +106,7 @@ class ContactController extends Controller
             'mobiles' => 'required|json',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
 
         $mobiles = json_decode($request->mobiles);
@@ -144,7 +144,7 @@ class ContactController extends Controller
             'user_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $id = $request->user_id;
         $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
@@ -170,6 +170,7 @@ class ContactController extends Controller
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
+            $allUsers['image'] = $user->profile_image;
             $data[] = $allUsers;
         }
         if (empty($data)) {
@@ -192,7 +193,7 @@ class ContactController extends Controller
             'user_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $id = $request->user_id;
         $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
@@ -213,10 +214,12 @@ class ContactController extends Controller
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
+            $allUsers['image'] = $user->profile_image;
+
             $data[] = $allUsers;
         }
         if (empty($data)) {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'No  user found']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'No  user found']);
         } else {
             return response()->json(['status' => 200, 'data' => $data, 'message' => 'All your contact list']);
         }
@@ -236,13 +239,13 @@ class ContactController extends Controller
             'block_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $savedata = new BlockUser;
         $savedata->blocked_by = $request->user_id;
         $savedata->blocked_to = $request->block_id;
         $savedata->save();
-        return response()->json(['status' => 200, 'data' => '', 'message' => 'User blocked succesfully']);
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'User blocked succesfully']);
     }
 
     /** 
@@ -259,18 +262,18 @@ class ContactController extends Controller
             'delete_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
 
         $deleteUser = Contact::where('friend_one', $request->id)
             ->where('friend_two', $request->delete_id)->first();
         if (empty($deleteUser)) {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'No user found']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'No user found']);
         }
         $deleteUser->deleted_at = date('Y-m-d H:i:s');
         $deleteUser->save();
 
-        return response()->json(['status' => 200, 'data' => '', 'message' => 'User Deleted succesfully']);
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'User Deleted succesfully']);
     }
 
 
@@ -280,7 +283,7 @@ class ContactController extends Controller
             'user_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $user_id = $request->user_id;
         // $user_id= Crypt::encryptString($user_id);
@@ -306,12 +309,12 @@ class ContactController extends Controller
             'link' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $send_user = explode("#", $request->link);
         $user = User::where('refrence_code', $send_user[1])->first();
         if (!$user) {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'Link is not valid']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Link is not valid']);
         }
 
         $oldFriend = Contact::where('friend_one', $user->id)->where('friend_two', $request->user_id)->first();
@@ -325,11 +328,11 @@ class ContactController extends Controller
             $savedata->status = '1';
             $savedata->save();
         } else {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'Friend already added']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Friend already added']);
         }
 
         if (!$savedata) {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'No new user found']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'No new user found']);
         } else {
             return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
         }
@@ -342,11 +345,11 @@ class ContactController extends Controller
             'mobile' => 'required',
         ]);
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $userData = User::where('mobile', $request->mobile)->where('type', '2')->first();
         if (!isset($userData)) {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'User not found']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
         }
         $oldFriend = Contact::where('friend_one', $request->user_id)->where('friend_two', $userData->id)->first();
         if (!isset($oldFriend)) {
@@ -360,9 +363,9 @@ class ContactController extends Controller
             $savedata->invited_via = 'mobile';
             $savedata->status = '1';
             $savedata->save();
-            return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend added succesfully']);
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Friend added succesfully']);
         } else {
-            return response()->json(['status' => 200, 'data' => '', 'message' => 'Friend already added']);
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Friend already added']);
         }
     }
 }
