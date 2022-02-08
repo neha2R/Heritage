@@ -154,6 +154,7 @@ Route::post('deleteuser', 'ContactController@deleteUser');
 Route::post('invite_contact', 'ContactController@invite_contact');
 Route::post('accept_link_invitation', 'ContactController@accept_link_invitation');
 Route::post('add_friend', 'ContactController@add_friend');
+Route::post('unblockuser', 'ContactController@unblockUser');
 
 //========= Privacy API
 Route::get('privacy/{id}', 'PrivacyController@fetchPrivacy');

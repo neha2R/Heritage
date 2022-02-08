@@ -165,7 +165,7 @@ class ContactController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
-                
+                $allUsers['country'] =$user->country->country_name->name;
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
@@ -215,6 +215,7 @@ class ContactController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
+                $allUsers['country'] =$user->country->country_name->name;
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
@@ -256,6 +257,35 @@ class ContactController extends Controller
         $savedata->save();
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User blocked succesfully']);
     }
+
+    /** 
+     * Block user 
+     *
+     * @param  \App\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function unblockUser(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'block_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
+        }
+        $savedata =  BlockUser::where('blocked_by',$request->user_id)->where('blocked_to',$request->block_id)->first();
+       if($savedata){
+           $savedata->delete();
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'User un blocked succesfully']);
+
+       }else{
+        return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
+  
+       }
+        
+    }
+
 
     /** 
      * Delete a user from friend List
