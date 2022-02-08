@@ -328,6 +328,10 @@ class ContactController extends Controller
         // $user_id= Crypt::encryptString($user_id);
 
         $user = User::find($user_id);
+        if(!$user){
+            return response()->json(['status' => 201, 'data' =>[], 'message' => 'User not found']);
+  
+        }
         if (isset($user->refrence_code)) {
             $code = $user->refrence_code;
         } else {
@@ -407,4 +411,9 @@ class ContactController extends Controller
             return response()->json(['status' => 200, 'data' => [], 'message' => 'Friend already added']);
         }
     }
+
+  
+
+
+
 }
