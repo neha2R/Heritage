@@ -341,7 +341,7 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $data = Attempt::find($request->dual_id);
+        $data = Attempt::where('id',$request->dual_id)->where('user_id',$request->user_id)->first();
 
         if (isset($data)) {
             if(isset($data->parent_id)){
