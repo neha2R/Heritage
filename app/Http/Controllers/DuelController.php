@@ -129,11 +129,11 @@ class DuelController extends Controller
             } else {
                 $allUsers['request'] = "0";
             }
-            if(isset($user->profile_image)){
-                $allUsers['image'] = url('/images') . '/' .$user->profile_image;
-                } else{
-                    $allUsers['image'] ='';  
-                }
+            if (isset($user->profile_image)) {
+                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+            } else {
+                $allUsers['image'] = '';
+            }
             $data[] = $allUsers;
         }
 
@@ -159,7 +159,7 @@ class DuelController extends Controller
         if (isset($challenge)) {
             if ($challenge->status == '0') {
                 if (carbon::now()->parse($challenge->created_at)->diffInSeconds() < 60) {
-                    return response()->json(['status' => 200, 'message' => 'Sorry! Wait for 1 minutes or till accept the request.']);
+                    return response()->json(['status' => 200, 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
                 }
             }
         }
@@ -175,25 +175,25 @@ class DuelController extends Controller
         // if ($challange >= 3) {
         //     return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
         // } else {
-            $challange = new Challange;
-            $challange->to_user_id = $req->to_id;
-            $challange->from_user_id = $req->from_id;
-            $challange->attempt_id = $req->dual_id;
-            $challange->status = '0';
-            $challange->save();
+        $challange = new Challange;
+        $challange->to_user_id = $req->to_id;
+        $challange->from_user_id = $req->from_id;
+        $challange->attempt_id = $req->dual_id;
+        $challange->status = '0';
+        $challange->save();
 
-            //notification
+        //notification
 
-            $attempt = Attempt::where('id', $challange->attempt_id)->first();
-            $data = [
-                'title' => 'Invitation recieved.',
-                'token' => $challange->to_user->token,
-                'link' => $attempt->link,
-                //   'from'=>$challange->from_user->name,
-                'message' => 'You have a new request from' . $challange->from_user->name,
-            ];
-            sendNotification($data);
-            return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
+        $attempt = Attempt::where('id', $challange->attempt_id)->first();
+        $data = [
+            'title' => 'Invitation recieved.',
+            'token' => $challange->to_user->token,
+            'link' => $attempt->link,
+            //   'from'=>$challange->from_user->name,
+            'message' => 'You have a new request from' . $challange->from_user->name,
+        ];
+        sendNotification($data);
+        return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
         // }
         // }
 
@@ -344,8 +344,12 @@ class DuelController extends Controller
         $data = Attempt::find($request->dual_id);
 
         if (isset($data)) {
-            $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
+            if(isset($data->parent_id)){
+                $data2 =  Attempt::where('id', $data->parent_id)->first();
 
+            }else{
+               $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
+            }
             if ($data->user_id == $request->user_id) {
                 $user_data = $data;
                 $otheruser_data = $data2;
@@ -361,22 +365,46 @@ class DuelController extends Controller
             $user['user_id'] = $user_data->user_id;
             $user['xp'] = $user_data->xp;
             $user['percentage'] = $user_data->result;
-            $user['image'] = $user_data->user->profile_image;
+            if (isset($user_data->user->profile_image)) {
+                $user['image']  = url('/images') . '/' . $user_data->user->profile_image;
+            } else {
+                $user['image']  = '';
+            }
+
             $response = [];
             $response['user_id'] = $otheruser_data->user_id;
             $response['xp'] = $otheruser_data->xp;
             $response['percentage'] = $otheruser_data->result;
-            if(isset($user_data->user->profile_image)){
-                $response['image']  = url('/images') . '/' .$user_data->user->profile_image;
-                } else{
-                    $response['image']  ='';  
-                }
-           
+            if (isset($otheruser_data->user->profile_image)) {
+                $response['image']  = url('/images') . '/' . $otheruser_data->user->profile_image;
+            } else {
+                $response['image']  = '';
+            }
+
 
 
             return response()->json(['status' => 200, 'user_data' => $user, 'data' => $response, 'message' => 'Dual data']);
         } else {
             return response()->json(['status' => 201, 'data' => '', 'message' => 'Quiz not find']);
+        }
+    }
+
+    public function dual_user_list(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'dual_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $data = Attempt::find($request->dual_id);
+        if (!$data) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
+        }
+        $datas = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->get();
+        foreach ($datas as $data) {
+
         }
     }
 }

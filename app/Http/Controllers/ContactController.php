@@ -149,11 +149,11 @@ class ContactController extends Controller
         $id = $request->user_id;
         $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
         $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
-       $toaluser = array_unique (array_merge ($totalfiends, $whoinvited));
+        $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
         $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
         $onlyfriends = array_diff($toaluser, $blockuser);
         $users = User::whereIn('id', $onlyfriends)->get();
-        $data =[];
+        $data = [];
         foreach ($users as $user) {
             $age = Carbon::parse($user->dob)->age;
             $allUsers['id'] = $user->id;
@@ -165,19 +165,19 @@ class ContactController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
-                $allUsers['country'] =$user->country->country_name->name;
+                $allUsers['country'] = $user->country->country_name->name;
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
-          
-            if(isset($user->profile_image)){
-                $allUsers['image'] = url('/images') . '/' .$user->profile_image;
-                } else{
-                    $allUsers['image'] ='';  
-                }          
-                 $data[] = $allUsers;
+
+            if (isset($user->profile_image)) {
+                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+            } else {
+                $allUsers['image'] = '';
+            }
+            $data[] = $allUsers;
         }
         if (empty($data)) {
             return response()->json(['status' => 201, 'data' => $data, 'message' => 'No  user found']);
@@ -215,16 +215,16 @@ class ContactController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
-                $allUsers['country'] =$user->country->country_name->name;
+                $allUsers['country'] = $user->country->country_name->name;
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
-            if(isset($user->profile_image)){
-            $allUsers['image'] = url('/images') . '/' .$user->profile_image;
-            } else{
-                $allUsers['image'] ='';  
+            if (isset($user->profile_image)) {
+                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+            } else {
+                $allUsers['image'] = '';
             }
             $data[] = $allUsers;
         }
@@ -274,16 +274,13 @@ class ContactController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
-        $savedata =  BlockUser::where('blocked_by',$request->user_id)->where('blocked_to',$request->block_id)->first();
-       if($savedata){
-           $savedata->delete();
-        return response()->json(['status' => 200, 'data' => [], 'message' => 'User un blocked succesfully']);
-
-       }else{
-        return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
-  
-       }
-        
+        $savedata =  BlockUser::where('blocked_by', $request->user_id)->where('blocked_to', $request->block_id)->first();
+        if ($savedata) {
+            $savedata->delete();
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'User un blocked succesfully']);
+        } else {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
+        }
     }
 
 
@@ -328,9 +325,8 @@ class ContactController extends Controller
         // $user_id= Crypt::encryptString($user_id);
 
         $user = User::find($user_id);
-        if(!$user){
-            return response()->json(['status' => 201, 'data' =>[], 'message' => 'User not found']);
-  
+        if (!$user) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
         }
         if (isset($user->refrence_code)) {
             $code = $user->refrence_code;
@@ -412,36 +408,32 @@ class ContactController extends Controller
         }
     }
 
-  public function check_friend(Request $request){
-    $validator = Validator::make($request->all(), [
-        'user_id' => 'required',
-    ]);
-    if ($validator->fails()) {
-        return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
-    }
-    $userData = User::find($request->user_id);
-    if (!isset($userData)) {
-        return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
-    }
-    $id = $request->user_id;
-    $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
-    $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
-   $toaluser = array_unique (array_merge ($totalfiends, $whoinvited));
-    $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
-    $onlyfriends = array_diff($toaluser, $blockuser);
-    $users = User::whereIn('id', $onlyfriends)->get();
-    $data =[];
-    foreach ($users as $user) {
-        if(isset($user->mobile)){
-            $response = $user->mobile;
-            $data[] = $response;
+    public function check_friend(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
-     
+        $userData = User::find($request->user_id);
+        if (!isset($userData)) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
+        }
+        $id = $request->user_id;
+        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
+        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
+        $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
+        $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
+        $onlyfriends = array_diff($toaluser, $blockuser);
+        $users = User::whereIn('id', $onlyfriends)->get();
+        $data = [];
+        foreach ($users as $user) {
+            if (isset($user->mobile)) {
+                $response = $user->mobile;
+                $data[] = $response;
+            }
+        }
+        return response()->json(['status' => 200, 'data' => $data, 'message' => 'User not found']);
     }
-    return response()->json(['status' => 200, 'data' =>$data, 'message' => 'User not found']);
-
-  }
-
-
-
 }

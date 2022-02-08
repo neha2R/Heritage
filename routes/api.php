@@ -91,6 +91,7 @@ Route::post('accept_invitation', 'DuelController@accept_invitation');
 Route::post('generate_link', 'DuelController@generate_link');
 Route::get('dual/{id}', 'DuelController@dual');
 Route::post('get_dual_result', 'DuelController@get_dual_result');
+Route::post('dual_user_list', 'DuelController@dual_user_list');
 
 // Route::post('savedual', 'DuelController@submit_exam');
 // Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');
