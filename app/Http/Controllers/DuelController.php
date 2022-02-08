@@ -169,12 +169,12 @@ class DuelController extends Controller
         // }
         // else
         // {
-        $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
-            ->where('to_user_id', $req->to_id)
-            ->whereDate('created_at', carbon::now())->get()->count();
-        if ($challange >= 3) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
-        } else {
+        // $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
+        //     ->where('to_user_id', $req->to_id)
+        //     ->whereDate('created_at', carbon::now())->get()->count();
+        // if ($challange >= 3) {
+        //     return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
+        // } else {
             $challange = new Challange;
             $challange->to_user_id = $req->to_id;
             $challange->from_user_id = $req->from_id;
@@ -194,7 +194,7 @@ class DuelController extends Controller
             ];
             sendNotification($data);
             return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
-        }
+        // }
         // }
 
     }
@@ -218,14 +218,14 @@ class DuelController extends Controller
         $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
 
         if (empty($challenge)) {
-            return response()->json(['status' => 204, 'message' => 'Invitation not send yet']);
+            return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
         }
-        if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 300) {
+        if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
             return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
         } else {
 
             if ($attempt->challange_id != "") {
-                return response()->json(['status' => 422, 'data' => '', 'message' => 'somebody has already accepted the request. try next time!']);
+                return response()->json(['status' => 422, 'data' => '', 'message' => 'Someone has already accepted the request. try next time!']);
             } else {
                 // update attempts table
                 $attempt->challange_id = $req->user_id;

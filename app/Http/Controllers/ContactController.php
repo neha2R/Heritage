@@ -412,7 +412,35 @@ class ContactController extends Controller
         }
     }
 
-  
+  public function check_friend(Request $request){
+    $validator = Validator::make($request->all(), [
+        'user_id' => 'required',
+    ]);
+    if ($validator->fails()) {
+        return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
+    }
+    $userData = User::find($request->user_id);
+    if (!isset($userData)) {
+        return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
+    }
+    $id = $request->user_id;
+    $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
+    $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
+   $toaluser = array_unique (array_merge ($totalfiends, $whoinvited));
+    $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
+    $onlyfriends = array_diff($toaluser, $blockuser);
+    $users = User::whereIn('id', $onlyfriends)->get();
+    $data =[];
+    foreach ($users as $user) {
+        if(isset($user->mobile)){
+            $response = $user->mobile;
+            $data[] = $response;
+        }
+     
+    }
+    return response()->json(['status' => 200, 'data' =>$data, 'message' => 'User not found']);
+
+  }
 
 
 
