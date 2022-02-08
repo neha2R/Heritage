@@ -218,14 +218,15 @@ class DuelController extends Controller
         $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
 
         if (empty($challenge)) {
-            $challange = new Challange;
-            $challange->to_user_id = $req->user_id;
-            $challange->from_user_id = $attempt->id;
-            $challange->attempt_id = $attempt->id;
-            $challange->status = '1';
-            $challange->save();
+            $challenge = new Challange;
+            $challenge->to_user_id = $req->user_id;
+            $challenge->from_user_id = $attempt->user_id;
+            $challenge->attempt_id = $attempt->id;
+            $challenge->status = '1';
+            $challenge->save();
             // return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
         }
+      
         if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
             return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
         } else {
