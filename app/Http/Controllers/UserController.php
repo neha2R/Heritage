@@ -9,12 +9,14 @@ use App\ForgetPasswords;
 use App\Mail\ForgetPassword;
 use App\AgeGroup;
 use App\CheckUserState;
-use Auth;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use Hash;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -580,6 +582,24 @@ class UserController extends Controller
             }
         
         return response()->json(['status' => 200, 'data' => '', 'message' => 'User is free']);
+
+    }
+
+    public function updatetoken(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'token' => 'required',
+        ]);
+       
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $user = User::find($request->user_id);
+        $user->token = $request->token;
+        $user->device_id = $request->device_type;
+        $user->save();
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'Token updated succesfully..']);
 
     }
 }

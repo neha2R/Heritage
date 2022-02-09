@@ -32,7 +32,7 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $quiz_type = QuizType::where('name', 'like', '%Dual%')->where('no_of_player', 2)->latest()->first();
+        $quiz_type = QuizType::where('name', 'like', '%Duel%')->where('no_of_player', 2)->latest()->first();
 
         if (empty($quiz_type)) {
             return response()->json(['status' => 204, 'message' => 'Dual type quiz not found', 'data' => array()]);
@@ -46,7 +46,7 @@ class DuelController extends Controller
 
         // Create dual link
         $dual = Attempt::where('id', $data->id)->first();
-        $dual->link = "cul.tre/dual#" . $data->id;
+        $dual->link = "cul.tre/duel#" . $data->id;
         $dual->save();
 
         $domain = new QuizDomain;
@@ -348,7 +348,8 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $data = Attempt::where('id',$request->dual_id)->where('user_id',$request->user_id)->first();
+        // $data = Attempt::where('id',$request->dual_id)->where('user_id',$request->user_id)->first();
+        $data = Attempt::where('id',$request->dual_id)->first();
 
         if (isset($data)) {
             if(isset($data->parent_id)){
@@ -361,9 +362,9 @@ class DuelController extends Controller
                 $user_data = $data;
                 $otheruser_data = $data2;
             } else {
-                if ($data2->user_id != $request->user_id) {
-                    return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
-                }
+                // if ($data2->user_id != $request->user_id) {
+                //     return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
+                // }
                 $user_data = $data2;
                 $otheruser_data = $data;
             }
@@ -396,7 +397,7 @@ class DuelController extends Controller
         }
     }
 
-    public function dual_user_list(Request $request)
+    public function dual_status(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'dual_id' => 'required',
@@ -405,12 +406,15 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $data = Attempt::find($request->dual_id);
+        $data = Attempt::where('id',$request->dual_id)->where('quiz_type_id','2')->first();
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
-        $datas = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->get();
-        foreach ($datas as $data) {
+        if(isset($data->challange_id)){
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Request accepted']);
+   
+        }   else{
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Request not accepted yet']);
 
         }
     }

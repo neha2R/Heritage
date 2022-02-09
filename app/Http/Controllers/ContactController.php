@@ -147,8 +147,8 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
         $id = $request->user_id;
-        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
-        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
+        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->where('status','1')->toArray();
+        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->where('status','1')->toArray();
         $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
         $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
         $onlyfriends = array_diff($toaluser, $blockuser);
@@ -357,24 +357,49 @@ class ContactController extends Controller
         }
 
         $oldFriend = Contact::where('friend_one', $user->id)->where('friend_two', $request->user_id)->first();
-        $oldFriend2 = Contact::where('friend_one', $request->user_id)->where('friend_two', $user->id)->first();
-
-        if (!isset($oldFriend) && !isset($oldFriend2)) {
+        if (!isset($oldFriend)) {
+        $oldFriend = Contact::where('friend_one', $request->user_id)->where('friend_two', $user->id)->first();
+        }
+        if (!isset($oldFriend)) {
             $savedata = new Contact;
             $savedata->friend_one = $user->id;
             $savedata->friend_two = $request->user_id;
             $savedata->invited_via = 'link';
             $savedata->status = '1';
             $savedata->save();
+
+            $data = [
+                'title' => 'Request Accept.',
+                'token' => $user->token,
+                'message' => User::where('id', $request->user_id)->first()->name . " has accept your request",
+            ];
+            notify($data);
+
         } else {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'Friend already added']);
+            if($oldFriend->status=='1' ){
+                return response()->json(['status' => 201, 'data' => [], 'message' => 'Friend already added']);
+
+            }else{
+                
+                $oldFriend->status='1';
+                $oldFriend->save();
+                $data = [
+                    'title' => 'Request Accept.',
+                    'token' => $user->token,
+                    'message' => User::where('id', $request->user_id)->first()->name . " has accept your request",
+                ];
+                notify($data);
+
+                return response()->json(['status' => 200, 'data' => [], 'message' => 'User added to friend list']);
+
+            }
         }
 
-        if (!$savedata) {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'No new user found']);
-        } else {
-            return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
-        }
+        // if (!$savedata) {
+        //     return response()->json(['status' => 201, 'data' => [], 'message' => 'No new user found']);
+        // } else {
+        //     return response()->json(['status' => 200, 'data' => $savedata->id, 'message' => 'New user added to your friend list']);
+        // }
     }
 
     public function add_friend(Request $request)
@@ -400,11 +425,23 @@ class ContactController extends Controller
             $savedata->friend_one = $request->user_id;
             $savedata->friend_two = $userData->id;
             $savedata->invited_via = 'mobile';
-            $savedata->status = '1';
+            $savedata->status = '0';
+            $savedata->count = 1;
             $savedata->save();
-            return response()->json(['status' => 200, 'data' => [], 'message' => 'Friend added succesfully']);
+
+            $data = [
+                'title' => 'Friend Request.',
+                'token' => $userData->token,
+                'type' => 'contact',
+                'link' => $userData->refrence_code,
+                'message' => User::where('id', $request->user_id)->first()->name . " has send you a friend request",
+            ];
+            sendNotification($data);
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Request sent succesfully']);
         } else {
-            return response()->json(['status' => 200, 'data' => [], 'message' => 'Friend already added']);
+            $oldFriend->count = $oldFriend->count+1;
+            $oldFriend->save();
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Already sent request']);
         }
     }
 
@@ -421,8 +458,8 @@ class ContactController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
         }
         $id = $request->user_id;
-        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->toArray();
-        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->toArray();
+        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->where('status','1')->toArray();
+        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->where('status','1')->toArray();
         $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
         $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
         $onlyfriends = array_diff($toaluser, $blockuser);
@@ -434,6 +471,6 @@ class ContactController extends Controller
                 $data[] = $response;
             }
         }
-        return response()->json(['status' => 200, 'data' => $data, 'message' => 'User not found']);
+        return response()->json(['status' => 200, 'data' => $data, 'message' => 'Data']);
     }
 }
