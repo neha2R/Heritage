@@ -62,7 +62,7 @@ class HomeController extends Controller
                 } else {
                     $data['image'] = '';
                 }
-                $data['link'] = $user->refrence_code;
+                $data['link'] = "cul.tre/invite#".$user->refrence_code;
                 $response['contact'][] = $data;
             }
 
@@ -74,7 +74,7 @@ class HomeController extends Controller
                 } else {
                     $data['image'] = '';
                 }
-                $data['link'] = "cul.tre/invite#" .Attempt::where('id', $dual->attempt_id)->first()->link;
+                $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
                 $data['dual_id'] = $dual->attempt_id;
                 $response['dual'][] = $data;
             }
