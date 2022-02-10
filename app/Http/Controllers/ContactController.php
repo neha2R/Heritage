@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use App\Challange;
 use App\AgeGroup;
 use App\BlockUser;
+use App\FireBaseNotification;
+
 use Illuminate\Support\Facades\Crypt;
 
 class ContactController extends Controller
@@ -375,6 +377,13 @@ class ContactController extends Controller
             ];
             notify($data);
 
+            $savenoti = new FireBaseNotification;
+            $savenoti->user_id = $user->id;
+            $savenoti->type = 'contact';
+            $savenoti->message = User::where('id', $request->user_id)->first()->name . " has accept your request";
+            $savenoti->title = 'Request Accept.';
+            $savenoti->status = '0';
+            $savenoti->save();
         } else {
             if($oldFriend->status=='1' ){
                 return response()->json(['status' => 201, 'data' => [], 'message' => 'Friend already added']);
@@ -389,7 +398,13 @@ class ContactController extends Controller
                     'message' => User::where('id', $request->user_id)->first()->name . " has accept your request",
                 ];
                 notify($data);
-
+            $savenoti = new FireBaseNotification;
+            $savenoti->user_id = $user->id;
+            $savenoti->type = 'contact';
+            $savenoti->message = User::where('id', $request->user_id)->first()->name . " has accept your request";
+            $savenoti->title = 'Request Accept.';
+            $savenoti->status = '0';
+            $savenoti->save();
                 return response()->json(['status' => 200, 'data' => [], 'message' => 'User added to friend list']);
 
             }
@@ -437,6 +452,17 @@ class ContactController extends Controller
                 'message' => User::where('id', $request->user_id)->first()->name . " has send you a friend request",
             ];
             sendNotification($data);
+            // save notification 
+           
+            $savenoti = new FireBaseNotification;
+            $savenoti->user_id = $userData->id;
+            $savenoti->link = $userData->link;
+            $savenoti->type = 'contact';
+            $savenoti->message = User::where('id', $request->user_id)->first()->name . " has send you a friend request";
+            $savenoti->title = 'Friend Request.';
+            $savenoti->status = '0';
+            $savenoti->save();
+
             return response()->json(['status' => 200, 'data' => [], 'message' => 'Request sent succesfully']);
         } else {
             $oldFriend->count = $oldFriend->count+1;

@@ -4,6 +4,7 @@ use App\AgeGroup;
 use Carbon\Carbon;
 use App\CheckUserState;
 
+
 function sendNotification($data)
 {
     $msg = array(
@@ -100,3 +101,4 @@ function checkUser($id)
 {
     return CheckUserState::where('user_id', $id)->first();
 }
+

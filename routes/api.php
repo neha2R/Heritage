@@ -37,6 +37,8 @@ Route::get('get-profile', 'UserController@get_profile');
 These are the auth routes
 Start from here
 */
+Route::post('dashboard', 'HomeController@dashboard');
+
 Route::post('createquiz', 'AttemptController@store');
 Route::get('domains', 'DomainController@domains');
 Route::get('difficulty', 'DifficultyLevelController@difficulty');

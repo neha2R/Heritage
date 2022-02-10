@@ -7,15 +7,14 @@ use App\Attempt;
 use App\Challange;
 use App\QuizDomain;
 use App\AgeGroup;
-use App\Country;
 use App\User;
 use App\Contact;
 use App\BlockUser;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use App\QuizType;
 use App\Domain;
+use App\FireBaseNotification;
 
 class DuelController extends Controller
 {
@@ -186,13 +185,23 @@ class DuelController extends Controller
 
         $attempt = Attempt::where('id', $challange->attempt_id)->first();
         $data = [
-            'title' => 'Invitation recieved.',
+            'title' => 'Invitation send.',
             'token' => $challange->to_user->token,
             'link' => $attempt->link,
             //   'from'=>$challange->from_user->name,
             'message' => 'You have a new request from' . $challange->from_user->name,
         ];
         sendNotification($data);
+
+        $savenoti = new FireBaseNotification;
+        $savenoti->user_id =$challange->to_user->id;
+        $savenoti->link = $attempt->link;
+        $savenoti->type = 'dual';
+        $savenoti->message = 'You have a new request from' . $challange->from_user->name;
+        $savenoti->title = 'Dual Invitation send.';
+        $savenoti->status = '0';
+        $savenoti->save();
+
         return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
         // }
         // }
@@ -239,7 +248,7 @@ class DuelController extends Controller
                 $attempt->save();
 
                 $data = [
-                    'title' => 'Invitation accepted.',
+                    'title' => 'Dual Invitation accepted.',
                     'token' => $challenge->from_user->token,
                     'link' => $attempt->link,
                     'message' => User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now",
@@ -259,6 +268,16 @@ class DuelController extends Controller
                 $challenge->save();
 
                 sendNotification($data);
+               // Save notification
+            $savenoti = new FireBaseNotification;
+            $savenoti->user_id =$challenge->from_user->id;
+            $savenoti->link = $attempt->link;
+            $savenoti->type = 'dual';
+            $savenoti->message = User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now";
+            $savenoti->title = 'Dual Invitation accepted.';
+            $savenoti->status = '0';
+            $savenoti->save();
+
                 $response['quiz_id'] = $acceptuser->id;
 
                 return response()->json(['status' => 200, 'data' => $response, 'message' => 'Invitation Successfully accepted.']);
