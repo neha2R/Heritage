@@ -58,7 +58,7 @@ class HomeController extends Controller
                 $data['name'] = $user->name;
 
                 if (isset($user->profile_image)) {
-                    $data['image'] = url('/images') . '/' . $user->profile_image;
+                    $data['image'] = url('/storage') . '/' . $user->profile_image;
                 } else {
                     $data['image'] = '';
                 }
@@ -70,7 +70,7 @@ class HomeController extends Controller
                 $user = User::where('id', $dual->from_user_id)->first();
                 $data['name'] = $user->name;
                 if (isset($user->profile_image)) {
-                    $data['image'] = url('/images') . '/' . $user->profile_image;
+                    $data['image'] = url('/storage') . '/' . $user->profile_image;
                 } else {
                     $data['image'] = '';
                 }

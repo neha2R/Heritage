@@ -175,7 +175,7 @@ class ContactController extends Controller
             $allUsers['status'] = "Online";
 
             if (isset($user->profile_image)) {
-                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+                $allUsers['image'] = url('/storage') . '/' . $user->profile_image;
             } else {
                 $allUsers['image'] = '';
             }
@@ -224,7 +224,7 @@ class ContactController extends Controller
             }
             $allUsers['status'] = "Online";
             if (isset($user->profile_image)) {
-                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+                $allUsers['image'] = url('/storage') . '/' . $user->profile_image;
             } else {
                 $allUsers['image'] = '';
             }

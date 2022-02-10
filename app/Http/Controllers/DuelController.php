@@ -129,7 +129,7 @@ class DuelController extends Controller
                 $allUsers['request'] = "0";
             }
             if (isset($user->profile_image)) {
-                $allUsers['image'] = url('/images') . '/' . $user->profile_image;
+                $allUsers['image'] = url('/storage') . '/' . $user->profile_image;
             } else {
                 $allUsers['image'] = '';
             }
@@ -395,7 +395,7 @@ class DuelController extends Controller
             $user['xp'] = $user_data->xp;
             $user['percentage'] = $user_data->result;
             if (isset($user_data->user->profile_image)) {
-                $user['image']  = url('/images') . '/' . $user_data->user->profile_image;
+                $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
             } else {
                 $user['image']  = '';
             }
@@ -405,7 +405,7 @@ class DuelController extends Controller
             $response['xp'] = $otheruser_data->xp;
             $response['percentage'] = $otheruser_data->result;
             if (isset($otheruser_data->user->profile_image)) {
-                $response['image']  = url('/images') . '/' . $otheruser_data->user->profile_image;
+                $response['image']  = url('/storage') . '/' . $otheruser_data->user->profile_image;
             } else {
                 $response['image']  = '';
             }
