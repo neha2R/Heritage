@@ -188,6 +188,7 @@ class DuelController extends Controller
             'title' => 'Invitation send.',
             'token' => $challange->to_user->token,
             'link' => $attempt->link,
+            'type' => 'dual',
             //   'from'=>$challange->from_user->name,
             'message' => 'You have a new request from' . $challange->from_user->name,
         ];
@@ -251,6 +252,7 @@ class DuelController extends Controller
                     'title' => 'Dual Invitation accepted.',
                     'token' => $challenge->from_user->token,
                     'link' => $attempt->link,
+                    'type' => 'dual',
                     'message' => User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now",
                 ];
                 // Create new data for user who accepts the request

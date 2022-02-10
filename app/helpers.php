@@ -11,7 +11,8 @@ function sendNotification($data)
         'title' => $data['title'],
         'body' => $data['message'],
         'link' => $data['link'],
-        'vibrate' => 1,
+        'type' => $data['type'],
+         'vibrate' => 1,
         'sound' => 1,
     );
     //this is for android
@@ -52,6 +53,7 @@ function notify($data)
     $msg = array(
         'title' => $data['title'],
         'body' => $data['message'],
+        'type' => '',
         'vibrate' => 1,
         'sound' => 1,
     );
