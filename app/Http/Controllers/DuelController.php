@@ -280,9 +280,9 @@ class DuelController extends Controller
             $savenoti->status = '0';
             $savenoti->save();
 
-                $response['quiz_id'] = $acceptuser->id;
+                // $response['quiz_id'] = $acceptuser->id;
 
-                return response()->json(['status' => 200, 'data' => $response, 'message' => 'Invitation Successfully accepted.']);
+                return response()->json(['status' => 200, 'data' =>$acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
             // }
         // }
     }
