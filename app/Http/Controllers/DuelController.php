@@ -237,13 +237,13 @@ class DuelController extends Controller
             // return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
         }
       
-        if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
-            return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
-        } else {
+        // if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
+        //     return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
+        // } else {
 
-            if ($attempt->challange_id != "") {
-                return response()->json(['status' => 422, 'data' => '', 'message' => 'Someone has already accepted the request. try next time!']);
-            } else {
+            // if ($attempt->challange_id != "") {
+            //     return response()->json(['status' => 422, 'data' => '', 'message' => 'Someone has already accepted the request. try next time!']);
+            // } else {
                 // update attempts table
                 $attempt->challange_id = $req->user_id;
                 $attempt->save();
@@ -283,8 +283,8 @@ class DuelController extends Controller
                 $response['quiz_id'] = $acceptuser->id;
 
                 return response()->json(['status' => 200, 'data' => $response, 'message' => 'Invitation Successfully accepted.']);
-            }
-        }
+            // }
+        // }
     }
     public function generate_link(Request $req)
     {
