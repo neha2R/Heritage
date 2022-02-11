@@ -8,6 +8,8 @@ use App\Challange;
 use App\Contact;
 use App\User;
 use App\Attempt;
+use App\QuizDomain;
+use App\Domain;
 
 class HomeController extends Controller
 {
@@ -69,6 +71,7 @@ class HomeController extends Controller
             foreach ($duals as $dual) {
                 $user = User::where('id', $dual->from_user_id)->first();
                 $data['name'] = $user->name;
+                $data['id'] = $dual->id;
                 if (isset($user->profile_image)) {
                     $data['image'] = url('/storage') . '/' . $user->profile_image;
                 } else {
@@ -76,6 +79,13 @@ class HomeController extends Controller
                 }
                 $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
                 $data['dual_id'] = $dual->attempt_id;
+                $domain =  QuizDomain::where('attempts_id', $dual->attempt_id)->first()->domain_id;
+
+                $dualdata = Attempt::find($dual->attempt_id);
+                $domains = explode(',', $domain);
+                $data['domain'] = implode(',',Domain::whereIn('id', $domains)->pluck('name')->toArray());
+                $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
+                $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
                 $response['dual'][] = $data;
             }
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);

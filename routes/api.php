@@ -160,6 +160,7 @@ Route::post('accept_link_invitation', 'ContactController@accept_link_invitation'
 Route::post('add_friend', 'ContactController@add_friend');
 Route::post('unblockuser', 'ContactController@unblockUser');
 Route::post('check_friend','ContactController@check_friend');
+Route::post('reject_link_invitation','ContactController@reject_link_invitation');
 //========= Privacy API
 Route::get('privacy/{id}', 'PrivacyController@fetchPrivacy');
 Route::post('privacy', 'PrivacyController@save');
@@ -172,6 +173,6 @@ Route::post('privacy', 'PrivacyController@save');
 Route::get('busy/{user_id}', 'UserController@busyUser');
 Route::get('free/{user_id}', 'UserController@freeUser');
 
-// Route::fallback(function () {
-//     return response()->json(['message' => 'Not Found.'], 404);
-// });
+//========= Quiz ROOM API ========
+
+Route::post('create_quiz_room', 'QuizRoomController@create_quiz_room');
