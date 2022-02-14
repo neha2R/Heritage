@@ -493,12 +493,12 @@ class DuelController extends Controller
 
         $attempt = Attempt::where('link', $req->dual_link)->first();
         if (empty($attempt)) {
-            return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
+            return response()->json(['status' => 204, 'data'=>[],'message' => 'Sorry! Link has been expired. or not found']);
         }
         $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
 
         if (empty($challenge)) {
-            return response()->json(['status' => 201, 'message' => 'Sorry! No invitation']);
+            return response()->json(['status' => 201, 'data'=>[], 'message' => 'Sorry! No invitation']);
 
         }else{
             $challenge->deleted_at = date('Y-m-d h:i:s');
@@ -514,7 +514,7 @@ class DuelController extends Controller
             ];
             sendNotification($data);
 
-            return response()->json(['status' => 200, 'message' => 'Rejected succesfully']);
+            return response()->json(['status' => 200, 'data'=>[], 'message' => 'Rejected succesfully']);
 
         }
     }
