@@ -64,12 +64,10 @@ class HomeController extends Controller
                 } else {
                     $data['image'] = '';
                 }
-                if(isset($user->refrence_code)){
-                    $data['link'] = "cul.tre/invite#".$user->refrence_code;
-
-                }else{
+                if (isset($user->refrence_code)) {
+                    $data['link'] = "cul.tre/invite#" . $user->refrence_code;
+                } else {
                     $data['link'] = "";
- 
                 }
                 $response['contact'][] = $data;
             }
@@ -89,7 +87,7 @@ class HomeController extends Controller
 
                 $dualdata = Attempt::find($dual->attempt_id);
                 $domains = explode(',', $domain);
-                $data['domain'] = implode(',',Domain::whereIn('id', $domains)->pluck('name')->toArray());
+                $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
                 $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
                 $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
                 $response['dual'][] = $data;

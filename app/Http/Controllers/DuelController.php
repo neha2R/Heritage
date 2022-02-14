@@ -16,6 +16,7 @@ use App\QuizType;
 use App\Domain;
 use App\FireBaseNotification;
 use App\QuizRule;
+
 class DuelController extends Controller
 {
     public function create_duel(Request $request)
@@ -195,7 +196,7 @@ class DuelController extends Controller
         sendNotification($data);
 
         $savenoti = new FireBaseNotification;
-        $savenoti->user_id =$challange->to_user->id;
+        $savenoti->user_id = $challange->to_user->id;
         $savenoti->link = $attempt->link;
         $savenoti->type = 'dual';
         $savenoti->message = 'You have a new request from' . $challange->from_user->name;
@@ -236,7 +237,7 @@ class DuelController extends Controller
             $challenge->save();
             // return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
         }
-      
+
         if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
             return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
         } else {
@@ -270,19 +271,19 @@ class DuelController extends Controller
                 $challenge->save();
 
                 sendNotification($data);
-               // Save notification
-            $savenoti = new FireBaseNotification;
-            $savenoti->user_id =$challenge->from_user->id;
-            $savenoti->link = $attempt->link;
-            $savenoti->type = 'dual';
-            $savenoti->message = User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now";
-            $savenoti->title = 'Dual Invitation accepted.';
-            $savenoti->status = '0';
-            $savenoti->save();
+                // Save notification
+                $savenoti = new FireBaseNotification;
+                $savenoti->user_id = $challenge->from_user->id;
+                $savenoti->link = $attempt->link;
+                $savenoti->type = 'dual';
+                $savenoti->message = User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now";
+                $savenoti->title = 'Dual Invitation accepted.';
+                $savenoti->status = '0';
+                $savenoti->save();
 
                 // $response['quiz_id'] = $acceptuser->id;
 
-                return response()->json(['status' => 200, 'data' =>$acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
+                return response()->json(['status' => 200, 'data' => $acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
             }
         }
     }
@@ -370,14 +371,13 @@ class DuelController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         // $data = Attempt::where('id',$request->dual_id)->where('user_id',$request->user_id)->first();
-        $data = Attempt::where('id',$request->dual_id)->first();
+        $data = Attempt::where('id', $request->dual_id)->first();
 
         if (isset($data)) {
-            if(isset($data->parent_id)){
+            if (isset($data->parent_id)) {
                 $data2 =  Attempt::where('id', $data->parent_id)->first();
-
-            }else{
-               $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
+            } else {
+                $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
             }
             if ($data->user_id == $request->user_id) {
                 $user_data = $data;
@@ -409,11 +409,11 @@ class DuelController extends Controller
             } else {
                 $response['image']  = '';
             }
-           
+
             $res[] = $response;
             $res[] = $user;
 
-        
+
 
             return response()->json(['status' => 200, 'user_data' => $user, 'data' => $res, 'message' => 'Dual data']);
         } else {
@@ -430,16 +430,14 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $data = Attempt::where('id',$request->dual_id)->where('quiz_type_id','2')->first();
+        $data = Attempt::where('id', $request->dual_id)->where('quiz_type_id', '2')->first();
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
-        if(isset($data->challange_id)){
+        if (isset($data->challange_id)) {
             return response()->json(['status' => 200, 'data' => [], 'message' => 'Request accepted']);
-   
-        }   else{
+        } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Request not accepted yet']);
-
         }
     }
 
@@ -452,28 +450,27 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $data = Attempt::where('id',$request->id)->where('quiz_type_id',2)->first();
+        $data = Attempt::where('id', $request->id)->where('quiz_type_id', 2)->first();
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
 
         if (isset($data)) {
-            if(isset($data->parent_id)){
+            if (isset($data->parent_id)) {
                 $data2 =  Attempt::where('id', $data->parent_id)->first();
-
-            }else{
-               $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
+            } else {
+                $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
             }
         }
-        $quiz_rules = QuizRule::select('scoring','negative_marking','time_limit','no_of_players','hint_guide','que_navigation','more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
-        
+        $quiz_rules = QuizRule::select('scoring', 'negative_marking', 'time_limit', 'no_of_players', 'hint_guide', 'que_navigation', 'more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
+
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => []]);
         } else {
             // $data = json_decode($quiz_rules->more);
             $quiz_rules->more = json_decode($quiz_rules->more);
             $data = $quiz_rules->toArray();
-             $data = array_filter(array_values($data));
+            $data = array_filter(array_values($data));
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }
@@ -493,16 +490,15 @@ class DuelController extends Controller
 
         $attempt = Attempt::where('link', $req->dual_link)->first();
         if (empty($attempt)) {
-            return response()->json(['status' => 204, 'data'=>[],'message' => 'Sorry! Link has been expired. or not found']);
+            return response()->json(['status' => 204, 'data' => [], 'message' => 'Sorry! Link has been expired. or not found']);
         }
         $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
 
         if (empty($challenge)) {
-            return response()->json(['status' => 201, 'data'=>[], 'message' => 'Sorry! No invitation']);
-
-        }else{
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Sorry! No invitation']);
+        } else {
             $challenge->deleted_at = date('Y-m-d h:i:s');
-            $challenge->save(); 
+            $challenge->save();
 
 
             $data = [
@@ -514,8 +510,7 @@ class DuelController extends Controller
             ];
             sendNotification($data);
 
-            return response()->json(['status' => 200, 'data'=>[], 'message' => 'Rejected succesfully']);
-
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Rejected succesfully']);
         }
     }
 }
