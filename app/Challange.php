@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Challange extends Model
 {
+    use SoftDeletes;
+
     public function to_user()
     {
         return $this->hasOne('App\User', 'id', 'to_user_id');
