@@ -506,7 +506,7 @@ class DuelController extends Controller
 
 
             $data = [
-                'title' => 'Duel Invitation accepted.',
+                'title' => 'Duel Invitation rejected.',
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',

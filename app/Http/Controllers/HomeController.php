@@ -64,7 +64,13 @@ class HomeController extends Controller
                 } else {
                     $data['image'] = '';
                 }
-                $data['link'] = "cul.tre/invite#".$user->refrence_code;
+                if(isset($user->refrence_code)){
+                    $data['link'] = "cul.tre/invite#".$user->refrence_code;
+
+                }else{
+                    $data['link'] = "";
+ 
+                }
                 $response['contact'][] = $data;
             }
 

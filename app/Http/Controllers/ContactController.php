@@ -506,21 +506,35 @@ class ContactController extends Controller
     public function reject_link_invitation(Request $request){
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
-            'link' => 'required',
+            
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
+        if($request->link){
         $send_user = explode("#", $request->link);
         $user = User::where('refrence_code', $send_user[1])->first();
         if (!$user) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Link is not valid']);
         }
-
         $oldFriend = Contact::where('friend_one', $user->id)->where('friend_two', $request->user_id)->where('status','0')->first();
         if (!isset($oldFriend)) {
         $oldFriend = Contact::where('friend_one', $request->user_id)->where('friend_two', $user->id)->where('status','0')->first();
         }
+     }  
+    else{
+
+        $validator = Validator::make($request->all(), [
+            'id' => 'required',
+            
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
+        }
+        $oldFriend = Contact::where('id',$request->id)->first();
+
+    }
+       
 
         $oldFriend->deleted_at = date('Y-m-d h:i:s');
         $oldFriend->status = '2'; // for reject a request
