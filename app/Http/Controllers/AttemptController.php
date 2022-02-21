@@ -144,7 +144,9 @@ class AttemptController extends Controller
                 $data = [];
                 $quiz = Attempt::find($request->quiz_id);
                 if($quiz->quiz_type_id==2){
-                     
+                    $data['quiz_id'] = $request->quiz_id;
+                    $data['xp'] = $quiz->xp;
+                    $data['per'] = $quiz->result;    
                 } else{
                 
                 $data['quiz_id'] = $request->quiz_id;

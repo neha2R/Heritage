@@ -186,3 +186,4 @@ Route::post('generate_link_quiz_room', 'QuizRoomController@accept_invitation');
 Route::post('room_user', 'QuizRoomController@room_user');
 Route::post('delete_user_room', 'QuizRoomController@delete_user_room');
 Route::post('leaveroom', 'QuizRoomController@leaveroom');
+Route::post('save_room_result', 'QuizRoomController@save_room_result');

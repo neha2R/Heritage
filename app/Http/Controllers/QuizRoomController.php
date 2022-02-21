@@ -16,6 +16,8 @@ use App\Domain;
 use App\FireBaseNotification;
 use App\QuizRule;
 use Carbon\Carbon;
+use App\Jobs\SaveQuizRoomResult;
+use App\Performance;
 
 class QuizRoomController extends Controller
 {
@@ -115,7 +117,6 @@ class QuizRoomController extends Controller
 
 
         return response()->json(['status' => 200, 'message' => 'Quiz disbanded succesfully', 'data' => $data]);
-    
     }
 
     public function send_invitation(Request $req)
@@ -300,13 +301,10 @@ class QuizRoomController extends Controller
             } else {
                 $allUsers['age_group'] = "";
             }
-            if ($user->country) 
-            {
+            if ($user->country) {
                 $allUsers['country'] = $user->country->country_name->name;
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
-            } 
-            else 
-            {
+            } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             $allUsers['status'] = "Online";
@@ -321,7 +319,7 @@ class QuizRoomController extends Controller
         return response()->json(['status' => 200, 'data' => $data, 'message' => 'Quiz room users list']);
     }
 
-    
+
     public function delete_user_room(Request $request)
     {
 
@@ -330,29 +328,24 @@ class QuizRoomController extends Controller
             'user_id' => 'required',
         ]);
 
-        if ($validator->fails()) 
-        {
-           
+        if ($validator->fails()) {
+
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        
-        $attempt = Attempt::where('id',$request->room_id)->first();
-        
-        if (!isset($attempt)) 
-        {
+
+        $attempt = Attempt::where('id', $request->room_id)->first();
+
+        if (!isset($attempt)) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found..']);
         }
         $user = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $request->user_id)->first();
-        if (!isset($user)) 
-        {
+        if (!isset($user)) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not in the quiz']);
         }
         $user->delete();
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User removed from room']);
-
-        
     }
-    
+
     public function leaveroom(Request $request)
     {
 
@@ -379,4 +372,65 @@ class QuizRoomController extends Controller
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User removed from room']);
     }
 
+
+    public function save_room_result(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'quiz_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $quiz = Attempt::find($request->quiz_id);
+        if (!empty($quiz)) {
+
+            if ($quiz->user_id != $request->user_id) {
+                // Check if user register with room
+                $user = Challange::where('attempt_id', $quiz->id)->where('to_user_id', $request->user_id)->where('status','1')->first();
+             if(empty($user)){
+                    return response()->json(['status' => 201, 'data' => [], 'message' => 'Not a valid user']);
+  
+             }
+                $userquiz = Attempt::where('parent_id',$request->quiz_id)->where('user_id', $request->user_id)->first();
+            if(empty($userquiz)){
+                    $userquiz = new Attempt;
+                    $userquiz->user_id = $request->user_id;
+                    $userquiz->parent_id = $quiz->id;
+                    $userquiz->difficulty_level_id = $quiz->difficulty_level_id;
+                    $userquiz->quiz_type_id = $quiz->quiz_type_id;
+                    $userquiz->quiz_speed_id = $quiz->quiz_speed_id;
+                    $userquiz->save();
+                   
+            }
+                $quiz = $userquiz;
+            }
+
+            $alreadysave = Performance::where('attempt_id', $request->quiz_id)->get('question_id');
+
+            if (empty($alreadysave)) {
+
+                $data = SaveQuizRoomResult::dispatchNow($request->all());
+            }
+            else{
+                $data = 'success'; 
+            }
+
+            if ($data == 'error') {
+                return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+            }
+            if ($data == 'success') {
+
+                $data['quiz_id'] = $request->quiz_id;
+                $data['xp'] = $quiz->xp;
+                $data['per'] = $quiz->result;
+
+                return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $data]);
+            }
+        } else {
+            return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
+        }
+    }
 }

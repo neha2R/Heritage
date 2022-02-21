@@ -405,7 +405,8 @@ class UserController extends Controller
               $data['first_name']=$user->name;
               $data['last_name']=$user->last_name;
               $data['email']=$user->email;
-              $data['country']=$user->state_id!=""?\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name:'null';
+            $data['mobile'] = $user->mobile;
+             $data['country']=$user->state_id!=""?\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name:'null';
               $data['country_id']=$user->state_id!=""?\App\State::whereId($user->state_id)->first()->country_id:'N/A';
               $data['state']=$user->state_id!=""?\App\State::whereId($user->state_id)->first()->name:'Null';
               $data['state_id']=$user->state_id;
