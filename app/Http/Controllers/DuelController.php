@@ -513,4 +513,37 @@ class DuelController extends Controller
             return response()->json(['status' => 200, 'data' => [], 'message' => 'Rejected succesfully']);
         }
     }
+
+    public function dualdetails(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            // 'user_id' => 'required',
+            'dual_link' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+
+        $data = Attempt::where('link',$request->dual_link)->first();
+        if (empty($data)) {
+            return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
+        }
+         
+            $domain =  QuizDomain::where('attempts_id', $data->id)->first()->domain_id;
+
+            $domains = explode(',', $domain);
+
+            $dual = [];
+            $dual['dual_id'] = $data->id;
+            $dual['domain'] = implode(',',Domain::whereIn('id', $domains)->pluck('name')->toArray());
+            $dual['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
+            $dual['difficulty'] = ucwords(strtolower($data->difficulty->name));
+            $dual['link'] = $data->link;
+            $dual['created_date'] = date('d-M-Y', strtotime($data->created_at));
+
+            return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
+        
+    }
 }
