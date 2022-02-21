@@ -548,12 +548,12 @@ class UserController extends Controller
      */
     public function busyUser(Request $request){
 
-        // $validator = Validator::make($request->all(), [
-        //     'user_id' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-        // }
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
          $savedata = new CheckUserState;
          $savedata->user_id = $request->user_id;
          $savedata->save();
@@ -569,12 +569,12 @@ class UserController extends Controller
      */
     public function freeUser(Request $request){
      
-        // $validator = Validator::make($request->all(), [
-        //     'user_id' => 'required',
-        // ]);
-        // if ($validator->fails()) {
-        //     return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-        // }
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
       $data = CheckUserState::where('user_id', $request->user_id)->get();
        
       if($data->count()>0){

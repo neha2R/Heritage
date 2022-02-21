@@ -172,9 +172,17 @@ Route::post('privacy', 'PrivacyController@save');
       */
 
 //========= Check user status free or busy
-Route::get('busy/{user_id}', 'UserController@busyUser');
-Route::get('free/{user_id}', 'UserController@freeUser');
+Route::post('busy', 'UserController@busyUser');
+Route::post('free', 'UserController@freeUser');
 
 //========= Quiz ROOM API ========
 
 Route::post('create_quiz_room', 'QuizRoomController@create_quiz_room');
+Route::post('quiz_room_rule', 'QuizRoomController@quiz_rules');
+Route::post('disband_quiz', 'QuizRoomController@disband_quiz');
+Route::post('send_invitation_quiz_room', 'QuizRoomController@send_invitation');
+Route::post('accept_invitation_quiz_room', 'QuizRoomController@accept_invitation');
+Route::post('generate_link_quiz_room', 'QuizRoomController@accept_invitation');
+Route::post('room_user', 'QuizRoomController@room_user');
+Route::post('delete_user_room', 'QuizRoomController@delete_user_room');
+Route::post('leaveroom', 'QuizRoomController@leaveroom');

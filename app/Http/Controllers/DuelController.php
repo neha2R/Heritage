@@ -159,14 +159,14 @@ class DuelController extends Controller
         if (isset($challenge)) {
             if ($challenge->status == '0') {
                 if (carbon::now()->parse($challenge->created_at)->diffInSeconds() < 60) {
-                    return response()->json(['status' => 200, 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
+                    return response()->json(['status' => 200, 'data'=>[], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
                 }
             }
         }
-        // if($challenge)
-        // {
-        //         return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You have already sent this user request for the dual quiz."]);
-        // }
+        if($challenge)
+        {
+                return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        }
         // else
         // {
         // $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)

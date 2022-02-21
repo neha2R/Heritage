@@ -55,7 +55,7 @@ class HomeController extends Controller
             $data = [];
             $response = [];
             foreach ($contacts as $contact) {
-                $user = User::where('id', $contact->friend_two)->first();
+                $user = User::where('id', $contact->friend_one)->first();
                 $data['id'] = $contact->id;
                 $data['name'] = $user->name;
 
