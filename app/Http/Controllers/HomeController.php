@@ -50,11 +50,12 @@ class HomeController extends Controller
         }
 
         $user =  User::find($request->user_id);
+
         if (isset($user)) {
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
             $duals = Challange::where('to_user_id', $request->user_id)->get();
             $data = [];
-            $acceptdata=[];
+            $acceptdata = [];
             $response = [];
             foreach ($contacts as $contact) {
                 $user = User::where('id', $contact->friend_one)->first();
@@ -73,44 +74,45 @@ class HomeController extends Controller
                 }
                 $response['contact'][] = $data;
             }
-$mydata=[];
+            $mydata = [];
             foreach ($duals as $dual) {
-                $user = User::where('id', $dual->from_user_id)->first();
-               if($dual->status=='0'){
-                $data['name'] = $user->name;
-                $data['id'] = $dual->id;
-                if (isset($user->profile_image)) {
-                    $data['image'] = url('/storage') . '/' . $user->profile_image;
-                } else {
-                    $data['image'] = '';
-                }
-                $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
-                $data['dual_id'] = $dual->attempt_id;
-                $domain =  QuizDomain::where('attempts_id', $dual->attempt_id)->first()->domain_id;
+                $check = Attempt::find($dual->attempt_id);
+                if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
-                $dualdata = Attempt::find($dual->attempt_id);
-                $domains = explode(',', $domain);
-                $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
-                $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
-                $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
-           $mydata[] = $data;
-            }
-            if($dual->status == '1'){
-                if(Attempt::find($dual->attempt_id)){
-                $challange = Attempt::find($dual->attempt_id);
+                    $user = User::where('id', $dual->from_user_id)->first();
+                    if ($dual->status == '0') {
+                        $data['name'] = $user->name;
+                        $data['id'] = $dual->id;
+                        if (isset($user->profile_image)) {
+                            $data['image'] = url('/storage') . '/' . $user->profile_image;
+                        } else {
+                            $data['image'] = '';
+                        }
+                        $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
+                        $data['dual_id'] = $dual->attempt_id;
+                        $domain =  QuizDomain::where('attempts_id', $dual->attempt_id)->first()->domain_id;
+
+                        $dualdata = Attempt::find($dual->attempt_id);
+                        $domains = explode(',', $domain);
+                        $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
+                        $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
+                        $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
+                        $mydata[] = $data;
+                    }
+                }
+                if ($dual->status == '1') {
+                    $challange = Attempt::find($dual->attempt_id);
+
+                    if (Attempt::find($dual->attempt_id)) {
                         if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
- 
-                $accept['id'] = $dual->attempt_id;
-               $acceptdata[] = $accept ;
-                   }
+
+                            $accept['id'] = $dual->attempt_id;
+                            $acceptdata[] = $accept;
+                        }
+                    }
                 }
-
             }
-                
-              
-
-            }
-             $response['accept'] = $acceptdata;
+            $response['accept'] = $acceptdata;
             $response['dual'] = $mydata;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
