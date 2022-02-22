@@ -40,7 +40,7 @@ class DuelController extends Controller
         $oldquizcheck = Attempt::where('user_id', $request->user_id)->where('quiz_type_id',2)->where('end_at', null)->latest()->first();
     
         if ($oldquizcheck) {
-            if (Carbon::now()->parse($oldquizcheck->created_at)->diffInSeconds() < 180) {
+            if (Carbon::now()->parse($oldquizcheck->created_at)->diffInSeconds() < 30) {
 
                 return response()->json(['status' => 201, 'message' => 'Wait for 180 sec', 'data' => array()]);
             }
