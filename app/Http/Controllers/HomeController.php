@@ -10,6 +10,7 @@ use App\User;
 use App\Attempt;
 use App\QuizDomain;
 use App\Domain;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -51,8 +52,9 @@ class HomeController extends Controller
         $user =  User::find($request->user_id);
         if (isset($user)) {
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
-            $duals = Challange::where('to_user_id', $request->user_id)->where('status', '0')->get();
+            $duals = Challange::where('to_user_id', $request->user_id)->get();
             $data = [];
+            $acceptdata=[];
             $response = [];
             foreach ($contacts as $contact) {
                 $user = User::where('id', $contact->friend_one)->first();
@@ -74,6 +76,7 @@ class HomeController extends Controller
 
             foreach ($duals as $dual) {
                 $user = User::where('id', $dual->from_user_id)->first();
+               if($dual->status=='0'){
                 $data['name'] = $user->name;
                 $data['id'] = $dual->id;
                 if (isset($user->profile_image)) {
@@ -90,8 +93,23 @@ class HomeController extends Controller
                 $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
                 $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
                 $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
-                $response['dual'][] = $data;
             }
+            if($dual->status == '1'){
+                if(Attempt::find($dual->attempt_id)){
+                $challange = Attempt::find($dual->attempt_id);
+                        if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
+ 
+                $accept['id'] = $dual->attempt_id;
+               $acceptdata[] = $accept ;
+                   }
+                }
+
+            }
+                $response['dual'][] = $data;
+              
+
+            }
+             $response['accept'] = $acceptdata;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);

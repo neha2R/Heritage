@@ -37,6 +37,23 @@ class DuelController extends Controller
         if (empty($quiz_type)) {
             return response()->json(['status' => 204, 'message' => 'Dual type quiz not found', 'data' => array()]);
         }
+        $oldquizcheck = Attempt::where('user_id', $request->user_id)->where('quiz_type_id',2)->where('end_at', null)->latest()->first();
+    
+        if ($oldquizcheck) {
+            if (Carbon::now()->parse($oldquizcheck->created_at)->diffInSeconds() < 180) {
+
+                return response()->json(['status' => 201, 'message' => 'Wait for 180 sec', 'data' => array()]);
+            }
+        }
+        $oldquizs = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 2)->where('end_at', null)->get();
+        if ($oldquizs) {
+            foreach ($oldquizs as $oldquiz) {
+                if (Carbon::now()->parse($oldquiz->created_at)->diffInSeconds() > 180) {
+                    $oldquiz->deleted_at = date('Y-m-d h:i:s');
+                    $oldquiz->save();
+                }
+            }
+        }
         $data = new Attempt;
         $data->user_id = $request->user_id;
         $data->quiz_type_id = $quiz_type->id;
@@ -159,13 +176,12 @@ class DuelController extends Controller
         if (isset($challenge)) {
             if ($challenge->status == '0') {
                 if (carbon::now()->parse($challenge->created_at)->diffInSeconds() < 60) {
-                    return response()->json(['status' => 200, 'data'=>[], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
+                    return response()->json(['status' => 200, 'data' => [], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
                 }
             }
         }
-        if($challenge)
-        {
-                return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        if ($challenge) {
+            return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
         }
         // else
         // {
@@ -514,7 +530,8 @@ class DuelController extends Controller
         }
     }
 
-    public function dualdetails(Request $request){
+    public function dualdetails(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             // 'user_id' => 'required',
@@ -526,24 +543,23 @@ class DuelController extends Controller
         }
 
 
-        $data = Attempt::where('link',$request->dual_link)->first();
+        $data = Attempt::where('link', $request->dual_link)->first();
         if (empty($data)) {
             return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
         }
-         
-            $domain =  QuizDomain::where('attempts_id', $data->id)->first()->domain_id;
 
-            $domains = explode(',', $domain);
+        $domain =  QuizDomain::where('attempts_id', $data->id)->first()->domain_id;
 
-            $dual = [];
-            $dual['dual_id'] = $data->id;
-            $dual['domain'] = implode(',',Domain::whereIn('id', $domains)->pluck('name')->toArray());
-            $dual['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
-            $dual['difficulty'] = ucwords(strtolower($data->difficulty->name));
-            $dual['link'] = $data->link;
-            $dual['created_date'] = date('d-M-Y', strtotime($data->created_at));
+        $domains = explode(',', $domain);
 
-            return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
-        
+        $dual = [];
+        $dual['dual_id'] = $data->id;
+        $dual['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
+        $dual['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
+        $dual['difficulty'] = ucwords(strtolower($data->difficulty->name));
+        $dual['link'] = $data->link;
+        $dual['created_date'] = date('d-M-Y', strtotime($data->created_at));
+
+        return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
     }
 }
