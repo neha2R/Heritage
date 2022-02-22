@@ -73,7 +73,7 @@ class HomeController extends Controller
                 }
                 $response['contact'][] = $data;
             }
-
+$mydata=[];
             foreach ($duals as $dual) {
                 $user = User::where('id', $dual->from_user_id)->first();
                if($dual->status=='0'){
@@ -93,6 +93,7 @@ class HomeController extends Controller
                 $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
                 $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
                 $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
+           $mydata[] = $data;
             }
             if($dual->status == '1'){
                 if(Attempt::find($dual->attempt_id)){
@@ -105,11 +106,12 @@ class HomeController extends Controller
                 }
 
             }
-                $response['dual'][] = $data;
+                
               
 
             }
              $response['accept'] = $acceptdata;
+            $response['dual'] = $mydata;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
