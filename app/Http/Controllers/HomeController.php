@@ -76,6 +76,8 @@ class HomeController extends Controller
             }
             $mydata = [];
             foreach ($duals as $dual) {
+                if
+                (Attempt::find($dual->attempt_id)){
                 $check = Attempt::find($dual->attempt_id);
                 if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
@@ -99,6 +101,7 @@ class HomeController extends Controller
                         $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
                         $mydata[] = $data;
                     }
+                }
                 }
                 if ($dual->status == '1') {
                     $challange = Attempt::find($dual->attempt_id);
