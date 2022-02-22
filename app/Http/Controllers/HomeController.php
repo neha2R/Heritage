@@ -53,7 +53,9 @@ class HomeController extends Controller
 
         if (isset($user)) {
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
-            $duals = Challange::where('to_user_id', $request->user_id)->get();
+            $duals = Challange::where('to_user_id', $request->user_id)->where('status','0')->get();
+            $acceptinvitations = Challange::where('from_user_id', $request->user_id)->where('status','1')->get();
+
             $data = [];
             $acceptdata = [];
             $response = [];
@@ -82,7 +84,7 @@ class HomeController extends Controller
                 if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
                     $user = User::where('id', $dual->from_user_id)->first();
-                    if ($dual->status == '0') {
+                
                         $data['name'] = $user->name;
                         $data['id'] = $dual->id;
                         if (isset($user->profile_image)) {
@@ -102,16 +104,19 @@ class HomeController extends Controller
                         $mydata[] = $data;
                     }
                 }
-                }
-                if ($dual->status == '1') {
-                    $challange = Attempt::find($dual->attempt_id);
+                
+               
+                   
+                
+            }
+            foreach($acceptinvitations as $acceptinvitation){
+                $challange = Attempt::find($acceptinvitation->attempt_id);
 
-                    if (Attempt::find($dual->attempt_id)) {
-                        if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
+                if (Attempt::find($acceptinvitation->attempt_id)) {
+                    if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
-                            $accept['id'] = $dual->attempt_id;
-                            $acceptdata[] = $accept;
-                        }
+                        $accept['id'] = $acceptinvitation->attempt_id;
+                        $acceptdata[] = $accept;
                     }
                 }
             }

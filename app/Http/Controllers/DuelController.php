@@ -478,6 +478,7 @@ class DuelController extends Controller
                 $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
             }
         }
+        
         $quiz_rules = QuizRule::select('scoring', 'negative_marking', 'time_limit', 'no_of_players', 'hint_guide', 'que_navigation', 'more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
 
         if (empty($quiz_rules)) {
