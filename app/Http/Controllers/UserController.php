@@ -404,6 +404,11 @@ class UserController extends Controller
         {
               $data['first_name']=$user->name;
               $data['last_name']=$user->last_name;
+            if (isset($user->profile_image)) {
+                $data['image'] = url('/storage') . '/' . $user->profile_image;
+            } else {
+                $data['image'] = '';
+            }
               $data['email']=$user->email;
             $data['mobile'] = $user->mobile;
              $data['country']=$user->state_id!=""?\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name:'null';
