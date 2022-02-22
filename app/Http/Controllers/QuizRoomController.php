@@ -378,6 +378,7 @@ class QuizRoomController extends Controller
         $validator = Validator::make($request->all(), [
             'quiz_id' => 'required',
             'user_id' => 'required',
+            'quiz_answer'=>'required',
         ]);
 
         if ($validator->fails()) {
