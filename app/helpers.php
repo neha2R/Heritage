@@ -42,7 +42,7 @@ function sendNotification($data)
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
     $result = curl_exec($ch);
-    // dd($result);
+    //  dd($result);
     curl_close($ch);
     return true;
 }

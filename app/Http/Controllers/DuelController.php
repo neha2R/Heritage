@@ -40,7 +40,7 @@ class DuelController extends Controller
         $oldquizcheck = Attempt::where('user_id', $request->user_id)->where('quiz_type_id',2)->where('end_at', null)->latest()->first();
     
         if ($oldquizcheck) {
-            if (Carbon::now()->parse($oldquizcheck->created_at)->diffInSeconds() < 30) {
+            if (Carbon::now()->parse($oldquizcheck->created_at)->diffInSeconds() < 180) {
 
                 return response()->json(['status' => 201, 'message' => 'Wait for 180 sec', 'data' => array()]);
             }
@@ -252,7 +252,9 @@ class DuelController extends Controller
             return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
         }
         $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
-
+        if (carbon::now()->parse($attempt->created_at)->diffInSeconds() > 180) {
+            return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
+        }
         if (empty($challenge)) {
             $challenge = new Challange;
             $challenge->to_user_id = $req->user_id;
@@ -263,9 +265,7 @@ class DuelController extends Controller
             // return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
         }
 
-        if (carbon::now()->parse($challenge->created_at)->diffInSeconds() > 180) {
-            return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
-        } else {
+         
 
             if ($attempt->challange_id != "") {
                 return response()->json(['status' => 422, 'data' => '', 'message' => 'Someone has already accepted the request. try next time!']);
@@ -281,6 +281,7 @@ class DuelController extends Controller
                     'type' => 'dual',
                     'message' => User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now",
                 ];
+            sendNotification($data);
                 // Create new data for user who accepts the request
 
                 $acceptuser = new Attempt;
@@ -295,7 +296,7 @@ class DuelController extends Controller
                 $challenge->status = '1';
                 $challenge->save();
 
-                sendNotification($data);
+               
                 // Save notification
                 $savenoti = new FireBaseNotification;
                 $savenoti->user_id = $challenge->from_user->id;
@@ -309,7 +310,7 @@ class DuelController extends Controller
                 // $response['quiz_id'] = $acceptuser->id;
 
                 return response()->json(['status' => 200, 'data' => $acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
-            }
+            
         }
     }
     public function generate_link(Request $req)
@@ -490,7 +491,7 @@ class DuelController extends Controller
             }
         }
         
-        $quiz_rules = QuizRule::select('scoring', 'negative_marking', 'time_limit', 'no_of_players', 'hint_guide', 'que_navigation', 'more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
+        $quiz_rules = QuizRule::select('more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
 
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => []]);

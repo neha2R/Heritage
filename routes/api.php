@@ -188,3 +188,4 @@ Route::post('room_user', 'QuizRoomController@room_user');
 Route::post('delete_user_room', 'QuizRoomController@delete_user_room');
 Route::post('leaveroom', 'QuizRoomController@leaveroom');
 Route::post('save_room_result', 'QuizRoomController@save_room_result');
+Route::post('reject_room_invitation', 'QuizRoomController@reject_invitation');

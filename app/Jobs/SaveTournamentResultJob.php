@@ -39,7 +39,10 @@ class SaveTournamentResultJob implements ShouldQueue
         // TournamenetUser
         $tournament = Tournament::find($result['tournament_id']);
         $user = TournamenetUser::where('tournament_id',$result['tournament_id'])->where('session_id', $result['session_id'])->where('user_id', $result['user_id'])->orderBy('id','DESC')->first();
-       
+        if (empty($user)) {
+
+            return 'error';
+        }
         if($user->status=='completed'){
          $data=array('status'=>'success','per'=> $user->percentage );
           return  $data; 

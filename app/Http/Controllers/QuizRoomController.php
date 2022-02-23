@@ -434,4 +434,43 @@ class QuizRoomController extends Controller
             return response()->json(['status' => 202, 'message' => 'Quiz not found', 'data' => '']);
         }
     }
+
+    public function reject_invitation(Request $req)
+    {
+
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'room_link' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+
+        $attempt = Attempt::where('link', $req->room_link)->first();
+        if (empty($attempt)) {
+            return response()->json(['status' => 204, 'data' => [], 'message' => 'Sorry! Link has been expired. or not found']);
+        }
+        $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
+
+        if (empty($challenge)) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Sorry! No invitation']);
+        } else {
+            $challenge->deleted_at = date('Y-m-d h:i:s');
+            $challenge->save();
+
+
+            $data = [
+                'title' => 'Duel Invitation rejected.',
+                'token' => $challenge->from_user->token,
+                'link' => $attempt->link,
+                'type' => 'dual',
+                'message' => User::where('id', $req->user_id)->first()->name . " has been rejected the request",
+            ];
+            sendNotification($data);
+
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'Rejected succesfully']);
+        }
+    }
 }
