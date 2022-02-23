@@ -431,7 +431,7 @@ class DuelController extends Controller
 
 
 
-            return response()->json(['status' => 200, 'user_data' => $user, 'data' => $res, 'message' => 'Dual data']);
+            return response()->json(['status' => 200, 'user_data' => $user, 'result' => $res, 'message' => 'Dual data']);
         } else {
             return response()->json(['status' => 201, 'data' => '', 'message' => 'Quiz not find']);
         }
