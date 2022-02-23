@@ -384,7 +384,7 @@ class DuelController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+            return response()->json(['status' => 422,  'message' => $validator->errors()]);
         }
         // $data = Attempt::where('id',$request->dual_id)->where('user_id',$request->user_id)->first();
         $data = Attempt::where('id', $request->dual_id)->first();
@@ -433,7 +433,7 @@ class DuelController extends Controller
 
             return response()->json(['status' => 200, 'user_data' => $user, 'result' => $res, 'message' => 'Dual data']);
         } else {
-            return response()->json(['status' => 201, 'data' => '', 'message' => 'Quiz not find']);
+            return response()->json(['status' => 201,  'message' => 'Quiz not find']);
         }
     }
 
