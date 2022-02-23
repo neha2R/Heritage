@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>culture</title>
+    <title>cultre</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <style>
@@ -36,7 +36,7 @@
                     <img src="{{ asset('/assets/images/192.png')}}" class="img-fluid">
                 </div>
                 <div class="p-2">
-                    <h2>CULTURE</h2>
+                    <h2>CULTRE</h2>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 <div>
                     <h5 class=" ">Click here to Download Application</h5>
                 </div>
-                <div class="p-1"><a href="https://play.google.com/"><img src="{{ asset('/assets/images/apple_store.png')}}" class="img-fluid  "></a></div>
+                <div class="p-1"><a href="https://play.google.com/store/apps/details?id=com.heritageolympiad.quiz"><img src="{{ asset('/assets/images/apple_store.png')}}" class="img-fluid  "></a></div>
                 <div class="p-1"><a href="https://www.apple.com/in/app-store/"><img src="{{ asset('/assets/images/google-play.png')}}" class="img-fluid  "></a></div>
             </div>
         </div>
