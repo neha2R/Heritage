@@ -53,8 +53,8 @@ class HomeController extends Controller
 
         if (isset($user)) {
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
-            $duals = Challange::where('to_user_id', $request->user_id)->where('status','0')->get();
-            $acceptinvitations = Challange::where('from_user_id', $request->user_id)->where('status','1')->get();
+            $duals = Challange::where('to_user_id', $request->user_id)->where('status', '0')->get();
+            $acceptinvitations = Challange::where('from_user_id', $request->user_id)->where('status', '1')->get();
 
             $data = [];
             $acceptdata = [];
@@ -78,13 +78,12 @@ class HomeController extends Controller
             }
             $mydata = [];
             foreach ($duals as $dual) {
-                if
-                (Attempt::find($dual->attempt_id)){
-                $check = Attempt::find($dual->attempt_id);
-                if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
+                if (Attempt::find($dual->attempt_id)) {
+                    $check = Attempt::find($dual->attempt_id);
+                    if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
-                    $user = User::where('id', $dual->from_user_id)->first();
-                
+                        $user = User::where('id', $dual->from_user_id)->first();
+
                         $data['name'] = $user->name;
                         $data['id'] = $dual->id;
                         if (isset($user->profile_image)) {
@@ -104,12 +103,8 @@ class HomeController extends Controller
                         $mydata[] = $data;
                     }
                 }
-                
-               
-                   
-                
             }
-            foreach($acceptinvitations as $acceptinvitation){
+            foreach ($acceptinvitations as $acceptinvitation) {
                 $challange = Attempt::find($acceptinvitation->attempt_id);
 
                 if (Attempt::find($acceptinvitation->attempt_id)) {
@@ -128,7 +123,27 @@ class HomeController extends Controller
         }
     }
 
-    public function download($id){
+    public function download($id)
+    {
         return view('download');
+    }
+
+    public function link_details(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'link' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+          
+        $string = explode('/',$request->link);
+        $string = explode('#',$string['1']);
+
+        dd($string);
+        
+
     }
 }

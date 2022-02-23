@@ -307,7 +307,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-
+ $image=null;
         if($request->has('image'))
         {
             $file = $request->file('image');
@@ -315,11 +315,7 @@ class UserController extends Controller
             $patch = $file->store('images','public');
             $image = $patch;
         }
-        else
-        {
-            $image=$user->image;
-             
-        }
+        
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
         $user->name = $request->first_name;
@@ -330,7 +326,9 @@ class UserController extends Controller
         $user->state_id = $request->state_id;
         $user->city_id = $request->city_id;
         $user->profile_complete = '1';
-        $user->profile_image = $image;
+        if ($image != null) {
+            $user->profile_image = $image;
+        }
         $user->gender = $request->gender;
 
         $user->save();
@@ -406,7 +404,9 @@ class UserController extends Controller
               $data['last_name']=$user->last_name;
             if (isset($user->profile_image)) {
                 $data['image'] = url('/storage') . '/' . $user->profile_image;
-            } else {
+            } 
+            else
+             {
                 $data['image'] = '';
             }
               $data['email']=$user->email;

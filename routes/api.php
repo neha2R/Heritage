@@ -38,6 +38,7 @@ These are the auth routes
 Start from here
 */
 Route::post('dashboard', 'HomeController@dashboard');
+Route::post('link_details', 'HomeController@link_details');
 
 Route::post('createquiz', 'AttemptController@store');
 Route::get('domains', 'DomainController@domains');
