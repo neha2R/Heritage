@@ -136,13 +136,17 @@ class DuelController extends Controller
                 $allUsers['age_group'] = "";
             }
             if ($user->country) {
+                $allUsers['country'] = $user->country->country_name->name;
+
                 $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
             if (checkUser($user->id)) {
                 $allUsers['status'] = "Busy";
-            }else{
+            }
+            else
+            {
                 $allUsers['status'] = "Online";
             }
             
@@ -413,6 +417,7 @@ class DuelController extends Controller
             $user = [];
 
             $user['user_id'] = $user_data->user_id;
+            $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
             $user['percentage'] = $user_data->result;
             if (isset($user_data->user->profile_image)) {
@@ -423,6 +428,7 @@ class DuelController extends Controller
 
             $response = [];
             $response['user_id'] = $otheruser_data->user_id;
+            $response['name'] = $otheruser_data->user->name;
             $response['xp'] = $otheruser_data->xp;
             $response['percentage'] = $otheruser_data->result;
             if (isset($otheruser_data->user->profile_image)) {
