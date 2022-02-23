@@ -67,3 +67,6 @@ Route::get('/faqs', function(){
     $faqs=Faq::all();
     return view('faq',compact('faqs'));
 });
+Route::get('/cul.tre/{id}', 'HomeController@download');
+
+http://www.cultre.com/cul.tre/duel#80

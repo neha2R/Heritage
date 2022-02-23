@@ -19,6 +19,7 @@ use App\QuizRule;
 
 class DuelController extends Controller
 {
+           
     public function create_duel(Request $request)
     {
 
@@ -497,9 +498,9 @@ class DuelController extends Controller
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => []]);
         } else {
             // $data = json_decode($quiz_rules->more);
-            $quiz_rules->more = json_decode($quiz_rules->more);
-            $data = $quiz_rules->toArray();
-            $data = array_filter(array_values($data));
+             $quiz_rules->more = json_decode($quiz_rules->more);
+            $data = $quiz_rules->more;
+            // $data = array_filter(array_values($data));
             return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);
         }
     }

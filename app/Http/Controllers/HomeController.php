@@ -127,4 +127,8 @@ class HomeController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
         }
     }
+
+    public function download($id){
+        return view('download');
+    }
 }
