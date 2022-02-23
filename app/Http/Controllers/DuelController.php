@@ -140,7 +140,12 @@ class DuelController extends Controller
             } else {
                 $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
             }
-            $allUsers['status'] = "Online";
+            if (checkUser($user->id)) {
+                $allUsers['status'] = "Busy";
+            }else{
+                $allUsers['status'] = "Online";
+            }
+            
             if (Challange::where('attempt_id', $req->dual_id)->where('to_user_id', $user->id)->whereDate('created_at', carbon::now())->first()) {
                 $allUsers['request'] = "1";
             } else {
