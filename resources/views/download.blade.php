@@ -32,7 +32,7 @@
     <div class="m-5 shadow-lg col-sm-6 col-lg-4 col-md-6 h-75 py-5 bg-white radius">
         <div class="container-flex d-flex justify-content-center col-md-5 col-sm-4 col-lg-11 m-3 ">
             <div class="container">
-                <div class="container shadow col-lg-8 col-md-8 col-sm-6">
+                <div class="container  col-lg-8 col-md-8 col-sm-6">
                     <img src="{{ asset('/assets/images/192.png')}}" class="img-fluid">
                 </div>
                 <div class="p-2">
@@ -43,10 +43,10 @@
         <div class=" container d-flex justify-content-center  p-5">
             <div class="">
                 <div>
-                    <h5 class=" ">Click here to Download Application</h5>
+                    <h5 class="">Click here to Download Application</h5>
                 </div>
-                <div class="p-1"><a href="https://play.google.com/store/apps/details?id=com.heritageolympiad.quiz"><img src="{{ asset('/assets/images/apple_store.png')}}" class="img-fluid  "></a></div>
-                <div class="p-1"><a href="https://www.apple.com/in/app-store/"><img src="{{ asset('/assets/images/google-play.png')}}" class="img-fluid  "></a></div>
+                <div class="p-1"><a href="#"><img src="{{ asset('/assets/images/apple_store.png')}}" class="img-fluid  "></a></div>
+                <div class="p-1"><a href="https://play.google.com/store/apps/details?id=com.heritageolympiad.quiz"><img src="{{ asset('/assets/images/google-play.png')}}" class="img-fluid "></a></div>
             </div>
         </div>
     </div>
