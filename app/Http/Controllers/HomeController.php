@@ -59,22 +59,24 @@ class HomeController extends Controller
             $data = [];
             $acceptdata = [];
             $response = [];
+            $mycontacts = [];
             foreach ($contacts as $contact) {
                 $user = User::where('id', $contact->friend_one)->first();
-                $data['id'] = $contact->id;
-                $data['name'] = $user->name;
+                $mycontact['id'] = $contact->id;
+                $mycontact['name'] = $user->name;
 
                 if (isset($user->profile_image)) {
-                    $data['image'] = url('/storage') . '/' . $user->profile_image;
+                    $mycontact['image'] = url('/storage') . '/' . $user->profile_image;
                 } else {
-                    $data['image'] = '';
+                    $mycontact['image'] = '';
                 }
                 if (isset($user->refrence_code)) {
-                    $data['link'] = "cul.tre/invite#" . $user->refrence_code;
+                    $mycontact['link'] = "cul.tre/invite#" . $user->refrence_code;
                 } else {
-                    $data['link'] = "";
+                    $mycontact['link'] = "";
                 }
-                $response['contact'][] = $data;
+                $mycontacts[] = $mycontact;
+                
             }
             $mydata = [];
             foreach ($duals as $dual) {
@@ -117,6 +119,7 @@ class HomeController extends Controller
             }
             $response['accept'] = $acceptdata;
             $response['dual'] = $mydata;
+            $response['contact'] = $mycontacts;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
@@ -138,12 +141,12 @@ class HomeController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
-          
-        $string = explode('/',$request->link);
-        $string = explode('#',$string['1']);
+
+        $string = explode('/', $request->link);
+        $string = explode('#', $string['1']);
         $response = [];
-        
-        if($string['0']=='duel'){
+
+        if ($string['0'] == 'duel') {
             $data = Attempt::where('link', $request->link)->first();
             if (empty($data)) {
                 return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
@@ -152,7 +155,7 @@ class HomeController extends Controller
 
             $domains = explode(',', $domain);
 
-            
+
             $response['dual_id'] = $data->id;
             $response['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
             $response['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
@@ -161,18 +164,14 @@ class HomeController extends Controller
             $response['created_date'] = date('d-M-Y', strtotime($data->created_at));
             // $response['type'] = 'dual';
             return response()->json(['status' => 200, 'data' => $response, 'type' => 'duel', 'message' => 'Dual data']);
+        } else if ($string['0'] == 'invite') {
 
-        }
-        else if ($string['0'] == 'invite') {
-            
             $user = User::where('refrence_code', $string[1])->first();
-           
             if (!$user) {
                 return response()->json(['status' => 201, 'data' => [], 'message' => 'Link is not valid']);
             }
             $oldFriend = Contact::where('friend_one', $user->id)->where('friend_two', $request->user_id)->first();
-            if (isset($oldFriend) && $oldFriend->status == '1' ) 
-            {
+            if (isset($oldFriend) && $oldFriend->status == '1') {
                 return response()->json(['status' => 201, 'data' => [], 'message' => 'Friend already added']);
             }
             $data['id'] = $user->id;
@@ -183,20 +182,13 @@ class HomeController extends Controller
             } else {
                 $data['image'] = '';
             }
-           
+
             $data['link'] = $request->link;
-            
+
             $response = $data;
-            return response()->json(['status' => 200, 'data' => $response,'type'=> 'invite', 'message' => 'Contact data']);
-
-        }
-
-        else{
+            return response()->json(['status' => 200, 'data' => $response, 'type' => 'invite', 'message' => 'Contact data']);
+        } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Not a valid link']);
- 
         }
-        
-
-
     }
 }
