@@ -163,8 +163,8 @@ Route::post('invite_contact', 'ContactController@invite_contact');
 Route::post('accept_link_invitation', 'ContactController@accept_link_invitation');
 Route::post('add_friend', 'ContactController@add_friend');
 Route::post('unblockuser', 'ContactController@unblockUser');
-Route::post('check_friend','ContactController@check_friend');
-Route::post('reject_link_invitation','ContactController@reject_link_invitation');
+Route::post('check_friend', 'ContactController@check_friend');
+Route::post('reject_link_invitation', 'ContactController@reject_link_invitation');
 //========= Privacy API
 Route::get('privacy/{id}', 'PrivacyController@fetchPrivacy');
 Route::post('privacy', 'PrivacyController@save');
@@ -190,3 +190,6 @@ Route::post('delete_user_room', 'QuizRoomController@delete_user_room');
 Route::post('leaveroom', 'QuizRoomController@leaveroom');
 Route::post('save_room_result', 'QuizRoomController@save_room_result');
 Route::post('reject_room_invitation', 'QuizRoomController@reject_invitation');
+Route::post('get_room_result', 'QuizRoomController@get_room_result');
+
+Route::post('checkquiz', 'HomeController@checkquiz');

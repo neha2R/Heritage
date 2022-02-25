@@ -378,7 +378,7 @@ class QuizRoomController extends Controller
         $validator = Validator::make($request->all(), [
             'quiz_id' => 'required',
             'user_id' => 'required',
-            'quiz_answer'=>'required',
+            'quiz_answer' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -390,13 +390,12 @@ class QuizRoomController extends Controller
 
             if ($quiz->user_id != $request->user_id) {
                 // Check if user register with room
-                $user = Challange::where('attempt_id', $quiz->id)->where('to_user_id', $request->user_id)->where('status','1')->first();
-             if(empty($user)){
+                $user = Challange::where('attempt_id', $quiz->id)->where('to_user_id', $request->user_id)->where('status', '1')->first();
+                if (empty($user)) {
                     return response()->json(['status' => 201, 'data' => [], 'message' => 'Not a valid user']);
-  
-             }
-                $userquiz = Attempt::where('parent_id',$request->quiz_id)->where('user_id', $request->user_id)->first();
-            if(empty($userquiz)){
+                }
+                $userquiz = Attempt::where('parent_id', $request->quiz_id)->where('user_id', $request->user_id)->first();
+                if (empty($userquiz)) {
                     $userquiz = new Attempt;
                     $userquiz->user_id = $request->user_id;
                     $userquiz->parent_id = $quiz->id;
@@ -404,8 +403,7 @@ class QuizRoomController extends Controller
                     $userquiz->quiz_type_id = $quiz->quiz_type_id;
                     $userquiz->quiz_speed_id = $quiz->quiz_speed_id;
                     $userquiz->save();
-                   
-            }
+                }
                 $quiz = $userquiz;
             }
 
@@ -414,9 +412,8 @@ class QuizRoomController extends Controller
             if (empty($alreadysave)) {
 
                 $data = SaveQuizRoomResult::dispatchNow($request->all());
-            }
-            else{
-                $data = 'success'; 
+            } else {
+                $data = 'success';
             }
 
             if ($data == 'error') {
@@ -471,6 +468,62 @@ class QuizRoomController extends Controller
             sendNotification($data);
 
             return response()->json(['status' => 200, 'data' => [], 'message' => 'Rejected succesfully']);
+        }
+    }
+
+    public function get_room_result(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422,  'message' => $validator->errors()]);
+        }
+        $data = Attempt::where('id', $request->room_id)->first();
+        if (isset($data)) {
+            if ($data->user_id == $request->user_id) {
+                $user_data = $data;
+            } else {
+                $user_data =
+                    Attempt::where('parent_id', $request->room_id)->where('user_id', $request->user_id)->first();
+            }
+            $user = [];
+
+            $user['user_id'] = $user_data->user_id;
+            $user['name'] = $user_data->user->name;
+            $user['xp'] = $user_data->xp;
+            $user['percentage'] = $user_data->result;
+            if (isset($user_data->user->profile_image)) {
+                $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
+            } else {
+                $user['image']  = '';
+            }
+            $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+            if ($totalusers->count() < 3) {
+                return response()->json(['status' => 201,  'message' => 'waiting...']);
+            }
+            $res = [];
+            $i=1;
+            foreach ($totalusers as $totaluser) 
+            {
+                $other['user_id'] = $totaluser->user_id;
+                $other['name'] = $totaluser->user->name;
+                $other['rank'] = $i;
+                $other['xp'] = $totaluser->xp;
+                $other['percentage'] = $totaluser->result;
+                if (isset($totaluser->user->profile_image)) {
+                    $other['image']  = url('/storage') . '/' . $totaluser->user->profile_image;
+                } else {
+                    $other['image']  = '';
+                }
+                $res[] = $other;
+                $i++;
+            }
+            return response()->json(['status' => 200, 'user_data' => $user, 'result' => $res, 'message' => 'Quiz room data']);
+        } else {
+            return response()->json(['status' => 201,  'message' => 'Quiz not find']);
         }
     }
 }
