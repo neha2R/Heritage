@@ -203,7 +203,7 @@ class HomeController extends Controller
         }
 
         if($request->type=='duel'){
-            $data = Attempt::where('user_id', $request->user_id)->first();
+            $data = Attempt::where('user_id', $request->user_id)->latest()->first();
             if (empty($data)) {
                 return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
             }
