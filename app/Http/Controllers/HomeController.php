@@ -76,7 +76,6 @@ class HomeController extends Controller
                     $mycontact['link'] = "";
                 }
                 $mycontacts[] = $mycontact;
-                
             }
             $mydata = [];
             foreach ($duals as $dual) {
@@ -192,7 +191,8 @@ class HomeController extends Controller
         }
     }
 
-    public function checkquiz(Request $request){
+    public function checkquiz(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'type' => 'required',
@@ -202,8 +202,8 @@ class HomeController extends Controller
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
 
-        if($request->type=='duel'){
-            $data = Attempt::where('user_id', $request->user_id)->latest()->first();
+        if ($request->type == 'duel') {
+            $data = Attempt::where('user_id', $request->user_id)->where('end_at',null)->latest()->first();
             if (empty($data)) {
                 return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
             }
@@ -211,16 +211,12 @@ class HomeController extends Controller
                 if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
 
                     return response()->json(['status' => 200, 'message' => 'Link', 'data' => $data->link]);
-                }
-                else{
+                } else {
                     $data->deleted_at = date('Y-m-d h:i:s');
                     $data->save();
-                    return response()->json(['status' => 201, 'message' => 'Link expired create new..', 'data' =>array()]);
-
+                    return response()->json(['status' => 201, 'message' => 'Link expired create new..', 'data' => array()]);
                 }
             }
         }
-
-
     }
 }
