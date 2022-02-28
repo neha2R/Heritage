@@ -45,7 +45,7 @@ class QuestionController extends Controller
     {
         $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
         $domains = Domain::OrderBy('id', 'DESC')->get();
-        $sub_domains = Sundomain::OrderBy('id', 'DESC')->get();
+        $sub_domains = Subdomain::OrderBy('id', 'DESC')->get();
         $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->get();
 
         return view('question.add', compact('age_groups', 'domains'));

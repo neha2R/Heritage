@@ -64,7 +64,7 @@ class SaveQuizRoomResult implements ShouldQueue
         $total = 0;
         foreach ($ans as $key => $myperformance) {
             $saveperformance = new Performance;
-            $saveperformance->attempt_id = $respreformance['quiz_id'];
+            $saveperformance->attempt_id = $attempt->id;
             $saveperformance->selected_option = $myperformance;
             $saveperformance->question_id = $question[$key];
             $ques = Question::find($question[$key]);
