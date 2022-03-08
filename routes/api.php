@@ -193,3 +193,10 @@ Route::post('reject_room_invitation', 'QuizRoomController@reject_invitation');
 Route::post('get_room_result', 'QuizRoomController@get_room_result');
 
 Route::post('checkquiz', 'HomeController@checkquiz');
+
+
+// Chart and User data api
+Route::post('xpgainchart', 'ProfileController@xpgainchart');
+Route::post('badges', 'BadgeController@userbadges');
+Route::post('checkbadge', 'BadgeController@checkbadge');
+Route::post('goals', 'GoalController@setgoal');

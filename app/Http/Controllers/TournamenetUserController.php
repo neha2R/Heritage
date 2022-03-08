@@ -308,7 +308,7 @@ class TournamenetUserController extends Controller
       // get all user with comulative lp (sum of lp)
     //    $userTours = TournamenetUser::whereIn('tournament_id',$tournaments)->selectRaw("SUM(lp) as cu_lp,user_id")->groupBy('user_id')->whereMonth('created_at', date('m'))->pluck('cu_lp','user_id')->toArray();
 
-    $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->first();
+    $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->whereMonth('created_at', Carbon::now()->month)->first();
     //    arsort($userTours);
       $count1 = $userTours->cu_lp / $totallp;
         $count2 = $count1 * 100;
@@ -525,7 +525,7 @@ class TournamenetUserController extends Controller
       $totaltour = ($daily*$day)+($weekly*$week)+$month;
       $totallp = $totaltour* $totaltour;
 
-      $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->first();
+      $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id',$request->user_id)->whereMonth('created_at', Carbon::now()->month)->first();
       //    arsort($userTours);
       $your_leage = [];
       $other_league=[];

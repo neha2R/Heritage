@@ -7,9 +7,12 @@ use App\Product_images;
 use App\Product_categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Traits\NotificationToUser;
 
 class ProductController extends Controller
 {
+    use NotificationToUser;
+
     /**
      * Display a listing of the resource.
      *
@@ -77,6 +80,8 @@ class ProductController extends Controller
                 }
      
        }
+       // send new post notification
+        $this->NewProduct();
 
        return redirect()->back()->with('success',"You have created product successfully.");
     }

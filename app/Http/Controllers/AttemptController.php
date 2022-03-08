@@ -11,6 +11,7 @@ use App\QuestionsSetting;
 use App\QuizDomain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\QuizTheme;
 
 class AttemptController extends Controller
 {
@@ -65,6 +66,11 @@ class AttemptController extends Controller
         $domain->attempts_id = $data->id;
         $domain->domain_id = $request->domains;
         $domain->save();
+        $quiztheme = new QuizTheme;
+        $quiztheme->quiz_id = $data->id;
+        $quiztheme->user_id = $request->user_id;
+        $quiztheme->theme_id = $request->theme_id;
+        $quiztheme->save();
         // $rule = QuizRule::where('quiz_type_id', $request->quiz_type_id)->orWhere('quiz_speed_id', $request->quiz_speed_id)->first();
         // $data = $data->toArray();
         // if (!empty($rule)) {

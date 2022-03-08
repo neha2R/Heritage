@@ -38,33 +38,29 @@ class UserController extends Controller
 
         if ($request->is_social == 1) {
             $user = User::where('email', '=', request('email'))->first();
- 
-            
+
+
 
             if (Auth::loginUsingId($user->id)) {
                 $user = Auth::user();
 
-                
+
 
                 if ($user->profile_complete == 0) {
                     return response()->json(['status' => 202, 'message' => "Your profile is not completed", 'data' => ''], 200);
                 }
 
-                $age=carbon::now()->parse($user->dob)->age;
-            
-                if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-                {
-                     $group=$group->name;
-                }
-                else
-                {
-                    $group="N/A";
+                $age = carbon::now()->parse($user->dob)->age;
+
+                if ($group = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+                    $group = $group->name;
+                } else {
+                    $group = "N/A";
                 }
 
-                if($user->state_id!="")
-                {
-                    $country_name=$user->country->country_name->name;
-            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
+                if ($user->state_id != "") {
+                    $country_name = $user->country->country_name->name;
+                    $country_flag = url('/flags/' . strtolower($user->country->country_name->sortname) . ".png");
                 }
                 $token = $user->createToken($user->email)->plainTextToken;
                 // $token = $this->generateRandomString();
@@ -76,16 +72,18 @@ class UserController extends Controller
                 } else {
                     $user_avatar = "http://via.placeholder.com/50X50";
                 }
-                
-                return response()->json(['status' => 200,
+
+                return response()->json([
+                    'status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
                     'data' => $user,
                     'profile_complete' => $user->profile_complete,
-                    'age_group'=>ucwords(strtolower($group)),
-                    'country'=>$country_name,
-                    'flag'=>$country_flag,
-                    'avatar' => $user_avatar], 200);
+                    'age_group' => ucwords(strtolower($group)),
+                    'country' => $country_name,
+                    'flag' => $country_flag,
+                    'avatar' => $user_avatar
+                ], 200);
             } else {
 
                 return response()->json(['status' => 202, 'message' => "User not found.", 'data' => ''], 200);
@@ -95,42 +93,41 @@ class UserController extends Controller
                 $user = Auth::user();
                 $token = $user->createToken($user->email)->plainTextToken;
 
-                
+
 
                 if ($user->profile_complete == 0) {
-                    return response()->json(['status' => 202, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
-                        'data' => $user], 200);
+                    return response()->json([
+                        'status' => 202, 'message' => "Your profile is not completed", 'profile_complete' => '0', 'token' => $token,
+                        'data' => $user
+                    ], 200);
                 }
 
-                $age=carbon::now()->parse($user->dob)->age;
+                $age = carbon::now()->parse($user->dob)->age;
 
-                if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-                {
-                    $group=$group->name;
+                if ($group = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+                    $group = $group->name;
+                } else {
+                    $group = "N/A";
                 }
-                else
-                {
-                    $group="N/A";
+
+                if ($user->state_id != "") {
+                    $country_name = $user->country->country_name->name;
+                    $country_flag = url('/flags/' . strtolower($user->country->country_name->sortname) . ".png");
                 }
-                
-                if($user->state_id!="")
-                {
-                    $country_name=$user->country->country_name->name;
-                    $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
-                }
-                return response()->json(['status' => 200,
+                return response()->json([
+                    'status' => 200,
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
                     'profile_complete' => $user->profile_complete,
-                    'age_group'=>$group,
-                    'country'=>$country_name,
-                    'flag'=>$country_flag,
-                    'data' => $user], 200);
+                    'age_group' => $group,
+                    'country' => $country_name,
+                    'flag' => $country_flag,
+                    'data' => $user
+                ], 200);
             } else {
                 return response()->json(['status' => 202, 'message' => "Email or password is invalid.", 'data' => ''], 200);
             }
         }
-
     }
 
     public function register(Request $request)
@@ -150,7 +147,7 @@ class UserController extends Controller
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
 
         $user = User::find($request->user_id);
-        $user->name = $request->first_name ;
+        $user->name = $request->first_name;
         // $user->email = $request->email;
         $user->last_name = $request->last_name;
         $user->age = $age;
@@ -175,26 +172,23 @@ class UserController extends Controller
         // $user = $user->toArray();
 
 
-        $age=carbon::now()->parse($user->dob)->age;
-            
-        if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-        {
-             $group=$group->name;
-        }
-        else
-        {
-            $group="N/A";
+        $age = carbon::now()->parse($user->dob)->age;
+
+        if ($group = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+            $group = $group->name;
+        } else {
+            $group = "N/A";
         }
 
-        if($user->state_id!="")
-        {
-            $country_name=$user->country->country_name->name;
-            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
+        if ($user->state_id != "") {
+            $country_name = $user->country->country_name->name;
+            $country_flag = url('/flags/' . strtolower($user->country->country_name->sortname) . ".png");
         }
 
-        return response()->json(['status' => 200, 'profile_complete' => $user->profile_complete,
-            'message' => 'User updated successfully', 'data' => $user,'age_group'=>$group,'country'=>$country_name,'flag'=>$country_flag]);
-
+        return response()->json([
+            'status' => 200, 'profile_complete' => $user->profile_complete,
+            'message' => 'User updated successfully', 'data' => $user, 'age_group' => $group, 'country' => $country_name, 'flag' => $country_flag
+        ]);
     }
 
     public function stepone(Request $request)
@@ -220,7 +214,6 @@ class UserController extends Controller
         Mail::to($request->email)->send(new Setotp($otp));
 
         return response()->json(['status' => 200, 'message' => 'Please verify email', 'data' => $otp]);
-
     }
 
     public function email_verify(Request $request)
@@ -281,7 +274,7 @@ class UserController extends Controller
         $currentTime = $currentDateTime->toTimeString();
         $currentDate = $currentDateTime->toDateString();
 
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'currentTime' => $currentTime,'currentDate'=>$currentDate]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'currentTime' => $currentTime, 'currentDate' => $currentDate]);
     }
 
 
@@ -307,15 +300,14 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
- $image=null;
-        if($request->has('image'))
-        {
+        $image = null;
+        if ($request->has('image')) {
             $file = $request->file('image');
             // $format = $file->extension();
-            $patch = $file->store('images','public');
+            $patch = $file->store('images', 'public');
             $image = $patch;
         }
-        
+
 
         $age = date_diff(date_create($request->dob), date_create('today'))->y;
         $user->name = $request->first_name;
@@ -334,26 +326,22 @@ class UserController extends Controller
         $user->save();
 
 
-        $age=carbon::now()->parse($user->dob)->age;
-            
-        if($group=AgeGroup::where('from','<=',$age)->where('to','>=',$age)->first())
-        {
-             $group=$group->name;
-        }
-        else
-        {
-            $group="N/A";
+        $age = carbon::now()->parse($user->dob)->age;
+
+        if ($group = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+            $group = $group->name;
+        } else {
+            $group = "N/A";
         }
 
-        if($user->state_id!="")
-        {
-            $country_name=$user->country->country_name->name;
-            $country_flag=url('/flags/'.strtolower($user->country->country_name->sortname).".png");
+        if ($user->state_id != "") {
+            $country_name = $user->country->country_name->name;
+            $country_flag = url('/flags/' . strtolower($user->country->country_name->sortname) . ".png");
         }
 
-        return response()->json(['status' => 200, 'message' => 'Domain data', 'data'=>$user,'age_group'=>$group,'country'=>$country_name,'flag'=>$country_flag]);
+        return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $user, 'age_group' => $group, 'country' => $country_name, 'flag' => $country_flag]);
     }
-   
+
 
     public function change_password(Request $req)
     {
@@ -367,27 +355,22 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        $user=User::whereId($req->user_id)->first();
-        if($user)
-        {
+        $user = User::whereId($req->user_id)->first();
+        if ($user) {
             if (Hash::check($req->current_password, $user->password)) {
-                $user->password=bcrypt($req->new_password);
+                $user->password = bcrypt($req->new_password);
                 $user->save();
                 return response()->json(['status' => 200, 'data' => '', 'message' => "Your password has been updated successfully."]);
-            }
-            else
-            {
+            } else {
                 return response()->json(['status' => 422, 'data' => '', 'message' => "please check your current password."]);
             }
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 422, 'data' => '', 'message' => "No user found."]);
         }
     }
 
-     public function get_profile(Request $req)
-     {
+    public function get_profile(Request $req)
+    {
         $validator = Validator::make($req->all(), [
             'user_id' => 'required',
         ]);
@@ -396,53 +379,46 @@ class UserController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        $user=User::whereId($req->user_id)->first();
-        $data=[];
-        if($user)
-        {
-              $data['first_name']=$user->name;
-              $data['last_name']=$user->last_name;
+        $user = User::whereId($req->user_id)->first();
+        $data = [];
+        if ($user) {
+            $data['first_name'] = $user->name;
+            $data['last_name'] = $user->last_name;
             if (isset($user->profile_image)) {
                 $data['image'] = url('/storage') . '/' . $user->profile_image;
-            } 
-            else
-             {
+            } else {
                 $data['image'] = '';
             }
-              $data['email']=$user->email;
+            $data['email'] = $user->email;
             $data['mobile'] = $user->mobile;
-             $data['country']=$user->state_id!=""?\App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name:'null';
-              $data['country_id']=$user->state_id!=""?\App\State::whereId($user->state_id)->first()->country_id:'N/A';
-              $data['state']=$user->state_id!=""?\App\State::whereId($user->state_id)->first()->name:'Null';
-              $data['state_id']=$user->state_id;
-              $data['city']=$user->city_id!=""?\App\City::whereId($user->city_id)->first()->name:'N/A';
-              $data['city_id']=$user->city_id;
-              $data['gender']=$user->gender;
-              $data['dob']=date('d-m-Y',strtotime($user->dob));
-                
-                return response()->json(['status' => 200, 'data' => $data , 'message' => "User profile."]);
-            
-        }
-        else
-        {
+            $data['country'] = $user->state_id != "" ? \App\Country::whereId(\App\State::whereId($user->state_id)->first()->country_id)->first()->name : 'null';
+            $data['country_id'] = $user->state_id != "" ? \App\State::whereId($user->state_id)->first()->country_id : 'N/A';
+            $data['state'] = $user->state_id != "" ? \App\State::whereId($user->state_id)->first()->name : 'Null';
+            $data['state_id'] = $user->state_id;
+            $data['city'] = $user->city_id != "" ? \App\City::whereId($user->city_id)->first()->name : 'N/A';
+            $data['city_id'] = $user->city_id;
+            $data['gender'] = $user->gender;
+            $data['dob'] = date('d-m-Y', strtotime($user->dob));
+
+            return response()->json(['status' => 200, 'data' => $data, 'message' => "User profile."]);
+        } else {
             return response()->json(['status' => 422, 'data' => '', 'message' => "No user found."]);
         }
-     }
+    }
 
-     public function forgetPassword(Request $req)
+    public function forgetPassword(Request $req)
     {
-        
+
         $validator = Validator::make($req->all(), [
             'email' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-        }  
-        $users=User::where('email',$req->email)->first();
-       
-        if(!empty($users))
-        {
+        }
+        $users = User::where('email', $req->email)->first();
+
+        if (!empty($users)) {
             // if($user=ForgetPasswords::where('user_id',$req->id)->whereDate('created_at',carbon::now())->first())
             // {
             //     $user->changed="0";
@@ -451,71 +427,58 @@ class UserController extends Controller
             // }
             // else
             // {
-                $data=new ForgetPasswords;
-                $data->user_id=$users->id;
-                $data->save();
+            $data = new ForgetPasswords;
+            $data->user_id = $users->id;
+            $data->save();
             // }
-           
+
             // Mail::to($request->email)->send(new Setotp($otp));
 
             Mail::to($users->email)->send(new ForgetPassword($users));
             return response()->json(['status' => 200, 'data' => '', 'message' => "Change password link has been sent to your email. Please check your email!"]);
-        }
-        else
-        {
+        } else {
             return response()->json(['status' => 422, 'data' => '', 'message' => "No User Found."]);
         }
-        
     }
     public function change_passwords($id)
     {
         // $id=\Crypt::Decrypt($id);
-        $token=$id;
-        $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($id))->first();
-            if(empty($user))
-            {
-                return view('auth.passwords.not_found')->with('error','Your email link has been expired. please apply for change password again through application.');
-            }
-            else
-            {  
-                return view('auth.passwords.reset1',compact('token'));
-            }
-       
+        $token = $id;
+        $user = ForgetPasswords::where('user_id', \Crypt::Decrypt($id))->first();
+        if (empty($user)) {
+            return view('auth.passwords.not_found')->with('error', 'Your email link has been expired. please apply for change password again through application.');
+        } else {
+            return view('auth.passwords.reset1', compact('token'));
+        }
     }
     public function password_update(Request $req)
     {
 
-        if($req->password_confirmation!=$req->password)
-        {
-            return redirect()->back()->with('error','Your password doesnot match. Try again!');
-        }
-        else
-        {
-            $user=ForgetPasswords::where('user_id',\Crypt::Decrypt($req->token))->whereDate('created_at',carbon::now())->first();
-            if($user)
-            {
+        if ($req->password_confirmation != $req->password) {
+            return redirect()->back()->with('error', 'Your password doesnot match. Try again!');
+        } else {
+            $user = ForgetPasswords::where('user_id', \Crypt::Decrypt($req->token))->whereDate('created_at', carbon::now())->first();
+            if ($user) {
                 //    if($user->changed=='1')
                 //    {
                 //      return redirect()->back()->with('error','Your email link has been expired. please apply for change password again through application.');
-                         
+
                 //    }
                 //    else{
-                        $user->changed="1";
-                        $user->save();
-                     
-                        $data=User::whereId(\Crypt::Decrypt($req->token))->first();
-                        $data->password=$req->password;
-                        $data->save();
+                $user->changed = "1";
+                $user->save();
 
-                        $user->delete();
+                $data = User::whereId(\Crypt::Decrypt($req->token))->first();
+                $data->password = $req->password;
+                $data->save();
 
-                        return redirect('success')->with('success','Your password has been changed successfully thanks!');    
-                  // }
-                   
-            }
-            else
-            {
-                return redirect()->back()->with('error','Sorry change password link has been expired. Try again1!');
+                $user->delete();
+
+                return redirect('success')->with('success', 'Your password has been changed successfully thanks!');
+                // }
+
+            } else {
+                return redirect()->back()->with('error', 'Sorry change password link has been expired. Try again1!');
             }
         }
     }
@@ -529,30 +492,28 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-        }       
+        }
         $user = User::whereId($req->user_id)->first();
         if (!$user) {
             return response()->json(['status' => 422, 'data' => '', 'message' => 'No user found']);
         }
         if (!Hash::check($req->current_password, $user->password)) {
             return response()->json(['status' => 422, 'data' => '', 'message' => 'Sorry your current password is incorrect.']);
-        }
-        else
-        {
-            $user->password=bcrypt($req->new_password);
+        } else {
+            $user->password = bcrypt($req->new_password);
             $user->save();
             return response()->json(['status' => 200, 'data' => '', 'message' => "Successfully password has been changed."]);
         }
-        
     }
 
-     /** 
+    /** 
      * Busy a user
      *
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function busyUser(Request $request){
+    public function busyUser(Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
@@ -560,35 +521,34 @@ class UserController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-         $savedata = new CheckUserState;
-         $savedata->user_id = $request->user_id;
-         $savedata->save();
-         return response()->json(['status' => 200, 'data' => '', 'message' => 'User is busy']);
+        $savedata = new CheckUserState;
+        $savedata->user_id = $request->user_id;
+        $savedata->save();
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User is busy']);
+    }
 
-    } 
-
-     /** 
+    /** 
      * Delete a user from friend List // Free user
      *
      * @param  \App\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function freeUser(Request $request){
-     
+    public function freeUser(Request $request)
+    {
+
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-      $data = CheckUserState::where('user_id', $request->user_id)->get();
-       
-      if($data->count()>0){
-            $data->each->delete();
-            }
-        
-        return response()->json(['status' => 200, 'data' => '', 'message' => 'User is free']);
+        $data = CheckUserState::where('user_id', $request->user_id)->get();
 
+        if ($data->count() > 0) {
+            $data->each->delete();
+        }
+
+        return response()->json(['status' => 200, 'data' => '', 'message' => 'User is free']);
     }
 
     public function updatetoken(Request $request)
@@ -597,7 +557,7 @@ class UserController extends Controller
             'user_id' => 'required',
             'token' => 'required',
         ]);
-       
+
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
@@ -606,6 +566,5 @@ class UserController extends Controller
         $user->device_id = $request->device_type;
         $user->save();
         return response()->json(['status' => 200, 'data' => [], 'message' => 'Token updated succesfully..']);
-
     }
 }

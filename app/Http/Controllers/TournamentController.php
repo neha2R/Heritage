@@ -25,11 +25,14 @@ use App\TournamentSessionQuestion;
 use App\Jobs\AddSessionQuestionJob;
 use App\User;
 use App\TournamentRule;
+use App\Http\Traits\NotificationToUser;
 
 //use App\Frequency;
 
 class TournamentController extends Controller
 {
+    use NotificationToUser;
+
     /**
      * Display a listing of the resource.
      *
@@ -69,7 +72,9 @@ class TournamentController extends Controller
      */
     public function store(Request $request)
     {
-         // dd($request);
+
+       
+        //   dd($request);
         
         
         // add normal quize 
@@ -167,6 +172,7 @@ class TournamentController extends Controller
              }
             
             }
+            $this->NewTournament();
             // if($request->frequency_id=='1'){
 
             //     $starttime = date('H:i',strtotime($request->start_time));
@@ -179,6 +185,11 @@ class TournamentController extends Controller
             // }
             
             // 
+
+            // Send notification to user for new tournament
+
+            
+
             if($request->preference_questions == "1")
             {
                 return redirect()->route('tournament_add',['id'=>$newTournament->id]);

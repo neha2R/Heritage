@@ -14,9 +14,12 @@ use App\FeedCollection;
 use Illuminate\Support\Facades\Validator;
 use App\SaveFeed;
 use App\Jobs\FeedMediaUploadJob;
+use App\Http\Traits\NotificationToUser;
 
 class FeedContentController extends Controller
 {
+    use NotificationToUser;
+    
     /**
      * Display a listing of the resource.
      *
@@ -331,7 +334,9 @@ class FeedContentController extends Controller
             }
 
         }
-    
+        // send new post notification
+        $this->NewPost();
+
          if ($data->id) {
              return redirect('admin/feed-content')->with(['success' => 'Feed saved Successfully']);
          } else {

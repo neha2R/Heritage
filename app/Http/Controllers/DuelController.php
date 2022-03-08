@@ -16,7 +16,7 @@ use App\QuizType;
 use App\Domain;
 use App\FireBaseNotification;
 use App\QuizRule;
-
+use App\QuizTheme;
 class DuelController extends Controller
 {
            
@@ -71,6 +71,12 @@ class DuelController extends Controller
         $domain->attempts_id = $data->id;
         $domain->domain_id = $request->domains;
         $domain->save();
+
+        $quiztheme = new QuizTheme;
+        $quiztheme->quiz_id = $data->id;
+        $quiztheme->user_id = $request->user_id;
+        $quiztheme->theme_id = $request->theme_id;
+        $quiztheme->save();
 
         $dual = [];
         $dual['dual_id'] = $data->id;
