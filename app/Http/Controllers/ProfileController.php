@@ -23,7 +23,11 @@ class ProfileController extends Controller
         $data=[];
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         foreach ($months as $key => $month) {
-            $xp['xp'] = Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key + 1)->first()->xp;
+           $xp= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key + 1)->first()->xp;
+            if (!$xp) {
+                $xp = 0;
+            }
+           $xp['xp'] = $xp ;
             $xp['month'] = $month;
             
             $sum += $xp['xp'];
