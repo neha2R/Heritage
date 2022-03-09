@@ -31,7 +31,7 @@ class ProfileController extends Controller
             // Badges xp calculate
             $badgeids = UserBadge::where('user_id', $request->user_id)->whereMonth('created_at', $key)->pluck('badge_id')->toArray();
       
-            $xpofbadges = Badge::whereIn('id', $badgeids)->sum('no');
+            $xpofbadges = Badge::whereIn('id', $badgeids)->sum('xp');
 
            $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first()->xp;
             if ($xps == 0) {
