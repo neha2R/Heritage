@@ -25,7 +25,7 @@ class ProfileController extends Controller
         foreach ($months as $key => $month) {
            $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key + 1)->whereYear('created_at', date('Y'))->first()->xp;
             if ($xps == 0) {
-                $xps = 0;
+                $xps = "0";
             }
            
            $xp['xp'] = $xps ;
