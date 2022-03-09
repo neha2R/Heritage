@@ -30,7 +30,11 @@ class ProfileController extends Controller
             $data[] = $xp;
         }
         $data['totalxp'] = $sum;
-        $data['totalquiz'] =  Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->first()->totalquiz;
+        $totalquiz= Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->first()->totalquiz;
+        if(!$totalquiz){
+            $totalquiz=0;
+        }
+        $data['totalquiz'] = $totalquiz;
 
         return response()->json(['status' => 200, 'message' => 'xp', 'data' => $data]);
 

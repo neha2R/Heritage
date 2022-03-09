@@ -200,3 +200,5 @@ Route::post('xpgainchart', 'ProfileController@xpgainchart');
 Route::post('badges', 'BadgeController@userbadges');
 Route::post('checkbadge', 'BadgeController@checkbadge');
 Route::post('goals', 'GoalController@setgoal');
+Route::post('goalsummary', 'GoalController@goalsummary');
+Route::post('leaderboardranking', 'TournamenetUserController@leaderboardranking');
