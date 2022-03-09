@@ -23,7 +23,7 @@ class ProfileController extends Controller
         $data=[];
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
         foreach ($months as $key => $month) {
-           $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key + 1)->first()->xp;
+           $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key + 1)->whereYear('created_at', date('Y'))->first()->xp;
             if ($xps == 0) {
                 $xps = 0;
             }
@@ -32,7 +32,7 @@ class ProfileController extends Controller
             $xp['month'] = $month;
             
             $sum += $xp['xp'];
-            $data[] = $xp;
+            $data['mnth'][] = $xp;
         }
         $data['totalxp'] = $sum;
         $totalquiz= Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->first()->totalquiz;
