@@ -27,7 +27,7 @@ class BadgeController extends Controller
         $res = [];
         foreach ($badges as $badge) {
             $data['title']  = $badge->badgedata->title;
-            $data['image'] = url('/storage/badges') . '/' . $badge->badgedata->image;
+            $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
             $data['description'] = $badge->badgedata->description;
             $res[] = $data;
         }
@@ -59,7 +59,7 @@ class BadgeController extends Controller
                 $savebadge->save();
 
                 $data['title']  = $checkbadge->title;
-                $data['image'] = url('/storage/badges') . '/' . $checkbadge->image;
+                $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $checkbadge->image;
                 $data['description'] = $checkbadge->description;
             }
         }
@@ -94,7 +94,7 @@ class BadgeController extends Controller
                 $savebadge->save();
 
                 $data['title']  = $ih->title;
-                $data['image'] = url('/storage/badges') . '/' . $ih->image;
+                $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $ih->image;
                 $data['description'] = $ih->description;
             }
         }
@@ -108,7 +108,7 @@ class BadgeController extends Controller
                 $savebadge->save();
 
                 $data['title']  = $nh->title;
-                $data['image'] = url('/storage/badges') . '/' . $nh->image;
+                $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $nh->image;
                 $data['description'] = $nh->description;
             }
         }
@@ -122,14 +122,14 @@ class BadgeController extends Controller
                 $savebadge->save();
 
                 $data['title']  = $th->title;
-                $data['image'] = url('/storage/badges') . '/' . $th->image;
+                $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $th->image;
                 $data['description'] = $th->description;
             }
         }
         if($ifalready){
             $badge = Badge::find($ifalready->badge_id);
             $data['title']  = $badge->title;
-            $data['image'] = url('/storage/badges') . '/' . $badge->image;
+            $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->image;
             $data['description'] = $badge->description;  
         }
         return response()->json(['status' => 200, 'message' => 'Badge recived', 'data' => $data]);

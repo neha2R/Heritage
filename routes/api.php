@@ -202,3 +202,4 @@ Route::post('checkbadge', 'BadgeController@checkbadge');
 Route::post('goals', 'GoalController@setgoal');
 Route::post('goalsummary', 'GoalController@goalsummary');
 Route::post('leaderboardranking', 'TournamenetUserController@leaderboardranking');
+Route::post('user_profile', 'ProfileController@user_profile'); //  user and contact details on profile

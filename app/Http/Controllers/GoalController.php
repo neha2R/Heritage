@@ -51,6 +51,9 @@ class GoalController extends Controller
         $check = Goal::where('user_id', $request->user_id)->whereMonth('created_at', date('m'))
             ->whereYear('created_at', date('Y'))
             ->latest()->first();
+            if(!$check){
+        return response()->json(['status' => 201, 'message' => 'Please set goal', 'data' => []]);
+            }
         $totalquiz = 0;
            if($check->type=='daily'){
             $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first()->totalquiz;

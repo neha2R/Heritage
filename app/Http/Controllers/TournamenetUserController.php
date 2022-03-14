@@ -511,7 +511,7 @@ class TournamenetUserController extends Controller
         $week = Carbon::now()->weekOfMonth;
         $day =  Carbon::now()->day;
         $totaltour = ($daily * $day) + ($weekly * $week) + $month;
-        $totallp = $totaltour * $totaltour;
+        $totallp = $totaltour * 50; // Max 50 lp can be get by user in single tournament
 
         $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id', $request->user_id)->whereMonth('created_at', Carbon::now()->month)->first();
         //    arsort($userTours);
@@ -577,6 +577,7 @@ class TournamenetUserController extends Controller
 
     public function leaderboardranking(Request $request)
     {
+        
         // dd(date('m',strtotime('jan')));
 
         $validator = Validator::make($request->all(), [
@@ -594,6 +595,27 @@ class TournamenetUserController extends Controller
         } else {
             $month = date('m');
         }
+        $group = age_group_by_user($request->user_id);
+        $daily =0;
+        $weekly=0;
+        $month = 0;
+
+        for($i =1; $i<= date('t'); $i++){
+
+            $daily = Tournament::where('age_group_id', $group->id)->where('frequency_id', 1)->count();
+       if($i==1)
+       {
+                $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();
+            $month = Tournament::where('age_group_id', $group->id)->where('frequency_id', 3)->count();
+       }
+       if($i%7==1)
+       {
+                $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();  
+       }
+       $totallpperday = $daily+ $weekly+ $month*50;
+       $tournamentUsers = TournamenetUser::where('tournament_id', $request->tournament_id)->where('session_id', $request->session_id)->orderBy('rank', 'ASC')->where('status', 'completed')->whereDate('created_at', Carbon::today())->get();
+
+    }
         $rank = TournamenetUser::where('user_id', $request->user_id)->where('status', 'completed')
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', date('Y'))

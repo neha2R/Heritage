@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\UserBadge;
 use App\Badge;
+use App\User;
 class ProfileController extends Controller
 {
     public function xpgainchart(Request $request)
@@ -57,6 +58,10 @@ class ProfileController extends Controller
 
     }
 
+
+    public function user_profile(Request $request){
+
+    }
     
 
 }
