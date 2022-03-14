@@ -203,10 +203,15 @@ class HomeController extends Controller
         }
 
         if ($request->type == 'duel') {
-            $data = Attempt::where('user_id', $request->user_id)->where('end_at',null)->latest()->first();
-            if (empty($data)) {
-                return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
-            }
+            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 2)->where('end_at',null)->latest()->first();
+           
+        }
+        if ($request->type == 'quizroom') {
+            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id',3)->where('end_at', null)->latest()->first();
+        }
+        if (empty($data)) {
+            return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
+        }
             if ($data) {
                 if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
 
@@ -217,6 +222,6 @@ class HomeController extends Controller
                     return response()->json(['status' => 201, 'message' => 'Link expired create new..', 'data' => array()]);
                 }
             }
-        }
+       
     }
 }
