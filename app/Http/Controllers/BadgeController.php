@@ -49,6 +49,7 @@ class BadgeController extends Controller
         $checkbadge = Badge::where('no', $totalquiz)->where('type', 'quiz')->first();
 
         $data = [];
+        $ifalready='';
         if ($checkbadge) {
             $ifalready = UserBadge::where('badge_id', $checkbadge->id)->first();
            
