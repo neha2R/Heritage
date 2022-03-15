@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Traits;
+namespace App\Traits;
 
 use App\User;
 use App\Notification;

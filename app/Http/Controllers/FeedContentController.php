@@ -14,7 +14,7 @@ use App\FeedCollection;
 use Illuminate\Support\Facades\Validator;
 use App\SaveFeed;
 use App\Jobs\FeedMediaUploadJob;
-use App\Http\Traits\NotificationToUser;
+use App\Traits\NotificationToUser;
 
 class FeedContentController extends Controller
 {

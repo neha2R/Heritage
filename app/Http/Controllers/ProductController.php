@@ -7,7 +7,7 @@ use App\Product_images;
 use App\Product_categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Traits\NotificationToUser;
+use App\Traits\NotificationToUser;
 
 class ProductController extends Controller
 {

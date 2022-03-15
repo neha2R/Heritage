@@ -25,7 +25,7 @@ use App\TournamentSessionQuestion;
 use App\Jobs\AddSessionQuestionJob;
 use App\User;
 use App\TournamentRule;
-use App\Http\Traits\NotificationToUser;
+use App\Traits\NotificationToUser;
 
 //use App\Frequency;
 
