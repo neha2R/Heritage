@@ -60,7 +60,19 @@ class ProfileController extends Controller
 
 
     public function user_profile(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        if($request->contact_id){
+            
+        }
+        else{
+            
+        }
     }
     
 
