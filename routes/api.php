@@ -83,7 +83,9 @@ Route::post('filter_feed', 'FeedContentController@filter_feed');
 
 /**  Product APi Routes  Start from Here      */
 Route::get('get_all_products', 'ProductController@get_all_products');
-Route::get('product_search', 'ProductController@product_search');
+// Route::get('product_search', 'ProductController@product_search');
+Route::get('exp', 'ExperinceController@exp');
+
 /**  End from Here        */
 
 
