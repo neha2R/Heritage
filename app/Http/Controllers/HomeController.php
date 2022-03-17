@@ -60,6 +60,7 @@ class HomeController extends Controller
             $acceptdata = [];
             $response = [];
             $mycontacts = [];
+
             foreach ($contacts as $contact) {
                 $user = User::where('id', $contact->friend_one)->first();
                 $mycontact['id'] = $contact->id;
@@ -77,34 +78,55 @@ class HomeController extends Controller
                 }
                 $mycontacts[] = $mycontact;
             }
-            $mydata = [];
+            $dualquizdata = [];
+            $quizroomdata = [];
+
             foreach ($duals as $dual) {
+                $data=[];
                 if (Attempt::find($dual->attempt_id)) {
                     $check = Attempt::find($dual->attempt_id);
-                    if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
-
-                        $user = User::where('id', $dual->from_user_id)->first();
-
-                        $data['name'] = $user->name;
-                        $data['id'] = $dual->id;
-                        if (isset($user->profile_image)) {
-                            $data['image'] = url('/storage') . '/' . $user->profile_image;
-                        } else {
-                            $data['image'] = '';
-                        }
-                        $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
+                if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
+                    $type = $check->quiz_type_id;
+                    // $data['type'] = $type;
+                    if ($type == 2) {
                         $data['dual_id'] = $dual->attempt_id;
-                        $domain =  QuizDomain::where('attempts_id', $dual->attempt_id)->first()->domain_id;
-
-                        $dualdata = Attempt::find($dual->attempt_id);
-                        $domains = explode(',', $domain);
-                        $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
-                        $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
-                        $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
-                        $mydata[] = $data;
                     }
+                    if ($type == 3) {
+                        $data['quiz_room_id'] = $dual->attempt_id;
+                    }
+                    $user = User::where('id', $dual->from_user_id)->first();
+
+                    $data['name'] = $user->name;
+                    $data['id'] = $dual->id;
+                    if (isset($user->profile_image)) {
+                        $data['image'] = url('/storage') . '/' . $user->profile_image;
+                    } else {
+                        $data['image'] = '';
+                    }
+                    $data['link'] = Attempt::where('id', $dual->attempt_id)->first()->link;
+
+                    $domain =  QuizDomain::where('attempts_id', $dual->attempt_id)->first()->domain_id;
+
+                    $dualdata = Attempt::find($dual->attempt_id);
+                    $domains = explode(',', $domain);
+                    $data['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
+                    $data['quiz_speed'] = ucwords(strtolower($dualdata->quiz_speed->name));
+                    $data['difficulty'] = ucwords(strtolower($dualdata->difficulty->name));
+                    // for duel quiz
+                    if ($type == 2) {
+                        $dualquizdata[] = $data;
+                    }
+                    // For quiz room
+                    if ($type == 3) {
+                        $quizroomdata[] = $data;
+                    }
+
+                 }
+                    
                 }
             }
+
+
             foreach ($acceptinvitations as $acceptinvitation) {
                 $challange = Attempt::find($acceptinvitation->attempt_id);
 
@@ -117,7 +139,8 @@ class HomeController extends Controller
                 }
             }
             $response['accept'] = $acceptdata;
-            $response['dual'] = $mydata;
+            $response['dual'] = $dualquizdata;
+            $response['quizroom'] = $quizroomdata;
             $response['contact'] = $mycontacts;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
@@ -203,25 +226,23 @@ class HomeController extends Controller
         }
 
         if ($request->type == 'duel') {
-            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 2)->where('end_at',null)->latest()->first();
-           
+            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 2)->where('end_at', null)->latest()->first();
         }
         if ($request->type == 'quizroom') {
-            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id',3)->where('end_at', null)->latest()->first();
+            $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 3)->where('end_at', null)->latest()->first();
         }
         if (empty($data)) {
             return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
         }
-            if ($data) {
-                if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
+        if ($data) {
+            if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
 
-                    return response()->json(['status' => 200, 'message' => 'Link', 'data' => $data->link]);
-                } else {
-                    $data->deleted_at = date('Y-m-d h:i:s');
-                    $data->save();
-                    return response()->json(['status' => 201, 'message' => 'Link expired create new..', 'data' => array()]);
-                }
+                return response()->json(['status' => 200, 'message' => 'Link', 'data' => $data->link]);
+            } else {
+                $data->deleted_at = date('Y-m-d h:i:s');
+                $data->save();
+                return response()->json(['status' => 201, 'message' => 'Link expired create new..', 'data' => array()]);
             }
-       
+        }
     }
 }

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator;
 use App\UserBadge;
 use App\Badge;
 use App\User;
+use Carbon\Carbon;
+use App\AgeGroup;
+use App\Contact;
+
 class ProfileController extends Controller
 {
     public function xpgainchart(Request $request)
@@ -67,12 +71,73 @@ class ProfileController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+        $contactdata = array();
+        $userdata=[];
         if($request->contact_id){
-            
+           $contact= User::find($request->contact_id);
+            $age = Carbon::parse($contact->dob)->age;
+            $contactdata['id'] = $contact->id;
+            $contactdata['name'] = ucwords(strtolower($contact->name));
+
+            if ($ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+                $contactdata['age_group'] = ucwords(strtolower($ageGroup->name));
+            } else {
+                $contactdata['age_group'] = "";
+            }
+            if ($contact->country) {
+                $contactdata['country'] = $contact->country->country_name->name;
+                $contactdata['flag_icon'] = url('/flags') . '/' . strtolower($contact->country->country_name->sortname) . ".png";
+            } else {
+                $contactdata['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
+            }
+            $contactdata['status'] = "Online";
+            if (isset($contact->profile_image)) {
+                $contactdata['image'] = url('/storage') . '/' . $contact->profile_image;
+            } else {
+                $contactdata['image'] = '';
+            }
+
         }
-        else{
-            
+        $user = User::find($request->user_id);
+
+        $age = Carbon::parse($user->dob)->age;
+        $userdata['id'] = $user->id;
+        $userdata['name'] = ucwords(strtolower($user->name));
+
+        if ($ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+            $userdata['age_group'] = ucwords(strtolower($ageGroup->name));
+        } else {
+            $userdata['age_group'] = "";
         }
+        if ($user->country) {
+            $userdata['country'] = $user->country->country_name->name;
+            $userdata['flag_icon'] = url('/flags') . '/' . strtolower($user->country->country_name->sortname) . ".png";
+        } else {
+            $userdata['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
+        }
+        $userdata['status'] = "Online";
+
+        if (isset($user->profile_image)) {
+            $userdata['image'] = url('/storage') . '/' . $user->profile_image;
+        } else {
+            $userdata['image'] = '';
+        }
+        $is_friend = 0;
+        // Check if already friend or not
+        $oldFriend = Contact::where('friend_one', $request->user_id)->where('friend_two', $request->contact_id)->first();
+        if (!isset($oldFriend)) {
+            $oldFriend = Contact::where('friend_one', $request->contact_id)->where('friend_two', $request->user_id)->first();
+        }
+
+        if(isset($oldFriend)){
+            $is_friend = 1;  
+        }
+        $response['user'] = $userdata;
+        $response['contact'] =  $contactdata ? $contactdata :json_encode($contactdata, JSON_FORCE_OBJECT);
+        $response['is_friend'] = $is_friend;
+        
+        return response()->json(['status' => 200, 'message' => 'Profile data', 'data' => $response]);
+
     }
     
 
