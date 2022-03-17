@@ -232,7 +232,7 @@ class HomeController extends Controller
             $data = Attempt::where('user_id', $request->user_id)->where('quiz_type_id', 3)->where('end_at', null)->latest()->first();
         }
         if (empty($data)) {
-            return response()->json(['status' => 204, 'message' => 'Sorry! No active quiz found.']);
+            return response()->json(['status' => 204, 'data' => array(),'message' => 'Sorry! No active quiz found.']);
         }
         if ($data) {
             if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
