@@ -56,6 +56,24 @@ trait NotificationToUser {
         }
     }
 
+    public function Newexp()
+    {
+        $noti =  NotificationDetail::where(
+            'title',
+            'like',
+            '%New Experience%'
+        )->first();
+        $users =  NotificationSetting::where('notification_details_id', $noti->id)->get();
+        foreach ($users as $user) {
+            $userdata = User::find($user->user_id);
+
+            $data['title'] = 'New Experience';
+            $data['message'] = 'New Experience found ! Please hurry up';
+            $data['token'] = $userdata->token;
+            $this->sendNotification($data);
+        }
+    }
+    
     function sendNotification($data)
     {
         $msg = array(
@@ -94,5 +112,15 @@ trait NotificationToUser {
         //  dd($result);
         curl_close($ch);
         return true;
+    }
+
+    function startroom($users){
+        foreach ($users as $user) {
+            $userdata = User::find($user);
+            $data['title'] = 'Quiz room started';
+            $data['message'] = 'Started';
+            $data['token'] = $userdata->token;
+            $this->sendNotification($data);
+        }
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BadgeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -193,6 +194,8 @@ Route::post('leaveroom', 'QuizRoomController@leaveroom');
 Route::post('save_room_result', 'QuizRoomController@save_room_result');
 Route::post('reject_room_invitation', 'QuizRoomController@reject_invitation');
 Route::post('get_room_result', 'QuizRoomController@get_room_result');
+Route::post('room_status', 'QuizRoomController@room_status');
+Route::post('start_room', 'QuizRoomController@start_room');
 
 Route::post('checkquiz', 'HomeController@checkquiz');
 
@@ -205,3 +208,4 @@ Route::post('goals', 'GoalController@setgoal');
 Route::post('goalsummary', 'GoalController@goalsummary');
 Route::post('leaderboardranking', 'TournamenetUserController@leaderboardranking');
 Route::post('user_profile', 'ProfileController@user_profile'); //  user and contact details on profile
+Route::post('badges_details', 'BadgeController@badges_details');

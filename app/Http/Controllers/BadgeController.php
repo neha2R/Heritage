@@ -136,4 +136,34 @@ class BadgeController extends Controller
         return response()->json(['status' => 200, 'message' => 'Badge recived', 'data' => $data]);
 
     }
+
+
+    public function badges_details(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'badges_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $badges =  UserBadge::where('user_id', $request->user_id)->get();
+        $res = [];
+        foreach ($badges as $badge) {
+            $data['title']  = $badge->badgedata->title;
+            $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
+            $data['description'] = $badge->badgedata->description;
+          if($badge->badge_id==$request->badges_id){
+            $data['won'] = '1';
+            $data['message']='You won this badge on '.date('d-m-Y',strtotime($badge->created_at));
+          }else{
+              $data['won']='0';
+            $data['message']='You haven`t won this badge ! ';
+
+          }
+            $res[] = $data;
+        }
+        return response()->json(['status' => 200, 'message' => 'Badge data', 'data' => $res]);
+
+    }
 }

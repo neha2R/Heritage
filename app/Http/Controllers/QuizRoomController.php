@@ -18,9 +18,12 @@ use App\QuizRule;
 use Carbon\Carbon;
 use App\Jobs\SaveQuizRoomResult;
 use App\Performance;
+use App\Traits\NotificationToUser;
 
 class QuizRoomController extends Controller
 {
+    use NotificationToUser;
+
     //
 
     public function create_quiz_room(Request $request)
@@ -313,6 +316,9 @@ class QuizRoomController extends Controller
         $userids = Challange::where('attempt_id', $attempt->id)->where('status', '1')->pluck('to_user_id')->toArray();
         $users = User::whereIn('id', $userids)->get();
         $data = [];
+
+
+        // All user who accept invitation
         foreach ($users as $user) {
             $age = Carbon::parse($user->dob)->age;
             $allUsers['id'] = $user->id;
@@ -338,7 +344,32 @@ class QuizRoomController extends Controller
             $data[] = $allUsers;
         }
 
-        return response()->json(['status' => 200, 'data' => $data, 'message' => 'Quiz room users list']);
+        // user who creates quizroom
+        $creator = User::find($attempt->user_id);
+        $age = Carbon::parse($creator->dob)->age;
+        $allUsers['id'] = $creator->id;
+        $allUsers['name'] = ucwords(strtolower($creator->name));
+
+        if ($ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first()) {
+            $allUsers['age_group'] = ucwords(strtolower($ageGroup->name));
+        } else {
+            $allUsers['age_group'] = "";
+        }
+        if ($creator->country) {
+            $allUsers['country'] = $creator->country->country_name->name;
+            $allUsers['flag_icon'] = url('/flags') . '/' . strtolower($creator->country->country_name->sortname) . ".png";
+        } else {
+            $allUsers['flag_icon'] = url('/flags/') . strtolower('in') . ".png";
+        }
+        $allUsers['status'] = "Online";
+        if (isset($creator->profile_image)) {
+            $allUsers['image'] = url('/storage') . '/' . $creator->profile_image;
+        } else {
+            $allUsers['image'] = '';
+        }
+
+        $data[] = $allUsers;
+        return response()->json(['status' => 200,'creator_id'=> $creator->id, 'data' => $data, 'message' => 'Quiz room users list']);
     }
 
 
@@ -554,5 +585,51 @@ class QuizRoomController extends Controller
         } else {
             return response()->json(['status' => 201,  'message' => 'Quiz not find']);
         }
+    }
+
+    public function room_status(Request $request){
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422,  'message' => $validator->errors()]);
+        }
+        $data = Attempt::where('id', $request->room_id)->first();
+        if($data){
+            if($data->started_at){
+                return response()->json(['status' => 200,  'message' => 'Quiz started..']);
+
+            }else{
+            return response()->json(['status' => 201,  'message' => 'Quiz not started yet']);
+            }
+        }else{
+            return response()->json(['status' => 201,  'message' => 'Quiz room not find']);
+   
+        }
+    }
+
+    public function start_room(Request $request){
+        $validator = Validator::make($request->all(), [
+            'room_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422,  'message' => $validator->errors()]);
+        }
+        $data = Attempt::where('id', $request->room_id)->first();
+        if($data){
+            $userids = Challange::where('attempt_id', $data->id)->where('status', '1')->pluck('to_user_id')->toArray();
+            $users = User::whereIn('id', $userids)->get();
+            $this->startroom($users);
+          $data->started_at = date('Y-m-d');
+          $data->save();
+        return response()->json(['status' => 200,  'message' => 'Quiz started succesfully']);
+
+        }else{
+            return response()->json(['status' => 201,  'message' => 'Quiz room not find']);
+ 
+        }
+
     }
 }

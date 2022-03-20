@@ -12,6 +12,8 @@ use App\User;
 use Carbon\Carbon;
 use App\AgeGroup;
 use App\Contact;
+use App\League;
+use App\UserLeagueWithPer;
 
 class ProfileController extends Controller
 {
@@ -132,9 +134,22 @@ class ProfileController extends Controller
         if(isset($oldFriend)){
             $is_friend = 1;  
         }
+
+        // League of a user
+        $userleague = UserLeagueWithPer::where('user_id', $request->user_id)->first();
+
+        if (empty($userleague)) {
+            $your_leage['league_id'] = 5;
+            $your_leage['league_name'] = 'Initiate';
+        } else {
+            $your_leage['league_id'] = $userleague->league_id;
+            $your_leage['league_name'] = League::find($userleague->league_id)->title;
+        }
+
         $response['user'] = $userdata;
         $response['contact'] =  $contactdata ? $contactdata :json_encode($contactdata, JSON_FORCE_OBJECT);
         $response['is_friend'] = $is_friend;
+        $response['your_league'] = $your_leage;
         
         return response()->json(['status' => 200, 'message' => 'Profile data', 'data' => $response]);
 

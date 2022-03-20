@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Experince;
 use Illuminate\Http\Request;
 use App\ExperinceImage;
+use App\Traits\NotificationToUser;
 
 class ExperinceController extends Controller
 {
+    use NotificationToUser;
+
     /**
      * Display a listing of the resource.
      *
@@ -64,7 +67,8 @@ class ExperinceController extends Controller
                 $image->save();
             }
         }
-
+        // send new post notification
+        $this->Newexp();
         return redirect()->back()->with('success', "You have created experince successfully.");
 
     }
