@@ -39,7 +39,9 @@ class UserController extends Controller
         if ($request->is_social == 1) {
             $user = User::where('email', '=', request('email'))->first();
 
-
+            if ($user->password != null) {
+                return response()->json(['status' => 202, 'message' => "Email is invalid.", 'data' => ''], 200);
+            }
 
             if (Auth::loginUsingId($user->id)) {
                 $user = Auth::user();

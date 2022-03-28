@@ -630,7 +630,7 @@ class TournamenetUserController extends Controller
     }
 //    dd($monthdata);
     foreach($monthdata as $key=>$data){
-          $rank[$key]=  array_search($request->user_id, array_keys($data)) ? array_search($request->user_id, array_keys($data))+1 :0; // array index start from zero so +1
+          $rank[]=  array_search($request->user_id, array_keys($data)) ? array_search($request->user_id, array_keys($data))+1 :0; // array index start from zero so +1
 
     }
    
