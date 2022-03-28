@@ -148,22 +148,30 @@ class BadgeController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-        $badges =  UserBadge::where('user_id', $request->user_id)->get();
-        $res = [];
-        foreach ($badges as $badge) {
-            $data['title']  = $badge->badgedata->title;
-            $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
-            $data['description'] = $badge->badgedata->description;
-          if($badge->badge_id==$request->badges_id){
+        $userbadge =  UserBadge::where('user_id', $request->user_id)->where('badge_id',$request->badges_id)->first();
+        $badge = Badge::where('id', $request->badges_id)->first();
+         $res = [];
+        $res= json_encode($res, JSON_FORCE_OBJECT);
+         if(!isset($badge)){
+        return response()->json(['status' => 200, 'message' => 'Badge not found', 'data' => $res]);
+         }
+        // foreach ($badges as $badge) {
+            $data['title']  = $badge->title;
+            $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->image;
+            $data['description'] = $badge->description;
+            if(isset($userbadge->badge_id)){
+          if($userbadge->badge_id==$request->badges_id){
             $data['won'] = '1';
-            $data['message']='You won this badge on '.date('d-m-Y',strtotime($badge->created_at));
-          }else{
+            $data['message']='You won this badge on '.date('d-m-Y',strtotime($userbadge->created_at));
+          
+        }
+      }else{
               $data['won']='0';
             $data['message']='You haven`t won this badge ! ';
 
           }
-            $res[] = $data;
-        }
+             $res = $data;
+        // }
         return response()->json(['status' => 200, 'message' => 'Badge data', 'data' => $res]);
 
     }
