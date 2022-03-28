@@ -18,6 +18,7 @@ class GoalController extends Controller
             'type' => 'required',
             'no' => 'required',
         ]);
+        $data = [];
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
@@ -25,7 +26,8 @@ class GoalController extends Controller
         ->whereYear('created_at', date('Y'))
         ->latest()->first();
         if($ifset){
-            return response()->json(['status' => 201, 'message' => 'Goal already set for current month', 'data' => []]);
+            $data = json_encode($data, JSON_FORCE_OBJECT);
+            return response()->json(['status' => 201, 'message' => 'Goal already set for current month', 'data' => $data]);
 
         }
         else
