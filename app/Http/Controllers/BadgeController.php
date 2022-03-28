@@ -29,6 +29,7 @@ class BadgeController extends Controller
             $data['title']  = $badge->badgedata->title;
             $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
             $data['description'] = $badge->badgedata->description;
+            $data['id']  = $badge->badgedata->id;
             $res[] = $data;
         }
         return response()->json(['status' => 200, 'message' => 'Badge data', 'data' => $res]);

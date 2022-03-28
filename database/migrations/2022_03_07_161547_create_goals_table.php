@@ -16,7 +16,7 @@ class CreateGoalsTable extends Migration
         Schema::create('goals', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
-            $table->enum('type', ['daily', 'weekely','monthly'])->nullable();
+            $table->enum('type', ['daily', 'weekly','monthly'])->nullable();
             $table->integer('no')->nullable();
             $table->timestamps();
         });

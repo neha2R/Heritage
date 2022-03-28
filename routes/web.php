@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Faq;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,4 +71,4 @@ Route::get('/faqs', function(){
 });
 Route::get('/cul.tre/{id}', 'HomeController@download');
 
-http://www.cultre.com/cul.tre/duel#80
+// http://www.cultre.com/cul.tre/duel#80

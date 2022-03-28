@@ -59,7 +59,7 @@ class GoalController extends Controller
             $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first()->totalquiz;
 
            }
-        if ($check->type == 'weekely') {
+        if ($check->type == 'weekly') {
             $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->first()->totalquiz;
 
         }
@@ -70,6 +70,7 @@ class GoalController extends Controller
         }
         $data['total'] = $check->no;
         $data['play'] = $totalquiz;
+        $data['type'] = $check->type;
         return response()->json(['status' => 200, 'message' => 'Goal set succesfully', 'data' => $data]);
 
     }
