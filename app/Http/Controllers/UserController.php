@@ -52,9 +52,9 @@ class UserController extends Controller
                 $user->save();
 
            }
-            if ($user->password != null) {
-                return response()->json(['status' => 202, 'message' => "Email is invalid.", 'data' => '']);
-            }
+            // if ($user->password != null) {
+            //     return response()->json(['status' => 202, 'message' => "Email is invalid.", 'data' => '']);
+            // }
 
             if (Auth::loginUsingId($user->id)) {
                 $user = Auth::user();
@@ -101,8 +101,9 @@ class UserController extends Controller
                     'avatar' => $user_avatar
                 ], 200);
             } else {
-
-                return response()->json(['status' => 202, 'message' => "User not found.", 'data' => ''], 200);
+                $data = [];
+                $data = json_encode($data, JSON_FORCE_OBJECT);
+                return response()->json(['status' => 202, 'message' => "User not found.", 'data' => $data]);
             }
         } else {
             if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
