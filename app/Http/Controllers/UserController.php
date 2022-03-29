@@ -37,10 +37,21 @@ class UserController extends Controller
     {
 
         if ($request->is_social == 1) {
+           
             $user = User::where('email', '=', request('email'))->first();
-            if (!$user) {
-            return response()->json(['status' => 202, 'message' => "Email or password is invalid.", 'data' => '']);
-            }
+            $data=[];
+            $data = json_encode($data, JSON_FORCE_OBJECT);
+            if(empty($user)){
+                $user = new User;
+                $user->name = '';
+                $user->email = $request->email;
+                // $userdata->password = $user->password;
+                // $userdata->username = $user->username;
+                 $user->is_social = '1';
+                $user->email_verified_at = date('Y-m-d H:i:s');
+                $user->save();
+
+           }
             if ($user->password != null) {
                 return response()->json(['status' => 202, 'message' => "Email is invalid.", 'data' => '']);
             }
@@ -51,7 +62,7 @@ class UserController extends Controller
 
 
                 if ($user->profile_complete == 0) {
-                    return response()->json(['status' => 202, 'message' => "Your profile is not completed", 'data' => ''], 200);
+                    return response()->json(['status' => 200, 'user_id' => $user->id, 'profile_complete' => '0', 'message' => "Your profile is not completed", 'data' => $data]);
                 }
 
                 $age = carbon::now()->parse($user->dob)->age;
@@ -82,6 +93,7 @@ class UserController extends Controller
                     'message' => "Authenticated Successfully.",
                     'token' => $token,
                     'data' => $user,
+                    'user_id' => $user->id,
                     'profile_complete' => $user->profile_complete,
                     'age_group' => ucwords(strtolower($group)),
                     'country' => $country_name,
@@ -124,6 +136,7 @@ class UserController extends Controller
                     'token' => $token,
                     'profile_complete' => $user->profile_complete,
                     'age_group' => $group,
+                    'user_id' => $user->id,
                     'country' => $country_name,
                     'flag' => $country_flag,
                     'data' => $user
