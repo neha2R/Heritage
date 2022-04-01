@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\TournamentRule;
 use Illuminate\Http\Request;
-
+use App\Tournament;
 class TournamentRuleController extends Controller
 {
     /**
@@ -14,7 +14,8 @@ class TournamentRuleController extends Controller
      */
     public function index()
     {
-       $quizRules = TournamentRule::all();
+       $quizRules = TournamentRule::where('default', 0)->get();
+
         return view('quiz_rules.list', compact('quizType'));
 
     }
@@ -49,9 +50,9 @@ class TournamentRuleController extends Controller
         $data->save();
 
         if ($data->id) {
-            return redirect()->back()->with(['success' => 'Tournament Rule saved Successfully', 'model' => 'model show']);
+            return redirect()->route('tournament.index')->with(['success' => 'Tournament Rule saved Successfully', 'model' => 'model show']);
         } else {
-            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+            return redirect()->route('tournament.index')->with(['error' => 'Something Went Wrong Try Again Later']);
         }
     }
 
@@ -86,7 +87,22 @@ class TournamentRuleController extends Controller
      */
     public function update(Request $request, TournamentRule $tournamentRule)
     {
-        //
+        $validatedData = $request->validate([
+            'details' => 'required|array|min:1',
+            // 'more' => 'required',
+        ]);
+
+        $data =  TournamentRule::where('default',1)->first();
+        // $data->tournament_id = $request->tournament_id;
+        $data->details = json_encode($request->details);
+        $data->default = 1;
+        $data->save();
+
+        if ($data->id) {
+            return redirect()->back()->with(['success' => 'Tournament Rule saved Successfully', 'model' => 'model show']);
+        } else {
+            return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
+        }
     }
 
     /**
@@ -98,5 +114,16 @@ class TournamentRuleController extends Controller
     public function destroy(TournamentRule $tournamentRule)
     {
         //
+    }
+
+    public function addrule(Request $req){
+        $id = $req->id;
+        $quizRules = TournamentRule::where('tournament_id',$id)->first();
+        $tournament = Tournament::find($id);
+       if($tournament==null){
+            return redirect()->route('tournament.index');
+
+       }
+        return view('tournament_rules.index', compact('quizRules', 'tournament'));
     }
 }

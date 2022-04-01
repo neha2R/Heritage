@@ -60,6 +60,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/add_media','FeedContentController@add_media')->name('add_media');
     Route::post('/add_feed_media','FeedContentController@add_feed_media')->name('add_feed_media');
     Route::resource('/tourrule', 'TournamentRuleController');
+    Route::get('addrule', 'TournamentRuleController@addrule')->name('addrule');
 
 });
 // Auth::routes();

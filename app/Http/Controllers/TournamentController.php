@@ -50,8 +50,9 @@ class TournamentController extends Controller
         $domains = Domain::OrderBy('id','DESC')->get();
         $subDomains = Subdomain::OrderBy('id','DESC')->get();
         $frequencies = Frequency::get();
-       
-        return view('tournament.list', compact('tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
+        $defrule =  TournamentRule::where('default', 1)->first();
+
+        return view('tournament.list', compact('defrule','tournaments','age_groups','difficulty_levels','themes','domains','subDomains','frequencies'));
     }
 
     /**
@@ -192,7 +193,7 @@ class TournamentController extends Controller
 
             if($request->preference_questions == "1")
             {
-                return redirect()->route('tournament_add',['id'=>$newTournament->id]);
+                return redirect()->route('tournament_add',['id'=>$newTournament->id,'rule'=>$request->rule]);
             
             }
             else if ($request->preference_questions == "0")
@@ -206,6 +207,9 @@ class TournamentController extends Controller
                 $newQuizeQuestions->question_type = '0';
                 $newQuizeQuestions->save();
                // dd($tournament_questions);
+               if($request->rule=='1'){
+                    return redirect()->route('addrule', ['id' => $newTournament->id]); 
+               }
                return redirect()->route('tournament.index');
 
             }
@@ -424,11 +428,14 @@ class TournamentController extends Controller
             //     $secondSession->duration = $request->duration;
             //     $secondSession->save();
             // }
-            
+            if($request->rule=='0'){
+                $rule = TournamentRule::where('tournament_id', $updateTournament->id)->first();
+                 $rule->delete();
+            }
              return redirect()->route('tournament.index');
             if($request->preference_questions == "1")
             {
-                return redirect()->route('tournament_add',['id'=>$newTournament->id]);
+                return redirect()->route('tournament_add',['id'=> $updateTournament->id]);
             
             }
             else if ($request->preference_questions == "0")
@@ -437,7 +444,7 @@ class TournamentController extends Controller
                 
                 $newQuizeQuestions = new TournamentQuizeQuestion;
                 $newQuizeQuestions->questions_id = json_encode($tournament_questions);
-                $newQuizeQuestions->tournament_id  = $newTournament->id;
+                $newQuizeQuestions->tournament_id  = $updateTournament->id;
                 $newQuizeQuestions->total_no_question = count($tournament_questions);
                 $newQuizeQuestions->save();
                // dd($tournament_questions);
@@ -513,7 +520,12 @@ class TournamentController extends Controller
           
           $tournament=Tournament::where('id',$req->id)->first();
           $questions=QuestionsSetting::with('domain')->with('question')->where('domain_id',$tournament->domain_id)->get();
-          return view('tournament.create_tournament',compact('questions','tournament'));
+          if($req->rule=='1'){
+              $rule = '1';
+          }else{
+           $rule='0';
+          }
+          return view('tournament.create_tournament',compact('questions','tournament','rule'));
     }
 
     public function tournament_question_store(Request $req)
@@ -525,7 +537,10 @@ class TournamentController extends Controller
         $newQuizeQuestions->question_type = '1';
 
         $newQuizeQuestions->save();
+        if($req->rule=='1'){
+            return redirect()->route('addrule', ['id' => $req->tournament_id]); 
 
+        }
         return redirect()->route('tournament.index');
        // dd(json_encode($req->questions_id));
     }
@@ -710,7 +725,11 @@ if(empty($mytournamnet)){
         $savetournament->save();
         }
 
-        $quiz_rules = TournamentRule::where('tournament_id',$request->tournament_id);
+        $quiz_rules = TournamentRule::where('tournament_id',$request->tournament_id)->first();
+        if(!isset($quiz_rules)){
+            $quiz_rules = TournamentRule::where('default', 1)->first();
+
+        }
         $data = json_decode($quiz_rules->details);
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => '']);

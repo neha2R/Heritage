@@ -39,6 +39,9 @@ class Tournament extends Model
         return $this->hasOne('App\Frequency', 'id','frequency_id');
     }
 
-    
+    public function rule()
+    {
+        return $this->hasOne('App\TournamentRule', 'tournament_id', 'id');
+    }
     
 }
