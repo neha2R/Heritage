@@ -30,7 +30,7 @@ class Setotp extends Mailable
     public function build()
     {
         // return $this->view('view.name');
-        return $this->from('prince.aadil@neologicx.com', 'Verify OTP')
+        return $this->from('admin@cultre.in', 'Verify OTP')
             ->markdown('emails.verifyotp');
     }
 }
