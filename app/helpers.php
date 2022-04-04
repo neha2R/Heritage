@@ -3,8 +3,8 @@ use App\User;
 use App\AgeGroup;
 use Carbon\Carbon;
 use App\CheckUserState;
-
-
+use App\Privacy;
+use App\PrivacyDetail;
 function sendNotification($data)
 {
     $msg = array(
@@ -102,5 +102,10 @@ function age_group_by_user($user_id)
 function checkUser($id)
 {
     return CheckUserState::where('user_id', $id)->first();
+}
+
+function userProfileSetting($userid){
+//    $profile= Privacy::find(1); //My Profile is visible to
+//     PrivacyDetail::where('privacy_id')
 }
 

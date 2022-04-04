@@ -85,7 +85,7 @@ class HomeController extends Controller
                 $data=[];
                 if (Attempt::find($dual->attempt_id)) {
                     $check = Attempt::find($dual->attempt_id);
-                // if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
+                 if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
                     $type = $check->quiz_type_id;
                     // $data['type'] = $type;
                     if ($type == 2) {
@@ -121,7 +121,7 @@ class HomeController extends Controller
                         $quizroomdata[] = $data;
                     }
 
-                //  }
+                 }
                     
                 }
             }
