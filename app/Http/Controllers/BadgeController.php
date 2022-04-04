@@ -25,6 +25,18 @@ class BadgeController extends Controller
 
         $badges =  UserBadge::where('user_id', $request->user_id)->get();
         $res = [];
+        $check= true;
+        if($request->contact_id){
+          $setting=  userProfileSetting($request->user_id);
+       if($setting=='all'){
+                $check =true;
+       }else{
+                $check =false;
+       }
+        }
+        
+        if($check){
+           
         foreach ($badges as $badge) {
             $data['title']  = $badge->badgedata->title;
             $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
@@ -32,6 +44,7 @@ class BadgeController extends Controller
             $data['id']  = $badge->badgedata->id;
             $res[] = $data;
         }
+      }
         return response()->json(['status' => 200, 'message' => 'Badge data', 'data' => $res]);
     }
 

@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use App\CheckUserState;
 use App\Privacy;
 use App\PrivacyDetail;
+use App\PrivacySetting;
 function sendNotification($data)
 {
     $msg = array(
@@ -105,7 +106,29 @@ function checkUser($id)
 }
 
 function userProfileSetting($userid){
-//    $profile= Privacy::find(1); //My Profile is visible to
-//     PrivacyDetail::where('privacy_id')
+    $privacy = Privacy::find(1);
+    $detailids = PrivacyDetail::where('privacy_id', $privacy->id)->pluck('id')->toArray();
+    $settings= PrivacySetting::where('user_id',$userid)->whereIn('privacy_details_id', $detailids)->latest()->first();
+    if (!isset($settings)) {
+        return 'all';      // default setting   
+    }
+  
+    // foreach($settings as $setting){
+        $detail =   PrivacyDetail::find($settings->privacy_details_id);
+  
+        if($detail->title=='Anyone') {
+          return 'all';
+        }
+        if ($detail->title == 'Only me') {
+            return 'me';
+        }
+
+        if ($detail->title == 'Only user i have added') {
+            return 'me';
+        }
+
+        return null;
+
+    // }
 }
 
