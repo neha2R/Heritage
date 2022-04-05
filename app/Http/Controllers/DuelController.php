@@ -573,7 +573,11 @@ class DuelController extends Controller
         $domains = explode(',', $domain);
 
         $dual = [];
+        if($data->quiz_type_id==3){
+        $dual['quiz_room_id'] = $data->id;
+        }else{
         $dual['dual_id'] = $data->id;
+        }
         $dual['domain'] = implode(',', Domain::whereIn('id', $domains)->pluck('name')->toArray());
         $dual['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
         $dual['difficulty'] = ucwords(strtolower($data->difficulty->name));
