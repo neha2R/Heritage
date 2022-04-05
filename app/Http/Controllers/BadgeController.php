@@ -35,8 +35,10 @@ class BadgeController extends Controller
        }
         }
         
-        if($check){
-           
+        if(!$check){
+            return response()->json(['status' => 201, 'message' => 'Profile set not visible to all', 'data' => $res]);
+    
+        }
         foreach ($badges as $badge) {
             $data['title']  = $badge->badgedata->title;
             $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->badgedata->image;
@@ -44,7 +46,7 @@ class BadgeController extends Controller
             $data['id']  = $badge->badgedata->id;
             $res[] = $data;
         }
-      }
+      
         return response()->json(['status' => 200, 'message' => 'Badge data', 'data' => $res]);
     }
 

@@ -29,6 +29,19 @@ class ProfileController extends Controller
 
         $sum=0;
         $data=[];
+        $check = true;
+        if ($request->contact_id) {
+            $setting =  userProfileSetting($request->user_id);
+            if ($setting == 'all') {
+                $check = true;
+            } else {
+                $check = false;
+            }
+        }
+
+        if (!$check) {
+            return response()->json(['status' => 201, 'message' => 'Profile set not visible to all', 'data' => $data]);
+        }
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
        
         foreach ($months as $key => $month) {

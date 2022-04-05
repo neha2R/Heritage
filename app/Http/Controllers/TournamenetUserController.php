@@ -595,6 +595,19 @@ class TournamenetUserController extends Controller
         } else {
             $monthname = date('m');
         }
+        $check = true;
+        if ($request->contact_id) {
+            $setting =  userProfileSetting($request->user_id);
+            if ($setting == 'all') {
+                $check = true;
+            } else {
+                $check = false;
+            }
+        }
+
+        if (!$check) {
+            return response()->json(['status' => 201, 'message' => 'Profile set not visible to all', 'data' => $response]);
+        }
         $group = age_group_by_user($request->user_id);
         $daily =0;
         $weekly=0;
