@@ -132,18 +132,28 @@ class HomeController extends Controller
                 }
             }
 
-
+           $acceptquizroom =[];
             foreach ($acceptinvitations as $acceptinvitation) {
                 $challange = Attempt::find($acceptinvitation->attempt_id);
 
                 if (Attempt::find($acceptinvitation->attempt_id)) {
+                    if($challange->quiz_type_id==3){
+                        if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 600) {  // Duel is not older than 3 minute
+
+                            $acceptroom['id'] = $acceptinvitation->attempt_id;
+                            $acceptquizroom[] = $acceptroom;
+                        }  
+                    }
+                        else{
                     if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 180) {  // Duel is not older than 3 minute
 
                         $accept['id'] = $acceptinvitation->attempt_id;
                         $acceptdata[] = $accept;
                     }
                 }
-            }
+
+                }
+            }$response['quizroom'] = $acceptquizroom;
             $response['accept'] = $acceptdata;
             $response['dual'] = $dualquizdata;
             $response['quizroom'] = $quizroomdata;
