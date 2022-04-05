@@ -241,7 +241,7 @@ class HomeController extends Controller
             return response()->json(['status' => 201, 'data' => array(),'message' => 'Sorry! No active quiz found.']);
         }
         if ($data) {
-            if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
+            if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 600) {
 
                 return response()->json(['status' => 200, 'message' => 'Link', 'quizroom_id'=>$data->id,'data' => $data->link]);
             } else {
