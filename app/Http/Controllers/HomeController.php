@@ -93,7 +93,13 @@ class HomeController extends Controller
                     }
                     if ($type == 3) {
                         $data['quiz_room_id'] = $dual->attempt_id;
+                    if ($check->started_at) {
+                        $data['is_start'] = '1';
+                    }else{
+                        $data['is_start'] = '0';
                     }
+                    }
+                       
                     $user = User::where('id', $dual->from_user_id)->first();
 
                     $data['name'] = $user->name;

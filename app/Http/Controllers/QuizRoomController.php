@@ -621,7 +621,7 @@ class QuizRoomController extends Controller
         if($data){
             $userids = Challange::where('attempt_id', $data->id)->where('status', '1')->pluck('to_user_id')->toArray();
             $users = User::whereIn('id', $userids)->get();
-            $this->startroom($users);
+            $this->startroom($users, $request->room_id);
           $data->started_at = date('Y-m-d');
           $data->save();
         return response()->json(['status' => 200,  'message' => 'Quiz started succesfully']);

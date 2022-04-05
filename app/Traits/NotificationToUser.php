@@ -114,10 +114,11 @@ trait NotificationToUser {
         return true;
     }
 
-    function startroom($users){
+    function startroom($users,$quizid){
         foreach ($users as $user) {
             $userdata = User::find($user);
             $data['title'] = 'Quiz room started';
+            $data['room_id'] = $quizid;
             $data['message'] = 'Started';
             $data['token'] = $userdata->token;
             $this->sendNotification($data);
