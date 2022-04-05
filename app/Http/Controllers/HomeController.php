@@ -138,7 +138,7 @@ class HomeController extends Controller
 
                 if (Attempt::find($acceptinvitation->attempt_id)) {
                     if($challange->quiz_type_id==3){
-                        if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 600) {  // Duel is not older than 3 minute
+                        if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 600) {  // Quiz room not older than 10 min
 
                             $acceptroom['id'] = $acceptinvitation->attempt_id;
                             $acceptquizroom[] = $acceptroom;
@@ -153,7 +153,7 @@ class HomeController extends Controller
                 }
 
                 }
-            }$response['quizroom'] = $acceptquizroom;
+            }$response['quizroom_start'] = $acceptquizroom;
             $response['accept'] = $acceptdata;
             $response['dual'] = $dualquizdata;
             $response['quizroom'] = $quizroomdata;
