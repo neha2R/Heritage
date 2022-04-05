@@ -242,11 +242,8 @@ class HomeController extends Controller
         }
         if ($data) {
             if (Carbon::now()->parse($data->created_at)->diffInSeconds() <= 180) {
-                if ($request->type == 'quizroom') {
-                $res['quizroom_id'] = $data->id; 
-                }
-                $res[]= $data->link;
-                return response()->json(['status' => 200, 'message' => 'Link', 'data' => $res]);
+
+                return response()->json(['status' => 200, 'message' => 'Link', 'quizroom_id'=>$data->id,'data' => $data->link]);
             } else {
                 $data->deleted_at = date('Y-m-d h:i:s');
                 $data->save();
