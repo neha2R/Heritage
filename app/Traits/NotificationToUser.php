@@ -116,11 +116,22 @@ trait NotificationToUser {
 
     function startroom($users,$quizid){
         foreach ($users as $user) {
-            $userdata = User::find($user);
+            // $userdata = User::find($user);
             $data['title'] = 'Quiz room started';
             $data['room_id'] = $quizid;
             $data['message'] = 'Started';
-            $data['token'] = $userdata->token;
+            $data['token'] = $user->token;
+            $this->sendNotification($data);
+        }
+    }
+
+    function disbandroom($users)
+    {
+        foreach ($users as $user) {
+            // $userdata = User::find($user);
+            $data['title'] = 'Quiz room deleted';
+            $data['message'] = 'Disband';
+            $data['token'] = $user->token;
             $this->sendNotification($data);
         }
     }

@@ -131,14 +131,17 @@ class QuizRoomController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+        
         $data = Attempt::where('id', $request->quiz_room_id)->where('quiz_type_id', 3)->first();
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
         $data->deleted_at = date('Y-m-d h:i:s');
         $data->save();
+        $userids = Challange::where('attempt_id', $request->quiz_room_id)->where('status', '1')->pluck('to_user_id')->toArray();
+        $users = User::whereIn('id', $userids)->get();
         Challange::where('attempt_id', $request->quiz_room_id)->update(['deleted_at' => date('Y-m-d h:i:s')]);
-
+        $this->disbandroom($users);
 
         return response()->json(['status' => 200, 'message' => 'Quiz disbanded succesfully', 'data' => $data]);
     }
