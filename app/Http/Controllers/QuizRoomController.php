@@ -607,7 +607,7 @@ class QuizRoomController extends Controller
         $validator = Validator::make($request->all(), [
             'room_id' => 'required',
         ]);
-        $data1['status']=0;
+        $data1=0;
         if ($validator->fails()) {
             return response()->json(['status' => 422,'data' => $data1, 'message' => $validator->errors()]);
         }
@@ -618,14 +618,14 @@ class QuizRoomController extends Controller
         $data = Attempt::where('id', $request->room_id)->first();
         if($data){
             if($data->started_at){
-                $data1['status'] = 1;
+                $data1 = 1;
                 return response()->json(['status' => 200, 'data'=>$data1, 'message' => 'Quiz started..']);
 
             }else{
             return response()->json(['status' => 200,'data' => $data1, 'message' => 'Quiz not started yet']);
             }
         }else{
-            $data1['status'] = 2;
+            $data1 = 2;
             return response()->json(['status' => 200,'data' => $data1, 'message' => 'Quiz room not find']);
    
         }
