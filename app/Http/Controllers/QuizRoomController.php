@@ -521,10 +521,10 @@ class QuizRoomController extends Controller
 
 
             $data = [
-                'title' => 'Duel Invitation rejected.',
+                'title' => 'Quiz room Invitation rejected.',
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
-                'type' => 'dual',
+                'type' => 'quizroom',
                 'message' => User::where('id', $req->user_id)->first()->name . " has been rejected the request",
             ];
             sendNotification($data);

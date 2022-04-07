@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Faq;
+use App\Http\Controllers\SocialMediaController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -71,5 +72,8 @@ Route::get('/faqs', function(){
     return view('faq',compact('faqs'));
 });
 Route::get('/cul.tre/{id}', 'HomeController@download');
-
+Route::post('fbdeleterequest', 'SocialMediaController@fbdeleterequest');
+Route::get('fbdeletioncheck', 'SocialMediaController@fbdeletioncheck');
+Route::get('test', 'SocialMediaController@test');
+Route::get('privacy-policy','SocialMediaController@privacypolicy');
 // http://www.cultre.com/cul.tre/duel#80
