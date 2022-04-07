@@ -75,10 +75,11 @@ class PrivacyController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-       $olddata = PrivacySetting::where('user_id',$request->user_id)->get();
-      if($olddata->count()>0){
-       $olddata->delete();
-      }
+       $olddata = PrivacySetting::where('user_id',$request->user_id)->delete();
+      
+    //    if($olddata->count()>0){
+    //    $olddata->delete();
+    //   }
       $notifications_id = explode(',',$request->privacy_id);
        foreach($notifications_id as $id){
         $savedata = new PrivacySetting;

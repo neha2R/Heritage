@@ -75,10 +75,10 @@ class NotificationController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-       $olddata = NotificationSetting::where('user_id',$request->user_id)->get();
-      if($olddata->count()>0){
-       $olddata->delete();
-      }
+       $olddata = NotificationSetting::where('user_id',$request->user_id)->delete();
+    //   if($olddata->count()>0){
+    //    $olddata->delete();
+    //   }
       $notifications_id = explode(',',$request->notifications_id);
        foreach($notifications_id as $id){
         $savedata = new NotificationSetting;
