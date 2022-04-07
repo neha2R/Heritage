@@ -600,23 +600,28 @@ class QuizRoomController extends Controller
     }
 
     public function room_status(Request $request){
+        // 0=> created
+        // 1=> Started
+        // 2=> Deleted
+        // user id for check if he has access to quiz
         $validator = Validator::make($request->all(), [
             'room_id' => 'required',
         ]);
-
+        $data['status']=0;
         if ($validator->fails()) {
-            return response()->json(['status' => 422,  'message' => $validator->errors()]);
+            return response()->json(['status' => 422,'data' => $data, 'message' => $validator->errors()]);
         }
         $data = Attempt::where('id', $request->room_id)->first();
         if($data){
             if($data->started_at){
-                return response()->json(['status' => 200,  'message' => 'Quiz started..']);
+                $data['status'] = 0;
+                return response()->json(['status' => 200, 'data'=>$data, 'message' => 'Quiz started..']);
 
             }else{
-            return response()->json(['status' => 201,  'message' => 'Quiz not started yet']);
+            return response()->json(['status' => 201,'data' => $data, 'message' => 'Quiz not started yet']);
             }
         }else{
-            return response()->json(['status' => 201,  'message' => 'Quiz room not find']);
+            return response()->json(['status' => 201,'data' => $data, 'message' => 'Quiz room not find']);
    
         }
     }

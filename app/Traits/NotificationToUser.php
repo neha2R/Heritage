@@ -85,6 +85,9 @@ trait NotificationToUser {
         if($data['room_id']){
             $msg['room_id'] = $data['room_id'];
         }
+        if ($data['type']) {
+            $msg['type'] = $data['type'];
+        }
         //this is for android
         $fields = array(
             'registration_ids' => array($data['token']),
@@ -123,6 +126,7 @@ trait NotificationToUser {
             $data['title'] = 'Quiz room started';
             $data['room_id'] = $quizid;
             $data['message'] = 'Started';
+            $data['type'] = 'quizroom';
             $data['token'] = $user->token;
             $this->sendNotification($data);
         }
