@@ -398,7 +398,16 @@ class QuizRoomController extends Controller
         if (!isset($user)) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not in the quiz']);
         }
+        $data = [
+            'title' => 'User deleted.',
+            'token' => $user->from_user->token,
+            'link' => $attempt->link,
+            'type' => 'quizroom',
+            'message' => User::where('id', $request->user_id)->first()->name . " you are no longer access the quiz",
+        ];
         $user->delete();
+     
+        sendNotification($data);
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User removed from room']);
     }
 
