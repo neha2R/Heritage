@@ -611,17 +611,22 @@ class QuizRoomController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422,'data' => $data, 'message' => $validator->errors()]);
         }
+        $user = Challange::where('attempt_id', $request->room_id)->where('to_user_id', $request->user_id)->first();
+        if (!isset($user)) {
+            return response()->json(['status' => 200,'data' => $data, 'message' => 'User not in the quiz']);
+        }
         $data = Attempt::where('id', $request->room_id)->first();
         if($data){
             if($data->started_at){
-                $data['status'] = 0;
+                $data['status'] = 1;
                 return response()->json(['status' => 200, 'data'=>$data, 'message' => 'Quiz started..']);
 
             }else{
-            return response()->json(['status' => 201,'data' => $data, 'message' => 'Quiz not started yet']);
+            return response()->json(['status' => 200,'data' => $data, 'message' => 'Quiz not started yet']);
             }
         }else{
-            return response()->json(['status' => 201,'data' => $data, 'message' => 'Quiz room not find']);
+            $data['status'] = 2;
+            return response()->json(['status' => 200,'data' => $data, 'message' => 'Quiz room not find']);
    
         }
     }
