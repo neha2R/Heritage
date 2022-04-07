@@ -67,4 +67,9 @@ class SocialMediaController extends Controller
     public function privacypolicy(){
         return view('privacypolicy');
     }
+
+    public function terms()
+    {
+        return view('terms');
+    }
 }
