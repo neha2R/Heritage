@@ -82,6 +82,9 @@ trait NotificationToUser {
             'vibrate' => 1,
             'sound' => 1,
         );
+        if($data['room_id']){
+            $msg['room_id'] = $data['room_id'];
+        }
         //this is for android
         $fields = array(
             'registration_ids' => array($data['token']),

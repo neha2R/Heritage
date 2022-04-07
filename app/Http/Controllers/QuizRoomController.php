@@ -183,7 +183,7 @@ class QuizRoomController extends Controller
 
         $attempt = Attempt::where('id', $challange->attempt_id)->first();
         $data = [
-            'title' => 'Invitation send.',
+            'title' => 'Invitation recived.',
             'token' => $challange->to_user->token,
             'link' => $attempt->link,
             'type' => 'quizroom',
