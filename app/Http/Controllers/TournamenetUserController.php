@@ -14,6 +14,9 @@ use App\League;
 use App\Tournament;
 use App\UserLeagueWithPer;
 use App\User;
+use App\Attempt;
+use App\Goal;
+
 class TournamenetUserController extends Controller
 {
     /**
@@ -345,6 +348,7 @@ class TournamenetUserController extends Controller
         $response['league'] = $leagues;
         $response['rank'] = $rank;
         $response['percentage'] = $percentage;
+        $response['goalsummery'] = $this->goalsummery($request->user_id);
         $userleague = UserLeagueWithPer::where('user_id', $request->user_id)->first();
 
         if ($userleague) {
@@ -651,5 +655,30 @@ class TournamenetUserController extends Controller
         $response['rank'] = $rank;
 
         return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
+    }
+
+    public function goalsummery($user_id){
+        $check = Goal::where('user_id', $user_id)->whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))
+            ->latest()->first();
+       
+         $totalquiz = 0;
+        if (!$check) {
+            return $data=[];
+        }
+        if ($check->type == 'daily') {
+            $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first()->totalquiz;
+        }
+        if ($check->type == 'weekly') {
+            $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $user_id)->where('status', 'completed')->whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->first()->totalquiz;
+        }
+        if ($check->type == 'monthly') {
+            $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $user_id)->where('status', 'completed')->whereMonth('created_at', date('m'))
+                ->whereYear('created_at', date('Y'))->first()->totalquiz;
+        }
+        $data['total'] = $check->no;
+        $data['play'] = $totalquiz;
+        $data['type'] = $check->type;
+        return $data;
     }
 }
