@@ -581,7 +581,7 @@ class TournamenetUserController extends Controller
 
     public function leaderboardranking(Request $request)
     {
-        
+
         //  dd(date('m',strtotime('jan')));
 
         $validator = Validator::make($request->all(), [
@@ -613,58 +613,55 @@ class TournamenetUserController extends Controller
             return response()->json(['status' => 201, 'message' => 'Profile set not visible to all', 'data' => $response]);
         }
         $group = age_group_by_user($request->user_id);
-        $daily =0;
-        $weekly=0;
+        $daily = 0;
+        $weekly = 0;
         $month = 0;
-      
-       $noofdays= date('t', strtotime($request->month));
-       $year=date('Y');
-        for($i =1; $i<= $noofdays; $i++){
-       $date = date("$year-$monthname-$i");
+
+        $noofdays = date('t', strtotime($request->month));
+        $year = date('Y');
+        for ($i = 1; $i <= $noofdays; $i++) {
+            $date = date("$year-$monthname-$i");
             $daily = Tournament::where('age_group_id', $group->id)->where('frequency_id', 1)->count();
-       if($i==1)
-       {
-            // $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();
-            $month = Tournament::where('age_group_id', $group->id)->where('frequency_id', 3)->count();
-       }
-       if($i%7==1)
-       {
-         $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();  
-       }
-       $totallpperday = $daily+ $weekly+ $month*50;
-       $users = User::where('type','2')->get();
-       
-       $totallp=[];
-       foreach($users as $user){
-              $totallp[$user->id]=  TournamenetUser::where('user_id',$user->id)->whereDate('created_at', $date)->sum('lp');
+            if ($i == 1) {
+                // $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();
+                $month = Tournament::where('age_group_id', $group->id)->where('frequency_id', 3)->count();
+            }
+            if ($i % 7 == 1) {
+                $weekly = Tournament::where('age_group_id', $group->id)->where('frequency_id', 2)->count();
+            }
+            $totallpperday = $daily + $weekly + $month * 50;
+            $users = User::where('type', '2')->get();
+
+            $totallp = [];
+            foreach ($users as $user) {
+                $totallp[$user->id] =  TournamenetUser::where('user_id', $user->id)->whereDate('created_at', $date)->sum('lp');
                 arsort($totallp);  // sor array in decending order according to value (for rank)
 
-             
-       }
-        $monthdata[$i] = $totallp;
-     
 
-    }
-//    dd($monthdata);
-    foreach($monthdata as $key=>$data){
-          $rank[]=  array_search($request->user_id, array_keys($data)) ? array_search($request->user_id, array_keys($data))+1 :0; // array index start from zero so +1
+            }
+            $monthdata[$i] = $totallp;
+        }
+        //    dd($monthdata);
+        foreach ($monthdata as $key => $data) {
+            $rank[] =  array_search($request->user_id, array_keys($data)) ? array_search($request->user_id, array_keys($data)) + 1 : 0; // array index start from zero so +1
 
-    }
-   
-      
+        }
+
+
         $response['rank'] = $rank;
 
         return response()->json(['status' => 200, 'data' => $response, 'message' => 'Success']);
     }
 
-    public function goalsummery($user_id){
+    public function goalsummery($user_id)
+    {
         $check = Goal::where('user_id', $user_id)->whereMonth('created_at', date('m'))
             ->whereYear('created_at', date('Y'))
             ->latest()->first();
-       
-         $totalquiz = 0;
+
+        $totalquiz = 0;
         if (!$check) {
-            $data=[];
+            $data = [];
             return json_encode($data, JSON_FORCE_OBJECT);
         }
         if ($check->type == 'daily') {

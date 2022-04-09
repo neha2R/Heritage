@@ -20,9 +20,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product_categories=Product_categories::where('status','1')->get();
-        $products=Product::all();
-        return view('product.list',compact('products','product_categories'));
+        $product_categories = Product_categories::where('status', '1')->get();
+        $products = Product::all();
+        return view('product.list', compact('products', 'product_categories'));
     }
 
     /**
@@ -32,7 +32,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-       
     }
 
     /**
@@ -44,46 +43,41 @@ class ProductController extends Controller
     public function store(Request $req)
     {
 
-        $validator=$req->validate([
-            'name'=>'required',
-            'price'=>'required',
-            'link'=>'required',
-            'description'=>'required|max:200',
+        $validator = $req->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'link' => 'required',
+            'description' => 'required|max:200',
             'images' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
-            'category_id'=>'required'
+            'category_id' => 'required'
         ]);
-       
-        
-      
+
+
+
         $product = new Product;
-        $product->name=$req->name;
-        $product->category_id=$req->category_id;
-        $product->price=$req->price;
-        $product->link=$req->link;
-        $product->description=$req->description;
+        $product->name = $req->name;
+        $product->category_id = $req->category_id;
+        $product->price = $req->price;
+        $product->link = $req->link;
+        $product->description = $req->description;
         $product->save();
 
-        if($req->hasfile('images'))
-        {
-                foreach($req->file('images') as $key=>$file)
-                {
-                    
-                        $type = '0';
-                        $name = $file->store('product','public');
-                        $image = new Product_images;
-                        $image->product_id = $product->id;
-                        $image->image = $name;
-                        $image->save();
-                    
-                   
-                }
-     
-       }
-       // send new post notification
+        if ($req->hasfile('images')) {
+            foreach ($req->file('images') as $key => $file) {
+
+                $type = '0';
+                $name = $file->store('product', 'public');
+                $image = new Product_images;
+                $image->product_id = $product->id;
+                $image->image = $name;
+                $image->save();
+            }
+        }
+        // send new post notification
         $this->NewProduct();
 
-       return redirect()->back()->with('success',"You have created product successfully.");
+        return redirect()->back()->with('success', "You have created product successfully.");
     }
 
     /**
@@ -94,12 +88,11 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product=Product::whereId($id)->first();
+        $product = Product::whereId($id)->first();
         if ($product->status == '1') {
             $product->status = '0';
         } else {
             $product->status = '1';
-
         }
         $product->save();
 
@@ -130,65 +123,56 @@ class ProductController extends Controller
      */
     public function update(Request $req, $id)
     {
-        
-        $validator=$req->validate([
-            'name'=>'required',
-            'price'=>'required',
-            'link'=>'required',
-            'description'=>'required|max:200',
+
+        $validator = $req->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'link' => 'required',
+            'description' => 'required|max:200',
             'images.*' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
-            'category_id'=>'required'
+            'category_id' => 'required'
         ]);
-       
+
         $product = Product::whereId($id)->first();
-        $product->name=$req->name;
-        $product->category_id=$req->category_id;
-        $product->price=$req->price;
-        $product->link=$req->link;
-        $product->description=$req->description;
+        $product->name = $req->name;
+        $product->category_id = $req->category_id;
+        $product->price = $req->price;
+        $product->link = $req->link;
+        $product->description = $req->description;
         $product->save();
 
 
-        
-     
-        if(isset($req->old_images) && count($req->old_images)>0)
-       {   
-              if(Product_images::where('product_id',$id)->first())
-              {
-                Product_images::where('product_id',$id)->delete();
-              }
-                    foreach($req->old_images as $key=>$file)
-                    {
-                        $name = $file;
-                        $image = new Product_images;
-                        $image->product_id = $product->id;
-                        $image->image = $name;
-                        $image->save();
-                    }
-        }
-        else
-        {
-            if(Product_images::where('product_id',$id)->first())
-              {
-                Product_images::where('product_id',$id)->delete();
-              }
+
+
+        if (isset($req->old_images) && count($req->old_images) > 0) {
+            if (Product_images::where('product_id', $id)->first()) {
+                Product_images::where('product_id', $id)->delete();
+            }
+            foreach ($req->old_images as $key => $file) {
+                $name = $file;
+                $image = new Product_images;
+                $image->product_id = $product->id;
+                $image->image = $name;
+                $image->save();
+            }
+        } else {
+            if (Product_images::where('product_id', $id)->first()) {
+                Product_images::where('product_id', $id)->delete();
+            }
         }
 
-        if($req->hasfile('images'))
-        {
-                foreach($req->file('images') as $key=>$file)
-                {
-                    $type = '0';
-                    $name = $file->store('product','public');
-                    $image = new Product_images;
-                    $image->product_id = $product->id;
-                    $image->image = $name;
-                    $image->save();
-                }
-     
-       }  
+        if ($req->hasfile('images')) {
+            foreach ($req->file('images') as $key => $file) {
+                $type = '0';
+                $name = $file->store('product', 'public');
+                $image = new Product_images;
+                $image->product_id = $product->id;
+                $image->image = $name;
+                $image->save();
+            }
+        }
 
-       return redirect()->back()->with('success',"You have updated product successfully.");
+        return redirect()->back()->with('success', "You have updated product successfully.");
     }
 
     /**
@@ -203,7 +187,6 @@ class ProductController extends Controller
 
         if ($product) {
             $product->delete();
-            
         }
 
         if ($product->id) {
@@ -218,60 +201,48 @@ class ProductController extends Controller
 
     public function get_all_products(Request $req)
     {
-        
-        if ($req->search!="") {
-            $str = $req->search;
-            $products=Product::where('name', 'like', '%' . $str . '%')->get();
-        }
-        else
-        {
-          
-            $products=Product::where('status','1')->get();
-        }
-        
-       
-        $data=[];
-        if(!empty($products))
-        {
-            foreach($products as $product)
-            {
-                   $productData['category']=ucwords(strtolower($product->category->name));
-                   $productData['name']=ucwords(strtolower($product->name));
-                   $productData['price']="₹ ".$product->price;
-                   $productData['description']=ucwords(strtolower($product->description));
-                   $productData['link']=ucwords(strtolower($product->link));
-    
-                   $i=1;
-               
-                   if(count($product->images)>0)
-                   {
-                    $productData['images']=$this->get_files($product->images);
-                   }
-                   else
-                   {
-                    $productData['images']=[];
-                   }
-                   $data[]=$productData;
-                        
-            }
-        }
-        else
-        {
-            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
-        }
-        
-        if(empty($data)){
-            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
-        }
-        return response()->json(['status' => 200, 'message' => 'Products Found','data' => $data]);
 
+        if ($req->search != "") {
+            $str = $req->search;
+            $products = Product::where('name', 'like', '%' . $str . '%')->get();
+        } else {
+
+            $products = Product::where('status', '1')->get();
+        }
+
+
+        $data = [];
+        if (!empty($products)) {
+            foreach ($products as $product) {
+                $productData['category'] = ucwords(strtolower($product->category->name));
+                $productData['name'] = ucwords(strtolower($product->name));
+                $productData['price'] = "₹ " . $product->price;
+                $productData['description'] = ucwords(strtolower($product->description));
+                $productData['link'] = ucwords(strtolower($product->link));
+
+                $i = 1;
+
+                if (count($product->images) > 0) {
+                    $productData['images'] = $this->get_files($product->images);
+                } else {
+                    $productData['images'] = [];
+                }
+                $data[] = $productData;
+            }
+        } else {
+            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
+        }
+
+        if (empty($data)) {
+            return response()->json(['status' => 200, 'message' => 'no product found.', 'data' => array()]);
+        }
+        return response()->json(['status' => 200, 'message' => 'Products Found', 'data' => $data]);
     }
     public function get_files($files)
     {
-        $productImages=[];
-        foreach($files as $image)
-        {
-            $productImages[]=url('/storage').'/'.$image->image;
+        $productImages = [];
+        foreach ($files as $image) {
+            $productImages[] = url('/storage') . '/' . $image->image;
         }
         return $productImages;
     }
