@@ -664,7 +664,8 @@ class TournamenetUserController extends Controller
        
          $totalquiz = 0;
         if (!$check) {
-            return $data=[];
+            $data=[];
+            return json_encode($data, JSON_FORCE_OBJECT);
         }
         if ($check->type == 'daily') {
             $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first()->totalquiz;
