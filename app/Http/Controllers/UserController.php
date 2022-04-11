@@ -75,7 +75,7 @@ class UserController extends Controller
                      $user->email = null;
                     // $userdata->password = $user->password;
                     $user->username = $user->username;
-                    $user->app_id = $user->social_id;
+                    $user->app_id = $request->social_id;
                     $user->is_social = '2';
                     // $user->email_verified_at = date('Y-m-d H:i:s');
                     $user->save();
@@ -99,7 +99,7 @@ class UserController extends Controller
                     // $user->email = $request->email;
                     // $userdata->password = $user->password;
                     $user->username = $user->username;
-                    $user->app_id = $user->social_id;
+                    $user->app_id = $request->social_id;
                     $user->is_social = '3';
                     // $user->email_verified_at = date('Y-m-d H:i:s');
                     $user->save();
