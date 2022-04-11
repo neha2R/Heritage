@@ -130,7 +130,12 @@ class UserController extends Controller
                     $country_name = $user->country->country_name->name;
                     $country_flag = url('/flags/' . strtolower($user->country->country_name->sortname) . ".png");
                 }
+
+                if($user->email){
                 $token = $user->createToken($user->email)->plainTextToken;
+                } else{
+                    $token = $user->createToken($user->app_id)->plainTextToken; 
+                }
                 // $token = $this->generateRandomString();
                 // $user->app_id = $request->app_id;
                 // $user->save();
