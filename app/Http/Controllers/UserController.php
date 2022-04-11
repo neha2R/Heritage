@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class UserController extends Controller
@@ -35,6 +36,8 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
+        if ($request->is_social) {
+            //for 3 --> twitter, 2--> facebook, 1-->google
 
         if ($request->is_social == 1) {
            
@@ -52,6 +55,41 @@ class UserController extends Controller
                 $user->save();
 
            }
+        }
+           // Check for Facebook login 
+        if ($request->is_social == 2) {
+
+                $user = User::where('app_id', '=', request('social_id'))->first();
+                $data = [];
+                $data = json_encode($data, JSON_FORCE_OBJECT);
+                if (empty($user)) {
+                    $user = new User;
+                    $user->name = '';
+                    // $user->email = $request->email;
+                    // $userdata->password = $user->password;
+                     $user->username = $user->username;
+                    $user->is_social = '2';
+                    // $user->email_verified_at = date('Y-m-d H:i:s');
+                    $user->save();
+                }
+            }
+                // Check for Twitter login 
+            if ($request->is_social == 3) {
+
+                $user = User::where('app_id', '=', request('social_id'))->first();
+                $data = [];
+                $data = json_encode($data, JSON_FORCE_OBJECT);
+                if (empty($user)) {
+                    $user = new User;
+                    $user->name = '';
+                    // $user->email = $request->email;
+                    // $userdata->password = $user->password;
+                    $user->username = $user->username;
+                    $user->is_social = '3';
+                    // $user->email_verified_at = date('Y-m-d H:i:s');
+                    $user->save();
+                }
+            }
             // if ($user->password != null) {
             //     return response()->json(['status' => 202, 'message' => "Email is invalid.", 'data' => '']);
             // }

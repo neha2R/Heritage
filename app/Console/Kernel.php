@@ -25,7 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('inspire')->everyFifteenMinutes();
+      
+         $schedule->command('inspire')->everyTwoMinutes()->withoutOverlapping()->emailOutputTo('virendra.singh.shekhawat@neologicx.com');
+        $schedule->command('xptolp:convertxptolp')->everyTwoMinutes()->withoutOverlapping()->emailOutputTo('virendra.singh.shekhawat@neologicx.com');
     }
 
     /**
