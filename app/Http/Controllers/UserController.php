@@ -37,45 +37,58 @@ class UserController extends Controller
     public function login(Request $request)
     {
         if ($request->is_social) {
+            
             //for 3 --> twitter, 2--> facebook, 1-->google
 
-        if ($request->is_social == 1) {
-           
-            $user = User::where('email', '=', request('email'))->first();
-            $data=[];
-            $data = json_encode($data, JSON_FORCE_OBJECT);
-            if(empty($user)){
-                $user = new User;
-                $user->name = '';
-                $user->email = $request->email;
-                // $userdata->password = $user->password;
-                // $userdata->username = $user->username;
-                 $user->is_social = '1';
-                $user->email_verified_at = date('Y-m-d H:i:s');
-                $user->save();
+            if ($request->is_social == 1) {
 
-           }
-        }
-           // Check for Facebook login 
-        if ($request->is_social == 2) {
-
-                $user = User::where('app_id', '=', request('social_id'))->first();
+                $user = User::where('email', '=', request('email'))->first();
                 $data = [];
                 $data = json_encode($data, JSON_FORCE_OBJECT);
                 if (empty($user)) {
                     $user = new User;
                     $user->name = '';
-                    // $user->email = $request->email;
+                    $user->email = $request->email;
                     // $userdata->password = $user->password;
-                     $user->username = $user->username;
+                    // $userdata->username = $user->username;
+                    $user->is_social = '1';
+                    $user->email_verified_at = date('Y-m-d H:i:s');
+                    $user->save();
+                }
+            }
+            // Check for Facebook login 
+            if ($request->is_social == 2) {
+                $validator = Validator::make($request->all(), [
+                    'social_id' => 'required',
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+                }
+                $user = User::where('app_id', '=', request('social_id'))->first();
+               
+                $data = [];
+                $data = json_encode($data, JSON_FORCE_OBJECT);
+                if (empty($user)) {
+                    $user = new User;
+                    $user->name = '';
+                     $user->email = null;
+                    // $userdata->password = $user->password;
+                    $user->username = $user->username;
                     $user->is_social = '2';
                     // $user->email_verified_at = date('Y-m-d H:i:s');
                     $user->save();
                 }
             }
-                // Check for Twitter login 
+            // Check for Twitter login 
             if ($request->is_social == 3) {
+                $validator = Validator::make($request->all(), [
+                    'social_id' => 'required',
+                ]);
 
+                if ($validator->fails()) {
+                    return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+                }
                 $user = User::where('app_id', '=', request('social_id'))->first();
                 $data = [];
                 $data = json_encode($data, JSON_FORCE_OBJECT);
