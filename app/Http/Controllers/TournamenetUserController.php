@@ -419,26 +419,26 @@ class TournamenetUserController extends Controller
             }
         }
 
-        for ($i = 1; $i <= 5; $i++) {
-            $top1['rank'] = $i;
-            $top1['percentage'] = rand(10, 70);
-            $top1['user_id'] = $i;
-            $top[] = $top1;
-        }
+        // for ($i = 1; $i <= 5; $i++) {
+        //     $top1['rank'] = $i;
+        //     $top1['percentage'] = rand(10, 70);
+        //     $top1['user_id'] = $i;
+        //     $top[] = $top1;
+        // }
 
-        for ($i = 1; $i <= 5; $i++) {
-            $middel1['rank'] = $i;
-            $middel1['percentage'] = rand(10, 70);
-            $middel1['user_id'] = $i;
-            $middle[] = $middel1;
-        }
+        // for ($i = 1; $i <= 5; $i++) {
+        //     $middel1['rank'] = $i;
+        //     $middel1['percentage'] = rand(10, 70);
+        //     $middel1['user_id'] = $i;
+        //     $middle[] = $middel1;
+        // }
 
-        for ($i = 1; $i <= 5; $i++) {
-            $bottom1['rank'] = $i;
-            $bottom1['percentage'] = rand(10, 70);
-            $bottom1['user_id'] = $i;
-            $bottom[] = $bottom1;
-        }
+        // for ($i = 1; $i <= 5; $i++) {
+        //     $bottom1['rank'] = $i;
+        //     $bottom1['percentage'] = rand(10, 70);
+        //     $bottom1['user_id'] = $i;
+        //     $bottom[] = $bottom1;
+        // }
         $leaguedata = [];
 
         $myname = 1;
