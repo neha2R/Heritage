@@ -587,7 +587,7 @@ class FeedContentController extends Controller
                       {
                         foreach($request->media_name[$key] as $image)
                         {
-                            $name = $files->store('feed','public');
+                            $name = $image->store('feed','public');
                             $media= new FeedAttachment;
                             $media->feed_media_id=$media->id;
                             $media->media_type=$type;

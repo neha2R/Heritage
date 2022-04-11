@@ -72,4 +72,8 @@ class SocialMediaController extends Controller
     {
         return view('terms');
     }
+
+    public function twittercallback(Request $request){
+       return view('twittercallback');
+    }
 }

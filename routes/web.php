@@ -77,4 +77,5 @@ Route::get('fbdeletioncheck', 'SocialMediaController@fbdeletioncheck');
 Route::get('test', 'SocialMediaController@test');
 Route::get('privacy-policy','SocialMediaController@privacypolicy');
 Route::get('terms-amp-conditions', 'SocialMediaController@terms');
+Route::get('twittercall', 'SocialMediaController@twittercallback');
 // http://www.cultre.com/cul.tre/duel#80

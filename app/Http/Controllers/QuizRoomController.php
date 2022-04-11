@@ -558,7 +558,6 @@ class QuizRoomController extends Controller
                     Attempt::where('parent_id', $request->room_id)->where('user_id', $request->user_id)->first();
             }
             $user = [];
-
             $user['user_id'] = $user_data->user_id;
             $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
