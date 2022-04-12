@@ -14,6 +14,7 @@ use App\AgeGroup;
 use App\Contact;
 use App\League;
 use App\UserLeagueWithPer;
+use App\MonthendXp;
 
 class ProfileController extends Controller
 {
@@ -49,16 +50,22 @@ class ProfileController extends Controller
          
                  $key = $key+1;
             // Badges xp calculate
-            $badgeids = UserBadge::where('user_id', $request->user_id)->whereMonth('created_at', $key)->pluck('badge_id')->toArray();
+            $badgeids = UserBadge::where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->pluck('badge_id')->toArray();
       
             $xpofbadges = Badge::whereIn('id', $badgeids)->sum('xp');
-
+                // Quizzes xp calculate
            $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first()->xp;
-            if ($xps == 0) {
+          // Tournament month end lp to xp 
+           $monthendxp = MonthendXp::where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first();
+           if ($xps == 0) {
                 $xps = "0";
             }
-       
-           $xp['xp'] = $xps+ $xpofbadges ;
+       if($monthendxp){
+                $monthendx=   $monthendxp->xp;
+       }else{
+                $monthendx=0;
+       }
+           $xp['xp'] = $xps+ $xpofbadges + $monthendx;
             $xp['month'] = $month;
             
             $sum += $xp['xp'];

@@ -60,7 +60,7 @@ class BadgeController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->first()->totalquiz;
-        // Check Quiz Badge
+        // Check Quiz Badge on basis of total quiz played
    
         $checkbadge = Badge::where('no', $totalquiz)->where('type', 'quiz')->first();
 
@@ -86,6 +86,7 @@ class BadgeController extends Controller
         $one = 0;
         $two = 0;
         $three = 0;
+        // Check Badge on the basis of theme
         foreach ($completedQuizs as $quiz) {
             $themes = explode(',', $quiz->theme_id);
             if (in_array('1', $themes)) {
