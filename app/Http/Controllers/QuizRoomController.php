@@ -549,10 +549,10 @@ class QuizRoomController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422,  'message' => $validator->errors()]);
         }
-        $data = Attempt::where('id', $request->room_id)->first();
-        if (isset($data)) {
-            if ($data->user_id == $request->user_id) {
-                $user_data = $data;
+        $user_data = Attempt::where('id', $request->room_id)->first();
+        if (isset($user_data)) {
+            if ($user_data->user_id == $request->user_id) {
+                
             } else {
                 $user_data =
                     Attempt::where('parent_id', $request->room_id)->where('user_id', $request->user_id)->first();
