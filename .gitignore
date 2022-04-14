@@ -26,3 +26,4 @@ storage/
 app/Http/Livewire
 resources/views/livewire/
 resources/views/vendor/livewire/
+worker.log
