@@ -37,7 +37,7 @@ class AgeGroupController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|unique:age_groups',
+            'name' => 'required|unique:age_groups,name,NULL,id,deleted_at,NULL',
             'from' => 'required|numeric|min:1|max:99',
             'to' => 'required|numeric|min:1|max:99',
         ]);
