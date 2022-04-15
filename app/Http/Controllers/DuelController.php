@@ -498,7 +498,7 @@ class DuelController extends Controller
             }
         }
         
-        $quiz_rules = QuizRule::select('more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->first();
+        $quiz_rules = QuizRule::select('more')->where('quiz_type_id', 2)->where('quiz_speed_id', $data2->quiz_speed_id)->where('status','1')->first();
 
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => []]);

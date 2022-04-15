@@ -377,7 +377,7 @@ use App\QuestionsSetting;
             </div>
          </div>
       </div>
-      >>>>>>> 7452f46a579749ddd51feb57ddbec5c813e672ab
+      
       <!-- Bulk Model Ends here -->
       @endsection
       @section('js')

@@ -108,7 +108,7 @@ class QuizRoomController extends Controller
         }
 
 
-        $quiz_rules = QuizRule::select('scoring', 'negative_marking', 'time_limit', 'no_of_players', 'hint_guide', 'que_navigation', 'more')->where('quiz_type_id', 3)->where('quiz_speed_id', $data->quiz_speed_id)->first();
+        $quiz_rules = QuizRule::select('scoring', 'negative_marking', 'time_limit', 'no_of_players', 'hint_guide', 'que_navigation', 'more')->where('quiz_type_id', 3)->where('quiz_speed_id', $data->quiz_speed_id)->where('status','1')->first();
 
         if (empty($quiz_rules)) {
             return response()->json(['status' => 204, 'message' => 'No rules found for the quiz', 'data' => []]);
