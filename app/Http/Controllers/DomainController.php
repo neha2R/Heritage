@@ -47,7 +47,7 @@ class DomainController extends Controller
             'theme_id' => 'required',
         ]);
         $data = new Domain;
-        $data->name = strtolower($request->name);
+        $data->name = $request->name;
         $data->status = '1';
         $data->themes_id = implode(',',$request->theme_id);
         $data->save();
@@ -104,7 +104,7 @@ class DomainController extends Controller
     public function update(Request $request, Domain $domain)
     {
 
-        $domain->name = strtolower($request->name);
+        $domain->name = $request->name;
         $domain->themes_id = implode(',',$request->theme_id);
 
         $domain->save();
