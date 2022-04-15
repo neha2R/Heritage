@@ -68,7 +68,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/faqs', function(){
-    $faqs=Faq::all();
+    $faqs=Faq::where('status','1')->get();
     return view('faq',compact('faqs'));
 });
 Route::get('/cul.tre/{id}', 'HomeController@download');

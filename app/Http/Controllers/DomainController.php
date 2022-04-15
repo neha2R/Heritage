@@ -202,7 +202,7 @@ class DomainController extends Controller
     public function domains()
     {
 
-        $domains = Domain::OrderBy('id', 'DESC')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->where('status','1')->get();
         $domains = $domains->toArray();
         return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
 
@@ -217,7 +217,7 @@ class DomainController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
-              $query = Domain::select('id','name');
+              $query = Domain::select('id','name')->where('status','1');
          $ids = explode(',', $request->theme_id);
          foreach($ids as $myid){
          $query->orWhere('themes_id',$myid);
