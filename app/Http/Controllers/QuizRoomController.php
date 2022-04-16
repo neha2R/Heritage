@@ -36,6 +36,9 @@ class QuizRoomController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+        if (!age_group_by_user($request->user_id)) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'Age group not found..']);
+        }
         $quiz_type = QuizType::where('name', 'like', '%Quiz Room%')->latest()->first();
 
         if (empty($quiz_type)) {

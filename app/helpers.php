@@ -95,7 +95,7 @@ function age_group_by_user($user_id)
     $user = User::find($user_id);
     $age = Carbon::parse($user->dob)->age;
 
-    $ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->first();
+    $ageGroup = AgeGroup::where('from', '<=', $age)->where('to', '>=', $age)->where('status','1')->first();
     return $ageGroup;
 }
 

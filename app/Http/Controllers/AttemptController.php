@@ -55,7 +55,10 @@ class AttemptController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-
+       
+        if(!age_group_by_user($request->user_id)){
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'Age group not found..']);
+        }
         $data = new Attempt;
         $data->user_id = $request->user_id;
         $data->quiz_type_id = $request->quiz_type_id;

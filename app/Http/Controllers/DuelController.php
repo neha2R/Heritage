@@ -33,6 +33,9 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+        if (!age_group_by_user($request->user_id)) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => 'Age group not found..']);
+        }
         $quiz_type = QuizType::where('name', 'like', '%Duel%')->where('no_of_player', 2)->latest()->first();
 
         if (empty($quiz_type)) {
