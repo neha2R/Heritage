@@ -620,7 +620,9 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="difficulty_level_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required>
+                                            @if($tournament->difficulty_level)
                                             <option value="{{$tournament->difficulty_level->id}}" selected>{{$tournament->difficulty_level->name}}</option>
+                                            @endif
                                             <option disabled value> -- Select Difficulty Level --</option>
                                             @foreach($difficulty_levels as $difficulty_level)
                                             <option value="{{$difficulty_level->id}}">{{$difficulty_level->name}}</option>
@@ -779,7 +781,7 @@
                                         </label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" value="1" type="radio" name="rule" id="flexRadioDefault2" @php echo  ($rule) ?'checked':'' @endphp />
+                                        <input class="form-check-input" value="1" type="radio" name="rule" id="flexRadioDefault2" @php echo ($rule) ?'checked':'' @endphp />
                                         <label class="form-check-label" for="flexRadioDefault2">
                                             Custom Rules
                                         </label>
