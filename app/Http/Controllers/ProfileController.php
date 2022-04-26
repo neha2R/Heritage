@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $data=[];
         $check = true;
         if ($request->contact_id) {
-            $setting =  userProfileSetting($request->user_id);
+            $setting =  userProfileSetting($request->contact_id);
             if ($setting == 'all') {
                 $check = true;
             } else {

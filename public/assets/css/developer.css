@@ -112,7 +112,7 @@ input:checked + .slider:after {
   color: #fff;
 }
 .vertical-nav-menu li a.mm-active {
-  background: #151313;
+  background: #2dace3;
 }
 .nextstep {
   top: 125px !important;
