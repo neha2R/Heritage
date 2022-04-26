@@ -38,7 +38,7 @@ class FaqController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|unique:faqs',
-            'content' => 'required|max:300',
+            'content' => 'required|max:255',
             
         ]);
 
@@ -87,8 +87,8 @@ class FaqController extends Controller
         $data = Faq::find($faq);
 
         $validatedData = $request->validate([
-            'title' => 'required|unique:faqs'.",title,".$data->title,
-            'content' => 'required|max:99',
+            'title' => 'required|unique:faqs,title,'.$data->id,
+            'content' => 'required|max:255',
            
         ]);
         $data->title = $request->title;

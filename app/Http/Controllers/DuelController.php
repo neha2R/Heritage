@@ -473,7 +473,13 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
         if (isset($data->challange_id)) {
-            return response()->json(['status' => 200, 'data' => [], 'message' => 'Request accepted']);
+            $challenge = Challange::where('id', $data->challange_id)->first();
+
+            $dual['dual_id'] = $data->id;
+            $dual['name'] = $challenge->to_user->name ;
+            $dual['image'] = url('/storage') . '/' . $challenge->to_user->profile_image;
+         
+            return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Request accepted']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Request not accepted yet']);
         }
@@ -591,4 +597,6 @@ class DuelController extends Controller
 
         return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
     }
+
+    
 }
