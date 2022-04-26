@@ -82,10 +82,10 @@ trait NotificationToUser {
             'vibrate' => 1,
             'sound' => 1,
         );
-        if($data['room_id']){
+        if(isset($data['room_id'])){
             $msg['room_id'] = $data['room_id'];
         }
-        if ($data['type']) {
+        if (isset($data['type'])) {
             $msg['type'] = $data['type'];
         }
         //this is for android
