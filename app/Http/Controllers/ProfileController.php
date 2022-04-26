@@ -33,6 +33,7 @@ class ProfileController extends Controller
         $check = true;
         if ($request->contact_id) {
             $setting =  userProfileSetting($request->contact_id);
+           
             if ($setting == 'all') {
                 $check = true;
             } else {
