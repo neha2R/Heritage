@@ -647,7 +647,9 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <select name="domain_id" class="@error('domain_id') is-invalid @enderror form-control" required>
+                                            @if($tournament->domain)
                                             <option value="{{$tournament->domain->id}}" disabled selected>{{$tournament->domain->name}}</option>
+                                            @endif
                                             <!-- <option  disabled  value>--Select Domain--</option>
                                             @foreach($domains as $domain)
                                                 <option value="{{$domain->id}}">{{$domain->name}}</option>
