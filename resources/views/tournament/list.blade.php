@@ -101,7 +101,7 @@
                                         <tbody>
                                             @foreach($tournaments as $key=>$tournament)
                                             <tr>
-                                                <th scope="row">{{$tournament->id}}</th>
+                                                <th scope="row">{{$key+1}}</th>
                                                 <th scope="row">{{$tournament->title}}</th>
                                                 <td>{{$tournament->frequency->title}}</td>
                                                 <td><label class="switch">
