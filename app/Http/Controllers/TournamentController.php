@@ -602,7 +602,7 @@ class TournamentController extends Controller
         foreach($tournaments as $tournament)
         {
             $diffid = Tournament::find($tournament->id);
-            $tournament->difficulty = ($diffid->difficulty_level->name) ? $diffid->difficulty_level->name :'-' ;
+            $tournament->difficulty = ($diffid->difficulty_level) ? $diffid->difficulty_level->name :'-' ;
             $tournament->frequency = Tournament::find($tournament->id)->frequency->title;
             $tournament->sessions = SessionsPerDay::select('start_time','id')->where('tournament_id',$tournament->id)->get()->toArray();
 
