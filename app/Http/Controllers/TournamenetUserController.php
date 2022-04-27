@@ -596,9 +596,14 @@ class TournamenetUserController extends Controller
         }
         if (isset($request->month)) {
             $monthname =    date('m', strtotime($request->month));
-        } else {
-            $monthname = date('m');
+        } 
+        if($monthname>date('m')){
+            
         }
+        dd($monthname);
+        // else {
+        //     $monthname = date('m');
+        // }
         $check = true;
         if ($request->contact_id) {
             $setting =  userProfileSetting($request->contact_id);

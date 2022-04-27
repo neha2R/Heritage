@@ -189,13 +189,13 @@ class DuelController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
         $challenge =   Challange::where('attempt_id', $req->dual_id)
-            ->where('status', '0')
-            ->where('from_user_id', $req->from_id)->whereDate('created_at', carbon::now())->latest()->first();
+            // ->where('status', '0')
+            ->where('from_user_id', $req->from_id)->where('to_user_id',$req->to_id)->whereDate('created_at', carbon::now())->latest()->first();
 
         if (isset($challenge)) {
             if ($challenge->status == '0') {
                 if (carbon::now()->parse($challenge->created_at)->diffInSeconds() < 60) {
-                    return response()->json(['status' => 200, 'data' => [], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
+                    return response()->json(['status' => 201, 'data' => [], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
                 }
             }
         }
