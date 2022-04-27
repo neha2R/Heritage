@@ -586,10 +586,10 @@ class TournamentController extends Controller
          if($request->search){
             $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt','sponsor_media_id')
             ->where('title', 'like', '%' . $request->search . '%')
-            ->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+            ->where('age_group_id',$ageGroup->id)->where('status', '1')->OrderBy('id', 'DESC')->get();
          }else{
         //    dd($request->user_id);
-        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt','sponsor_media_id')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
+        $tournaments = Tournament::select('id','title','start_time','duration','interval_session','frequency_id','is_attempt','sponsor_media_id')->where('status', '1')->where('age_group_id',$ageGroup->id)->OrderBy('id', 'DESC')->get();
          }
         //Post::with('user:id,username')->get();
         $currentDateTime = Carbon::now();
