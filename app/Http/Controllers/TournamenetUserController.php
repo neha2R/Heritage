@@ -598,9 +598,10 @@ class TournamenetUserController extends Controller
             $monthname =    date('m', strtotime($request->month));
         } 
         if($monthname>date('m')){
-            
+            return response()->json(['status' => 201, 'data' => $response, 'message' => 'No data available']);
+   
         }
-        dd($monthname);
+        // dd($monthname);
         // else {
         //     $monthname = date('m');
         // }
@@ -623,6 +624,9 @@ class TournamenetUserController extends Controller
         $month = 0;
 
         $noofdays = date('t', strtotime($request->month));
+        if ($monthname == date('m')) {
+          $noofdays = date('d');
+        }
         $year = date('Y');
         for ($i = 1; $i <= $noofdays; $i++) {
             $date = date("$year-$monthname-$i");
