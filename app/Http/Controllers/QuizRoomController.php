@@ -163,16 +163,21 @@ class QuizRoomController extends Controller
 
 
         if ($challenge) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You have already sent this user request for the quiz room quiz."]);
+            if (carbon::now()->parse($challenge->created_at)->diffInSeconds() < 60) {
+                return response()->json(['status' => 201, 'data' => [], 'message' => 'Sorry! Wait for 60 sec or till accept the request.']);
+            }
+            // return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You have already sent this user request for the quiz room quiz."]);
         }
-        // else
-        // {
-        // $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
-        //     ->where('to_user_id', $req->to_id)
-        //     ->whereDate('created_at', carbon::now())->get()->count();
-        // if ($challange >= 3) {
-        //     return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
-        // } else {
+        else
+        {
+        $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
+            ->where('to_user_id', $req->to_id)
+            ->whereDate('created_at', carbon::now())->get()->count();
+        if ($challange >= 3) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
+        } 
+       }
+        // else {
         $challange = new Challange;
         $challange->to_user_id = $req->to_id;
         $challange->from_user_id = $req->from_id;

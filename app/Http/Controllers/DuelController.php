@@ -199,9 +199,9 @@ class DuelController extends Controller
                 }
             }
         }
-        if ($challenge) {
-            return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
-        }
+        // if ($challenge) {
+        //     return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        // }
         // else
         // {
         // $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
