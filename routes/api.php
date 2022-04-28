@@ -125,6 +125,7 @@ Route::get('userleague', 'TournamenetUserController@userleague');
 Route::get('leaguerank', 'TournamenetUserController@leaguerank');
 Route::get('xprewards', 'TournamenetUserController@xprewards');
 Route::post('tournamentuserlist', 'TournamentController@tournamentuserlist');
+Route::post('exitfromtournament', 'TournamentController@exitfromtournament');
 
 /**  End from Here        */
 

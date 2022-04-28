@@ -574,18 +574,18 @@ class TournamentController extends Controller
             $url_image = url('/storage') . '/' . Tournament::find($tournament->id)->media_name;
             $tournament->image_url = $url_image;
             $tournament->sponsor_media_id = url('/storage') . '/' . $tournament->sponsor_media_id;
-            
+
             $checkjoin = TournamenetUser::where('tournament_id', $tournament->id)->where('user_id', $request->user_id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->first();
-if($checkjoin){
+            if ($checkjoin) {
                 $waitlist_joined = 1;
-}
+            }
             //Current day record
             if ($tournament->frequency_id == 1) {
                 $mytournamnet = TournamenetUser::where('tournament_id', $tournament->id)->where('user_id', $request->user_id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->first();
                 if (empty($mytournamnet)) {
 
                     $mytournamnet = TournamenetUser::where('tournament_id', $tournament->id)->where('user_id', $request->user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first();
-                } 
+                }
             }
             // Prevoius 7 days record
             if ($tournament->frequency_id == 2) {
@@ -596,7 +596,6 @@ if($checkjoin){
                     $mytournamnet = TournamenetUser::where('tournament_id', $tournament->id)->where('user_id', $request->user_id)
                         ->where('status', 'completed')->where('created_at', '>=', Carbon::now()->subdays(7))->first();
                 }
-                
             }
 
             // // Last Month record
@@ -744,15 +743,17 @@ if($checkjoin){
     }
 
 
-    public function tournamentuserlist(Request $request){
+    public function tournamentuserlist(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'tournament_id' => 'required',
+            'session_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
-        $userids = TournamenetUser::where('tournament_id', $request->tournament_id)->where('status', 'joined')->pluck('user_id')->toArray();
+        $userids = TournamenetUser::where('tournament_id', $request->tournament_id)->where('session_id', $request->session_id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->pluck('user_id')->toArray();
         $users = User::whereIn('id', $userids)->get();
         $data = [];
 
@@ -781,9 +782,27 @@ if($checkjoin){
                 $allUsers['image'] = '';
             }
             $data[] = $allUsers;
-
         }
         return response()->json(['status' => 200,  'data' => $data, 'message' => 'TOurnament user list']);
+    }
 
+    public function exitfromtournament(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'tournament_id' => 'required',
+            'session_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $tournamenetUser = TournamenetUser::where('user_id', $request->user_id)->where('status', 'joined')->where('session_id', $request->session_id)->where('tournament_id', $request->tournament_id)->latest()->first();
+        if ($tournamenetUser) {
+            $tournamenetUser->delete();
+            return response()->json(['status' => 200, 'data' => [], 'message' => 'User exit from tournament']);
+        } else {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not joined yet']);
+        }
     }
 }
