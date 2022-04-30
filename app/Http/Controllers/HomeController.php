@@ -155,14 +155,17 @@ class HomeController extends Controller
 
                 }
             }
-
-            $response['tournament'] = TournamenetUser::select('tournament_id','session_id')->where('status', 'joined')->where('user_id',$request->user_id)->whereDate('created_at', Carbon::today())->first()->toArray();
-
+         $tournament=[];
+            $tournamentdata = TournamenetUser::select('tournament_id','session_id')->where('status', 'joined')->where('user_id',$request->user_id)->whereDate('created_at', Carbon::today())->first();
+            if($tournamentdata){
+                $tournament = $tournamentdata->toArray(); 
+            }
             $response['quizroom_start'] = $acceptquizroom;
             $response['accept'] = $acceptdata;
             $response['dual'] = $dualquizdata;
             $response['quizroom'] = $quizroomdata;
             $response['contact'] = $mycontacts;
+             $response['tournament'] =$tournament;
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
