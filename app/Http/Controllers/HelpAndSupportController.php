@@ -14,7 +14,8 @@ class HelpAndSupportController extends Controller
      */
     public function index()
     {
-        //
+        $supports = HelpAndSupport::get();
+        return view('help', compact('supports'));
     }
 
     /**

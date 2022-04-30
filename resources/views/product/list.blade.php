@@ -274,7 +274,9 @@
                 <input type="file" id="edit_files" name="images[]"  accept="image/*" multiple   />
                 <div id="old_photos">
                 @foreach($product->images as $image)           
-                   <span class="pip"><input type="hidden"  value="{{$image->image}}" name="old_images[]"/><input type="button" value="x" class="remove_edit"><img class="imageThumb" style="width:120px;" src="{{asset('storage/'.$image->image)}}"></span>
+                   <span class="pip"><input type="hidden"  value="{{$image->image}}" name="old_images[]"/><input type="button" value="x" class="remove_edit">
+                   <img class="imageThumb" style="width:120px;" src="{{asset('storage/'.$image->image)}}">
+                  </span>
               @endforeach
                   </div>
                  </div>

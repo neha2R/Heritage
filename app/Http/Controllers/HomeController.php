@@ -12,7 +12,7 @@ use App\QuizDomain;
 use App\Domain;
 use App\TournamenetUser;
 use Carbon\Carbon;
-
+use App\SessionsPerDay;
 class HomeController extends Controller
 {
     /**
@@ -158,7 +158,13 @@ class HomeController extends Controller
          $tournament=[];
             $tournamentdata = TournamenetUser::select('tournament_id','session_id')->where('status', 'joined')->where('user_id',$request->user_id)->whereDate('created_at', Carbon::today())->first();
             if($tournamentdata){
+                $session = SessionsPerDay::find($tournamentdata->session_id);
+                $StartTime    = Carbon::parse($session->start_time); //Get Timestamp
+                $currTime      = Carbon::parse(date('H:i'));
+                // $remtime = $EndTime->diffInSeconds($StartTime);
+                if($StartTime->gt($currTime)){
                 $tournament = $tournamentdata->toArray(); 
+                }
             }
             $response['quizroom_start'] = $acceptquizroom;
             $response['accept'] = $acceptdata;

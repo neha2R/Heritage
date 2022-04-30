@@ -62,7 +62,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('/add_feed_media','FeedContentController@add_feed_media')->name('add_feed_media');
     Route::resource('/tourrule', 'TournamentRuleController');
     Route::get('addrule', 'TournamentRuleController@addrule')->name('addrule');
-
+    Route::get('help', 'HelpAndSupportController@index')->name('help');
 });
 // Auth::routes();
 

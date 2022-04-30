@@ -153,7 +153,12 @@
                Tournament Setting
             </a>
          </li>
-
+         <li class="menu">
+            <a href="/admin/help" class="{{ request()->is('admin/help*') ? 'mm-active' : '' }}">
+               <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+               Help & Support
+            </a>
+         </li>
 
 
          </ul>
