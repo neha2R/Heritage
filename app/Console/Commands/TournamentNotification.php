@@ -45,7 +45,7 @@ class TournamentNotification extends Command
     //    echo $starttime;
     //    exit();
         $tournaments = Tournament::select('id', 'title', 'start_time', 'duration', 'interval_session', 'frequency_id', 'is_attempt', 'sponsor_media_id')->where('status', '1')->OrderBy('id', 'DESC')->get();
-       $users=[];
+       $users='';
        
         if($tournaments){
         foreach ($tournaments as $tournament) {
@@ -53,7 +53,7 @@ class TournamentNotification extends Command
             ->where('start_time', $starttime)->first();
                 // $userids=null;
                 if($sessid){
-                    $users[] = TournamenetUser::where('tournament_id', $tournament->id)->where('session_id', $sessid->id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->pluck('user_id')->toArray();
+                    $users = TournamenetUser::where('tournament_id', $tournament->id)->where('session_id', $sessid->id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->pluck('user_id')->toArray();
                 } 
                 // if($userids != null){
                 //     $users[] = $userids;
@@ -61,8 +61,8 @@ class TournamentNotification extends Command
         
         }
     }
-    dd($users);
-if(!empty($users)){
+  
+if($users){
     
         foreach ($users as $user){
             $data = [

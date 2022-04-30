@@ -10,6 +10,7 @@ use App\User;
 use App\Attempt;
 use App\QuizDomain;
 use App\Domain;
+use App\TournamenetUser;
 use Carbon\Carbon;
 
 class HomeController extends Controller
@@ -153,7 +154,11 @@ class HomeController extends Controller
                 }
 
                 }
-            }$response['quizroom_start'] = $acceptquizroom;
+            }
+
+            $response['tournament'] = TournamenetUser::select('tournament_id','session_id')->where('status', 'joined')->where('user_id',$request->user_id)->whereDate('created_at', Carbon::today())->first()->toArray();
+
+            $response['quizroom_start'] = $acceptquizroom;
             $response['accept'] = $acceptdata;
             $response['dual'] = $dualquizdata;
             $response['quizroom'] = $quizroomdata;
