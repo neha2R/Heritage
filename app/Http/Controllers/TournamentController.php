@@ -753,7 +753,13 @@ class TournamentController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
+       $session= SessionsPerDay::find($request->session_id);
+        $StartTime    = Carbon::parse($session->start_time); //Get Timestamp
+        $EndTime      = Carbon::parse(date('H:i'));
+       $remtime = $EndTime->diffInSeconds($StartTime);
+      
         $userids = TournamenetUser::where('tournament_id', $request->tournament_id)->where('session_id', $request->session_id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->pluck('user_id')->toArray();
+       
         $users = User::whereIn('id', $userids)->get();
         $data = [];
 
@@ -783,7 +789,7 @@ class TournamentController extends Controller
             }
             $data[] = $allUsers;
         }
-        return response()->json(['status' => 200,  'data' => $data, 'message' => 'TOurnament user list']);
+        return response()->json(['status' => 200, 'remaningtimestamp' => $remtime, 'data' => $data, 'message' => 'TOurnament user list']);
     }
 
     public function exitfromtournament(Request $request)
