@@ -199,10 +199,15 @@ class DomainController extends Controller
     }
 
     // Get all domains
-    public function domains()
+    public function domains(Request $request)
     {
+         if($request->theme_id){
+            $domains = Domain::OrderBy('id', 'DESC')->where('themes_id',$request->theme_id)->where('status', '1')->get();
+  
+         }else{
+            $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
 
-        $domains = Domain::OrderBy('id', 'DESC')->where('status','1')->get();
+         }
         $domains = $domains->toArray();
         return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
 

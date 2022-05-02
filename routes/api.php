@@ -43,6 +43,8 @@ Route::post('link_details', 'HomeController@link_details');
 
 Route::post('createquiz', 'AttemptController@store');
 Route::get('domains', 'DomainController@domains');
+Route::post('domains', 'DomainController@domains');
+
 Route::get('difficulty', 'DifficultyLevelController@difficulty');
 Route::get('speed', 'QuizSpeedController@speed');
 
