@@ -171,11 +171,9 @@ class HomeController extends Controller
             $response['dual'] = $dualquizdata;
             $response['quizroom'] = $quizroomdata;
             $response['contact'] = $mycontacts;
-            if(empty($tournament)){
-                $tournament = json_encode($tournament, JSON_FORCE_OBJECT);
-
-            }
+            if(!empty($tournament)){            
              $response['tournament'] =$tournament;
+            }
             return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
         } else {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
