@@ -15,6 +15,7 @@ trait NotificationToUser {
             $userdata = User::find($user->user_id);
 
             $data['title']='New tournament';
+            $data['type'] = 'tournament';
             $data['message'] = 'New tournament has been created';
             $data['token'] = $userdata->token;
             $this->sendNotification($data);   
@@ -32,6 +33,7 @@ trait NotificationToUser {
         foreach ($users as $user) {
             $userdata = User::find($user->user_id);
             $data['title'] = 'New Post';
+            $data['type'] = 'post';
             $data['message'] = 'New post has been created';
             $data['token'] = $userdata->token;
             $this->sendNotification($data);
@@ -50,6 +52,7 @@ trait NotificationToUser {
             $userdata = User::find($user->user_id);
 
             $data['title'] = 'New Products';
+            $data['type'] = 'product';
             $data['message'] = 'New products has been created';
             $data['token'] = $userdata->token;
             $this->sendNotification($data);
@@ -68,6 +71,7 @@ trait NotificationToUser {
             $userdata = User::find($user->user_id);
 
             $data['title'] = 'New Experience';
+            $data['type'] = 'experience';
             $data['message'] = 'New Experience found ! Please hurry up';
             $data['token'] = $userdata->token;
             $this->sendNotification($data);
