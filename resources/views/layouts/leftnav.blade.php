@@ -159,6 +159,12 @@
                Help & Support
             </a>
          </li>
+         <li class="menu">
+            <a href="/admin/disputes" class="{{ request()->is('admin/disputes*') ? 'mm-active' : '' }}">
+               <i class="fa fa-tasks metismenu-icon " aria-hidden="true"></i>
+               Disputes
+            </a>
+         </li>
 
 
          </ul>

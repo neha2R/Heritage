@@ -63,6 +63,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('/tourrule', 'TournamentRuleController');
     Route::get('addrule', 'TournamentRuleController@addrule')->name('addrule');
     Route::get('help', 'HelpAndSupportController@index')->name('help');
+    Route::get('disputes', 'DisputeController@index')->name('disputes');
+
 });
 // Auth::routes();
 

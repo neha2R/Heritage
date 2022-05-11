@@ -15,7 +15,8 @@ class DisputeController extends Controller
      */
     public function index()
     {
-        //
+        $disputes = Dispute::get();
+        return view('dispute', compact('disputes'));
     }
 
     /**
@@ -52,6 +53,7 @@ class DisputeController extends Controller
         $data->quiz_id = $request->quiz_id;
         $data->type = $request->type;
         $data->details = $request->dispute;
+        $data->user_id = $request->user_id;
         // $data->status = '1';
         $data->save();
         return response()->json(['status' => 200, 'message' => 'Data found succesfully', 'data' => $data]);

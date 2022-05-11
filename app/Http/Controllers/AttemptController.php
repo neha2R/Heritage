@@ -210,6 +210,17 @@ class AttemptController extends Controller
     public function get_answerkey(Request $request)
     {
         $quiz = Attempt::find($request->quiz_id);
+
+         // For quiz room
+        if($request->user_id){
+            if (isset($quiz)) {
+                if ($quiz->user_id == $request->user_id) {
+                } else {
+                    $quiz =
+                        Attempt::where('parent_id', $request->room_id)->where('user_id', $request->user_id)->first();
+                }
+        }
+    }
         if (!empty($quiz)) {
             $questions = Performance::where('attempt_id', $request->quiz_id)->get();
             $data = [];
