@@ -217,7 +217,7 @@ class AttemptController extends Controller
                 if ($quiz->user_id == $request->user_id) {
                 } else {
                     $quiz =
-                        Attempt::where('parent_id', $request->room_id)->where('user_id', $request->user_id)->first();
+                        Attempt::where('parent_id', $quiz->id)->where('user_id', $request->user_id)->first();
                 }
         }
     }
