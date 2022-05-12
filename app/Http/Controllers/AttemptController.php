@@ -217,12 +217,12 @@ class AttemptController extends Controller
                 if ($quiz->user_id == $request->user_id) {
                 } else {
                     $quiz =
-                        Attempt::where('parent_id', $quiz->id)->where('user_id', $request->user_id)->first();
+                        Attempt::where('parent_id', $request->quiz_id)->where('user_id', $request->user_id)->first();
                 }
         }
     }
         if (!empty($quiz)) {
-            $questions = Performance::where('attempt_id', $request->quiz_id)->get();
+            $questions = Performance::where('attempt_id', $quiz->id)->get();
             $data = [];
             foreach ($questions as $question) {
                 $res = [];
