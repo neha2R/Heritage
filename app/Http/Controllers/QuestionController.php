@@ -426,7 +426,8 @@ class QuestionController extends Controller
         $domains = (explode(",", $domains->domain_id));
 
         $quesdis = strtolower($diff->name);
-        if (!isset($quiz->parent_id)) {
+        
+        if ($quiz->parent_id==null) {
         switch ($quesdis) {
             case "beginner":
                 //Easy level question distribution
@@ -501,7 +502,16 @@ class QuestionController extends Controller
                     ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
                 // $question_ids->get()->toArray();
         }
-      }
+      
+        if (empty($question_ids)) {
+            return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
+        }
+            shuffle($question_ids);
+
+        } else{
+            $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
+
+        }
         $all[] = date('d-m-y h:i:s');
         $myuser[] = $user->name;
         $myuser[] = $user->id;
@@ -513,12 +523,6 @@ class QuestionController extends Controller
         $all['speed'] = $speed->name;
         $all['age'] = $age_group->name;
         Storage::append('file.log', json_encode($all));
-
-
-        if (empty($question_ids)) {
-            return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
-        }
-
         // if (count($question_ids) < $speed->no_of_question) {
         //     $dis3 = $speed->no_of_question - count($question_ids);
 
@@ -528,7 +532,6 @@ class QuestionController extends Controller
         // }
 
         // print_r($question_ids);exit;
-        shuffle($question_ids);
 
         $data = [];
 
