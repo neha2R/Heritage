@@ -591,8 +591,18 @@ class DuelController extends Controller
         $dual['quiz_speed'] = ucwords(strtolower($data->quiz_speed->name));
         $dual['difficulty'] = ucwords(strtolower($data->difficulty->name));
         $dual['link'] = $data->link;
-        $dual['name'] = '';
-        $dual['image'] = '';
+        if (isset($data->user->profile_image)) {
+            $dual['image']  = url('/storage') . '/' . $data->user->profile_image;
+        } else {
+            $dual['image']  = '';
+        }
+        if (isset($data->user)) {
+            $dual['name']  = $data->user->name;
+        } else {
+            $dual['name']  = '';
+        }
+        // $dual['name'] = '';
+        // $dual['image'] = '';
         $dual['created_date'] = date('d-M-Y', strtotime($data->created_at));
 
         return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
