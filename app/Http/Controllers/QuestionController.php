@@ -404,15 +404,18 @@ class QuestionController extends Controller
         if (empty($quiz)) {
             return response()->json(['status' => 200, 'message' => 'Quiz not found', 'data' => '']);
         }
-        $quiz->started_at = date('Y-m-d h:i:s');
-        $quiz->save();
-
-        // IF quiz is Dual or Quizroom
         if (isset($quiz->parent_id)) {
 
             $quiz = Attempt::find($quiz->parent_id);
-        } 
-        $user = User::find($quiz->user_id);
+        }
+        
+        if($request->user_id){
+            $user = User::find($request->user_id);
+
+        }else{
+            $user = User::find($quiz->user_id);
+
+        }
         $speed = QuizSpeed::find($quiz->quiz_speed_id);
         $quiz_type = QuizType::find($quiz->quiz_type_id);
 
@@ -424,94 +427,94 @@ class QuestionController extends Controller
             $age_group = AgeGroup::where('from', '>=', $user->age)->latest();
         }
         $domains = (explode(",", $domains->domain_id));
-
         $quesdis = strtolower($diff->name);
-        
-        if ($quiz->parent_id==null) {
-        switch ($quesdis) {
-            case "beginner":
-                //Easy level question distribution
-                // Easy    (75% E, 25% H/I)
-                // dd($speed->no_of_question);
-                // dd($age_group->id);
-                $dis1 = round(($speed->no_of_question / 100) * 75);
+        // IF quiz is Dual or Quizroom        
+        $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first()->toArray();
 
-                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+        if ($question_ids == null) {
+            switch ($quesdis) {
+                case "beginner":
+                    //Easy level question distribution
+                    // Easy    (75% E, 25% H/I)
+                    // dd($speed->no_of_question);
+                    // dd($age_group->id);
+                    $dis1 = round(($speed->no_of_question / 100) * 75);
 
-                $dis2 = round(($speed->no_of_question - $dis1) / 2);
-                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+                    $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
+                    $dis2 = round(($speed->no_of_question - $dis1) / 2);
+                    $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                // dd($dis1,$dis2,$dis3);
+                    $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
-                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+                    // dd($dis1,$dis2,$dis3);
 
-                //  dd($question_id1,$question_id2,$question_id3);
+                    $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
 
-                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
+                    //  dd($question_id1,$question_id2,$question_id3);
 
-                //  dd($question_id1, $dis1, $dis2, $speed->no_of_question);
-                // $question_ids = $question_ids->get()->toArray();
-                break;
-            case "intermediate":
-                //Intermediate level question distribution
-                // Easy    (75% I, 25% H/E)
-                $dis1 = round(($speed->no_of_question / 100) * 75);
-                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                    $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
-                $dis2 = round(($speed->no_of_question - $dis1) / 2);
-                // dd($question_id1,$age_group->id,$diff->id,$dis1);
-                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+                    //  dd($question_id1, $dis1, $dis2, $speed->no_of_question);
+                    // $question_ids = $question_ids->get()->toArray();
+                    break;
+                case "intermediate":
+                    //Intermediate level question distribution
+                    // Easy    (75% I, 25% H/E)
+                    $dis1 = round(($speed->no_of_question / 100) * 75);
+                    $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
+                    $dis2 = round(($speed->no_of_question - $dis1) / 2);
+                    // dd($question_id1,$age_group->id,$diff->id,$dis1);
+                    $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+                    $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
-                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
+                    $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 3)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
 
-                // $question_ids->get()->toArray();
-                break;
-            case "advance":
-                $dis1 = round(($speed->no_of_question / 100) * 75);
-                $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                    $question_ids = array_merge($question_id1, $question_id2, $question_id3);
 
-                $dis2 = round(($speed->no_of_question - $dis1) / 2);
-                $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
+                    // $question_ids->get()->toArray();
+                    break;
+                case "advance":
+                    $dis1 = round(($speed->no_of_question / 100) * 75);
+                    $question_id1 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
 
-                $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
+                    $dis2 = round(($speed->no_of_question - $dis1) / 2);
+                    $question_id2 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 2)->whereIn('domain_id', $domains)->limit($dis2)->pluck('question_id')->toArray();
 
-                $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+                    $dis3 = round($speed->no_of_question - ($dis1 + $dis2));
 
-                $question_ids = array_merge($question_id1, $question_id2, $question_id3);
-                // $question_ids->get()->toArray();
-                // dd($question_id1, $dis1, $dis2, $speed->no_of_question,$age_group->id,$domains,$diff->id);
-                break;
-            default:
-                $dis1 = $speed->no_of_question;
-                $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
-                    ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
-                // $question_ids->get()->toArray();
-        }
-      
-        if (empty($question_ids)) {
-            return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
-        }
+                    $question_id3 = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', 1)->whereIn('domain_id', $domains)->limit($dis3)->pluck('question_id')->toArray();
+
+                    $question_ids = array_merge($question_id1, $question_id2, $question_id3);
+                    // $question_ids->get()->toArray();
+                    // dd($question_id1, $dis1, $dis2, $speed->no_of_question,$age_group->id,$domains,$diff->id);
+                    break;
+                default:
+                    $dis1 = $speed->no_of_question;
+                    $question_ids = QuestionsSetting::inRandomOrder()->where('age_group_id', $age_group->id)
+                        ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
+                    // $question_ids->get()->toArray();
+            }
+
+            if (empty($question_ids)) {
+                return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
+            }
             shuffle($question_ids);
-
-        } else{
-            $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
-
-        }
+        } 
+        // else {
+        //     $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
+        // }
         $all[] = date('d-m-y h:i:s');
         $myuser[] = $user->name;
         $myuser[] = $user->id;
@@ -534,7 +537,6 @@ class QuestionController extends Controller
         // print_r($question_ids);exit;
 
         $data = [];
-
         $data['quiz_type'] = $quiz_type->name;
         if ($speed->quiz_speed_type == 'single') {
             $data['time'] = $speed->duration;
@@ -552,14 +554,10 @@ class QuestionController extends Controller
             $data['whole_quiz_time'] = '1';
             $data['time'] = $speed->duration;
         }
-
-
-
         $quizQuestions = QuizQuestion::where('attempts_id', $quiz->id)->latest()->first();
 
         if (empty($quizQuestions)) {
             $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type', 'type')->whereIn('id', $question_ids)->orderByRaw("field(id," . implode(',', $question_ids) . ")")->get();
-
             $quizques = new QuizQuestion;
             $quizques->attempts_id = $request->quiz_id;
             $quizques->questions = implode(",", $question_ids);
@@ -567,40 +565,31 @@ class QuestionController extends Controller
             $quizques->save();
         } else {
             $ques = explode(",", $quizQuestions->questions);
-
             $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'attachment_details', 'type')->whereIn('id', $ques)->orderByRaw("field(id," . implode(',', $ques) . ")")
                 ->get();
         }
         $response = [];
-
         foreach ($questions as $que) {
-
             $quesdata['id'] = $que->id;
             $quesdata['question'] = $que->question;
             if ($que->question_media != null) {
                 $quesdata['question_media'] = url('/storage') . '/' . $que->question_media;
-
-
                 if ($que->type == '1') {
                     $detail = (array) json_decode($que->attachment_details, true);
                     // $h = 0;
                     // $w = 1;
                     // dd($detail);
-
                     // $quesdata['width']  =$detail['0'];
                     // $quesdata['height']  =$detail['1'];
                     $quesdata['width']  = 800;
                     $quesdata['height']  = 800;
                     //  $quesdata['media_data']  =$detail;
-
-
                 }
             } else {
                 $quesdata['question_media'] = '';
                 $quesdata['width']  = '';
                 $quesdata['height']  = '';
             }
-
             $quesdata['option1'] = $que->option1;
             $quesdata['option1_media'] = $que->option1_media;
             $quesdata['option2'] = $que->option2;
@@ -614,13 +603,9 @@ class QuestionController extends Controller
             $quesdata['question_media_type'] = $que->type;
             $quesdata['why_right'] = $que->why_right;
             $quesdata['type'] = $que->type;
-
-
             $response[] = $quesdata;
         }
-
         $data['question'] = $response;
-
         return response()->json(['status' => 200, 'message' => 'Quiz Speed data', 'data' => $data]);
     }
 
