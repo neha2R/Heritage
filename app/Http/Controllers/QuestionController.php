@@ -429,8 +429,8 @@ class QuestionController extends Controller
         $domains = (explode(",", $domains->domain_id));
         $quesdis = strtolower($diff->name);
         // IF quiz is Dual or Quizroom        
-        $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first()->toArray();
-
+        $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
+        
         if ($question_ids == null) {
             switch ($quesdis) {
                 case "beginner":
@@ -512,9 +512,10 @@ class QuestionController extends Controller
             }
             shuffle($question_ids);
         } 
-        // else {
-        //     $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
-        // }
+        else {
+            $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
+            $question_ids = $question_ids->question;
+        }
         $all[] = date('d-m-y h:i:s');
         $myuser[] = $user->name;
         $myuser[] = $user->id;
@@ -541,7 +542,7 @@ class QuestionController extends Controller
         if ($speed->quiz_speed_type == 'single') {
             $data['time'] = $speed->duration;
             $data['whole_quiz_time'] = '0';
-            $data['total_question'] = count($question_ids);
+            $data['total_question'] = count(explode(',',$question_ids));
             $data['total_question_in_quiz'] = $speed->no_of_question;
             // foreach ($questions as $question) {
             //     // $id = $question->questionsettingapi->difficulty_level_id;
@@ -561,7 +562,7 @@ class QuestionController extends Controller
             $quizques = new QuizQuestion;
             $quizques->attempts_id = $request->quiz_id;
             $quizques->questions = implode(",", $question_ids);
-            $quizques->total = count($question_ids);
+            $quizques->total = count(explode(',',$question_ids));
             $quizques->save();
         } else {
             $ques = explode(",", $quizQuestions->questions);
