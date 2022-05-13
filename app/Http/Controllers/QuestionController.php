@@ -510,7 +510,7 @@ class QuestionController extends Controller
             if (empty($question_ids)) {
                 return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
             }
-            shuffle($question_ids);
+            // shuffle($question_ids);
         } 
         else {
             $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
