@@ -430,7 +430,7 @@ class QuestionController extends Controller
         $quesdis = strtolower($diff->name);
         // IF quiz is Dual or Quizroom        
         $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
-        
+       
         if ($question_ids == null) {
             switch ($quesdis) {
                 case "beginner":
@@ -516,6 +516,8 @@ class QuestionController extends Controller
             $question_ids = QuizQuestion::select('questions')->where('attempts_id', $quiz->id)->latest()->first();
             $question_ids = explode(',',$question_ids->question);
         }
+
+     
         $all[] = date('d-m-y h:i:s');
         $myuser[] = $user->name;
         $myuser[] = $user->id;
@@ -560,7 +562,7 @@ class QuestionController extends Controller
         if (empty($quizQuestions)) {
             $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type', 'type')->whereIn('id', $question_ids)->orderByRaw("field(id," . implode(',', $question_ids) . ")")->get();
             $quizques = new QuizQuestion;
-            $quizques->attempts_id = $request->quiz_id;
+            $quizques->attempts_id = $quiz->id;
             $quizques->questions = implode(",", $question_ids);
             $quizques->total = count($question_ids);
             $quizques->save();
