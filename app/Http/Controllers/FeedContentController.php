@@ -943,7 +943,7 @@ class FeedContentController extends Controller
 
     public function feed_collection_view()
     {
-        $single_posts = FeedContent::where('feed_id','=','1')->get();
+        $single_posts = FeedContent::where('feed_id','=','1')->where('status', '1')->get();
         //dd($single_posts);
         $themes = Theme::OrderBy('id', 'DESC')->get();
         $domains = Domain::OrderBy('id', 'DESC')->get();
@@ -998,7 +998,7 @@ class FeedContentController extends Controller
         $feeds = SaveFeed::where('user_id',$request->id)->pluck('feed_contents_id');
         
      
-            $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds)->get();
+            $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds)->where('status', '1')->get();
           
             $last_page='';
             $i=1;
