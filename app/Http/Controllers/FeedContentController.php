@@ -882,7 +882,7 @@ class FeedContentController extends Controller
        function tagfilter(Request $request)
        {
 
-      $feedContents = FeedContent::select('id','feed_id','type','tags','title','description');
+      $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->where('status', '1');
         
            
       if ($request->type=='0') {
@@ -1517,7 +1517,7 @@ class FeedContentController extends Controller
         $feeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
         
      
-        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds);
+        $feedContents = FeedContent::select('id','feed_id','type','tags','title','description')->whereIn('id',$feeds)->where('status', '1');
 
         $feedContents = $feedContents->where('title','like','%' . $request->serach . '%')->get();
       

@@ -546,7 +546,7 @@ class DuelController extends Controller
                 'token' =>User::where('id', $attempt->user_id)->first()->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
-                'message' => User::where('id', $req->user_id)->first()->name . " has been rejected the request",
+                'message' => User::where('id', $req->user_id)->first()->name . " had  rejected the request",
             ];
             sendNotification($data);
             return response()->json(['status' => 200, 'data' => [], 'message' => 'No invitation']);
@@ -560,7 +560,7 @@ class DuelController extends Controller
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
-                'message' => User::where('id', $req->user_id)->first()->name . " has been rejected the request",
+                'message' => User::where('id', $req->user_id)->first()->name . " had  rejected the request",
             ];
             sendNotification($data);
 
@@ -583,7 +583,7 @@ class DuelController extends Controller
 
         $data = Attempt::where('link', $request->dual_link)->first();
         if (empty($data)) {
-            return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
+            return response()->json(['status' => 204, 'message' => 'Sorry! Link had expired. or not found']);
         }
 
         $domain =  QuizDomain::where('attempts_id', $data->id)->first()->domain_id;
