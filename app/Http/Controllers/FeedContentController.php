@@ -638,7 +638,7 @@ class FeedContentController extends Controller
         if ($request->domain_id) {
 
             $domain_id = explode(',', $request->domain_id);
-            $feedContents = $feedContents->orWhereIn('domain_id', $domain_id);
+            $feedContents = $feedContents->whereIn('domain_id', $domain_id);
         }
 
 
