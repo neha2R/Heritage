@@ -232,7 +232,7 @@ class DomainController extends Controller
          }
 
         $id = $request->theme_id;
-       $domains = $query->where('status','1');
+       $domains = $query->where('status','1')->get();
         // $domains = $query->orWhere('themes_id','like', '%'.$id.'%')->get();
         // $domains = Domain::select('id','name')->get();
         
