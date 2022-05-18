@@ -627,7 +627,7 @@ class FeedContentController extends Controller
         if ($request->theme_id) {
 
             $id = explode(',', $request->theme_id);
-            $feedContents = $feedContents->orWhereIn('theme_id', $id);
+            $feedContents = $feedContents->whereIn('theme_id', $id);
         }
 
         if ($request->feed_type_id) {
