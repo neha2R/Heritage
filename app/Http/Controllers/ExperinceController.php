@@ -193,7 +193,7 @@ class ExperinceController extends Controller
 
         if ($req->search != "") {
             $str = $req->search;
-            $exps = Experince::where('name', 'like', '%' . $str . '%')->get();
+            $exps = Experince::where('name', 'like', '%' . $str . '%')->where('status', '1')->get();
         } else {
 
             $exps = Experince::where('status', '1')->get();
