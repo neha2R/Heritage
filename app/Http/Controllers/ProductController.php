@@ -204,7 +204,7 @@ class ProductController extends Controller
 
         if ($req->search != "") {
             $str = $req->search;
-            $products = Product::where('name', 'like', '%' . $str . '%')->get();
+            $products = Product::where('name', 'like', '%' . $str . '%')->where('status', '1')->get();
         } else {
 
             $products = Product::where('status', '1')->get();
