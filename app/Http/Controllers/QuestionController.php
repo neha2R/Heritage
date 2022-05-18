@@ -135,6 +135,7 @@ class QuestionController extends Controller
         $data->option2 = $request->option2;
         $data->option3 = $request->option3;
         $data->option4 = $request->option4;
+        $data->hint = $request->hint;
         $data->question_media = $question_media;
         // $data->option1_media = $option1_media;
         // $data->option2_media = $option2_media;
@@ -323,6 +324,8 @@ class QuestionController extends Controller
         $data->option3 = $request->option3;
         $data->option4 = $request->option4;
         $data->question_media = $question_media;
+        $data->hint = $request->hint;
+
         // $data->option1_media = $option1_media;
         // $data->option2_media = $option2_media;
         // $data->option3_media = $option3_media;

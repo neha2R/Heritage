@@ -311,6 +311,12 @@ use App\QuestionsSetting;
 
                      <div class="form-group more">
                      </div>
+
+                     <div class="form-group row">
+                        <div class="col-md-12">
+                         <input type="text" class="form-control" placeholder="Hint" name="hint"/>
+                        </div>
+                     </div>
                      <div class="form-group row">
                         <a href="#" class="form-group btn btn-success ml-auto" onclick="addMore()">Add more..</a>
                      </div>
@@ -377,7 +383,7 @@ use App\QuestionsSetting;
             </div>
          </div>
       </div>
-      
+
       <!-- Bulk Model Ends here -->
       @endsection
       @section('js')
