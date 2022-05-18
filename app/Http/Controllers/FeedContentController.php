@@ -620,7 +620,7 @@ class FeedContentController extends Controller
         }
 
 
-        $feedContents = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description')->where('status', '1');
+        $feedContents = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description');
 
         // $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
 
@@ -640,7 +640,7 @@ class FeedContentController extends Controller
             $domain_id = explode(',', $request->domain_id);
             $feedContents = $feedContents->whereIn('domain_id', $domain_id);
         }
-
+        $feedContents = $feedContents->where('status', '1');
 
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
 
