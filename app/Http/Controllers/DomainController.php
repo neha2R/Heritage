@@ -235,10 +235,11 @@ class DomainController extends Controller
        $domains = $query->where('status','1');
         // $domains = $query->orWhere('themes_id','like', '%'.$id.'%')->get();
         // $domains = Domain::select('id','name')->get();
-        $domains = $domains->toArray();
+        
         if(empty($domains)){
             return response()->json(['status' => 200, 'message' => 'Domain not found', 'data' => '']);
         }
+        $domains = $domains->toArray();
         return response()->json(['status' => 200, 'message' => 'Domain data', 'data' => $domains]);
 
     }
