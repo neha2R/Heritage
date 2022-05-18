@@ -213,6 +213,8 @@ class DomainController extends Controller
 
     }
 
+
+    // Domain filter according to themes
     public function getDomainAccordingTheme(Request $request)
     {  
         $validator = Validator::make($request->all(), [
@@ -222,15 +224,16 @@ class DomainController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
-              $query = Domain::select('id','name')->where('status','1');
+              $query = Domain::select('id','name');
          $ids = explode(',', $request->theme_id);
          foreach($ids as $myid){
-         $query->orWhere('themes_id',$myid);
+         $query->where('themes_id',$myid);
          $query->orWhere('themes_id','like', '%'.$myid.'%');
          }
 
         $id = $request->theme_id;
-        $domains = $query->orWhere('themes_id','like', '%'.$id.'%')->get();
+       $domains = $query->where('status','1');
+        // $domains = $query->orWhere('themes_id','like', '%'.$id.'%')->get();
         // $domains = Domain::select('id','name')->get();
         $domains = $domains->toArray();
         if(empty($domains)){
