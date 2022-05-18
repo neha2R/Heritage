@@ -601,6 +601,11 @@ class TournamenetUserController extends Controller
             return response()->json(['status' => 201, 'data' => $response, 'message' => 'No data available']);
    
         }
+        if (isset($request->contact_id)) {
+            $userid = $request->contact_id;
+        } else {
+            $userid = $request->user_id;
+        }
         // dd($monthname);
         // else {
         //     $monthname = date('m');
@@ -618,7 +623,7 @@ class TournamenetUserController extends Controller
         if (!$check) {
             return response()->json(['status' => 201, 'message' => 'Profile set not visible to all', 'data' => $response]);
         }
-        $group = age_group_by_user($request->user_id);
+        $group = age_group_by_user($userid);
         $daily = 0;
         $weekly = 0;
         $month = 0;
@@ -652,7 +657,7 @@ class TournamenetUserController extends Controller
         }
         //    dd($monthdata);
         foreach ($monthdata as $key => $data) {
-            $rank[] =  array_search($request->user_id, array_keys($data)) ? array_search($request->user_id, array_keys($data)) + 1 : 0; // array index start from zero so +1
+            $rank[] =  array_search($userid, array_keys($data)) ? array_search($userid, array_keys($data)) + 1 : 0; // array index start from zero so +1
 
         }
 

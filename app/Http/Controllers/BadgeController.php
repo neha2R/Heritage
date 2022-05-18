@@ -22,8 +22,12 @@ class BadgeController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
-
-        $badges =  UserBadge::where('user_id', $request->user_id)->get();
+        if (isset($request->contact_id)) {
+            $userid = $request->contact_id;
+        } else {
+            $userid = $request->user_id;
+        }
+        $badges =  UserBadge::where('user_id', $userid)->get();
         $res = [];
         $check= true;
         if($request->contact_id){

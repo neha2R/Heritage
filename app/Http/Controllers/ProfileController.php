@@ -28,6 +28,12 @@ class ProfileController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
+        if(isset($request->contact_id)){
+            $userid = $request->contact_id;
+        }else{
+            $userid = $request->user_id;
+        }
+
         $sum=0;
         $data=[];
         $check = true;
@@ -51,13 +57,13 @@ class ProfileController extends Controller
          
                  $key = $key+1;
             // Badges xp calculate
-            $badgeids = UserBadge::where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->pluck('badge_id')->toArray();
+            $badgeids = UserBadge::where('user_id', $userid)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->pluck('badge_id')->toArray();
       
             $xpofbadges = Badge::whereIn('id', $badgeids)->sum('xp');
                 // Quizzes xp calculate
-           $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first()->xp;
+           $xps= Attempt::selectRaw("SUM(xp) as xp")->where('user_id', $userid)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first()->xp;
           // Tournament month end lp to xp 
-           $monthendxp = MonthendXp::where('user_id', $request->user_id)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first();
+           $monthendxp = MonthendXp::where('user_id', $userid)->whereMonth('created_at', $key)->whereYear('created_at', date('Y'))->first();
            if ($xps == 0) {
                 $xps = "0";
             }
@@ -75,7 +81,7 @@ class ProfileController extends Controller
       $max = max($data['mnth']);
        $data['totalxp'] = $sum;
         $data['max'] = $max['xp'];
-        $totalquiz= Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $request->user_id)->where('status', 'completed')->first()->totalquiz;
+        $totalquiz= Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $userid)->where('status', 'completed')->first()->totalquiz;
         if(!$totalquiz){
             $totalquiz=0;
         }
