@@ -530,7 +530,8 @@ class QuizRoomController extends Controller
         if (empty($challenge)) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Sorry! No invitation']);
         } else {
-            $challenge->deleted_at = date('Y-m-d h:i:s');
+            // $challenge->deleted_at = date('Y-m-d h:i:s');
+            $challenge->status = '2';
             $challenge->save();
 
 
