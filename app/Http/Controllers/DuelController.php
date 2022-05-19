@@ -199,17 +199,17 @@ class DuelController extends Controller
                 }
             }
         }
-        // if ($challenge) {
-        //     return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
-        // }
-        // else
-        // {
-        // $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
-        //     ->where('to_user_id', $req->to_id)
-        //     ->whereDate('created_at', carbon::now())->get()->count();
-        // if ($challange >= 3) {
-        //     return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
-        // } else {
+        if ($challenge) {
+            return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        }
+        else
+        {
+        $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
+            ->where('to_user_id', $req->to_id)
+            ->whereDate('created_at', carbon::now())->get()->count();
+        if ($challange >= 3) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
+        } else {
         $challange = new Challange;
         $challange->to_user_id = $req->to_id;
         $challange->from_user_id = $req->from_id;
@@ -240,8 +240,8 @@ class DuelController extends Controller
         $savenoti->save();
 
         return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
-        // }
-        // }
+        }
+        }
 
     }
     public function accept_invitation(Request $req)
