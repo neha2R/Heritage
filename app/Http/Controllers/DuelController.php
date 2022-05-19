@@ -208,7 +208,7 @@ class DuelController extends Controller
             ->where('to_user_id', $req->to_id)
             ->whereDate('created_at', carbon::now())->get()->count();
         if ($challange >= 3) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times in a day."]);
+            return response()->json(['status' => 422, 'data' => '', 'message' => "Sorry You can not send invitations to a single user more then 3 times for a particular quiz."]);
         } else {
         $challange = new Challange;
         $challange->to_user_id = $req->to_id;
