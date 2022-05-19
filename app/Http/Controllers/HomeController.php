@@ -84,7 +84,7 @@ class HomeController extends Controller
 
             foreach ($duals as $dual) {
                 $data=[];
-                if (Attempt::find($dual->attempt_id)) {
+                if (Attempt::where('id',$dual->attempt_id)->where('started_at',null)->first()) {
                     $check = Attempt::find($dual->attempt_id);
                  if (Carbon::now()->parse($check->created_at)->diffInSeconds() < 600) {  // Duel is not older than 3 minute
                     $type = $check->quiz_type_id;
@@ -137,7 +137,7 @@ class HomeController extends Controller
             foreach ($acceptinvitations as $acceptinvitation) {
                 $challange = Attempt::find($acceptinvitation->attempt_id);
 
-                if (Attempt::find($acceptinvitation->attempt_id)) {
+                if (Attempt::where('id',$acceptinvitation->attempt_id)->where('started_at',null)->first()) {
                     if($challange->quiz_type_id==3){
                         if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 600) {  // Quiz room not older than 10 min
 

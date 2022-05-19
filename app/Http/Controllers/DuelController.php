@@ -582,7 +582,7 @@ class DuelController extends Controller
         }
 
 
-        $data = Attempt::where('link', $request->dual_link)->first();
+        $data = Attempt::where('link', $request->dual_link)->where('started_at',null)->first();
         if (empty($data)) {
             return response()->json(['status' => 204, 'message' => 'Sorry! Link had expired. or not found']);
         }
