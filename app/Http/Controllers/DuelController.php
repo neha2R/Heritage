@@ -199,11 +199,11 @@ class DuelController extends Controller
                 }
             }
         }
-        if ($challenge) {
-            return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
-        }
-        else
-        {
+        // if ($challenge) {
+        //     return response()->json(['status' => 422, 'data' => [], 'message' => "Sorry You have already sent this user request for the dual quiz."]);
+        // }
+        // else
+        // {
         $challange = Challange::where('attempt_id', $req->dual_id)->where('from_user_id', $req->from_id)
             ->where('to_user_id', $req->to_id)
             ->whereDate('created_at', carbon::now())->get()->count();
@@ -241,7 +241,7 @@ class DuelController extends Controller
 
         return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
         }
-        }
+        // }
 
     }
     public function accept_invitation(Request $req)
@@ -551,7 +551,8 @@ class DuelController extends Controller
             sendNotification($data);
             return response()->json(['status' => 200, 'data' => [], 'message' => 'No invitation']);
         } else {
-            $challenge->deleted_at = date('Y-m-d h:i:s');
+            // $challenge->deleted_at = date('Y-m-d h:i:s');
+            $challenge->status='2';
             $challenge->save();
 
 
