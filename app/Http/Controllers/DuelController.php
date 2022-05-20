@@ -188,6 +188,12 @@ class DuelController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
+        // Check if user blocked or not 
+        $blockuser = BlockUser::where('blocked_by', $req->from_id)->where('blocked_to',$req->to_id)->first();
+        if($blockuser){
+            return response()->json(['status' => 201, 'data' => [], 'message' => "You can not send request to this user"]);
+ 
+        }
         $challenge =   Challange::where('attempt_id', $req->dual_id)
             // ->where('status', '0')
             ->where('from_user_id', $req->from_id)->where('to_user_id',$req->to_id)->whereDate('created_at', carbon::now())->latest()->first();
@@ -221,7 +227,7 @@ class DuelController extends Controller
 
         $attempt = Attempt::where('id', $challange->attempt_id)->first();
         $data = [
-            'title' => 'Invitation send.',
+            'title' => 'Invitation Received.',
             'token' => $challange->to_user->token,
             'link' => $attempt->link,
             'type' => 'dual',
@@ -234,7 +240,7 @@ class DuelController extends Controller
         $savenoti->user_id = $challange->to_user->id;
         $savenoti->link = $attempt->link;
         $savenoti->type = 'dual';
-        $savenoti->message = 'You have a new request from' . $challange->from_user->name;
+        $savenoti->message = 'You have a new request from ' . $challange->from_user->name;
         $savenoti->title = 'Dual Invitation send.';
         $savenoti->status = '0';
         $savenoti->save();
