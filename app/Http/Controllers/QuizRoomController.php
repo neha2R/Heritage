@@ -161,7 +161,7 @@ class QuizRoomController extends Controller
         }
         $challenge =   Challange::where('attempt_id', $req->quiz_room_id)
             ->where('from_user_id', $req->from_id)->where('to_user_id', $req->to_id)->first();
-        $blockuser = BlockUser::where('blocked_by', $req->from_id)->where('blocked_to', $req->to_id)->first();
+        $blockuser = BlockUser::where('blocked_by', $req->to_id)->where('blocked_to', $req->from_id)->first();
         if ($blockuser) {
             return response()->json(['status' => 201, 'data' => [], 'message' => "You can not send request to this user"]);
         }
