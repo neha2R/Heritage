@@ -482,7 +482,7 @@ class DuelController extends Controller
             $res[] = $user;
              }
 
-           $relaseuser = CheckUserState::find($request->user_id);
+           $relaseuser = CheckUserState::where('user_id',$request->user_id);
            ($relaseuser) ? $relaseuser->delete() : '';
 
             return response()->json(['status' => 200, 'user_data' => $user, 'result' => $res, 'message' => 'Dual data']);
