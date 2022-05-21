@@ -627,20 +627,20 @@ class FeedContentController extends Controller
         if ($request->theme_id) {
 
             $id = explode(',', $request->theme_id);
-            $feedContents = $feedContents->orWhereIn('theme_id', $id)->where('status', '1');
+            $feedContents = $feedContents->whereIn('theme_id', $id);
         }
 
         if ($request->feed_type_id) {
 
             $feed_id = explode(',', $request->feed_type_id);
-            $feedContents = $feedContents->orWhereIn('feed_id', $feed_id)->where('status', '1');
+            $feedContents = $feedContents->whereIn('feed_id', $feed_id);
         }
         if ($request->domain_id) {
 
             $domain_id = explode(',', $request->domain_id);
-            $feedContents = $feedContents->orWhereIn('domain_id', $domain_id)->where('status', '1');
+            $feedContents = $feedContents->whereIn('domain_id', $domain_id);
         }
-        // $feedContents = $feedContents->where('status', '1');
+         $feedContents = $feedContents->where('status', '1');
 
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
 
