@@ -295,7 +295,7 @@ class DuelController extends Controller
                     'token' => $challenge->from_user->token,
                     'link' => $attempt->link,
                     'type' => 'dual',
-                    'message' => User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now",
+                    'message' => User::where('id', $challenge->to_user_id)->first()->name . " has been accepted the request. you can start quiz now",
                 ];
             sendNotification($data);
                 // Create new data for user who accepts the request

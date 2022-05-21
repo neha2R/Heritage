@@ -135,9 +135,9 @@ class HomeController extends Controller
 
            $acceptquizroom =[];
             foreach ($acceptinvitations as $acceptinvitation) {
-                $challange = Attempt::find($acceptinvitation->attempt_id);
-
-                if (Attempt::where('id',$acceptinvitation->attempt_id)->where('started_at',null)->first()) {
+                $challange = Attempt::where('id', $acceptinvitation->attempt_id)->where('started_at', null)->first();
+                  if($challange){
+                // if (Attempt::where('id',$acceptinvitation->attempt_id)->where('started_at',null)->first()) {
                     if($challange->quiz_type_id==3){
                         if (Carbon::now()->parse($challange->created_at)->diffInSeconds() < 600) {  // Quiz room not older than 10 min
 
