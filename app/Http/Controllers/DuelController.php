@@ -194,6 +194,18 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => "You can not send request to this user"]);
  
         }
+        // Check if already request accepted by other user
+        $checkifaccept =   Challange::where('attempt_id', $req->dual_id)
+             ->where('status', '1')
+            ->where('from_user_id', $req->from_id)->first();
+        if ($checkifaccept) {
+            if($checkifaccept->to_user_id == $req->to_id){
+              $message='You are already sent the request';  
+            }else{
+                $message = 'You cant not send the request at this point';   
+            }
+            return response()->json(['status' => 201, 'data' => [], 'message' => $message]);
+        } 
         $challenge =   Challange::where('attempt_id', $req->dual_id)
             // ->where('status', '0')
             ->where('from_user_id', $req->from_id)->where('to_user_id',$req->to_id)->whereDate('created_at', carbon::now())->latest()->first();
