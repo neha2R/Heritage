@@ -448,7 +448,7 @@ class DuelController extends Controller
             $user['user_id'] = $user_data->user_id;
             $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
-            $user['percentage'] = $user_data->result;
+            $user['percentage'] = ($user_data->result) ? $user_data->result:0;
             if (isset($user_data->user->profile_image)) {
                 $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
             } else {
@@ -459,15 +459,21 @@ class DuelController extends Controller
             $response['user_id'] = $otheruser_data->user_id;
             $response['name'] = $otheruser_data->user->name;
             $response['xp'] = $otheruser_data->xp;
-            $response['percentage'] = $otheruser_data->result;
+            $response['percentage'] = ($otheruser_data->result) ? $otheruser_data->result : 0;
             if (isset($otheruser_data->user->profile_image)) {
                 $response['image']  = url('/storage') . '/' . $otheruser_data->user->profile_image;
             } else {
                 $response['image']  = '';
             }
 
+            //Check whic user percentage is > (Greater)
+             if($user['percentage']> $response['percentage']){
+                $res[] = $user;
+                $res[] = $response; 
+             }else{
             $res[] = $response;
             $res[] = $user;
+             }
 
 
 
