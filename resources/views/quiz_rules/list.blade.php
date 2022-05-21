@@ -52,7 +52,7 @@
                               <th>Quiz Type</th>
                               <th>Quiz Speed </th>
                               <th>View</th>
-                              <th>Status</th>
+                              <!-- <th>Status</th> -->
                               <th>Edit</th>
                               <th>Delete</th>
                            </tr>
@@ -66,7 +66,7 @@
                               {{ucwords(strtolower($rule->speeds->name))}}
                               </th>
                               <td><button type="button" class=" btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button>
-                              <td><label class="switch">
+                              <!-- <td><label class="switch">
                                  @if($rule->status=='1')
                                  @php $status='checked'; @endphp
                                  @else
@@ -76,7 +76,7 @@
                                  <span class="slider round"></span>
                                  </label>
 
-                              </td>
+                              </td> -->
                               </td>
                               <td><button type="button" class="edit-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#edit-model{{$key}}"><i class="fas fa-pencil-alt"></i></button>
                               </td>
