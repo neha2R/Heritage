@@ -17,6 +17,7 @@ use App\Domain;
 use App\FireBaseNotification;
 use App\QuizRule;
 use App\QuizTheme;
+use App\CheckUserState;
 class DuelController extends Controller
 {
            
@@ -335,9 +336,15 @@ class DuelController extends Controller
                 $savenoti->status = '0';
                 $savenoti->save();
 
-                // $response['quiz_id'] = $acceptuser->id;
-
-                return response()->json(['status' => 200, 'data' => $acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
+            // $response['quiz_id'] = $acceptuser->id;
+            
+           
+            $data = [
+                ['user_id' => $req->user_id,],
+                ['user_id' => $attempt->user_id,]              
+            ];
+            CheckUserState::insert($data); // Eloquent approach
+            return response()->json(['status' => 200, 'data' => $acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
             
         }
     }
@@ -475,7 +482,8 @@ class DuelController extends Controller
             $res[] = $user;
              }
 
-
+           $relaseuser = CheckUserState::find($request->user_id);
+           ($relaseuser) ? $relaseuser->delete() : '';
 
             return response()->json(['status' => 200, 'user_data' => $user, 'result' => $res, 'message' => 'Dual data']);
         } else {
