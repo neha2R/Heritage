@@ -479,7 +479,7 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
         if (isset($data->challange_id)) {
-            $challenge = Challange::where('id', $data->challange_id)->first();
+            $challenge = Challange::where('attempt_id', $request->dual_id)->first();
 
             $dual['dual_id'] = $data->id;
             $dual['name'] = $challenge->to_user->name ;
