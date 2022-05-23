@@ -246,7 +246,7 @@ class DuelController extends Controller
             'link' => $attempt->link,
             'type' => 'dual',
             //   'from'=>$challange->from_user->name,
-            'message' => 'You have a new request from' . $challange->from_user->name,
+            'message' => 'You have a new request from' .' '. $challange->from_user->name,
         ];
         sendNotification($data);
 
@@ -254,7 +254,7 @@ class DuelController extends Controller
         $savenoti->user_id = $challange->to_user->id;
         $savenoti->link = $attempt->link;
         $savenoti->type = 'dual';
-        $savenoti->message = 'You have a new request from ' . $challange->from_user->name;
+        $savenoti->message = 'You have a new request from ' . ' ' . $challange->from_user->name;
         $savenoti->title = 'Dual Invitation send.';
         $savenoti->status = '0';
         $savenoti->save();
@@ -457,11 +457,7 @@ class DuelController extends Controller
             $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
             $user['percentage'] = ($user_data->result) ? $user_data->result:0;
-            if (isset($user_data->user->profile_image)) {
-                $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
-            } else {
-                $user['image']  = '';
-            }
+            
 
             $response = [];
             $response['user_id'] = $otheruser_data->user_id;

@@ -138,7 +138,7 @@ class TournamenetUserController extends Controller
             if ($data['per'] == null) {
                 $data['per'] = 0;
             }
-
+            
             $response['percentage'] = $data['per'];
             return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $response]);
         }
@@ -189,6 +189,11 @@ class TournamenetUserController extends Controller
                 $data['user_id'] = $users->user_id;
                 $data['lp'] = $users->lp;
                 $data['percentage'] = $users->percentage;
+                if (isset(User::find($users->user_id)->profile_image)) {
+                    $response['image']  = url('/storage') . '/' . User::find($users->user_id)->profile_image;
+                } else {
+                    $response['image']  = '';
+                }
                 $response[] = $data;
             }
 
