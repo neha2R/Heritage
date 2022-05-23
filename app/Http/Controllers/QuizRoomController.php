@@ -504,6 +504,11 @@ class QuizRoomController extends Controller
                 $res['quiz_id'] = $request->quiz_id;
                 $res['xp'] = $quiz->xp;
                 $res['per'] = $quiz->result;
+                if (isset($quiz->user->profile_image)) {
+                    $user['image']  = url('/storage') . '/' . $quiz->user->profile_image;
+                } else {
+                    $user['image']  = '';
+                }
 
                 return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $res]);
             }
