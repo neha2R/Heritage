@@ -18,6 +18,7 @@ use App\Jobs\SaveQuizRoomResult;
 use App\Performance;
 use App\Traits\NotificationToUser;
 use App\BlockUser;
+use App\CheckUserState;
 
 class QuizRoomController extends Controller
 {
@@ -283,7 +284,11 @@ class QuizRoomController extends Controller
         $savenoti->title = 'Quiz room Invitation accepted.';
         $savenoti->status = '0';
         $savenoti->save();
-
+        $data = [
+            ['user_id' => $req->user_id,],
+            ['user_id' => $attempt->user_id,]
+        ];
+        CheckUserState::insert($data); 
         // $response['quiz_id'] = $acceptuser->id;
 
         return response()->json(['status' => 200, 'data' => $attempt->id, 'message' => 'Invitation Successfully accepted.']);
@@ -418,6 +423,8 @@ class QuizRoomController extends Controller
         $user->delete();
 
         sendNotification($data);
+        $relaseuser = CheckUserState::where('user_id', $request->user_id);
+        ($relaseuser) ? $relaseuser->delete() : '';
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User removed from room']);
     }
 
@@ -444,6 +451,8 @@ class QuizRoomController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not in the quiz']);
         }
         $user->delete();
+        $relaseuser = CheckUserState::where('user_id', $request->user_id);
+        ($relaseuser) ? $relaseuser->delete() : '';
         return response()->json(['status' => 200, 'data' => [], 'message' => 'User removed from room']);
     }
 
@@ -509,7 +518,8 @@ class QuizRoomController extends Controller
                 } else {
                     $user['image']  = '';
                 }
-
+                $relaseuser = CheckUserState::where('user_id', $request->user_id);
+                ($relaseuser) ? $relaseuser->delete() : '';
                 return response()->json(['status' => 200, 'message' => 'Result saved succesfully', 'data' => $res]);
             }
         } else {
