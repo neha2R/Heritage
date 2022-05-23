@@ -307,6 +307,11 @@ class ContactController extends Controller
 
         $deleteUser = Contact::where('friend_one', $request->id)
             ->where('friend_two', $request->delete_id)->first();
+            if(!isset($deleteUser)){
+            $deleteUser = Contact::where('friend_two', $request->id)
+                ->where('friend_one', $request->delete_id)->first();
+            }
+        
         if (empty($deleteUser)) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'No user found']);
         }
