@@ -305,10 +305,10 @@ class ContactController extends Controller
             return response()->json(['status' => 422, 'data' => [], 'message' => $validator->errors()]);
         }
 
-        $deleteUser = Contact::where('friend_one', $request->id)
+        $deleteUser = Contact::where('friend_one', $request->user_id)
             ->where('friend_two', $request->delete_id)->first();
             if(!isset($deleteUser)){
-            $deleteUser = Contact::where('friend_two', $request->id)
+            $deleteUser = Contact::where('friend_two', $request->user_id)
                 ->where('friend_one', $request->delete_id)->first();
             }
         
