@@ -580,7 +580,11 @@ class QuizRoomController extends Controller
             $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
             $user['percentage'] = $user_data->result;
-           
+            if (isset($user_data->user->profile_image)) {
+                $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
+            } else {
+                $user['image']  = '';
+            }
             $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'DESC')->get();
             // if ($totalusers->count() < 3) {
             //     return response()->json(['status' => 201,  'message' => 'waiting...']);

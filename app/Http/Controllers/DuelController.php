@@ -457,7 +457,11 @@ class DuelController extends Controller
             $user['name'] = $user_data->user->name;
             $user['xp'] = $user_data->xp;
             $user['percentage'] = ($user_data->result) ? $user_data->result:0;
-            
+            if (isset($user_data->user->profile_image)) {
+                $user['image']  = url('/storage') . '/' . $user_data->user->profile_image;
+            } else {
+                $user['image']  = '';
+            }
 
             $response = [];
             $response['user_id'] = $otheruser_data->user_id;
