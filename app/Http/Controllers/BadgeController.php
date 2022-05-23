@@ -154,7 +154,7 @@ class BadgeController extends Controller
             $data['image'] = url('/storage/badgesimages/fourhundred') . '/' . $badge->image;
             $data['description'] = $badge->description;  
         }
-        return response()->json(['status' => 200, 'message' => 'Badge recived', 'data' => $data]);
+        return response()->json(['status' => 200, 'total'=> $totalquiz,'message' => 'Badge recived', 'data' => $data]);
 
     }
 
