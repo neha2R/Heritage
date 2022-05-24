@@ -786,7 +786,7 @@ class FeedContentController extends Controller
     public function tagfilter(Request $request)
     {
 
-        $feedContents = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description')->where('status', '1');
+        $feedContents = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description','status');
 
 
         if ($request->type == '0') {
@@ -797,7 +797,7 @@ class FeedContentController extends Controller
         }
 
 
-        $feedContents = $feedContents->get();
+        $feedContents = $feedContents->where('status', '1')->get();
         $data = [];
         $last_page = 0;
         $i = 1;
