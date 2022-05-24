@@ -802,9 +802,11 @@ class FeedContentController extends Controller
         $last_page = 0;
         $i = 1;
         foreach ($feedContents as $cont) {
+            if ($cont->feed_media_single) {
             $mydata['id'] = $cont->id;
             $mydata['type'] = $cont->feedtype->title;
             $mydata['tags'] = explode(",", $cont->tags);
+            
             $mydata['title'] = $cont->feed_media_single->title;
             $mydata['description'] = $cont->feed_media_single->description;
             $mydata['external_link'] = $cont->feed_media_single->external_link;
@@ -814,6 +816,7 @@ class FeedContentController extends Controller
             } else {
                 $place = null;
             }
+        
             $mydata['placeholder_image'] = $place;
             $savefeeds = SaveFeed::where('feed_contents_id', $cont->id)->pluck('feed_contents_id');
             $mydata['savepost'] = count($savefeeds);
@@ -831,11 +834,12 @@ class FeedContentController extends Controller
                 $imagename[] = $this->imageurl($image->media_name);
                 $imgdata = $imagename;
             }
-
+     
             $mydata['media'] = $imgdata;
             $data[] = $mydata;
             $last_page = $cont->id;
             $i++;
+            }
         }
 
         if (empty($feedContents)) {
