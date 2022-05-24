@@ -418,7 +418,7 @@ class QuizRoomController extends Controller
             'token' => $user->from_user->token,
             'link' => $attempt->link,
             'type' => 'quizroom',
-            'message' => User::where('id', $request->user_id)->first()->name . " you are no longer access the quiz",
+            'message' => User::where('id', $request->user_id)->first()->name . " is no longer access the quiz",
         ];
         $user->delete();
 

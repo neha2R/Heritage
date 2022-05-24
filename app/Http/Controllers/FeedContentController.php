@@ -793,7 +793,7 @@ class FeedContentController extends Controller
             $feedContents = $feedContents->where('tags', 'like', '%' . $request->searchkey . '%');
         } else {
 
-            $feedContents = $feedContents->where('title', 'like', '%' . $request->searchkey . '%');
+            $feedContents = $feedContents->where('title', 'like', '%' . $request->searchkey . '%')->orWhere('tags', 'like', '%' . $request->searchkey . '%');
         }
 
 
