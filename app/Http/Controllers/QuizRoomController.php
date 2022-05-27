@@ -146,7 +146,6 @@ class QuizRoomController extends Controller
         Challange::where('attempt_id', $request->quiz_room_id)->update(['deleted_at' => date('Y-m-d h:i:s')]);
         $this->disbandroom($users);
         $del = CheckUserState::whereIn('user_id', $userids)->get();
-
         if ($del->count() > 0) {
             $del->each->delete();
         }
@@ -599,7 +598,7 @@ class QuizRoomController extends Controller
             } else {
                 $user['image']  = '';
             }
-            $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'DESC')->get();
+            $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
             // if ($totalusers->count() < 3) {
             //     return response()->json(['status' => 201,  'message' => 'waiting...']);
             // }
