@@ -598,7 +598,7 @@ class QuizRoomController extends Controller
             } else {
                 $user['image']  = '';
             }
-            $totalusers = Attempt::where('id', $request->room_id)->orderBy('marks', 'ASC')->orWhere('parent_id', $request->room_id)->get();
+            $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->sortByDesc('marks')->get();
             // if ($totalusers->count() < 3) {
             //     return response()->json(['status' => 201,  'message' => 'waiting...']);
             // }
