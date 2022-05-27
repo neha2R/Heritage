@@ -142,6 +142,7 @@ trait NotificationToUser {
             // $userdata = User::find($user);
             $data['title'] = 'Quiz room deleted';
             $data['message'] = 'Disband';
+            $data['type'] = 'quizroom';
             $data['token'] = $user->token;
             $this->sendNotification($data);
         }
