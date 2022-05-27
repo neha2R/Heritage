@@ -660,5 +660,10 @@ class DuelController extends Controller
         return response()->json(['status' => 200, 'data' => $dual, 'message' => 'Dual data']);
     }
 
+
+    public function duelrank(){
+        
+    }
+
     
 }

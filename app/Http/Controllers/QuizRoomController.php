@@ -652,7 +652,7 @@ class QuizRoomController extends Controller
             }
         } else {
             $data1 = 2;
-            return response()->json(['status' => 200, 'data' => $data1, 'message' => 'Quiz room not find']);
+            return response()->json(['status' => 201, 'data' => $data1, 'message' => 'Quiz room not find']);
         }
     }
 
