@@ -462,6 +462,11 @@ class DuelController extends Controller
             } else {
                 $user['image']  = '';
             }
+            if($user_data->status =='completed'){
+                $user['is_submit'] = '1';   
+            }else{
+                $user['is_submit'] = '0';  
+            }
 
             $response = [];
             $response['user_id'] = $otheruser_data->user_id;
@@ -473,7 +478,11 @@ class DuelController extends Controller
             } else {
                 $response['image']  = '';
             }
-
+            if ($otheruser_data->status == 'completed') {
+                $response['is_submit'] = '1';
+            } else {
+                $response['is_submit'] = '0';
+            }
             //Check whic user percentage is > (Greater)
              if($user['percentage']> $response['percentage']){
                 $res[] = $user;
