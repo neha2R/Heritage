@@ -1,1 +1,1 @@
-Click here to change your password. <a href="{{url('/change_password',encrypt($data->id))}}">click here</a>
+Click here to change your password. <br/><a href="{{url('/change_password',encrypt($data->id))}}">Click here</a>

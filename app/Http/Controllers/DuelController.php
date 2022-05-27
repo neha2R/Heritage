@@ -678,7 +678,9 @@ class DuelController extends Controller
         }
 
         $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
-
+       if($totalusers->count() >= 2) {
+           
+       }
 
     }
 
