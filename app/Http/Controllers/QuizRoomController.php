@@ -145,7 +145,11 @@ class QuizRoomController extends Controller
         $users = User::whereIn('id', $userids)->get();
         Challange::where('attempt_id', $request->quiz_room_id)->update(['deleted_at' => date('Y-m-d h:i:s')]);
         $this->disbandroom($users);
+        $del = CheckUserState::whereIn('user_id', $userids)->get();
 
+        if ($del->count() > 0) {
+            $del->each->delete();
+        }
         return response()->json(['status' => 200, 'message' => 'Quiz disbanded succesfully', 'data' => $data]);
     }
 
