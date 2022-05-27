@@ -677,10 +677,10 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
 
-        $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
-       if($totalusers->count() >= 2) {
-           
-       }
+        $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->orderBy('marks', 'ASC')->get();
+        if($totalusers->count() >= 2) {
+            
+        }
 
     }
 

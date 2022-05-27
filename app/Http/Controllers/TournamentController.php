@@ -622,6 +622,7 @@ class TournamentController extends Controller
             }
             $tournament->is_played = $isset;
             $tournament->waitlist_joined = $waitlist_joined;
+            $tournament->link = "cul.tre/tournament#" . $tournament->id;
             // $tournament->is_attempt = $tournament->is_attempt;
 
             //
