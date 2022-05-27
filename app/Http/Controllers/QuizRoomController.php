@@ -332,7 +332,7 @@ class QuizRoomController extends Controller
 
         $attempt = Attempt::where('id', $request->room_id)->first();
         if (!isset($attempt)) {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found..']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found.']);
         }
         $userids = Challange::where('attempt_id', $attempt->id)->where('status', '1')->pluck('to_user_id')->toArray();
         $users = User::whereIn('id', $userids)->get();
@@ -410,7 +410,7 @@ class QuizRoomController extends Controller
         $attempt = Attempt::where('id', $request->room_id)->first();
 
         if (!isset($attempt)) {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found..']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found.']);
         }
         $user = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $request->user_id)->first();
         if (!isset($user)) {
@@ -447,7 +447,7 @@ class QuizRoomController extends Controller
         $attempt = Attempt::where('id', $request->room_id)->first();
 
         if (!isset($attempt)) {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found..']);
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found.']);
         }
         $user = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $request->user_id)->first();
         if (!isset($user)) {
