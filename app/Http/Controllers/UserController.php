@@ -511,7 +511,7 @@ class UserController extends Controller
             // Mail::to($request->email)->send(new Setotp($otp));
 
             Mail::to($users->email)->send(new ForgetPassword($users));
-            return response()->json(['status' => 200, 'data' => '', 'message' => "Change password link has been sent to your email. Please check your email!"]);
+            return response()->json(['status' => 200, 'data' => '', 'message' => "Change password link has been sent to your email."]);
         } else {
             return response()->json(['status' => 422, 'data' => '', 'message' => "No User Found."]);
         }

@@ -104,6 +104,7 @@ Route::post('dual_status', 'DuelController@dual_status');
 Route::post('duel_rules', 'DuelController@quiz_rules');
 Route::post('reject_invitation', 'DuelController@reject_invitation');
 Route::post('dualdetails', 'DuelController@dualdetails');
+Route::post('duelrank', 'DuelController@duelrank');
 
 // Route::post('savedual', 'DuelController@submit_exam');
 // Route::get('fetch_dual_question/{id}', 'DuelController@fetch_dual_question');

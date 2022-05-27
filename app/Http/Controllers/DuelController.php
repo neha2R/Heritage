@@ -661,8 +661,25 @@ class DuelController extends Controller
     }
 
 
-    public function duelrank(){
-        
+    public function duelrank(Request $request){
+
+        $validator = Validator::make($request->all(), [
+            // 'user_id' => 'required',
+            'dual_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $data = Attempt::where('id', $request->dual_id)->where('quiz_type_id', '2')->first();
+        if (!$data) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
+        }
+
+        $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+
+
     }
 
     
