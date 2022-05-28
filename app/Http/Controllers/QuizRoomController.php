@@ -608,6 +608,7 @@ class QuizRoomController extends Controller
             foreach ($totalusers as $totaluser) {
                 $other['user_id'] = $totaluser->user_id;
                 $other['name'] = $totaluser->user->name;
+                $other['marks'] = $totaluser->marks;
                 $other['rank'] = $i;
                 $other['xp'] = $totaluser->xp;
                 $other['percentage'] = $totaluser->result;
