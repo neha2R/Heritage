@@ -201,6 +201,7 @@ Route::post('reject_room_invitation', 'QuizRoomController@reject_invitation');
 Route::post('get_room_result', 'QuizRoomController@get_room_result');
 Route::post('room_status', 'QuizRoomController@room_status');
 Route::post('start_room', 'QuizRoomController@start_room');
+Route::post('roomrank', 'QuizRoomController@roomrank');
 
 Route::post('checkquiz', 'HomeController@checkquiz');
 

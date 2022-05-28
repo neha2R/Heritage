@@ -677,4 +677,105 @@ class QuizRoomController extends Controller
             return response()->json(['status' => 201,  'message' => 'Quiz room not find']);
         }
     }
+
+    public function roomrank(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'room_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $data = Attempt::where('id', $request->room_id)->where('quiz_type_id', '2')->first();
+        if (!$data) {
+            return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
+        }
+
+        $totalusers = Attempt::where('id', $request->room_id)->where('end_at', '!=', null)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+        $rankdata = [];
+        $quizspeed = QuizSpeed::find($data->quiz_speed_id);
+        if ($quizspeed->quiz_speed_type == 'single') {
+            $totaltime = $quizspeed->no_of_question * $quizspeed->duration;
+        } else {
+            $totaltime = $quizspeed->duration;
+        }
+
+        $totaltime = $totaltime + 45; // Delay of 45 seconds
+        //    dd($totaltime);
+        if ($data->started_at) {
+            $endtime =  Carbon::parse($data->started_at)
+                ->addSeconds($totaltime)
+                ->format('Y-m-d H:i:s');
+        } else {
+
+            $endtime =  Carbon::parse($data->created_at)
+                ->addSeconds($totaltime)
+                ->format('Y-m-d H:i:s');
+        }
+
+        if ($totalusers->count() >= 2) {
+            foreach ($totalusers as $user) {
+                $rankdata[$user->user_id] = $user->marks;
+                arsort($rankdata);
+            }
+        } else {
+
+            $nowDate = Carbon::now();
+            $result = $nowDate->gt($endtime);
+            if ($result) {
+                foreach ($totalusers as $user) {
+                    $rankdata[$user->user_id] = $user->marks;
+                    arsort($rankdata);
+                }
+            }
+        }
+
+        if ($rankdata) {
+            $rank = 1;
+            $myrank = 0;
+            $message = '';
+            $olddata = '';
+            foreach ($rankdata as $key => $rankdata) {
+
+                if ($key == $request->user_id) {
+                    $myrank = $rank;
+                    if ($myrank == 1) {
+                        $message = 'You won the group quiz!';
+                    }
+                    if ($myrank == 2) {
+                        $message = 'You are the first runner up!.';
+                    }
+                    if ($myrank == 3) {
+                        $message = 'You are the second runner up!.';
+                    }
+                }
+                if ($olddata != $rankdata) {
+                    $rank++;
+                }
+
+                $olddata = $rankdata;
+            }
+            $userdata = User::find($request->user_id);
+            $res = [];
+            if ($myrank <=3) {
+                $res['image']  = url('/storage') . '/' . $userdata->profile_image;
+                $res['name']  = $userdata->name;
+                $res['rank']  = $myrank;
+                $res['message']  = $message;
+            } else {
+                $res = json_encode($res, JSON_FORCE_OBJECT);
+            }
+            $endtime =
+                Carbon::parse($endtime)
+                ->format('H:i:s');
+
+            return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
+        } else {
+            return response()->json(['status' => 201, 'time' => $endtime, 'completed' => '0', 'data' => [], 'message' => 'Result not calculated yet']);
+        }
+    }
 }
