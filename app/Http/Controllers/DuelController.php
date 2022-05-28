@@ -684,6 +684,7 @@ class DuelController extends Controller
             }
         }
         $rankdata = [];
+        $res=[];
         $quizspeed = QuizSpeed::find($data->quiz_speed_id);
         if ($quizspeed->quiz_speed_type == 'single') {
             $totaltime = $quizspeed->no_of_question * $quizspeed->duration;
@@ -720,12 +721,13 @@ class DuelController extends Controller
                 }
             }
         }
-
+ 
         if ($rankdata) {
             $rank = 1;
             $myrank = 0;
             $message = '';
             $olddata = '';
+            
             foreach ($rankdata as $key => $rankdata) {
 
                 if ($key == $request->user_id) {
@@ -741,21 +743,27 @@ class DuelController extends Controller
                 $olddata = $rankdata;
             }
             $userdata = User::find($request->user_id);
-            $res=[];
+           
                 if($myrank==1){
                             $res['image']  = url('/storage') . '/' . $userdata->profile_image;
                             $res['name']  = $userdata->name;
                             $res['rank']  = $myrank;
                             $res['message']  = $message;
                 } 
-                else{ $res= json_encode($res, JSON_FORCE_OBJECT);     }
+                
             // $endtime =
             // Carbon::parse($endtime)
             //     ->format('H:i:s');
-                
+                if($res){
             return response()->json(['status' => 200,'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
-        } else {
-            return response()->json(['status' => 201, 'time'=> $endtime, 'completed'=>'0', 'data' => [], 'message' => 'Result not calculated yet']);
+        }  else{
+                return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1',  'message' => 'Rank Data']);
+
+        } 
+    }
+        else {
+            
+            return response()->json(['status' => 201, 'time'=> $endtime, 'completed'=>'0',  'message' => 'Result not calculated yet']);
         }
     }
 }
