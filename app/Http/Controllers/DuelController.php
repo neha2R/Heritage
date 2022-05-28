@@ -743,9 +743,9 @@ class DuelController extends Controller
                             $res['message']  = $message;
                 } 
                 else{ $res= json_encode($res, JSON_FORCE_OBJECT);     }
-            $endtime =
-            Carbon::parse($endtime)
-                ->format('H:i:s');
+            // $endtime =
+            // Carbon::parse($endtime)
+            //     ->format('H:i:s');
                 
             return response()->json(['status' => 200,'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
         } else {
