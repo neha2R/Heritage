@@ -773,16 +773,18 @@ class QuizRoomController extends Controller
                 $res['name']  = $userdata->name;
                 $res['rank']  = $myrank;
                 $res['message']  = $message;
-            } else {
-                $res = json_encode($res, JSON_FORCE_OBJECT);
             }
             // $endtime =
             //     Carbon::parse($endtime)
             //     ->format('H:i:s');
 
-            return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
-        } else {
-            return response()->json(['status' => 201, 'time' => $endtime, 'completed' => '0', 'data' => [], 'message' => 'Result not calculated yet']);
+            if ($res) {
+                return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
+            } else {
+                return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1',  'message' => 'Rank Data']);
+            } 
+                } else {
+            return response()->json(['status' => 201, 'time' => $endtime, 'completed' => '0','message' => 'Result not calculated yet']);
         }
     }
 }
