@@ -724,7 +724,7 @@ class QuizRoomController extends Controller
                 ->format('Y-m-d H:i:s');
         }
 
-        if ($count >= 10) {
+        if ($count == $totalusers->count()) {
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
                 arsort($rankdata);
