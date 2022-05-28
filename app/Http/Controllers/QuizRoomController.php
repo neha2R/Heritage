@@ -697,6 +697,12 @@ class QuizRoomController extends Controller
         }
 
         $totalusers = Attempt::where('id', $request->room_id)->where('end_at', '!=', null)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+        $count = 0;
+        foreach ($totalusers as $checsubmit) {
+            if ($checsubmit->end_at != null) {
+                $count++;
+            }
+        }
         $rankdata = [];
         $quizspeed = QuizSpeed::find($data->quiz_speed_id);
         if ($quizspeed->quiz_speed_type == 'single') {
@@ -718,7 +724,7 @@ class QuizRoomController extends Controller
                 ->format('Y-m-d H:i:s');
         }
 
-        if ($totalusers->count() >= 2) {
+        if ($count >= 10) {
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
                 arsort($rankdata);

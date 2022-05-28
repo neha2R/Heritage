@@ -676,7 +676,13 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
 
-        $totalusers = Attempt::where('id', $request->dual_id)->where('end_at', '!=', null)->orWhere('parent_id', $request->dual_id)->orderBy('marks', 'ASC')->get();
+        $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->orderBy('marks', 'ASC')->get();
+       $count = 0;
+        foreach ($totalusers as $checsubmit){
+            if($checsubmit->end_at != null){
+             $count++;
+            }
+        }
         $rankdata = [];
         $quizspeed = QuizSpeed::find($data->quiz_speed_id);
         if ($quizspeed->quiz_speed_type == 'single') {
@@ -698,7 +704,7 @@ class DuelController extends Controller
                 ->format('Y-m-d H:i:s');
         }
 
-        if ($totalusers->count() >= 2) {
+        if ($count >= 2) {
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
                 arsort($rankdata);
