@@ -750,6 +750,7 @@ class QuizRoomController extends Controller
             $myrank = 0;
             $message = '';
             $olddata = '';
+            dd($rankdata);
             foreach ($rankdata as $key => $rankdat) {
 
                 if ($key == $request->user_id) {
