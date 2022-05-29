@@ -671,7 +671,7 @@ class QuizRoomController extends Controller
             $userids = Challange::where('attempt_id', $data->id)->where('status', '1')->pluck('to_user_id')->toArray();
             $users = User::whereIn('id', $userids)->get();
             $this->startroom($users, $request->room_id);
-            $data->started_at = date('Y-m-d');
+            $data->started_at = date('Y-m-d H:i:s');
             $data->save();
             return response()->json(['status' => 200,  'message' => 'Quiz started succesfully']);
         } else {
@@ -725,8 +725,10 @@ class QuizRoomController extends Controller
                 ->addSeconds($totaltime)
                 ->format('Y-m-d H:i:s');
         }
+      
           // count+1 for add user who create the quiz
         if ($count == $challenegaccept->count()+1) {
+        
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
                 arsort($rankdata);
