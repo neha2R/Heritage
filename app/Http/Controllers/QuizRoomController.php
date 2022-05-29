@@ -750,7 +750,7 @@ class QuizRoomController extends Controller
             $myrank = 0;
             $message = '';
             $olddata = '';
-            foreach ($rankdata as $key => $rankdata) {
+            foreach ($rankdata as $key => $rankdat) {
 
                 if ($key == $request->user_id) {
                     $myrank = $rank;
@@ -764,7 +764,7 @@ class QuizRoomController extends Controller
                         $message = 'You are the second runner up!.';
                     }
                 }
-                if ($olddata != $rankdata) {
+                if ($olddata != $rankdat) {
                     $rank++;
                 }
 
