@@ -698,7 +698,7 @@ class QuizRoomController extends Controller
 
         $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
         $challenegaccept = Challange::where('attempt_id',$request->room_id)->where('status', '1')->get();
-
+        dd($totalusers);
         $count = 0;
         foreach ($totalusers as $checsubmit) {
             if ($checsubmit->end_at != null) {
@@ -750,7 +750,7 @@ class QuizRoomController extends Controller
             $myrank = 0;
             $message = '';
             $olddata = '';
-            dd($rankdata);
+           
             foreach ($rankdata as $key => $rankdat) {
 
                 if ($key == $request->user_id) {
