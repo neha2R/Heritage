@@ -408,8 +408,10 @@ class TournamentController extends Controller
             //     $secondSession->save();
             // }
             if ($request->rule == '0') {
-                $rule = TournamentRule::where('tournament_id', $updateTournament->id)->first();
+                $rule = TournamentRule::where('tournament_id', $updateTournament->id)->where('default','!=','1')->first();
+               if($rule){
                 $rule->delete();
+               }
             }
             return redirect()->route('tournament.index');
             if ($request->preference_questions == "1") {

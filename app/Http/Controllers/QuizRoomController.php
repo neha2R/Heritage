@@ -691,12 +691,12 @@ class QuizRoomController extends Controller
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
         }
 
-        $data = Attempt::where('id', $request->room_id)->where('quiz_type_id', '2')->first();
+        $data = Attempt::where('id', $request->room_id)->where('quiz_type_id', '3')->first();
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
 
-        $totalusers = Attempt::where('id', $request->room_id)->where('end_at', '!=', null)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+        $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
         $count = 0;
         foreach ($totalusers as $checsubmit) {
             if ($checsubmit->end_at != null) {
