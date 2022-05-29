@@ -697,6 +697,8 @@ class QuizRoomController extends Controller
         }
 
         $totalusers = Attempt::where('id', $request->room_id)->orWhere('parent_id', $request->room_id)->orderBy('marks', 'ASC')->get();
+        $challenegaccept = Challange::where('attempt_id',$request->room_id)->where('status', '1')->get();
+
         $count = 0;
         foreach ($totalusers as $checsubmit) {
             if ($checsubmit->end_at != null) {
@@ -723,8 +725,8 @@ class QuizRoomController extends Controller
                 ->addSeconds($totaltime)
                 ->format('Y-m-d H:i:s');
         }
-
-        if ($count == $totalusers->count()) {
+          // count+1 for add user who create the quiz
+        if ($count == $challenegaccept->count()+1) {
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
                 arsort($rankdata);

@@ -633,8 +633,6 @@
       @section('js')
       <script>
          var add_more_btn_click_edit = 1;
-
-
          var cart_edit = 1;
 
          function showType(val) {
@@ -648,7 +646,6 @@
                $('#myvideo1').css('display', 'block');
             }
          }
-
          function showModules(val) {
 
             if (val == '1') {
@@ -694,9 +691,6 @@
                // $("#files_collection").removeAttr("required");
             }
          }
-
-
-
          function add_post(val) {
             var i = $('#edit_key_' + val).val()
             if (add_more_btn_click_edit < 4) {
@@ -1196,6 +1190,9 @@
 
 
          });
+
+         
+
       </script>
 
 
