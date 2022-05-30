@@ -316,7 +316,7 @@ class TournamenetUserController extends Controller
         $count1 = $userTours->cu_lp / $totallp;
         $count2 = $count1 * 100;
         $percentage = number_format($count2, 0);
-        dd($percentage, $userTours->cu_lp, $totallp);
+        // dd($percentage, $userTours->cu_lp, $totallp);
         if ($percentage >= 0 && $percentage <= 30) {
 
             $user['title'] = 'Initiate';
