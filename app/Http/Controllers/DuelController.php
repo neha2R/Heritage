@@ -724,7 +724,7 @@ class DuelController extends Controller
                 }
             }
         }
-
+dd($rankdata);
         if ($rankdata) {
             $rank = 1;
             $myrank = 0;
