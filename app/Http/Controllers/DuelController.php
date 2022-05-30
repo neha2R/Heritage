@@ -731,7 +731,7 @@ class DuelController extends Controller
             $myrank = 0;
             $message = '';
             $olddata = '';
-            dd($rankdata);
+           
             foreach ($rankdata as $key => $rankdata) {
 
                 if ($key == $request->user_id) {
@@ -747,7 +747,7 @@ class DuelController extends Controller
                 $olddata = $rankdata;
             }
             $userdata = User::find($request->user_id);
-           
+           dd($myrank);
                 if($myrank==1){
                             $res['image']  = url('/storage') . '/' . $userdata->profile_image;
                             $res['name']  = $userdata->name;
