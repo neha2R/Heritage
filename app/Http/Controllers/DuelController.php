@@ -731,7 +731,7 @@ class DuelController extends Controller
             $myrank = 0;
             $message = '';
             $olddata = '';
-            
+            dd($rankdata);
             foreach ($rankdata as $key => $rankdata) {
 
                 if ($key == $request->user_id) {
