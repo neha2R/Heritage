@@ -311,12 +311,12 @@ class TournamenetUserController extends Controller
         // get all user with comulative lp (sum of lp)
         //    $userTours = TournamenetUser::whereIn('tournament_id',$tournaments)->selectRaw("SUM(lp) as cu_lp,user_id")->groupBy('user_id')->whereMonth('created_at', date('m'))->pluck('cu_lp','user_id')->toArray();
 
-        $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id', $request->user_id)->whereMonth('created_at', Carbon::now()->month)->first();
+        $userTours = TournamenetUser::selectRaw("SUM(lp) as cu_lp")->where('user_id', $request->user_id)->whereMonth('created_at', Carbon::now()->month)->whereYear('created_at', date('Y'))->first();
         //    arsort($userTours);
         $count1 = $userTours->cu_lp / $totallp;
         $count2 = $count1 * 100;
         $percentage = number_format($count2, 0);
-         dd($percentage, $userTours->cu_lp, $totallp);
+        //  dd($percentage, $userTours->cu_lp, $totallp);
         if ($percentage >= 0 && $percentage <= 30) {
 
             $user['title'] = 'Initiate';
