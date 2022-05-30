@@ -757,7 +757,7 @@ class DuelController extends Controller
                 if($res){
             return response()->json(['status' => 200,'time' => $endtime, 'completed' => '1', 'data' => $res, 'message' => 'Rank Data']);
         }  else{
-                return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1',  'message' => 'Rank Data not submit yet']);
+                return response()->json(['status' => 200, 'time' => $endtime, 'completed' => '1',  'message' => 'Second user rank']);
 
         } 
     }
