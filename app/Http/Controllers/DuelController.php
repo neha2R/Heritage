@@ -740,14 +740,15 @@ class DuelController extends Controller
                         $message = 'You won the quiz.';
                     }
                 }
-                if ($olddata != $rankdata) {
+               
+                if ($rankdata[$request->user_id] != $rankdata) {
                     $rank++;
                 }
 
-                $olddata = $rankdata;
+               
             }
             $userdata = User::find($request->user_id);
-           dd($myrank);
+        
                 if($myrank==1){
                             $res['image']  = url('/storage') . '/' . $userdata->profile_image;
                             $res['name']  = $userdata->name;
