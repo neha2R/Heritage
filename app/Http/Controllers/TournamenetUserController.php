@@ -305,8 +305,8 @@ class TournamenetUserController extends Controller
         $week = Carbon::now()->weekOfMonth;
         $day =  Carbon::now()->day;
         $totaltour = ($daily * $day) + ($weekly * $week) + $month;
-        $totallp = $totaltour * $totaltour;
-
+        // $totallp = $totaltour * $totaltour;
+        $totallp = $totaltour * 50;  // Max 50 Lp gain by user in a single tournament
         //    dd($daily,$weekly,$month); 
         // get all user with comulative lp (sum of lp)
         //    $userTours = TournamenetUser::whereIn('tournament_id',$tournaments)->selectRaw("SUM(lp) as cu_lp,user_id")->groupBy('user_id')->whereMonth('created_at', date('m'))->pluck('cu_lp','user_id')->toArray();
