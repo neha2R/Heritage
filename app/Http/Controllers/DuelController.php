@@ -745,7 +745,7 @@ class DuelController extends Controller
                
                 
                     $rank++;
-                
+                $olddata = $rankdata;
 
                
             }
