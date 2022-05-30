@@ -704,7 +704,7 @@ class DuelController extends Controller
                 ->addSeconds($totaltime)
                 ->format('Y-m-d H:i:s');
         }
-dd($count);
+
         if ($count == 2) {
             foreach ($totalusers as $user) {
                 $rankdata[$user->user_id] = $user->marks;
@@ -721,7 +721,7 @@ dd($count);
                 }
             }
         }
- 
+ dd($rankdata);
         if ($rankdata) {
             $rank = 1;
             $myrank = 0;
