@@ -733,7 +733,9 @@ class DuelController extends Controller
             $olddata = '';
            
             foreach ($rankdata as $key => $rankdata) {
-
+                if ($olddata == $rankdata) {
+                    $rank--;
+                }
                 if ($key == $request->user_id) {
                     $myrank = $rank;
                     if ($myrank == 1) {
@@ -741,9 +743,9 @@ class DuelController extends Controller
                     }
                 }
                
-                if ($rankdata[$request->user_id] != $rankdata) {
+                
                     $rank++;
-                }
+                
 
                
             }
