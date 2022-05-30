@@ -672,10 +672,13 @@ class DuelController extends Controller
         }
 
         $data = Attempt::where('id', $request->dual_id)->where('quiz_type_id', '2')->first();
+       if($data->parent_id){
+            $data = Attempt::where('id', $data->parent_id)->where('quiz_type_id', '2')->first();
+       }
         if (!$data) {
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
-
+        
         $totalusers = Attempt::where('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->orderBy('marks', 'DESC')->get();
         $count = 0;
         foreach ($totalusers as $checsubmit){

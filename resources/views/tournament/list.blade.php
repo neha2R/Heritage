@@ -1228,6 +1228,40 @@
                 $(this).closest(".box").remove();
             });
 
-            
+            $(document).on('change', "select[name='theme_id']", function() {
+
+                var theme_id = $(this).val();
+                var token = $("input[name='_token']").val();
+                $.ajax({
+                    url: "<?php echo route('select-domain') ?>",
+                    method: 'POST',
+                    data: {
+                        theme_id: theme_id,
+                        _token: token
+                    },
+                    success: function(data) {
+                        $("select[name='domain_id'").html('');
+                        $("select[name='domain_id'").html(data.options);
+                    }
+                });
+            });
+
+            $(document).on('change', "select[name='domain_id']", function() {
+
+                var domain_id = $(this).val();
+                var token = $("input[name='_token']").val();
+                $.ajax({
+                    url: "<?php echo route('select-subdomain') ?>",
+                    method: 'POST',
+                    data: {
+                        domain_id: domain_id,
+                        _token: token
+                    },
+                    success: function(data) {
+                        $("select[name='sub_domain_id'").html('');
+                        $("select[name='sub_domain_id'").html(data.options);
+                    }
+                });
+            });
         </script>
         @endsection

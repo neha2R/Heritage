@@ -646,6 +646,7 @@
                $('#myvideo1').css('display', 'block');
             }
          }
+
          function showModules(val) {
 
             if (val == '1') {
@@ -691,6 +692,7 @@
                // $("#files_collection").removeAttr("required");
             }
          }
+
          function add_post(val) {
             var i = $('#edit_key_' + val).val()
             if (add_more_btn_click_edit < 4) {
@@ -1191,8 +1193,23 @@
 
          });
 
-         
+         $(document).on('change', "select[name='theme_id']", function() {
 
+            var theme_id = $(this).val();
+            var token = $("input[name='_token']").val();
+            $.ajax({
+               url: "<?php echo route('select-domain') ?>",
+               method: 'POST',
+               data: {
+                  theme_id: theme_id,
+                  _token: token
+               },
+               success: function(data) {
+                  $("select[name='domain_id'").html('');
+                  $("select[name='domain_id'").html(data.options);
+               }
+            });
+         });
       </script>
 
 

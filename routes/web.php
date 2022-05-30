@@ -64,6 +64,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('addrule', 'TournamentRuleController@addrule')->name('addrule');
     Route::get('help', 'HelpAndSupportController@index')->name('help');
     Route::get('disputes', 'DisputeController@index')->name('disputes');
+    Route::post('select-domain', 'DomainController@selectdomain')->name('select-domain');
+    Route::post('select-subdomain', 'DomainController@selectsubdomain')->name('select-subdomain');
 
 });
 // Auth::routes();

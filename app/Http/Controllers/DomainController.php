@@ -244,4 +244,29 @@ class DomainController extends Controller
 
     }
 
+
+    public function selectdomain(Request $request){
+        if ($request->ajax()) {
+            $query = Domain::select('id', 'name');
+                
+            $query->where('themes_id', $request->theme_id);
+            $query->orWhere('themes_id', 'like', '%' . $request->theme_id . '%');
+
+            // $id = $request->theme_id;
+            $domains = $query->where('status', '1')->get();
+            $data = view('domain-select', compact('domains'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
+
+    public function selectsubdomain(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Subdomain::select('id', 'name');
+            $query->where('domain_id', $request->domain_id);
+            $subdomains = $query->where('status', '1')->get();
+            $data = view('subdomain-select', compact('subdomains'))->render();
+            return response()->json(['options' => $data]);
+        }
+    }
 }
