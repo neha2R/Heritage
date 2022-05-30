@@ -307,7 +307,7 @@ class TournamenetUserController extends Controller
         $totaltour = ($daily * $day) + ($weekly * $week) + $month;
         $totallp = $totaltour * $totaltour;
 
-           dd($daily,$weekly,$month); 
+        //    dd($daily,$weekly,$month); 
         // get all user with comulative lp (sum of lp)
         //    $userTours = TournamenetUser::whereIn('tournament_id',$tournaments)->selectRaw("SUM(lp) as cu_lp,user_id")->groupBy('user_id')->whereMonth('created_at', date('m'))->pluck('cu_lp','user_id')->toArray();
 
