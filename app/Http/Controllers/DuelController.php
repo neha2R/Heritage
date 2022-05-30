@@ -679,8 +679,9 @@ class DuelController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'Quiz not found']);
         }
         
-        $totalusers = Attempt::orWhere('id', $request->dual_id)->orWhere('parent_id', $request->dual_id)->orderBy('marks', 'DESC')->get();
+        $totalusers = Attempt::where('id', $data->id)->orWhere('parent_id', $data->id)->orderBy('marks', 'DESC')->get();
         $count = 0;
+      
         foreach ($totalusers as $checsubmit){
             if($checsubmit->end_at != null){
              $count++;
@@ -724,7 +725,7 @@ class DuelController extends Controller
                 }
             }
         }
-dd($rankdata);
+
         if ($rankdata) {
             $rank = 1;
             $myrank = 0;
