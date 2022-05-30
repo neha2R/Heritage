@@ -191,9 +191,9 @@ class TournamenetUserController extends Controller
                 $data['lp'] = $users->lp;
                 $data['percentage'] = $users->percentage;
                 if (isset(User::find($users->user_id)->profile_image)) {
-                    $response['image']  = url('/storage') . '/' . User::find($users->user_id)->profile_image;
+                    $data['image']  = url('/storage') . '/' . User::find($users->user_id)->profile_image;
                 } else {
-                    $response['image']  = '';
+                    $data['image']  = '';
                 }
                 $response[] = $data;
             }
