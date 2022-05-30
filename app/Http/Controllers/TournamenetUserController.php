@@ -195,6 +195,7 @@ class TournamenetUserController extends Controller
                 } else {
                     $data['image']  = '';
                 }
+                $data['name'] = User::find($users->user_id)->name;
                 $response[] = $data;
             }
 
