@@ -184,6 +184,7 @@ class TournamenetUserController extends Controller
 
             $tournamentUsers = TournamenetUser::where('tournament_id', $request->tournament_id)->where('session_id', $request->session_id)->orderBy('rank', 'ASC')->where('status', 'completed')->whereDate('created_at', Carbon::today())->get();
 
+            
             foreach ($tournamentUsers as $users) 
             {
                 $data['rank'] = $users->rank;
