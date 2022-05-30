@@ -43,12 +43,12 @@ class TournamentController extends Controller
         //
         $tournaments = Tournament::OrderBy('id', 'DESC')->get();
         //  dd($tournaments);
-        $age_groups = AgeGroup::OrderBy('id', 'DESc')->get();
-        $difficulty_levels = DifficultyLevel::OrderBy('id', 'DESC')->get();
+        $age_groups = AgeGroup::OrderBy('id', 'DESc')->where('status','1')->get();
+        $difficulty_levels = DifficultyLevel::OrderBy('id', 'DESC')->where('status', '1')->get();
 
         $themes = Theme::OrderBy('id', 'DESC')->get();
-        $domains = Domain::OrderBy('id', 'DESC')->get();
-        $subDomains = Subdomain::OrderBy('id', 'DESC')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $subDomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
         $frequencies = Frequency::get();
         $defrule =  TournamentRule::where('default', 1)->first();
 

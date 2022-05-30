@@ -1227,5 +1227,7 @@
             $(document).on("click", ".button-remove", function() {
                 $(this).closest(".box").remove();
             });
+
+            
         </script>
         @endsection

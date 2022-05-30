@@ -174,7 +174,8 @@ class TournamenetUserController extends Controller
             $job = (new XpLpOfTournament($request->all()))->delay(now()->addMinutes(1));
             $this->dispatch($job);
             return response()->json(['status' => 200, 'message' => 'Rank will be not calculated yet', 'data' => '', 'result' => '0']);
-        } else {
+        } 
+        else {
             $user = [];
 
             $user['user_id'] = $singleuser->user_id;
@@ -184,7 +185,7 @@ class TournamenetUserController extends Controller
 
             $tournamentUsers = TournamenetUser::where('tournament_id', $request->tournament_id)->where('session_id', $request->session_id)->orderBy('rank', 'ASC')->where('status', 'completed')->whereDate('created_at', Carbon::today())->get();
 
-            
+
             foreach ($tournamentUsers as $users) 
             {
                 $data['rank'] = $users->rank;
