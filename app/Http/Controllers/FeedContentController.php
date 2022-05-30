@@ -821,8 +821,12 @@ class FeedContentController extends Controller
             $mydata['placeholder_image'] = $place;
             $savefeeds = SaveFeed::where('feed_contents_id', $cont->id)->pluck('feed_contents_id');
             $mydata['savepost'] = count($savefeeds);
-            if ($cont->savefeed->user_id == $request->user->id) {
+            if (isset($cont->savefeed)) {
+                        if ($cont->savefeed->user_id == $request->user->id){
                 $save = 1;
+                        } else{
+                            $save = 0;
+                        }
             } else {
                 $save = 0;
             }
