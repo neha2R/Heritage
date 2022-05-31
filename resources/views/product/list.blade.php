@@ -204,7 +204,7 @@
                 <div class="field" align="left" id="original">
                 <label class="img-label">Upload images</label> 
              
-                <input type="file" id="files" name="images[]" accept="image/*" multiple   />
+                <input type="file" id="files" name="images[]" accept="image/*" multiple  required />
                  </div>
                </div>
              
@@ -271,7 +271,7 @@
                 <div class="field" align="left">
                 <label class="img-label">Upload images</label> 
              
-                <input type="file" id="edit_files" name="images[]"  accept="image/*" multiple   />
+                <input type="file" id="edit_files" name="images[]"  accept="image/*" multiple  required />
                 <div id="old_photos">
                 @foreach($product->images as $image)           
                    <span class="pip"><input type="hidden"  value="{{$image->image}}" name="old_images[]"/><input type="button" value="x" class="remove_edit">

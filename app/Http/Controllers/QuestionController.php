@@ -29,10 +29,10 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::OrderBy('id', 'DESC')->get();
-        $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
-        $domains = Domain::OrderBy('id', 'DESC')->get();
-        $subdomains = Subdomain::OrderBy('id', 'DESC')->get();
-        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->get();
+        $age_groups = AgeGroup::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $subdomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->where('status', '1')->get();
 
         return view('question.list', compact('questions', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains'));
     }
@@ -60,7 +60,7 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        
         $validatedData = $request->validate([
             'question' => 'required',
             'option1' => 'required',
@@ -130,6 +130,7 @@ class QuestionController extends Controller
         // }
 
         $data = new Question;
+
         $data->question = $request->question;
         $data->option1 = $request->option1;
         $data->option2 = $request->option2;
@@ -200,10 +201,10 @@ class QuestionController extends Controller
     public function edit($id)
     {
         $question = Question::whereId($id)->first();
-        $age_groups = AgeGroup::OrderBy('id', 'DESC')->get();
-        $domains = Domain::OrderBy('id', 'DESC')->get();
-        $subdomains = Subdomain::OrderBy('id', 'DESC')->get();
-        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->get();
+        $age_groups = AgeGroup::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $subdomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->where('status', '1')->get();
 
         return view('question.edit_question', compact('question', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains'));
     }

@@ -57,8 +57,9 @@
                                             <tr>
                                                 <th scope="row">{{$key+1}}</th>
                                                 <td>{{ucwords(($support->user) ? $support->user->name : '-')}}</td>
-                                                <td>{{$support->title}}</td>
-                                                <td>{{$support->description}}</td>
+                                                @php $title= wordwrap($support->title,50,"<br />\n") @endphp
+                                                <td>{{ $title }}</td>
+                                                <td>{{wordwrap($support->description,50,"<br/>\n")}}</td>
                                                 <!-- <td> <img class="imageThumb" style="width:120px;" src="{{asset('storage/'.$support->image)}}"> -->
                                                 </td>
                                             </tr>

@@ -1153,31 +1153,36 @@ class FeedContentController extends Controller
             $media = FeedMedia::where('feed_content_id', $req->feed_content_id)->first();
 
             if ($req->media_type == '0') {
+                if($media){
+                    if (FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->first()) {
 
-                if (FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->first()) {
-
-                    FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->delete();
-                    if (isset($req->old_images)) {
-                        foreach ($req->old_images as $image) {
-                            $images = new FeedAttachment;
-                            $images->feed_media_id = $media->id;
-                            $images->media_type = '0';
-                            $images->media_name = $image;
-                            $images->save();
+                        FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->delete();
+                        if (isset($req->old_images)) {
+                            foreach ($req->old_images as $image) {
+                                $images = new FeedAttachment;
+                                $images->feed_media_id = $media->id;
+                                $images->media_type = '0';
+                                $images->media_name = $image;
+                                $images->save();
+                            }
                         }
                     }
-                }
 
-                if (FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '1')->first()) {
-                    FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '1')->delete();
+                    if (FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '1')->first()) {
+                        FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '1')->delete();
+                    }
+                } else{
+                   $media = new FeedMedia; 
                 }
-
                 $media->description = $req->description;
                 $media->video_link = "";
                 $media->placholder_image = "";
+                $media->feed_content_id = $req->feed_content_id;
                 $media->description = $req->description;
                 $media->external_link = $req->external_link;
                 $media->save();
+
+            
                 if ($req->hasfile('files')) {
                     foreach ($req->file('files') as $key => $file) {
                         $type = '0';
@@ -1188,7 +1193,8 @@ class FeedContentController extends Controller
                         $attachment->media_type = $type;
                         $attachment->save();
                     }
-                }
+               
+            }
             } else {
 
 
@@ -1218,7 +1224,8 @@ class FeedContentController extends Controller
                     $attachment->media_name = $name;
                     $attachment->media_type = '1';
                     $attachment->save();
-                } else {
+                } 
+                else {
                     if (FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->first()) {
                         FeedAttachment::where('feed_media_id', $media->id)->where('media_type', '0')->delete();
                     }

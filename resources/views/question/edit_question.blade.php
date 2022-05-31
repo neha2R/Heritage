@@ -42,7 +42,7 @@ use App\QuestionsSetting;
                                     <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old" />
                                     <input type="hidden" name="question_media_type_edit" value="" id="question_media_type_edit" />
                                  </span>
-                                 <input type="text" value="{{$question->question}}" class="@error('question') is-invalid @enderror form-control" name="question" placeholder="Type a question" required>
+                                 <textarea type="text" class="@error('question') is-invalid @enderror form-control" name="question" id="question" placeholder="Type a question">{{$question->question}}</textarea>
                                  <!-- <span class="image-upload form-control-feedback">
                                  <label for="file-input">
                                  <i class="fa fa-paperclip" aria-hidden="true"></i>
@@ -273,7 +273,15 @@ use App\QuestionsSetting;
 </div>
 @endsection
 @section('js')
+<script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+
 <script>
+   ClassicEditor
+      .create(document.querySelector('#question'))
+      .catch(error => {
+         console.error(error);
+      });
+
    function readURL(input, imgControlName) {
 
       if (input.files && input.files[0]) {
@@ -634,6 +642,24 @@ use App\QuestionsSetting;
 
    $(document).on("click", ".button-remove", function() {
       $(this).closest(".box").remove();
+   });
+
+   $(document).on('change', "select[name='domain_id']", function() {
+
+      var domain_id = $(this).val();
+      var token = $("input[name='_token']").val();
+      $.ajax({
+         url: "<?php echo route('select-subdomain') ?>",
+         method: 'POST',
+         data: {
+            domain_id: domain_id,
+            _token: token
+         },
+         success: function(data) {
+            $("select[name='subdomain_id'").html('');
+            $("select[name='subdomain_id'").html(data.options);
+         }
+      });
    });
 </script>
 @endsection

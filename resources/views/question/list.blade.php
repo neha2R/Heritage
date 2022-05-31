@@ -65,7 +65,7 @@ use App\QuestionsSetting;
                                  @foreach($questions as $key=>$question)
                                  <tr>
                                     <th scope="row">{{$key+1}}</th>
-                                    <th scope="row">{{$question->question}}</th>
+                                    <th scope="row">{!! $question->question !!}</th>
                                     <td>{{($question->questionsetting->domain) ? ucwords($question->questionsetting->domain->name):'N/A'}}</td>
                                     <td>{{($question->questionsetting->age_group) ? ucwords($question->questionsetting->age_group->name):'N/A'}}</td>
                                     <td>{{($question->questionsetting->difflevel) ? ucwords($question->questionsetting->difflevel->name):'N/A'}}</td>
@@ -129,22 +129,24 @@ use App\QuestionsSetting;
                      @csrf
                      <div class="row">
                         <div class="col-md-10">
+                           <span class="image-upload">
+                              <label for="file-input1">
+                                 <i class="fa fa-paperclip form-control-feedback"></i>
+                              </label>
+                              <input id="file-input1" name="question_media" class="file-input" type="file" accept="*" />
+                              <input type="hidden" name="question_media_type" value="" id="question_media_type" />
+                           </span>
                            <div class="form-group inner-addon right-addon">
                               <!-- <label for="name">Quiz Speed</label> -->
-                              <span class="image-upload">
-                                 <label for="file-input1">
-                                    <i class="fa fa-paperclip form-control-feedback"></i>
-                                 </label>
-                                 <input id="file-input1" name="question_media" class="file-input" type="file" accept="*" />
-                                 <input type="hidden" name="question_media_type" value="" id="question_media_type" />
-                              </span>
-                              <input type="text" class="@error('question') is-invalid @enderror form-control" name="question" placeholder="Type a question" required>
+
+                              <textarea type="text" class="@error('question') is-invalid @enderror form-control" name="question" placeholder="Type a question" id="question"></textarea>
                               <!-- <span class="image-upload form-control-feedback">
                                  <label for="file-input">
                                  <i class="fa fa-paperclip" aria-hidden="true"></i>
                                  </label>
                                  <input id="file-input" type="file"/>
                                  </span> -->
+
                            </div>
                         </div>
                         <div class="col-md-2 yes" id="img1">
@@ -314,7 +316,7 @@ use App\QuestionsSetting;
 
                      <div class="form-group row">
                         <div class="col-md-12">
-                         <input type="text" class="form-control" placeholder="Hint" name="hint"/>
+                           <input type="text" class="form-control" placeholder="Hint" name="hint" />
                         </div>
                      </div>
                      <div class="form-group row">
@@ -387,8 +389,15 @@ use App\QuestionsSetting;
       <!-- Bulk Model Ends here -->
       @endsection
       @section('js')
+      <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+
       <script>
          $(document).ready(function() {
+            ClassicEditor
+               .create(document.querySelector('#question'))
+               .catch(error => {
+                  console.error(error);
+               });
 
             $('#table').DataTable();
 
@@ -772,6 +781,24 @@ use App\QuestionsSetting;
 
          $(document).on("click", ".button-remove", function() {
             $(this).closest(".box").remove();
+         });
+
+         $(document).on('change', "select[name='domain_id']", function() {
+
+            var domain_id = $(this).val();
+            var token = $("input[name='_token']").val();
+            $.ajax({
+               url: "<?php echo route('select-subdomain') ?>",
+               method: 'POST',
+               data: {
+                  domain_id: domain_id,
+                  _token: token
+               },
+               success: function(data) {
+                  $("select[name='subdomain_id'").html('');
+                  $("select[name='subdomain_id'").html(data.options);
+               }
+            });
          });
       </script>
       @endsection
