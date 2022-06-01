@@ -37,7 +37,7 @@ class FaqController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required|unique:faqs',
+            'title' => 'required|unique:faqs,title,NULL,id,deleted_at,NULL',
             'content' => 'required|max:255',
             
         ]);

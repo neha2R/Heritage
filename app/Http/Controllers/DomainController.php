@@ -43,7 +43,7 @@ class DomainController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required|unique:domains',
+            'name' => 'required|unique:domains,name,NULL,id,deleted_at,NULL',
             'theme_id' => 'required',
         ]);
         $data = new Domain;
