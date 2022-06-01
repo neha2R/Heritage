@@ -581,7 +581,7 @@ class QuestionController extends Controller
             $quizques->save();
         } else {
             $ques = explode(",", $quizQuestions->questions);
-            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'attachment_details', 'type')->whereIn('id', $ques)->orderByRaw("field(id," . implode(',', $ques) . ")")
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'attachment_details', 'type', 'ques_type')->whereIn('id', $ques)->orderByRaw("field(id," . implode(',', $ques) . ")")
                 ->get();
         }
         $response = [];
