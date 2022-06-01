@@ -310,6 +310,14 @@ use App\QuestionsSetting;
                            </div>
                         </div>
                      </div>
+                     <div class="form-group more">
+                        <select class="form-control" name="ques_type">
+                           <option value="">Select Question type </option>
+                           <option value="1"> Normal</option>
+                           <option value="2"> True False</option>
+                           <option value="3"> Match the following</option>
+                        </select>
+                     </div>
 
                      <div class="form-group more">
                      </div>

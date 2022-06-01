@@ -132,6 +132,10 @@ class QuestionController extends Controller
         $data = new Question;
 
         $data->question = $request->question;
+        if(!$request->ques_type){
+            $request->ques_type =1;
+        }
+        $data->ques_type = $request->ques_type;        
         $data->option1 = $request->option1;
         $data->option2 = $request->option2;
         $data->option3 = $request->option3;
@@ -320,6 +324,11 @@ class QuestionController extends Controller
 
 
         $data->question = $request->question;
+        $data->question = $request->question;
+        if (!$request->ques_type) {
+            $request->ques_type = 1;
+        }
+        $data->ques_type = $request->ques_type;
         $data->option1 = $request->option1;
         $data->option2 = $request->option2;
         $data->option3 = $request->option3;
@@ -610,6 +619,7 @@ class QuestionController extends Controller
             $quesdata['question_media_type'] = $que->type;
             $quesdata['why_right'] = $que->why_right;
             $quesdata['type'] = $que->type;
+            $quesdata['ques_type'] = $que->ques_type;
             $response[] = $quesdata;
         }
         $data['question'] = $response;

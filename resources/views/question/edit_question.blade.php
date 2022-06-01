@@ -262,6 +262,14 @@ use App\QuestionsSetting;
                               <input type="text" class="form-control" placeholder="Hint" name="hint" value="{{$question->hint}}" />
                            </div>
                         </div>
+                        <div class="form-group more">
+                           <select class="form-control" name="ques_type">
+                              <option value="">Select Question type </option>
+                              <option @if ($question->ques_type=='1') selected="selected" @endif value="1"> Normal</option>
+                              <option @if ($question->ques_type=='2') selected="selected" @endif value="2"> True False</option>
+                              <option @if ($question->ques_type=='3') selected="selected" @endif value="3"> Match the following</option>
+                           </select>
+                        </div>
                         <div class="form-group row">
                            <input type="submit" value="Update" class="btn btn-success ml-auto" />
                         </div>
