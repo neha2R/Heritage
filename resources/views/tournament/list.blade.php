@@ -410,7 +410,7 @@
                                     <div class="form-group">
                                         <div class="field" align="left">
                                             <label>Banner Image</label>
-                                            <input type="file" id="files" name="media_name" accept="image/*" multiple />
+                                            <input type="file" id="files" name="media_name" accept="image/*" multiple required />
                                         </div>
                                     </div>
                                 </div>
@@ -419,7 +419,7 @@
                                     <div class="form-group">
                                         <div class="field" align="left">
                                             <label>Sponsor Images</label>
-                                            <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple />
+                                            <input type="file" id="files" name="sponsor_media_name" accept="image/*" multiple required />
                                         </div>
                                     </div>
                                 </div>

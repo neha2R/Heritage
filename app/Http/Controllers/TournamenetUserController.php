@@ -358,7 +358,9 @@ class TournamenetUserController extends Controller
         $response['league'] = $leagues;
         $response['rank'] = $rank;
         $response['percentage'] = $percentage;
+        if(empty($this->goalsummery($request->user_id))){
         $response['goalsummery'] = $this->goalsummery($request->user_id);
+         }
         $userleague = UserLeagueWithPer::where('user_id', $request->user_id)->first();
 
         if ($userleague) {
@@ -686,7 +688,8 @@ class TournamenetUserController extends Controller
         $totalquiz = 0;
         if (!$check) {
             $data = [];
-            return json_encode($data, JSON_FORCE_OBJECT);
+            return json_encode($data);
+            // return json_encode($data, JSON_FORCE_OBJECT);
         }
         if ($check->type == 'daily') {
             $totalquiz = Attempt::selectRaw("Count(id) as totalquiz")->where('user_id', $user_id)->where('status', 'completed')->whereDate('created_at', Carbon::today())->first()->totalquiz;

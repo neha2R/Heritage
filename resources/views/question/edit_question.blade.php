@@ -30,18 +30,20 @@ use App\QuestionsSetting;
                         @csrf
                         <div class="row">
                            <div class="col-md-9">
+                              @php $i=1; @endphp
+                              <span class="image-upload">
+                                 <label for="file-input{{$i}}">
+                                    <i class="fa fa-paperclip form-control-feedback file-input{{$i}}"></i>
+                                 </label>
+                                 <input id="file-input{{$i}}" name="question_media" class="file-input" type="file" myattr="file-input00{{$i}}" accept="*" />
+                                 <input type="hidden" name="question_media_old" value="{{$question->question_media}}" />
+                                 <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old" />
+                                 <input type="hidden" name="question_media_type_edit" value="" id="question_media_type_edit" />
+                              </span>
                               <div class="form-group inner-addon right-addon">
                                  <!-- <label for="name">Quiz Speed</label> -->
-                                 @php $i=1; @endphp
-                                 <span class="image-upload">
-                                    <label for="file-input{{$i}}">
-                                       <i class="fa fa-paperclip form-control-feedback file-input{{$i}}"></i>
-                                    </label>
-                                    <input id="file-input{{$i}}" name="question_media" class="file-input" type="file" myattr="file-input00{{$i}}" accept="*" />
-                                    <input type="hidden" name="question_media_old" value="{{$question->question_media}}" />
-                                    <input type="hidden" name="question_media_type_old" value="" id="question_media_type_old" />
-                                    <input type="hidden" name="question_media_type_edit" value="" id="question_media_type_edit" />
-                                 </span>
+
+
                                  <textarea type="text" class="@error('question') is-invalid @enderror form-control" name="question" id="question" placeholder="Type a question">{{$question->question}}</textarea>
                                  <!-- <span class="image-upload form-control-feedback">
                                  <label for="file-input">
