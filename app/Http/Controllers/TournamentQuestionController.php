@@ -52,7 +52,7 @@ class TournamentQuestionController extends Controller
            $mydata=[];
         $questions_ids = json_decode($tourQuestions->questions);
                 foreach($questions_ids as $ids){
-                    $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type')->where('id', $ids)->first()->toArray(); 
+                    $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type', 'ques_type')->where('id', $ids)->first()->toArray(); 
                     $mydta[] = $questions; 
                 }
                 $data['question'] = $mydta;
