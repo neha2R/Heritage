@@ -573,7 +573,7 @@ class QuestionController extends Controller
         $quizQuestions = QuizQuestion::where('attempts_id', $quiz->id)->latest()->first();
 
         if (empty($quizQuestions)) {
-            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type', 'type')->whereIn('id', $question_ids)->orderByRaw("field(id," . implode(',', $question_ids) . ")")->get();
+            $questions = Question::select('id', 'question', 'question_media', 'option1', 'option1_media', 'option2', 'option2_media', 'option3', 'option3_media', 'option4', 'option4_media', 'why_right', 'right_option', 'hint', 'question_media_type', 'type', 'ques_type')->whereIn('id', $question_ids)->orderByRaw("field(id," . implode(',', $question_ids) . ")")->get();
             $quizques = new QuizQuestion;
             $quizques->attempts_id = $quiz->id;
             $quizques->questions = implode(",", $question_ids);
