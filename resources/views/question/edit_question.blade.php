@@ -133,7 +133,7 @@ use App\QuestionsSetting;
                                  <input id="file-input9"  name="option3_media" class="file-input" type="file" accept="*"/>
                                  <input type="hidden" name="option3_media_old" value="{{$question->option3_media}}"/>
                                  </span> -->
-                                 <input type="text" value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3" required>
+                                 <input type="text" value="{{$question->option3}}" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3" >
                               </div>
                            </div>
                            <!-- <div class="col-md-2 yes" id="img4">
@@ -156,7 +156,7 @@ use App\QuestionsSetting;
                                  <input id="file-input10"  name="option4_media" class="file-input" type="file" accept="*"/>
                                  <input type="hidden" name="option4_media_old" value="{{$question->option4_media}}"/>
                                  </span> -->
-                                 <input type="text" value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4" required>
+                                 <input type="text" value="{{$question->option4}}" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4" >
                               </div>
                            </div>
                            <!-- <div class="col-md-2 yes" id="img5">
@@ -263,7 +263,7 @@ use App\QuestionsSetting;
                            </div>
                         </div>
                         <div class="form-group more">
-                           <select class="form-control" name="ques_type">
+                           <select class="form-control" name="ques_type" required>
                               <option value="">Select Question type </option>
                               <option @if ($question->ques_type=='1') selected="selected" @endif value="1"> Normal</option>
                               <option @if ($question->ques_type=='2') selected="selected" @endif value="2"> True False</option>
