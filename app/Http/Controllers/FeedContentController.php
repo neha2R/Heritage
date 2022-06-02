@@ -797,7 +797,7 @@ class FeedContentController extends Controller
         }
 
 
-        $feedContents = $feedContents->get();
+        $feedContents = $feedContents->orderBy('id','DESC')->get();
         $data = [];
         $last_page = 0;
         $i = 1;
