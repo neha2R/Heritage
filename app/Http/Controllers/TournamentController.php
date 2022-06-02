@@ -554,7 +554,8 @@ class TournamentController extends Controller
             //    dd($request->user_id);
             $tournaments = Tournament::select('id', 'title', 'start_time', 'duration', 'interval_session', 'frequency_id', 'is_attempt', 'sponsor_media_id')->where('status', '1')->where('age_group_id', $ageGroup->id);
             if($request->theme_id){
-            $tournaments = $tournaments->where('theme_id', $request->theme_id);
+                $themes =  explode(',', $request->theme_id);
+            $tournaments = $tournaments->whereIn('theme_id', $themes);
             }
             if($request->domain_id){
                $domains=  explode(',', $request->domain_id);
