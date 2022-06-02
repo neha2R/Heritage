@@ -70,7 +70,7 @@ class NotificationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
-            'notifications_id' => 'required',
+            // 'notifications_id' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
