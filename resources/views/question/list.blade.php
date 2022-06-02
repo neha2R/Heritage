@@ -79,9 +79,9 @@ use App\QuestionsSetting;
                                     <td>{{($question->questionsetting->difflevel) ? ucwords($question->questionsetting->difflevel->name):'N/A'}}</td>
                                     <!-- <td><button type="button" class="view-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button> -->
                                     </td>
-                                    @php $page =$questions->currentPage(); $url ="$question->id?page=$page";@endphp
+                                    @php $page =$questions->currentPage(); @endphp
 
-                                    <td><a class="edit-btn-bg btn mr-2 mb-2 btn-primary" href="{{route('question.edit',$question->id)}}"><i class="fas fa-pencil-alt"></i></a>
+                                    <td><a class="edit-btn-bg btn mr-2 mb-2 btn-primary" href="{{route('quesbyid',['id'=>$question->id,'page'=>$page])}}"><i class="fas fa-pencil-alt"></i></a>
                                     </td>
                                     <td>
                                        <form class="delete" action="{{route('question.destroy',$question->id)}}" method="POST">

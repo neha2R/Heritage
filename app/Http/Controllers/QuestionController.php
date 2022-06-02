@@ -389,7 +389,7 @@ class QuestionController extends Controller
             }
         }
         if ($data->id) {
-            return redirect('admin/question')->with(['success' => 'Question updated successfully', 'model' => 'model show']);
+            return redirect("admin/question?page=$request->page")->with(['success' => 'Question updated successfully', 'model' => 'model show']);
         } else {
             return redirect()->back()->with(['error' => 'Something Went Wrong Try Again Later']);
         }
@@ -656,5 +656,20 @@ class QuestionController extends Controller
             $response[] = url('/storage') . '/' . $que->question_media;
         }
         return response()->json(['status' => 200, 'message' => 'Question media data', 'data' => $response]);
+    }
+
+// Edit Question 
+    public function quesbyid($id)
+    {
+        
+        $page = $_GET['page'];
+      
+        $question = Question::whereId($id)->first();
+        $age_groups = AgeGroup::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $subdomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
+        $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->where('status', '1')->get();
+
+        return view('question.edit_question', compact('question', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains', 'page'));
     }
 }
