@@ -221,7 +221,7 @@ use App\QuestionsSetting;
                         <input id="file-input4"  name="option3_media" class="file-input" type="file" accept="image/*"/>
                         <input type="hidden" name="option3_media_old" />
                         </span> -->
-                              <input type="text" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3" required>
+                              <input type="text" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3" >
                            </div>
                         </div>
                         <!-- <div class="col-md-2 yes" id="img4">
@@ -244,7 +244,7 @@ use App\QuestionsSetting;
          </label>
          <input id="file-input5"  name="option4_media" class="file-input" type="file" accept="image/*"/>
          </span> -->
-                              <input type="text" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4" required>
+                              <input type="text" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4" >
                            </div>
                         </div>
                         <!-- <div class="col-md-2 yes" id="img5">
@@ -311,7 +311,7 @@ use App\QuestionsSetting;
                         </div>
                      </div>
                      <div class="form-group more">
-                        <select class="form-control" name="ques_type">
+                        <select class="form-control" name="ques_type" required>
                            <option value="">Select Question type </option>
                            <option value="1"> Normal</option>
                            <option value="2"> True False</option>
