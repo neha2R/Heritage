@@ -28,6 +28,7 @@ use App\QuestionsSetting;
                      <form id="editform" enctype="multipart/form-data" class="col-md-10 mx-auto" method="post" action="{{ route('question.update',$question->id) }}">
                         @method('PUT')
                         @csrf
+                        <input type="hidden" name="page" value="{{$page}}"/>
                         <div class="row">
                            <div class="col-md-9">
                               @php $i=1; @endphp

@@ -27,6 +27,12 @@ use App\QuestionsSetting;
                         <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-bulk"> <i class="fas fa-plus-circle"></i> Bulk Upload</button>
 
                      </div>
+                     <div class="card-header display-inline mt-3">
+                        <form method="GET" action="">
+                           <button type="submit" class=" float-right btn mr-2 mb-2 btn-primary"> <i class="fa fa-search"></i> Search</button>
+                           <input type="text" name="search" required class=" float-right  mr-2 mb-2 form-control " style="width:200px" />
+                        </form>
+                     </div>
                      @if(session()->has('success'))
                      <div class="alert alert-dismissable alert-success">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> <strong>
@@ -48,7 +54,7 @@ use App\QuestionsSetting;
                      @endforeach
                      <div class="card-body">
                         <div class="table-responsive">
-                           <table id="table" class="mb-0 table table-striped">
+                           <table id="tables" class="mb-0 table table-striped">
                               <thead>
                                  <tr>
                                     <th>Sr. No.</th>
@@ -63,14 +69,18 @@ use App\QuestionsSetting;
                               </thead>
                               <tbody>
                                  @foreach($questions as $key=>$question)
+                                 @php $i = $questions->perPage() * ($questions->currentPage() - 1); $key++;@endphp
+
                                  <tr>
-                                    <th scope="row">{{$key+1}}</th>
+                                    <th scope="row">{{$i+=$key}}</th>
                                     <th scope="row">{!! $question->question !!}</th>
                                     <td>{{($question->questionsetting->domain) ? ucwords($question->questionsetting->domain->name):'N/A'}}</td>
                                     <td>{{($question->questionsetting->age_group) ? ucwords($question->questionsetting->age_group->name):'N/A'}}</td>
                                     <td>{{($question->questionsetting->difflevel) ? ucwords($question->questionsetting->difflevel->name):'N/A'}}</td>
                                     <!-- <td><button type="button" class="view-btn-bg btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target="#view-model{{$key}}"><i class="fas fa-eye"></i></button> -->
                                     </td>
+                                    @php $page =$questions->currentPage(); $url ="$question->id?page=$page";@endphp
+
                                     <td><a class="edit-btn-bg btn mr-2 mb-2 btn-primary" href="{{route('question.edit',$question->id)}}"><i class="fas fa-pencil-alt"></i></a>
                                     </td>
                                     <td>
@@ -84,6 +94,9 @@ use App\QuestionsSetting;
                                  @endforeach
                               </tbody>
                            </table>
+                           <div style="float:right">
+                              {{$questions->withQueryString()->links()}}
+                           </div>
                         </div>
                      </div>
 
@@ -221,7 +234,7 @@ use App\QuestionsSetting;
                         <input id="file-input4"  name="option3_media" class="file-input" type="file" accept="image/*"/>
                         <input type="hidden" name="option3_media_old" />
                         </span> -->
-                              <input type="text" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3" >
+                              <input type="text" class="@error('option3') is-invalid @enderror form-control" name="option3" placeholder="Option 3">
                            </div>
                         </div>
                         <!-- <div class="col-md-2 yes" id="img4">
@@ -244,7 +257,7 @@ use App\QuestionsSetting;
          </label>
          <input id="file-input5"  name="option4_media" class="file-input" type="file" accept="image/*"/>
          </span> -->
-                              <input type="text" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4" >
+                              <input type="text" class="@error('option4') is-invalid @enderror form-control" name="option4" placeholder="Option 4">
                            </div>
                         </div>
                         <!-- <div class="col-md-2 yes" id="img5">

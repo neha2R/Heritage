@@ -204,10 +204,10 @@ class ProductController extends Controller
 
         if ($req->search != "") {
             $str = $req->search;
-            $products = Product::where('name', 'like', '%' . $str . '%')->where('status', '1')->get();
+            $products = Product::where('name', 'like', '%' . $str . '%')->where('status', '1')->where('category_id',2)->get();
         } else {
 
-            $products = Product::where('status', '1')->get();
+            $products = Product::where('status', '1')->where('category_id', 2)->get();
         }
 
 

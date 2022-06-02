@@ -26,9 +26,15 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $questions = Question::OrderBy('id', 'DESC')->get();
+        $questions =  Question::query();
+        if ($request->search) {
+            $searchTerm = $request->search;
+
+            $questions = $questions->orWhere('question', 'LIKE', "%{$searchTerm}%");
+        }
+        $questions = $questions->OrderBy('id', 'DESC')->paginate(10);
         $age_groups = AgeGroup::OrderBy('id', 'DESC')->where('status', '1')->get();
         $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
         $subdomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
@@ -204,13 +210,15 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
+        // dd($id);
+        $page = $_GET['page'];
         $question = Question::whereId($id)->first();
         $age_groups = AgeGroup::OrderBy('id', 'DESC')->where('status', '1')->get();
         $domains = Domain::OrderBy('id', 'DESC')->where('status', '1')->get();
         $subdomains = Subdomain::OrderBy('id', 'DESC')->where('status', '1')->get();
         $diffulcitylevels = DifficultyLevel::OrderBy('id', 'DESC')->where('status', '1')->get();
 
-        return view('question.edit_question', compact('question', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains'));
+        return view('question.edit_question', compact('question', 'age_groups', 'domains', 'diffulcitylevels', 'subdomains','page'));
     }
 
     /**
