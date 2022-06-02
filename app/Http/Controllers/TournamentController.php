@@ -552,7 +552,20 @@ class TournamentController extends Controller
                 ->where('age_group_id', $ageGroup->id)->where('status', '1')->OrderBy('id', 'DESC')->get();
         } else {
             //    dd($request->user_id);
-            $tournaments = Tournament::select('id', 'title', 'start_time', 'duration', 'interval_session', 'frequency_id', 'is_attempt', 'sponsor_media_id')->where('status', '1')->where('age_group_id', $ageGroup->id)->OrderBy('id', 'DESC')->get();
+            $tournaments = Tournament::select('id', 'title', 'start_time', 'duration', 'interval_session', 'frequency_id', 'is_attempt', 'sponsor_media_id')->where('status', '1')->where('age_group_id', $ageGroup->id);
+            if($request->theme_id){
+            $tournaments = $tournaments->where('theme_id', $request->theme_id);
+            }
+            if($request->domain_id){
+               $domains=  explode(',', $request->domain_id);
+                $tournaments = $tournaments->whereIn('domain_id', $domains);
+
+            }
+            if ($request->tournament_type) {
+                $types =  explode(',', $request->tournament_type);
+                $tournaments = $tournaments->whereIn('frequency_id', $types);
+            }
+            $tournaments = $tournaments->OrderBy('id', 'DESC')->get();
         }
         //Post::with('user:id,username')->get();
         $currentDateTime = Carbon::now();
