@@ -358,9 +358,9 @@ class TournamenetUserController extends Controller
         $response['league'] = $leagues;
         $response['rank'] = $rank;
         $response['percentage'] = $percentage;
-        // if(empty($this->goalsummery($request->user_id))){
+        if(!empty($this->goalsummery($request->user_id))){
         $response['goalsummery'] = $this->goalsummery($request->user_id);
-        //  }
+         }
         $userleague = UserLeagueWithPer::where('user_id', $request->user_id)->first();
 
         if ($userleague) {
