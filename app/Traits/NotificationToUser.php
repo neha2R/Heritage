@@ -130,7 +130,7 @@ trait NotificationToUser {
             $data['title'] = 'Quiz room started';
             $data['room_id'] = $quizid;
             $data['message'] = 'Started';
-            $data['type'] = 'quizroom';
+            $data['type'] = 'quizroomstart';
             $data['token'] = $user->token;
             $this->sendNotification($data);
         }
