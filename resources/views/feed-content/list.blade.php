@@ -640,10 +640,12 @@
             if (val == '0') {
 
                $('#myimage1').css('display', 'block');
+               $("#files_1").attr('required', true);
                $('#myvideo1').css('display', 'none');
             } else {
                $('#myimage1').css('display', 'none');
                $('#myvideo1').css('display', 'block');
+               $("#videos_1").attr("required",true);
             }
          }
 
