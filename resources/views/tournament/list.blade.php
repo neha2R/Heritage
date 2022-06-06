@@ -480,8 +480,11 @@
                             <div class="row ">
                                 <div class="col">
                                     <div class="form-group">
-                                        <select name="frequency_id" class="@error('difficulty_level_id') is-invalid @enderror form-control" required>
-                                            <option>Frequency</option>
+                                        <select name="frequency_id" id="" class="@error('frequency_id') is-invalid @enderror form-control frequency" required>
+                                            <option value="">Select Frequency</option>
+                                            @foreach($frequencies as $freq)
+                                            <option value="{{$freq->id}}">{{$freq->title}}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -515,7 +518,7 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <input id="datetimepicker" type="text" name="start_time" autocomplete="off" class="form-control" placeholder="start time" />
+                                    <input id="sdatetimepicker" type="text" name="start_time" autocomplete="off" class="form-control" placeholder="start time" />
                                 </div>
 
                                 <div class="col">
@@ -1071,6 +1074,7 @@
 
                 $('#datetimepicker').datetimepicker();
                 $('#datetimepicker2').datetimepicker();
+                $('#sdatetimepicker').datetimepicker();
                 $(document).on('change', '#datetimepicker2', function() {
                     var start_date = $('#datetimepicker').val();
                     var end_date = $('#datetimepicker2').val();
