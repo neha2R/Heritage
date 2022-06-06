@@ -192,7 +192,7 @@
                               @endif
                               @if($feed->feed_id=='2')
                               <div class="row">
-                                 <a class="edit-btn-bg btn mr-2 mb-2 btn-success ml-auto" href="{{route('add_media',['id'=>$feed->id])}}">Add More</a>
+                                 <!-- <a class="edit-btn-bg btn mr-2 mb-2 btn-success ml-auto" href="{{route('add_media',['id'=>$feed->id])}}">Add More</a> -->
                               </div>
                               @endif
                               @if($feed->feed_id=='3')
@@ -213,7 +213,7 @@
                                  @endif
                                  @if($feed->feed_id=='3')
                                  <div class="row">
-                                    <a class="edit-btn-bg btn mr-2 mb-2 btn-success ml-auto" href="{{route('add_media',['id'=>$feed->id])}}">Add More</a>
+                                    <!-- <a class="edit-btn-bg btn mr-2 mb-2 btn-success ml-auto" href="{{route('add_media',['id'=>$feed->id])}}">Add More</a> -->
                                  </div>
                                  @endif
                                  <div class="row">
