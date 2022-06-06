@@ -265,7 +265,7 @@
                         </div>
 
                     </div>
-                    <button type="submit" class="btn btn-primary" style="float:right; margin-top:10px;">Save Collection</button>
+                    <button type="submit" id="btn-submit" class="btn btn-primary" style="float:right; margin-top:10px;">Save Collection</button>
                 </div>
 
             </div>
@@ -292,6 +292,14 @@
 
                 $('#btn-submit').on('click', function(e) {
                     e.preventDefault();
+                    var boxes = $('input[name="single_post[]"]:checked').length > 0;
+                    if (boxes) {
+                        return true;
+                    } else {
+                        alert('Please select at least one post');
+                        return false;
+                    }
+
 
                     var data = table.$('input[type="checkbox"]').serializeArray();
 

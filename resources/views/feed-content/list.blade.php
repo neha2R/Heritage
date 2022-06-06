@@ -239,7 +239,7 @@
 
                      <div class="form-group">
                         <label for="tags"># Tags</label>
-                        <input type="text" class="@error('from') is-invalid @enderror form-control" name="tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100">
+                        <input type="text" class="@error('from') is-invalid @enderror form-control" name="tags" placeholder="# Tags example(heritage,exam,education)" maxlength="100" required>
                      </div>
 
                      <div class="form-group">
@@ -644,7 +644,7 @@
             } else {
                $('#myimage1').css('display', 'none');
                $('#myvideo1').css('display', 'block');
-               $("#videos_1").attr("required",true);
+               $("#videos_1").attr("required", true);
             }
          }
 
@@ -705,8 +705,7 @@
                </div>\
                <div class="form-group">\
                    <label for="name" id="duration">Card ' + parseInt(cart_edit + 1) + ' Description</label>\
-                  <textarea class="@error("name") is-invalid @enderror form-control"   name="more_description_' + i + '[]" placeholder="Description" id="description" >\
-                   </textarea>\
+                  <textarea class="@error("name") is-invalid @enderror form-control"   name="more_description_' + i + '[]" placeholder="Description" id="description" ></textarea>\
                </div>\
                <div class="form-group">\
                   <label for="title">Card ' + parseInt(cart_edit + 1) + ' External Link</label>\
@@ -895,7 +894,9 @@
 
                   $("." + a).text('Image');
                   $("#" + b).show();
+                  $("#" + b).attr('required', true);
                   $("#" + c).hide();
+                  $("#" + c).attr('required', false);
 
                }
                if ($(this).val() == 1) {
@@ -903,6 +904,9 @@
                   $("." + a).text('Video');
                   $("#" + b).hide();
                   $("#" + c).show();
+                  $("#" + c).attr('required', true);
+                  $("#" + b).attr('required', false);
+
                }
             });
 
@@ -913,9 +917,13 @@
 
                   $('#myimage_collection').show();
                   $('#myvideo_collection').hide();
+                  $("#files_collection").attr("required", true);
+                  $("#videos_collection").attr("required", false);
                } else {
                   $('#myimage_collection').hide();
                   $('#myvideo_collection').show();
+                  $("#videos_collection").attr("required", true);
+                  $("#files_collection").attr("required", false);
                }
             });
 
