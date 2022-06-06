@@ -291,12 +291,13 @@
                 });
 
                 $('#btn-submit').on('click', function(e) {
-                    e.preventDefault();
+
                     var boxes = $('input[name="single_post[]"]:checked').length > 0;
                     if (boxes) {
                         return true;
                     } else {
                         alert('Please select at least one post');
+                        e.preventDefault();
                         return false;
                     }
 
