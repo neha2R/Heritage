@@ -22,7 +22,7 @@
                <!-- <a href="{{ route('domain.create') }}"  class="float-right mb-2 mr-2 btn-transition btn btn-outline-primary">Primary
                   </a> -->
 
-               <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Quiz Type</button>
+               <!-- <button type="button" class=" float-right btn mr-2 mb-2 btn-primary" data-toggle="modal" data-target=".add-model"> <i class="fas fa-plus-circle"></i> Create Quiz Type</button> -->
             </div>
             @if(session()->has('success'))
             <div class="alert alert-dismissable alert-success">
