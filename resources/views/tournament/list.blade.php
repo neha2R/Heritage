@@ -567,7 +567,9 @@
                                             <input type="file" class="form-control" id="files" name="sponsor_media_name" accept="image/*" multiple />
                                         </div>
                                     </div>
-                                    <a type="button" class="btn btn-warning" href={{ route("tournament-excel-download") }}>Excel Sample </a>
+                                    <a href="{{asset('assets/sponsor-sample.csv')}}" target="_blank" class="btn btn-success" download>Sample Document</a>
+
+                                    <!-- <a type="button" class="btn btn-warning" href={{ route("tournament-excel-download") }}>Excel Sample </a> -->
                                 </div>
                             </div>
                     </div>
