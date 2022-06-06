@@ -68,7 +68,7 @@ if($users){
             $data = [
                 'title' => 'Tournament Reminder.',
                 'token' => User::where('id', $user)->first()->token,
-                'type' => 'tournament',
+                'type' => 'noti',
                 'link' => '',
                 'message' => 'Your tournament is about to start',
             ];
