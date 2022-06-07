@@ -1031,7 +1031,7 @@ class FeedContentController extends Controller
             $mydata['is_saved'] = $mysave;
            
             $mydata['share'] = $this->sharepath($cont->id);
-            $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type+1;
+            $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type;
             $imagename = [];
             foreach ($cont->feed_attachments as $image) {
 
