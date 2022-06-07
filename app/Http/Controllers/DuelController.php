@@ -240,7 +240,7 @@ class DuelController extends Controller
 
             $attempt = Attempt::where('id', $challange->attempt_id)->first();
             $data = [
-                'title' => 'Invitation Received.',
+                'title' => 'Invitation received.',
                 'token' => $challange->to_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
@@ -254,7 +254,7 @@ class DuelController extends Controller
             $savenoti->link = $attempt->link;
             $savenoti->type = 'dual';
             $savenoti->message = 'You have a new request from ' . ' ' . $challange->from_user->name;
-            $savenoti->title = 'Dual Invitation send.';
+            $savenoti->title = 'Dual invitation send.';
             $savenoti->status = '0';
             $savenoti->save();
 
@@ -304,11 +304,11 @@ class DuelController extends Controller
             $attempt->save();
 
             $data = [
-                'title' => 'Dual Invitation accepted.',
+                'title' => 'Duel invitation accepted.',
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
-                'message' => User::where('id', $challenge->to_user_id)->first()->name . " has been accepted the request. you can start quiz now",
+                'message' => User::where('id', $challenge->to_user_id)->first()->name . " has accepted the request. You can start quiz now",
             ];
             sendNotification($data);
             // Create new data for user who accepts the request
@@ -332,8 +332,8 @@ class DuelController extends Controller
             $savenoti->user_id = $challenge->from_user->id;
             $savenoti->link = $attempt->link;
             $savenoti->type = 'dual';
-            $savenoti->message = User::where('id', $req->user_id)->first()->name . " has been accepted the request. you can start quiz now";
-            $savenoti->title = 'Dual Invitation accepted.';
+            $savenoti->message = User::where('id', $req->user_id)->first()->name . " has accepted the request. You can start quiz now";
+            $savenoti->title = 'Duel invitation accepted.';
             $savenoti->status = '0';
             $savenoti->save();
 
@@ -366,7 +366,7 @@ class DuelController extends Controller
             $data['link'] = $attempt->link;
             return response()->json(['status' => 200, 'message' => 'Generated Link', 'data' => $data]);
         } else {
-            return response()->json(['status' => 200, 'message' => 'Sorry! No dual quiz found.']);
+            return response()->json(['status' => 200, 'message' => 'Sorry! No duel quiz found.']);
         }
     }
 
@@ -587,7 +587,7 @@ class DuelController extends Controller
 
         if (empty($challenge)) {
             $data = [
-                'title' => 'Duel Invitation rejected.',
+                'title' => 'Duel invitation rejected.',
                 'token' => User::where('id', $attempt->user_id)->first()->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
@@ -602,7 +602,7 @@ class DuelController extends Controller
 
 
             $data = [
-                'title' => 'Duel Invitation rejected.',
+                'title' => 'Duel invitation rejected.',
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
