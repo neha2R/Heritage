@@ -1013,9 +1013,25 @@ class FeedContentController extends Controller
             $mydata['placeholder_image'] = $place;
             $savefeeds = SaveFeed::where('feed_contents_id', $cont->id)->pluck('feed_contents_id');
             $mydata['savepost'] = count($savefeeds);
-            $mydata['is_saved'] = fmod($i, 2);
+            if($request->user_id){
+                $save = SaveFeed::where('feed_contents_id', '=', $cont->id)->where('user_id', '=', $request->user_id)->first();
+
+            }else{
+                $save = SaveFeed::where('feed_contents_id', '=', $cont->id)->first();
+  
+            }
+
+            if ($save) {
+                $mysave = 1;
+            } else {
+                $mysave = 0;
+            }
+
+
+            $mydata['is_saved'] = $mysave;
+           
             $mydata['share'] = $this->sharepath($cont->id);
-            $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type;
+            $mydata['media_type'] = $feedContents->feed_media_single->feed_attachments_single->media_type+1;
             $imagename = [];
             foreach ($cont->feed_attachments as $image) {
 
