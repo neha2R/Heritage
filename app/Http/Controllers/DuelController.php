@@ -440,6 +440,7 @@ class DuelController extends Controller
             } else {
                 $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
             }
+            dd($data2);
             if ($data->user_id == $request->user_id) {
                 $user_data = $data;
                 $otheruser_data = $data2;
