@@ -319,6 +319,7 @@ class DuelController extends Controller
             $acceptuser->difficulty_level_id = $attempt->difficulty_level_id;
             $acceptuser->quiz_type_id = $attempt->quiz_type_id;
             $acceptuser->quiz_speed_id = $attempt->quiz_speed_id;
+            $acceptuser->started_at = date('Y-m-d H:i:s');
             $acceptuser->save();
 
             // Update challange table status to accepted
@@ -482,7 +483,7 @@ class DuelController extends Controller
             } else {
                 $response['is_submit'] = '0';
             }
-        } 
+        
             //Check whic user percentage is > (Greater)
             if ($user['percentage'] > $response['percentage']) {
                 $res[] = $user;
