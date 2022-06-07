@@ -436,10 +436,10 @@ class DuelController extends Controller
 
         if (isset($data)) {
             if (isset($data->parent_id)) {
-                $data2 =  Attempt::where('id', $data->parent_id)->first();
+                $data2 =  Attempt::where('id', $data->parent_id)->withTrashed()->first();
             } else {
-                $data2 =  Attempt::where('parent_id', $request->dual_id)->first();
-          dd($data2);
+                $data2 =  Attempt::where('parent_id', $request->dual_id)->withTrashed()->first();
+        
             }
            
             if ($data->user_id == $request->user_id) {
