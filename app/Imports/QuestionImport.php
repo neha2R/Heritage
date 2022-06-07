@@ -126,7 +126,8 @@ class QuestionImport implements ToCollection, WithHeadingRow
                 'why_right_media'=> $answer_image,
                 'right_option'=> $row['answer'],
                 'hint'=> $row['keyword'],
-                'question_media_type'=>$type 
+                'question_media_type'=>$type,
+                'ques_type'=> $row['ques_type'],
             ]);
             
             if($Domain=Domain::where('name',trim(strtolower($row['domain'])))->first())

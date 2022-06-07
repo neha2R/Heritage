@@ -495,9 +495,9 @@ class ContactController extends Controller
         $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->where('status', '1')->toArray();
         $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->where('status', '1')->toArray();
         $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
-        $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
-        $onlyfriends = array_diff($toaluser, $blockuser);
-        $users = User::whereIn('id', $onlyfriends)->get();
+        // $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
+        // $onlyfriends = array_diff($toaluser, $blockuser);
+        $users = User::whereIn('id', $toaluser)->get();
         $data = [];
         foreach ($users as $user) {
             if (isset($user->mobile)) {
