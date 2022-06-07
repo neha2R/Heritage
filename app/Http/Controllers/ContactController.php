@@ -492,8 +492,8 @@ class ContactController extends Controller
             return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found']);
         }
         $id = $request->user_id;
-        $totalfiends = Contact::where('friend_one', $id)->pluck('friend_two')->where('status', '1')->toArray();
-        $whoinvited = Contact::where('friend_two', $id)->pluck('friend_one')->where('status', '1')->toArray();
+        $totalfiends = Contact::where('friend_one', $id)->where('status', '1')->pluck('friend_two')->toArray();
+        $whoinvited = Contact::where('friend_two', $id)->where('status', '1')->pluck('friend_one')->toArray();
         $toaluser = array_unique(array_merge($totalfiends, $whoinvited));
       dd($totalfiends, $whoinvited);
         // $blockuser = BlockUser::where('blocked_by', $id)->pluck('blocked_to')->toArray();
