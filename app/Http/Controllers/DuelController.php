@@ -467,7 +467,7 @@ class DuelController extends Controller
             }
 
             $response = [];
-            if($otheruser_data){
+           
             $response['user_id'] = $otheruser_data->user_id;
             $response['name'] = $otheruser_data->user->name;
             $response['xp'] = $otheruser_data->xp;
@@ -482,9 +482,7 @@ class DuelController extends Controller
             } else {
                 $response['is_submit'] = '0';
             }
-        } else{
-                $response['percentage']=0;
-        }
+        } 
             //Check whic user percentage is > (Greater)
             if ($user['percentage'] > $response['percentage']) {
                 $res[] = $user;
