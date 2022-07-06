@@ -1191,6 +1191,7 @@ class FeedContentController extends Controller
                    $media = new FeedMedia; 
                 }
                 $media->description = $req->description;
+                $media->title = $req->fix_title;
                 $media->video_link = "";
                 $media->placholder_image = "";
                 $media->feed_content_id = $req->feed_content_id;
