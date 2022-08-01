@@ -92,13 +92,21 @@ trait NotificationToUser {
         if (isset($data['type'])) {
             $msg['type'] = $data['type'];
         }
+        if($data['is_ios']=='1'){
+            $fields = array(
+                'registration_ids' => array($data['token']),
+                'data' => $msg,
+                'notification' => "notification",
+
+            );
+        }else{
         //this is for android
         $fields = array(
             'registration_ids' => array($data['token']),
             'data' => $msg,
             'priority' => 'high',
         );
-
+    }
         //this is for ios
         //     $fields = array
         //     (

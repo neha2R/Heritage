@@ -58,6 +58,7 @@ class HomeController extends Controller
                 'token' => $user->token,
                 'link' =>"http://localhost",
                 'type' => 'dual',
+                'is_ios' => '1',
                 'message' => "Hello this is testing for ios users",
             ];
             if($user->device_id=='1'){
