@@ -53,7 +53,7 @@ class HomeController extends Controller
         $user =  User::find($request->user_id);
 
         if (isset($user)) {
-            $data = [
+            $tdata = [
                 'title' => 'Testing.',
                 'token' => $user->token,
                 'link' =>"http://localhost",
@@ -61,7 +61,7 @@ class HomeController extends Controller
                 'message' => "Hello this is testing for ios users",
             ];
             if($user->device_id=='1'){
-                sendNotification($data);
+                sendNotification($tdata);
 
             }
 
