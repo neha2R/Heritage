@@ -53,6 +53,18 @@ class HomeController extends Controller
         $user =  User::find($request->user_id);
 
         if (isset($user)) {
+            $data = [
+                'title' => 'Testing.',
+                'token' => $user->token,
+                'link' =>"http://localhost",
+                'type' => 'dual',
+                'message' => "Hello this is testing for ios users",
+            ];
+            if($user->device_id=='1'){
+                sendNotification($data);
+
+            }
+
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
             $duals = Challange::where('to_user_id', $request->user_id)->where('status', '0')->get();
             $acceptinvitations = Challange::where('from_user_id', $request->user_id)->where('status', '1')->get();
