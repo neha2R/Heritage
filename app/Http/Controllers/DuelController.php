@@ -244,6 +244,7 @@ class DuelController extends Controller
                 'token' => $challange->to_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
+                'is_ios' => $challange->to_user->is_ios,
                 //   'from'=>$challange->from_user->name,
                 'message' => 'You have a new request from' . ' ' . $challange->from_user->name,
             ];
@@ -591,6 +592,7 @@ class DuelController extends Controller
                 'token' => User::where('id', $attempt->user_id)->first()->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
+                'is_ios' => User::where('id', $attempt->user_id)->first()->is_ios,
                 'message' => User::where('id', $req->user_id)->first()->name . " had  rejected the request",
             ];
             sendNotification($data);
@@ -606,6 +608,7 @@ class DuelController extends Controller
                 'token' => $challenge->from_user->token,
                 'link' => $attempt->link,
                 'type' => 'dual',
+                'is_ios' => $challenge->from_user->is_ios,
                 'message' => User::where('id', $req->user_id)->first()->name . " had  rejected the request",
             ];
             sendNotification($data);

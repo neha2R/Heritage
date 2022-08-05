@@ -16,7 +16,10 @@ function sendNotification($data)
          'vibrate' => 1,
         'sound' => 1,
     );
-    if ($data['is_ios'] == '1') {
+
+    $mytoken = User::where('token', $data['token'])->first();
+
+    if ($mytoken->is_ios == '1') {
         $fields = array(
             'registration_ids' => array($data['token']),
             'data' => $msg,
