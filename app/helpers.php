@@ -16,12 +16,21 @@ function sendNotification($data)
          'vibrate' => 1,
         'sound' => 1,
     );
+    if ($data['is_ios'] == '1') {
+        $fields = array(
+            'registration_ids' => array($data['token']),
+            'data' => $msg,
+            'notification' => $msg,
+
+        );
+    } else {
     //this is for android
     $fields = array(
         'registration_ids' => array($data['token']),
         'data' => $msg,
         'priority' => 'high',
     );
+      }
 
     //this is for ios
     //     $fields = array
@@ -43,7 +52,7 @@ function sendNotification($data)
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
     $result = curl_exec($ch);
-    //  dd($result);
+    //   dd($result);
     curl_close($ch);
     return true;
 }
@@ -58,13 +67,21 @@ function notify($data)
         'vibrate' => 1,
         'sound' => 1,
     );
+    if ($data['is_ios'] == '1') {
+        $fields = array(
+            'registration_ids' => array($data['token']),
+            'data' => $msg,
+            'notification' => $msg,
+
+        );
+    } else {
     //this is for android
     $fields = array(
         'registration_ids' => array($data['token']),
         'data' => $msg,
         'priority' => 'high',
     );
-
+    }
     //this is for ios
     //     $fields = array
     //     (

@@ -61,10 +61,12 @@ class HomeController extends Controller
                 'is_ios' => '1',
                 'message' => "Hello this is testing for ios users",
             ];
+        
             if($user->device_id=='1'){
                 sendNotification($tdata);
 
             }
+            exit();
 
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
             $duals = Challange::where('to_user_id', $request->user_id)->where('status', '0')->get();
