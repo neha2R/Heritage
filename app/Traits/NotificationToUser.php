@@ -96,7 +96,7 @@ trait NotificationToUser {
             $fields = array(
                 'registration_ids' => array($data['token']),
                 'data' => $msg,
-                'notification' => "notification",
+                'notification' => $msg,
 
             );
         }else{
