@@ -61,7 +61,7 @@ class HomeController extends Controller
                 'is_ios' => '1',
                 'message' => "Hello this is testing for ios users",
             ];
-        
+        dd($tdata,$user->device_id);
             if($user->device_id=='1'){
                 sendNotification($tdata);
 
