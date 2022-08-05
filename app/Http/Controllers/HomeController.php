@@ -66,7 +66,7 @@ class HomeController extends Controller
                 sendNotification($tdata);
 
             }
-            exit();
+            // exit();
 
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
             $duals = Challange::where('to_user_id', $request->user_id)->where('status', '0')->get();
