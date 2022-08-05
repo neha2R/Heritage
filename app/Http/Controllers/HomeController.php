@@ -53,19 +53,19 @@ class HomeController extends Controller
         $user =  User::find($request->user_id);
 
         if (isset($user)) {
-        //     $tdata = [
-        //         'title' => 'Testing.',
-        //         'token' => $user->token,
-        //         'link' =>"http://localhost",
-        //         'type' => 'dual',
-        //         'is_ios' => '1',
-        //         'message' => "Hello this is testing for ios users",
-        //     ];
-        // // dd($tdata,$user->device_id);
-        //     if($user->device_id=='1'){
-        //         sendNotification($tdata);
+            $tdata = [
+                'title' => 'Testing.',
+                'token' => $user->token,
+                'link' =>"http://localhost",
+                'type' => 'dual',
+                'is_ios' => '1',
+                'message' => "Hello this is testing for ios users",
+            ];
+        // dd($tdata,$user->device_id);
+            if($user->device_id=='1'){
+                sendNotification($tdata);
 
-        //     }
+            }
             // exit();
 
             $contacts = Contact::where('friend_two', $request->user_id)->where('status', '0')->get();
