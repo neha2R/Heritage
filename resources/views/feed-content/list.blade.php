@@ -264,13 +264,13 @@
                         </div>
                         <div class="form-group">
                            <select name="media_type" id="type_add" class="@error('type') is-invalid @enderror form-control " onchange="showType(this.value)">
-                              <option>Type</option>
-                              <option value=""> -- Select Media Type -- </option>
+                              <!-- <option>Type</option> -->
+                              <!-- <option value=""> -- Select Media Type -- </option> -->
                               <option value="0">Image</option>
                               <option value="1">Video</option>
                            </select>
                         </div>
-                        <div class="form-group" id="myimage1" style="display:none">
+                        <div class="form-group" id="myimage1">
                            <div class="field" align="left">
                               <label class="img-label">Upload images</label>
                               <input type="file" id="files_1" name="media_name[]" accept="image/*" multiple />
@@ -326,12 +326,12 @@
                            </div>
                            <select name="type[]" id="type_collection" mytext="label0" myimage="myimage0" myvideo="myvideo0" class="@error('type') is-invalid @enderror form-control type">
                               <!-- <option>Type</option> -->
-                              <option value=""> -- Select Media Type -- </option>
+                              <!-- <option value=""> -- Select Media Type -- </option> -->
                               <option value="0">Image</option>
                               <option value="1">Video</option>
                            </select>
                         </div>
-                        <div class="form-group" id="myimage_collection" style="display:none">
+                        <div class="form-group" id="myimage_collection">
                            <div class="field" align="left">
                               <label class="img-label">Upload images</label>
                               <input type="file" id="files_collection" name="card[0][media_video1][]" accept="image/*" multiple />
@@ -386,12 +386,12 @@
                            <div class="form-group">
                               <select name="type[]" id="type" mytext="label0" myimage="myimage0" myvideo="myvideo0" class="@error('type') is-invalid @enderror form-control type">
                                  <!-- <option>Type</option> -->
-                                 <option value=""> -- Select Media Type -- </option>
+                                 <!-- <option value=""> -- Select Media Type -- </option> -->
                                  <option value="0">Image</option>
                                  <option value="1">Video</option>
                               </select>
                            </div>
-                           <div class="form-group" id="myimage0" style="display:none">
+                           <div class="form-group" id="myimage0">
                               <div class="field" align="left">
                                  <label class="img-label">Upload images</label>
                                  <input type="file" id="files" name="card[0][media_video][]" accept="image/*" multiple />
@@ -504,7 +504,7 @@
                         <div class="form-group">
                            <select name="media_type" class="type_add_edit form-control" class="@error('type') is-invalid @enderror form-control type">
                               <option>Type</option>
-                              <option value=""> -- Select Media Type -- </option>
+                              <!-- <option value=""> -- Select Media Type -- </option> -->
                               <option value="0" {{!empty($feedContent->feed_medium) && $feedContent->feed_medium->video_link==""?'selected':''}}>Image</option>
                               <option value="1" {{!empty($feedContent->feed_medium) && $feedContent->feed_medium->video_link!=""?'selected':''}}>Video</option>
                            </select>
@@ -576,7 +576,7 @@
                            <select name="more_type[]" id="type" mytext="label0" myimage="myimage0" myvideo="myvideo0" class="@error('type') is-invalid @enderror form-control type">
                               <!-- <option>Type</option> -->
 
-                              <option value=""> -- Select Media Type -- </option>
+                              <!-- <option value=""> -- Select Media Type -- </option> -->
                               <option value="0" @if($feed->feed_attachments_single && $feed->feed_attachments_single->media_type=='0') selected @endif>Image</option>
                               <option value="1" @if($feed->feed_attachments_single && $feed->feed_attachments_single->media_type=='1') selected @endif>Video</option>
                            </select>
@@ -641,10 +641,13 @@
                $('#myimage1').css('display', 'block');
                $("#files_1").attr('required', true);
                $('#myvideo1').css('display', 'none');
+               $('#videos_1').attr('required', false);
+
             } else {
                $('#myimage1').css('display', 'none');
                $('#myvideo1').css('display', 'block');
                $("#videos_1").attr("required", true);
+               $('#myimage1').css('required', false);
             }
          }
 
@@ -713,7 +716,7 @@
                </div>\
                <div class="form-group">\
                   <select name="more_type_' + i + '[]" id="type" class="@error("type") is-invalid @enderror form-control type" mytext="label' + cart_edit + '" myimage="myimage' + cart_edit + '" myvideo="myvideo' + cart_edit + '" required >\
-                     <option value=""> -- Select Media Type -- </option>\
+                     \
                      <option value="0">Image</option>\
                      <option value="1">Video</option>\
                      </select>\
@@ -1012,7 +1015,7 @@
                </div>\
                <div class="form-group">\
                   <select name="type[]" id="type" class="@error("type") is-invalid @enderror form-control type" mytext="label' + cart + '" myimage="myimage' + cart + '" myvideo="myvideo' + cart + '" required >\
-                     <option value=""> -- Select Media Type -- </option>\
+                     \
                      <option value="0">Image</option>\
                      <option value="1">Video</option>\
                      </select>\
@@ -1075,7 +1078,7 @@
                </div>\
                <div class="form-group">\
                   <select name="type[]" id="type" class="@error("type") is-invalid @enderror form-control type" mytext="label' + cart + '" myimage="myimage' + cart + '" myvideo="myvideo' + cart + '" required >\
-                     <option value=""> -- Select Media Type -- </option>\
+                     \
                      <option value="0">Image</option>\
                      <option value="1">Video</option>\
                      </select>\

@@ -51,7 +51,11 @@ class HomeController extends Controller
         }
 
         $user =  User::find($request->user_id);
-
+         if($user->is_deleted) {
+            $deleted_account=1;
+         }else{
+            $deleted_account=0;
+         }
         if (isset($user)) {
             // $tdata = [
             //     'title' => 'Testing.',
@@ -189,9 +193,9 @@ class HomeController extends Controller
             if(!empty($tournament)){            
              $response['tournament'] =$tournament;
             }
-            return response()->json(['status' => 200, 'data' => $response, 'message' => 'Data']);
+            return response()->json(['status' => 200, 'deleted_account'=> $deleted_account,'data' => $response, 'message' => 'Data']);
         } else {
-            return response()->json(['status' => 201, 'data' => [], 'message' => 'User not found..']);
+            return response()->json(['status' => 201, 'deleted_account' => $deleted_account, 'data' => [], 'message' => 'User not found..']);
         }
     }
 

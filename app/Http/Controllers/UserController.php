@@ -666,7 +666,7 @@ class UserController extends Controller
         $user->app_id = null;
         // $user->is_social = null;
         $user->refrence_code = null;
-        // $user->device_id = null;
+        $user->is_deleted = date('Y-m-d H:i:s');
         $user->save();
         return response()->json(['status' => 200, 'data' => [], 'message' => 'Profile deleted succesfully..']);
 

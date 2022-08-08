@@ -79,7 +79,8 @@ trait NotificationToUser {
     }
     
     function sendNotification($data)
-    { dd($data); 
+    { 
+        // dd($data); 
         $msg = array(
             'title' => $data['title'],
             'body' => $data['message'],
@@ -92,7 +93,8 @@ trait NotificationToUser {
         if (isset($data['type'])) {
             $msg['type'] = $data['type'];
         }
-        if($data['is_ios']=='1'){
+        $mytoken = User::where('token', $data['token'])->first();
+        if ($mytoken->device_id == '1') {
             $fields = array(
                 'registration_ids' => array($data['token']),
                 'data' => $msg,
