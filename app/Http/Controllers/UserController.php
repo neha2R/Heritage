@@ -643,4 +643,32 @@ class UserController extends Controller
         $user->save();
         return response()->json(['status' => 200, 'data' => [], 'message' => 'Token updated succesfully..']);
     }
+
+    public function deleteaccount(Request $request){
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $user = User::find($request->user_id);
+        $user->name = 'Unknown'. $request->user_id;
+        $user->last_name='Unknown';
+        $user->email = 'unknown'. $request->user_id.'@unknown.com';
+        $user->password = null;
+        $user->dob = null;
+        $user->mobile = null;
+        $user->username = null;
+        $user->profile_image = null;
+        $user->age = null;
+        $user->token = null;
+        $user->app_id = null;
+        // $user->is_social = null;
+        $user->refrence_code = null;
+        // $user->device_id = null;
+        $user->save();
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'Profile deleted succesfully..']);
+
+    }
 }

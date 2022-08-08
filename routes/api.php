@@ -215,3 +215,7 @@ Route::post('goalsummary', 'GoalController@goalsummary');
 Route::post('leaderboardranking', 'TournamenetUserController@leaderboardranking');
 Route::post('user_profile', 'ProfileController@user_profile'); //  user and contact details on profile
 Route::post('badges_details', 'BadgeController@badges_details');
+
+
+// Delete a user 
+Route::post('deleteaccount', 'UserController@deleteaccount');
