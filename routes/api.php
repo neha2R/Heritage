@@ -219,3 +219,4 @@ Route::post('badges_details', 'BadgeController@badges_details');
 
 // Delete a user 
 Route::post('deleteaccount', 'UserController@deleteaccount');
+Route::post('logout', 'UserController@logout');

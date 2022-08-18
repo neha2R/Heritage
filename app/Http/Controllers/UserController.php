@@ -671,4 +671,13 @@ class UserController extends Controller
         return response()->json(['status' => 200, 'data' => [], 'message' => 'Profile deleted succesfully..']);
 
     }
+
+    public function logout(Request $request){
+        $user = User::find($request->user_id);
+        $user->token = null;
+        $user->save();
+
+        return response()->json(['status' => 200, 'data' => [], 'message' => 'Profile logout succesfully..']);
+
+    }
 }
