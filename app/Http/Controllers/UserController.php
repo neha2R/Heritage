@@ -545,7 +545,7 @@ class UserController extends Controller
                 $user->save();
 
                 $data = User::whereId(\Crypt::Decrypt($req->token))->first();
-                $data->password = $req->password;
+                $data->password = bcrypt($req->password);
                 $data->save();
 
                 $user->delete();

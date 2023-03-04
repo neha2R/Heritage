@@ -18,7 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
       return $request->user();
 });
-
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    // return what you want
+});
 Route::post('/forgetPassword', 'UserController@forgetPassword');
 Route::post('updatetoken', 'UserController@updatetoken');
 
@@ -72,6 +75,10 @@ Route::get('feed_domains', 'DomainController@getDomainAccordingTheme');
 Route::get('feed_type', 'FeedController@feed_type');
 // Feed data according to passing filters
 Route::post('feed', 'FeedContentController@feed');
+Route::post('reset', 'FeedContentController@reset');
+Route::post('getuserfilters', 'FeedContentController@getuserfilters');
+
+
 // Save feed to database
 Route::post('savefeed', 'FeedContentController@savepost');
 Route::get('tagfilter', 'FeedContentController@tagfilter');
@@ -94,6 +101,11 @@ Route::get('exp', 'ExperinceController@exp');
 
 /**  Product APi Routes  Duel Apis from Here      */
 Route::post('create_duel', 'DuelController@create_duel');
+Route::post('duel_random_list', 'DuelController@create_duelrandom');
+Route::post('exit_duelrandom', 'DuelController@exit_duelrandom');
+Route::post('duelrandom_pair', 'DuelController@duelrandom_pair');
+Route::post('notify_sender', 'DuelController@notify_sender');
+
 Route::post('get_all_users', 'DuelController@get_all_users');
 Route::post('send_invitation', 'DuelController@send_invitation');
 Route::post('accept_invitation', 'DuelController@accept_invitation');
@@ -128,6 +140,7 @@ Route::get('userleague', 'TournamenetUserController@userleague');
 Route::get('leaguerank', 'TournamenetUserController@leaguerank');
 Route::get('xprewards', 'TournamenetUserController@xprewards');
 Route::post('tournamentuserlist', 'TournamentController@tournamentuserlist');
+Route::post('exitfromtournament', 'TournamentController@exitfromtournament');
 Route::post('exitfromtournament', 'TournamentController@exitfromtournament');
 
 /**  End from Here        */

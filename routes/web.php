@@ -19,7 +19,10 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    // return what you want
+});
 Auth::routes();
 Route::get('/change_password/{id}','UserController@change_passwords');
 Route::post('/password_update','UserController@password_update');

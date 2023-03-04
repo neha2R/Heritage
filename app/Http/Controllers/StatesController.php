@@ -23,7 +23,8 @@ class StatesController extends Controller
 
     public function fetchCity($state_id)
     {
-        $data['cities'] = City::where("state_id", $state_id)->get(["name", "id"]);
+    
+        $data['cities'] = City::where("state_id", $state_id)->get(["name", "id"])->unique('name');
         return response()->json($data);
     }
 }

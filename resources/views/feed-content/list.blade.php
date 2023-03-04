@@ -1135,16 +1135,17 @@
                   for (var i = 0; i < filesLength; i++) {
                      var f = files[i]
                      var fileReader = new FileReader();
-                     fileReader.onload = (function(e) {
+                     fileReader.onload = (function(theFile, count) {
+                      return function(e) {
                         var file = e.target;
                         $("<span class=\"pip\">" +
                            "<input type=\"button\"  value=\"x\" class=\"remove\" /><img class=\"imageThumb\" style=\"width:120px;\" src=\"" + e.target.result + "\" title=\"" + file.name + "\"/>" +
-                           "<br/> ").insertAfter("#files_1");
+                           "<br/>" + "Image" + " " + "-" + count + "<br/>").insertAfter("#files_1");
                         $(".remove").click(function() {
                            $(this).parent(".pip").remove();
                         });
-
-                     });
+                     };
+                     })(f,i+1);
                      fileReader.readAsDataURL(f);
                   }
                });

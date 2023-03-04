@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Validator;
 use App\SaveFeed;
 use App\Jobs\FeedMediaUploadJob;
 use App\Traits\NotificationToUser;
-
+use App\user_filterfeed;
+use App\userreadfeed;
 class FeedContentController extends Controller
 {
     use NotificationToUser;
@@ -604,7 +605,58 @@ class FeedContentController extends Controller
         }
     }
 
+    public function reset(Request $request)
+    {
 
+        $validator = Validator::make($request->all(), [
+            
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+
+        $feedContent = user_filterfeed::where('user_id', $request->user_id)->first();
+        if ($feedContent) {
+            $feedContent->delete();
+            return response()->json(['status' => 200, 'data' => '', 'message' => 'Feed reset successfully.']);
+
+
+        }
+
+
+       else {
+      
+        return response()->json(['status' => 202, 'data' => '', 'message' => 'Feed already reset.']);
+           }
+    }
+    public function getuserfilters(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            
+            'user_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
+        }
+        $data=[];
+        $datafilter=user_filterfeed::where('user_id', $request->user_id)->first();
+            if( $datafilter)
+            {
+            $data['theme_id']=isset($datafilter->theme_id)? $datafilter->theme_id: '';
+            $data['feed_type_id']=isset($datafilter->feed_type_id)? $datafilter->feed_type_id: '';
+            $data['domain_id']=isset($datafilter->domain_id)? $datafilter->domain_id: '';
+            return response()->json(['status' => 200, 'message' => 'filters  available', 'data' => $data]);
+
+            }
+            else
+            {
+            return response()->json(['status' => 202, 'message' => 'filters not available', 'data' => '']);
+   
+            }
+
+
+    }
     public function feed(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -614,13 +666,60 @@ class FeedContentController extends Controller
             'feed_page_id' => 'required',
             'user_id' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json(['status' => 201, 'data' => '', 'message' => $validator->errors()]);
         }
-
-
         $feedContents = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description');
+        $feedContents2 = FeedContent::select('id', 'feed_id', 'type', 'tags', 'title', 'description');
+
+        if($request->theme_id!='' || $request->feed_type_id!='' || $request->domain_id!='')
+        {
+
+            $datafilter=user_filterfeed::where('user_id', $request->user_id)->first();
+            if( $datafilter)
+            {
+            $datafilter->theme_id = $request->theme_id;
+            $datafilter->feed_type_id = $request->feed_type_id;
+            $datafilter->domain_id = $request->domain_id;
+            }
+            else
+            {
+            $datafilter = new user_filterfeed;
+            $datafilter->user_id = $request->user_id;
+            $datafilter->theme_id = $request->theme_id;
+            $datafilter->feed_type_id = $request->feed_type_id;
+            $datafilter->domain_id = $request->domain_id; 
+            }
+            $datafilter->save();
+        }
+        $userfilter=user_filterfeed::where('user_id', $request->user_id)->first();
+
+        if($userfilter)
+        {
+            if ($userfilter->theme_id) {
+
+                $id = explode(',', $userfilter->theme_id);
+                $feedContents = $feedContents->whereIn('theme_id', $id);
+               
+                $feedContents2 = $feedContents2->whereIn('theme_id', $id);
+            }
+    
+            if ($userfilter->feed_type_id) {
+    
+                $feed_id = explode(',', $userfilter->feed_type_id);
+                $feedContents = $feedContents->whereIn('feed_id', $feed_id);
+                $feedContents2 = $feedContents2->whereIn('feed_id', $feed_id);
+            }
+            if ($userfilter->domain_id) {
+    
+                $domain_id = explode(',', $userfilter->domain_id);
+                $feedContents = $feedContents->whereIn('domain_id', $domain_id);
+                $feedContents2 = $feedContents2->whereIn('domain_id', $domain_id);
+
+            }  
+        }
+        else
+        {
 
         // $savefeeds = SaveFeed::where('user_id',$request->user_id)->pluck('feed_contents_id');
 
@@ -628,35 +727,114 @@ class FeedContentController extends Controller
 
             $id = explode(',', $request->theme_id);
             $feedContents = $feedContents->whereIn('theme_id', $id);
+            $feedContents2 = $feedContents2->whereIn('theme_id', $id);
+
         }
 
         if ($request->feed_type_id) {
 
             $feed_id = explode(',', $request->feed_type_id);
             $feedContents = $feedContents->whereIn('feed_id', $feed_id);
+            $feedContents2 = $feedContents2->whereIn('theme_id', $id);
+
         }
         if ($request->domain_id) {
 
             $domain_id = explode(',', $request->domain_id);
             $feedContents = $feedContents->whereIn('domain_id', $domain_id);
+            $feedContents2 = $feedContents2->whereIn('theme_id', $id);
+
         }
+    }
          $feedContents = $feedContents->where('status', '1');
+         $feedContents2 = $feedContents2->where('status', '1');
 
+           $readid=[];
         // $feedContents2 = FeedContent::select('id','type','tags','title','description')->with('feedtype')->whereIn('feed_id',$feed_id)->whereIn('domain_id',$domain_id)->with(array('feed_media'=>function($query){$query->select('id','feed_content_id','title','description','external_link','video_link');}))->get(15);
-
-        if ($request->feed_page_id == 0) {
-            $feedContents = $feedContents->orderBy('id', 'DESC')->take(25)->get();
-        } else {
-            $feedContents = $feedContents->where('id', '<', $request->feed_page_id)->orderBy('id', 'DESC')->take(25)->get();
+        $userreadfeed=userreadfeed::where('user_id', $request->user_id)->get();
+        if($userreadfeed)
+        {
+            foreach ($userreadfeed as $ids) {
+                
+            $readid[]= $ids->feed_id;
+            }
         }
+        
+        if ($request->feed_page_id == 0) {
+            
+            $feedContents = $feedContents->whereNotIn('id', $readid)->orderBy('id', 'DESC')->take(4)->get();
+          
 
+        } else {
+            $feedContents = $feedContents->whereNotIn('id', $readid)->where('id', '<', $request->feed_page_id)->orderBy('id', 'DESC')->take(4)->get();
+        }
+     
+           if(!$feedContents || count($feedContents)<4)
+           {
+            $limit='';
+               if(count($feedContents)<4)
+               {
+               $limit=4-count($feedContents);
+               }
+               else
+               {
+                $limit=4;
+               }
+               $readid2=[];
+               $userreadfeed=userreadfeed::where('user_id', $request->user_id)->orderBy('visibility', 'ASC')->take($limit)->get();
+              // dd($userreadfeed);
+               if($userreadfeed)
+               {
+                   foreach ($userreadfeed as $ids) {
+                       
+                    $readid2[]= $ids->feed_id;
+                   }
+               }
+             if ($request->feed_page_id == 0) {
 
+                $feedContents2 = $feedContents2->whereIn('id', $readid2)->orderBy('id', 'DESC')->take($limit)->get();
+             } else {
+                $feedContents2 = $feedContents2->whereIn('id', $readid2)->where('id', '<', $request->feed_page_id)->orderBy('id', 'DESC')->take($limit)->get();
+             }
+           }
+
+            if(sizeof($feedContents)>0)
+            {
+               // dd('call1244');
+           $merged = $feedContents->merge($feedContents2);
+
+           $feedContents = $merged->all();
+            }
+            else
+            {
+               // dd('call1');
+                $feedContents= $feedContents2 ;
+            }
+           
+     
         $data = [];
         $last_page = '';
         $i = 1;
         foreach ($feedContents as $cont) {
+            $userreadfeed=userreadfeed::where('user_id', $request->user_id)->where('feed_id', $cont->id)->first();
+            if($userreadfeed)
+            {
+                $userreadfeed->visibility=$userreadfeed->visibility+1;
+                $userreadfeed->save();
+            }
+            else
+            {
+                $userreadfeed = new userreadfeed;
+               
+                $userreadfeed->user_id = $request->user_id;
+                $userreadfeed->feed_id = $cont->id;
+                
+                $userreadfeed->visibility = 1;
+                $userreadfeed->save();
+            }
+
             $mydata['id'] = $cont->id;
-            $mydata['type'] = $cont->feedtype->title;
+            $mydata['type'] = !empty($cont->feedtype->title);
             $mydata['tags'] = explode(",", $cont->tags);
             if (isset($cont->feed_media_single->title)) {
                 $title = $cont->feed_media_single->title;

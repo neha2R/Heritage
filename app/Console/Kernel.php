@@ -29,6 +29,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->everyTwoMinutes()->withoutOverlapping()->emailOutputTo('virendra.singh.shekhawat@neologicx.com');
         $schedule->command('xptolp:convertxptolp')->lastDayOfMonth('22:00')->withoutOverlapping()->emailOutputTo('virendra.singh.shekhawat@neologicx.com');
         $schedule->command('tournoti:send')->everyMinute()->withoutOverlapping();
+        $schedule->command('onlinestatus:send')->everySeconds(45)->withoutOverlapping();
+
+
     }
 
     /**

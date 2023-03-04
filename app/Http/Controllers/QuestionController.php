@@ -527,7 +527,7 @@ class QuestionController extends Controller
                         ->where('difficulty_level_id', $diff->id)->whereIn('domain_id', $domains)->limit($dis1)->pluck('question_id')->toArray();
                     // $question_ids->get()->toArray();
             }
-
+            
             if (empty($question_ids)) {
                 return response()->json(['status' => 204, 'message' => 'Question not created yet ', 'data' => '']);
             }

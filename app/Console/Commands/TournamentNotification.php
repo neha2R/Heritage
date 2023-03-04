@@ -51,8 +51,8 @@ class TournamentNotification extends Command
         foreach ($tournaments as $tournament) {
             $sessid = SessionsPerDay::select('id')->where('tournament_id', $tournament->id)
             ->where('start_time', $starttime)->first();
-                // $userids=null;
-                if($sessid){
+                // $=null;
+                if($sessiduserids){
                     $users = TournamenetUser::where('tournament_id', $tournament->id)->where('session_id', $sessid->id)->where('status', 'joined')->whereDate('created_at', Carbon::today())->pluck('user_id')->toArray();
                 } 
                 // if($userids != null){

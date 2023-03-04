@@ -411,7 +411,7 @@ class TournamenetUserController extends Controller
         } else {
             $your_leage['league_id'] = $userleague->league_id;
             $your_leage['league_name'] = League::find($userleague->league_id)->title;
-            $alluserleague = UserLeagueWithPer::where('league_id', $userleague->league_id)->orderBy('percentage', 'DESC')->get();
+            $alluserleague = UserLeagueWithPer::where('league_id', $userleague->league_id)->orderBy('percentage', 'DESC')->take(5)->get();
         }
 
 
@@ -426,6 +426,10 @@ class TournamenetUserController extends Controller
                 $user_league[] = $user_league1;
                 $rank++;
                 if ($alluser->user_id == $request->user_id) {
+                    $your_leage['rank'] = $rank;
+                    $your_leage['percentage'] = $alluser->percentage;
+                    $your_leage['user_id'] = $alluser->user_id;
+    
                     break;
                 }
             }
