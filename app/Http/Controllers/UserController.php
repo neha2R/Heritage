@@ -48,8 +48,8 @@ class UserController extends Controller
                 if (empty($user)) {
                     $user = new User;
                     $user->name = '';
-                    $user->email = $request->email;
-                    // $userdata->password = $user->password;
+                    $user->email = $request->email; 
+                    // $userdata ->password = $user->password;
                     // $userdata->username = $user->username;
                     $user->is_social = '1';
                     $user->email_verified_at = date('Y-m-d H:i:s');
@@ -602,7 +602,25 @@ class UserController extends Controller
         $savedata->save();
         return response()->json(['status' => 200, 'data' => '', 'message' => 'User is busy']);
     }
+    public function setpassword1(Request $req)
+    {
+        // $id=\Crypt::Decrypt($id);
+        
+$id=$req->id;
+        $user = User::where('id',$req->id)->first();
+       // dd($user);
+        // $user = User::where('id','1');
+   event(new \App\Events\RealTimeMessage('Hello World',$req->id));
+    //  $user->notify(new \App\Notifications\RealTimeNotification('Hello World',$req->id));
+     // return view('welcome', compact('id'));
+    //  return redirect()->route('welcome', compact('id'));
+    ////  return redirect()->back()->with(['welcome' => $id]);
+    // Echo.private('events.1')
+    // .listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message));    @endif 
+    //   return ["echo-private:events.{$req->id}.listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message))"];
 
+
+    }
     /** 
      * Delete a user from friend List // Free user
      *

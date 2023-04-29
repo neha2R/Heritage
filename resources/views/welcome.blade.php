@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Heritage</title>
 
@@ -62,6 +63,56 @@
                 margin-bottom: 30px;
             }
         </style>
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        @if(session()->has('welcome'))
+            <div class="alert alert-dismissable alert-success">
+               <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> <strong>
+               {!! session()->get('welcome') !!}
+               <script>
+               console.log('call');
+               </script>
+               </strong>
+            </div>
+            @endif
+        <script type="text/javascript">
+ var to_user_id ={{ auth()->id() }}
+ //let channelId='App.Models.User.${Echo.socketId()}';
+///Echo.private('App.Models.User.${Echo.socketId()}')
+
+ 
+Echo.private('App.Models.User.{{ auth()->id() }}')
+      .notification((notification) => {
+            console.log(notification.message);
+     });
+//                         $( document ).ready(function() {
+
+//             var to_user_id ={{ auth()->id() }}
+//            // console.log(to_user_id);
+
+// Echo.private('events')
+//  .listen('.getmessages', (e) => {
+// console.log(to_user_id);
+//     if(to_user_id==e.chat.to_user_id )
+//     {
+//   console.log('RealTimeMessage: ' + JSON.stringify(e.chat));}
+// });
+                       
+// const app = new Vue({
+//       el: '#app',
+     
+//       mounted() {
+//         @if(!empty($id))
+
+// Echo.private('events.1')
+//  .listen('RealTimeMessage', (e) =>  console.log('RealTimeMessage: ' + e.message));    @endif   }
+
+//     })
+ // Echo.private('events.1')
+ //.listen('RealTimeMessage', (e) => console.log('RealTimeMessage: ' + e.message));
+</script>
     </head>
     <body>
         <div class="flex-center position-ref full-height">

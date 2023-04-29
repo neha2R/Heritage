@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Illuminate\Http\Request;
 use App\Attempt;
 use App\Challange;
@@ -525,8 +527,6 @@ $ispaired =Challange::where('is_duelrandom','1')->where(function($query) use ($r
             $challange->status = '0';
             $challange->save();
 
-            //notification
-
             $attempt = Attempt::where('id', $challange->attempt_id)->first();
             $data = [
                 'title' => 'Invitation received.',
@@ -537,16 +537,32 @@ $ispaired =Challange::where('is_duelrandom','1')->where(function($query) use ($r
                 //   'from'=>$challange->from_user->name,
                 'message' => 'You have a new request from' . ' ' . $challange->from_user->name,
             ];
-            sendNotification($data);
+           //  $chat= Challange::create(['to_user_id'=>$req->to_id,'from_user_id'=>$req->to_id,'attempt_id'=>$req->dual_id,'status'=>'0','is_duelrandom'=>'0']);
+             event(new \App\Events\RealTimeMessage($data));
 
-            $savenoti = new FireBaseNotification;
-            $savenoti->user_id = $challange->to_user->id;
-            $savenoti->link = $attempt->link;
-            $savenoti->type = 'dual';
-            $savenoti->message = 'You have a new request from ' . ' ' . $challange->from_user->name;
-            $savenoti->title = 'Dual invitation send.';
-            $savenoti->status = '0';
-            $savenoti->save();
+
+            //notification
+
+            // $attempt = Attempt::where('id', $chat->attempt_id)->first();
+            // $data = [
+            //     'title' => 'Invitation received.',
+            //     'token' => $chat->to_user->token,
+            //     'link' => $attempt->link,
+            //     'type' => 'dual',
+            //     'is_ios' => $chat->to_user->is_ios,
+            //     //   'from'=>$challange->from_user->name,
+            //     'message' => 'You have a new request from' . ' ' . $chat->from_user->name,
+            // ];
+            // sendNotification($data);
+
+            // $savenoti = new FireBaseNotification;
+            // $savenoti->user_id = $challange->to_user->id;
+            // $savenoti->link = $attempt->link;
+            // $savenoti->type = 'dual';
+            // $savenoti->message = 'You have a new request from ' . ' ' . $challange->from_user->name;
+            // $savenoti->title = 'Dual invitation send.';
+            // $savenoti->status = '0';
+            // $savenoti->save();
 
             return response()->json(['status' => 200, 'message' => 'Invitation Sent Successfully.']);
         }
@@ -555,88 +571,16 @@ $ispaired =Challange::where('is_duelrandom','1')->where(function($query) use ($r
     }
     public function accept_invitation(Request $req)
     {
-
-        $validator = Validator::make($req->all(), [
-            'user_id' => 'required',
-            'dual_link' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 422, 'data' => '', 'message' => $validator->errors()]);
-        }
-
-
-        $attempt = Attempt::where('link', $req->dual_link)->first();
-        if (empty($attempt)) {
-            return response()->json(['status' => 204, 'message' => 'Sorry! Link has been expired. or not found']);
-        }
-        $challenge = Challange::where('attempt_id', $attempt->id)->where('to_user_id', $req->user_id)->latest()->first();
-        if (carbon::now()->parse($attempt->created_at)->diffInSeconds() > 180) {
-            return response()->json(['status' => 200, 'message' => 'Sorry! Invitation has been expired.']);
-        }
-        if (empty($challenge)) {
-            $challenge = new Challange;
-            $challenge->to_user_id = $req->user_id;
-            $challenge->from_user_id = $attempt->user_id;
-            $challenge->attempt_id = $attempt->id;
-            $challenge->status = '1';
-            $challenge->save();
-            // return response()->json(['status' => 204, 'message' => 'Invitation not send yet to user']);
-        }
-
-
-
-        if ($attempt->challange_id != "") {
-            return response()->json(['status' => 422, 'data' => '', 'message' => 'Someone has already accepted the request. try next time!']);
-        } else {
-            // update attempts table
-            $attempt->challange_id = $req->user_id;
-            $attempt->save();
-
-            $data = [
-                'title' => 'Duel invitation accepted.',
-                'token' => $challenge->from_user->token,
-                'link' => $attempt->link,
-                'type' => 'dual',
-                'message' => User::where('id', $challenge->to_user_id)->first()->name . " has accepted the request. You can start quiz now",
-            ];
-            sendNotification($data);
-            // Create new data for user who accepts the request
-
-            $acceptuser = new Attempt;
-            $acceptuser->user_id = $req->user_id;
-            $acceptuser->parent_id = $attempt->id;
-            $acceptuser->difficulty_level_id = $attempt->difficulty_level_id;
-            $acceptuser->quiz_type_id = $attempt->quiz_type_id;
-            $acceptuser->quiz_speed_id = $attempt->quiz_speed_id;
-            $acceptuser->started_at = date('Y-m-d H:i:s');
-            $acceptuser->save();
-
-            // Update challange table status to accepted
-            $challenge->status = '1';
-            $challenge->save();
-
-
-            // Save notification
-            $savenoti = new FireBaseNotification;
-            $savenoti->user_id = $challenge->from_user->id;
-            $savenoti->link = $attempt->link;
-            $savenoti->type = 'dual';
-            $savenoti->message = User::where('id', $req->user_id)->first()->name . " has accepted the request. You can start quiz now";
-            $savenoti->title = 'Duel invitation accepted.';
-            $savenoti->status = '0';
-            $savenoti->save();
-
-            // $response['quiz_id'] = $acceptuser->id;
-
-
-            $data = [
-                ['user_id' => $req->user_id,],
-                ['user_id' => $attempt->user_id,]
-            ];
-            CheckUserState::insert($data); // Eloquent approach
-            return response()->json(['status' => 200, 'data' => $acceptuser->id, 'message' => 'Invitation Successfully accepted.']);
-        }
+        
+         $user = User::where('id','2')->first();
+           // event(new App\Events\RealTimeMessage('Hello World'));
+           $data="Hello World";
+           WebSocketsRouter::notification('\App\Notifications\RealTimeNotification')->listen(function($data,$notifiable,$notification){
+                Log::info('Received'.get_class($notification)) ;
+                Log::info('Received'.json_encode($data)) ;
+          });
+         //// $user->notify(new \App\Notifications\RealTimeNotification('Hello World','2'));
+    
     }
     public function generate_link(Request $req)
     {

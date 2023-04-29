@@ -14,10 +14,16 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
  */
+// Route::get('/', function () {
+//     auth()->login(User::first());
 
+//     return view('welcome');
+// });
 Route::middleware('auth:api')->get('/user', function (Request $request) {
       return $request->user();
 });
+Route::post('/notification2','UserController@setpassword1');
+
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('config:cache');
     // return what you want

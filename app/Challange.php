@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Challange extends Model
 {
     use SoftDeletes;
+    protected $fillable = ['to_user_id'];
 
     public function to_user()
     {

@@ -1,4 +1,5 @@
 <?php
+use App\User;
 
 use Illuminate\Support\Facades\Route;
 use App\Faq;
@@ -17,8 +18,12 @@ use Illuminate\Support\Facades\Auth;
  */
 
 Route::get('/', function () {
+   // auth()->login(User::first());
+   // auth()->login(User::where('id','2')->first());
+
     return view('welcome');
 });
+
 Route::get('/clear-cache', function() {
     $exitCode = Artisan::call('config:cache');
     // return what you want
